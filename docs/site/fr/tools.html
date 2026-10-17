@@ -1,0 +1,630 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="Documentation technique ReaPlus : installation, référence des outils, exemples, feuille de route.">
+<title>Référence des outils — ReaPlus Docs</title>
+<script>try{var t=localStorage.getItem("reaplus-tema");if(!t){t=window.matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light";}document.documentElement.dataset.theme=t;}catch(e){}</script>
+<style>:root{color-scheme:light;--zemin:#F6F6F3;--yuzey:#FCFCFA;--metin:#1D1F24;--silik:#5A6270;--sinir:#DFDFD6;--vurgu:#2E6B4E;--vurgu-arka:#E4EFE8;--kod-zemin:#EBEBE4;--golge:rgba(23,28,24,.08)}[data-theme="light"]{color-scheme:light;--zemin:#F6F6F3;--yuzey:#FCFCFA;--metin:#1D1F24;--silik:#5A6270;--sinir:#DFDFD6;--vurgu:#2E6B4E;--vurgu-arka:#E4EFE8;--kod-zemin:#EBEBE4;--golge:rgba(23,28,24,.08)}[data-theme="dark"]{color-scheme:dark;--zemin:#15181D;--yuzey:#1D2229;--metin:#E9E7E1;--silik:#A7B0BC;--sinir:#2F3742;--vurgu:#7BC9A2;--vurgu-arka:#1D3328;--kod-zemin:#232A33;--golge:rgba(8,10,12,.45)}@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){color-scheme:dark;--zemin:#15181D;--yuzey:#1D2229;--metin:#E9E7E1;--silik:#A7B0BC;--sinir:#2F3742;--vurgu:#7BC9A2;--vurgu-arka:#1D3328;--kod-zemin:#232A33;--golge:rgba(8,10,12,.45)}}*{box-sizing:border-box}html{-webkit-text-size-adjust:100%}body{margin:0;background:var(--zemin);color:var(--metin);font-family:system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;line-height:1.65}h1,h2,h3,.marka-ad{font-family:"Avenir Next","Segoe UI",system-ui,-apple-system,"Helvetica Neue",Arial,sans-serif;letter-spacing:-.01em;line-height:1.25}.sarmal{max-width:62rem;margin:0 auto;padding:0 1.25rem 3rem}.atla{position:absolute;left:-999px;top:0;background:var(--vurgu);color:var(--zemin);padding:.5rem 1rem;z-index:10}.atla:focus{left:0}.ust{display:flex;flex-wrap:wrap;align-items:center;gap:.6rem 1rem;padding:1rem 0;border-bottom:1px solid var(--sinir)}.marka-ad{font-weight:650;font-size:1.05rem}.marka-alt{color:var(--silik);font-size:.84rem;margin-left:.6rem}.gezinme{display:flex;flex-wrap:wrap;gap:.15rem .9rem;font-size:.92rem}.gezinme a{color:var(--silik);text-decoration:none;border-bottom:1px solid transparent}.gezinme a:hover{color:var(--metin);border-bottom-color:var(--vurgu)}.dil{display:flex;gap:.35rem;font-size:.8rem;color:var(--silik)}.dil a{color:var(--silik);text-decoration:none}.dil a:hover{color:var(--vurgu)}.dil strong{color:var(--metin)}#tema-toggle{margin-left:auto;font:inherit;font-size:.85rem;color:var(--metin);background:var(--yuzey);border:1px solid var(--sinir);border-radius:999px;padding:.32rem .85rem;cursor:pointer;transition:background-color .2s ease,border-color .2s ease}#tema-toggle:hover{border-color:var(--vurgu)}.ozet{margin:1.5rem 0 0;background:var(--yuzey);border:1px solid var(--sinir);border-radius:.6rem;padding:1rem 1.25rem}.ozet-metin{margin:0 0 .8rem;font-size:.92rem;color:var(--silik)}.istatistik{display:grid;grid-template-columns:repeat(auto-fit,minmax(8.5rem,1fr));gap:.6rem;margin:0}.istatistik div{border-top:2px solid var(--vurgu);padding-top:.45rem}.istatistik dt{font-size:.74rem;text-transform:uppercase;letter-spacing:.06em;color:var(--silik)}.istatistik dd{margin:.15rem 0 0;font-size:1.35rem;font-weight:650;font-variant-numeric:tabular-nums}#icerik{margin-top:1.5rem}#icerik a{color:var(--vurgu);text-decoration:underline;text-underline-offset:.15em}#icerik a:hover{text-decoration-thickness:2px}pre{background:var(--kod-zemin);border:1px solid var(--sinir);border-radius:.5rem;padding:1rem;overflow:auto;font-size:.86rem}code{font-family:ui-monospace,"Cascadia Code","SF Mono",Consolas,Menlo,monospace;font-size:.88em;background:var(--kod-zemin);border-radius:.3rem;padding:.1em .35em}pre code{background:none;padding:0;border-radius:0}table{border-collapse:collapse;width:100%;font-size:.9rem}th,td{border:1px solid var(--sinir);padding:.45rem .6rem;text-align:left;vertical-align:top}thead th{background:var(--yuzey)}blockquote{margin:1rem 0;padding:.6rem 1rem;border-left:3px solid var(--vurgu);background:var(--yuzey);color:var(--silik)}hr{border:none;border-top:1px solid var(--sinir);margin:1.75rem 0}img{max-width:100%}#arama{font:inherit;color:var(--metin);background:var(--yuzey);border:1px solid var(--sinir);border-radius:.5rem;padding:.5rem .8rem;width:min(22rem,100%)}#sonuclar{list-style:none;margin:.8rem 0 0;padding:0;display:grid;gap:.4rem}#sonuclar li{background:var(--yuzey);border:1px solid var(--sinir);border-radius:.5rem;padding:.5rem .8rem}.altbilgi{margin-top:2.5rem;padding-top:1rem;border-top:1px solid var(--sinir);color:var(--silik);font-size:.85rem}.js .reveal{opacity:0;transform:translateY(10px);transition:opacity .45s ease,transform .45s ease}.js .reveal.gorunur{opacity:1;transform:none}:focus-visible{outline:.16rem solid var(--vurgu);outline-offset:.18rem;border-radius:.25rem}::selection{background:var(--vurgu);color:var(--zemin)}@media (prefers-reduced-motion: reduce){.js .reveal{opacity:1;transform:none;transition:none}*{animation:none;transition:none}}@media (max-width:40rem){.sarmal{padding:0 1rem 2.5rem}#tema-toggle{margin-left:0}.istatistik{grid-template-columns:repeat(2,1fr)}table{font-size:.82rem}th,td{padding:.35rem .45rem}}@media (max-width:26rem){.istatistik{grid-template-columns:1fr}}</style>
+</head>
+<body>
+<div class="sarmal">
+<a class="atla" href="#icerik">Aller au contenu</a>
+<header class="ust">
+<div class="marka"><span class="marka-ad">ReaPlus Docs</span><span class="marka-alt">surface de travail de rétro-ingénierie</span></div>
+<nav class="gezinme" aria-label="Site"><a href="index.html">Page d'accueil</a> · <a href="readme.html">README</a> · <strong>Référence des outils</strong> · <a href="examples.html">Exemples</a> · <a href="roadmap.html">Feuille de route</a> · <a href="changelog.html">Journal des modifications</a> · <a href="prompts.html">Bibliothèque de prompts</a></nav>
+<nav id="dil" class="dil" aria-label="Langue"><a href="../tools.html" hreflang="tr">TR</a> · <a href="../en/tools.html" hreflang="en">EN</a> · <a href="../de/tools.html" hreflang="de">DE</a> · <strong aria-current="true">FR</strong> · <a href="../es/tools.html" hreflang="es">ES</a></nav>
+<button id="tema-toggle" type="button" aria-pressed="false">Thème sombre</button>
+</header>
+<section class="ozet reveal" aria-label="Résumé de surface">
+<p class="ozet-metin">Résumé de surface (exécution réelle, TOOLS.md) : 191 outils · 187 outputSchema · 191 annotations · 2 resources · 3 prompts</p>
+<dl class="istatistik"><div><dt>outils</dt><dd><span class="sayi" data-sayi="191">191</span></dd></div><div><dt>outputSchema</dt><dd><span class="sayi" data-sayi="187">187</span></dd></div><div><dt>annotations</dt><dd><span class="sayi" data-sayi="191">191</span></dd></div><div><dt>resources</dt><dd><span class="sayi" data-sayi="2">2</span></dd></div><div><dt>prompts</dt><dd><span class="sayi" data-sayi="3">3</span></dd></div></dl>
+</section>
+<main id="icerik"><div class="reveal">
+<h1>Référence des outils</h1>
+<h1 id="référence-des-outils-reaplus">Référence des outils ReaPlus</h1>
+<blockquote>Ce fichier est généré automatiquement ; ne le modifiez pas à la main. Source : la
+surface MCP réelle du serveur compilé (<code>dist/server.js</code>). Pour le régénérer :
+<code>npm run build &amp;&amp; node scripts/generate-tool-reference.mjs</code></blockquote>
+<h2 id="résumé">Résumé</h2>
+<ul><li>Serveur : <code>rea-plus</code> 0.9.0</li><li>Total outils : 191</li><li>Total resources : 2</li><li>Total prompts : 3</li><li>Outils avec outputSchema : 187</li><li>Outils avec annotations : 191</li></ul>
+<h2 id="outils">Outils</h2>
+<h3 id="close_target"><code>close_target</code></h3>
+<p>Libère la cible binaire (et son processus radare2) détenue par une session.</p>
+<ul><li>Champs d'entrée :</li><li><code>session_id</code> (string, requis) — Application session id. Not an MCP protocol session.</li><li>outputSchema : présent (champs : closed, session_id)</li><li>annotations : présentes (destructiveHint=true, openWorldHint=true, readOnlyHint=false)</li></ul>
+<h3 id="debug_attach"><code>debug_attach</code></h3>
+<p>Attachement par pid ou, sur une session frida, connexion à un Gadget Frida à l'écoute (gadget hôte:port) ou à un paquet mobile en cours d'exécution sur USB (usb + package). La cible continue de tourner après debug_close.</p>
+<ul><li>Champs d'entrée :</li><li><code>auto_analyze</code> (boolean, optionnel) — Run x64dbg auto-analysis after attaching (slower).</li><li><code>break_on_entry</code> (boolean, optionnel) — Pause the debuggee right after attaching.</li><li><code>gadget</code> (string, optionnel) — Frida Gadget listen address host:port. For targets that cannot be attached by pid.</li><li><code>package</code> (string, optionnel) — Process or mobile package name. Defaults to Gadget. Required with usb.</li><li><code>pid</code> (integer, optionnel) — Live process id. Required unless gadget or usb is set.</li><li><code>session_id</code> (string, requis) — Application session id. Not an MCP protocol session.</li><li><code>usb</code> (boolean, optionnel) — Use the USB Frida device (phone or tablet) instead of a host:port Gadget.</li><li>outputSchema : présent (champs : architecture, attached, engine, entry_point, mode, module_base, module_entry, path, pid, session_id)</li><li>annotations : présentes (destructiveHint=true, openWorldHint=true, readOnlyHint=false)</li></ul>
+<h3 id="debug_breakpoint"><code>debug_breakpoint</code></h3>
+<p>Définit, supprime ou liste les breakpoints. L'adresse peut être hexadécimale, un nombre ou une expression x64dbg.</p>
+<ul><li>Champs d'entrée :</li><li><code>action</code> (enum, optionnel)</li><li><code>address</code> (string | number, optionnel) — Required for set/remove; ignored for list.</li><li><code>condition</code> (string, optionnel) — Break condition expression (set only).</li><li><code>log_text</code> (string, optionnel) — Log text on hit (set only).</li><li><code>name</code> (string, optionnel) — Breakpoint name (set only).</li><li><code>session_id</code> (string, requis) — Application session id. Not an MCP protocol session.</li><li><code>type</code> (enum, optionnel)</li><li>outputSchema : présent</li><li>annotations : présentes (destructiveHint=true, openWorldHint=true, readOnlyHint=false)</li></ul>
+<h3 id="debug_callstack"><code>debug_callstack</code></h3>
+<p>Lit la pile d'appels du thread courant (adresse, module, fonction par cadre).</p>
+<ul><li>Champs d'entrée :</li><li><code>max_frames</code> (integer, optionnel) — Max frames returned (default 50).</li><li><code>session_id</code> (string, requis) — Application session id. Not an MCP protocol session.</li><li>outputSchema : présent (champs : frames, session_id, threadId)</li><li>annotations : présentes (openWorldHint=true, readOnlyHint=false)</li></ul>
+<h3 id="debug_close"><code>debug_close</code></h3>
+<p>Démonte le processus x64dbg caché détenu par une session. Les cibles lancées sont arrêtées ; les cibles attachées sont détachées et laissées en cours d'exécution.</p>
+<ul><li>Champs d'entrée :</li><li><code>session_id</code> (string, requis) — Application session id. Not an MCP protocol session.</li><li>outputSchema : présent (champs : closed, session_id)</li><li>annotations : présentes (destructiveHint=true, openWorldHint=true, readOnlyHint=false)</li></ul>
+<h3 id="debug_code"><code>debug_code</code></h3>
+<p>Code live : désassemble à une adresse (par défaut le pointeur d'instruction arrêté), assemble une instruction, ou s'exécute jusqu'à une adresse. Exige confirm:true.</p>
+<ul><li>Champs d'entrée :</li><li><code>action</code> (enum, requis)</li><li><code>address</code> (string | number, optionnel) — Address as hex (&quot;0x140001000&quot;), decimal, or an engine expression (&quot;cip&quot;).</li><li><code>confirm</code> (boolean, optionnel) — Must be true or the tool returns confirmation_required and does not touch the debuggee.</li><li><code>count</code> (integer, optionnel) — Instruction count for disassemble (default 12).</li><li><code>instruction</code> (string, optionnel) — Single instruction for assemble.</li><li><code>session_id</code> (string, requis) — Application session id. Not an MCP protocol session.</li><li>outputSchema : présent</li><li>annotations : présentes (destructiveHint=true, openWorldHint=true, readOnlyHint=false)</li></ul>
+<h3 id="debug_continue"><code>debug_continue</code></h3>
+<p>Reprend le débogué jusqu'au prochain breakpoint, pas-à-pas unique, ou sortie. L'arrêt publie un événement (debug.breakpoint_hit / debug.exited / debug.paused) récupérable via events_pull.</p>
+<ul><li>Champs d'entrée :</li><li><code>session_id</code> (string, requis) — Application session id. Not an MCP protocol session.</li><li>outputSchema : présent (champs : address, reason, session_id)</li><li>annotations : présentes (destructiveHint=true, openWorldHint=true, readOnlyHint=false)</li></ul>
+<h3 id="debug_memory"><code>debug_memory</code></h3>
+<p>Mémoire du processus live : lecture, recherche ou dump. Exige confirm:true. Sans lui, l'appel renvoie confirmation_required et ne touche pas au débogué.</p>
+<ul><li>Champs d'entrée :</li><li><code>action</code> (enum, requis)</li><li><code>address</code> (string | number, optionnel) — Read/dump address.</li><li><code>confirm</code> (boolean, optionnel) — Must be true or the tool returns confirmation_required and does not touch the debuggee.</li><li><code>length</code> (integer, optionnel) — Search length in bytes (default 4096, or the main module).</li><li><code>max_results</code> (integer, optionnel)</li><li><code>pattern</code> (string, optionnel) — Search pattern. Hex bytes, or ascii when search_type is ascii.</li><li><code>search_type</code> (enum, optionnel)</li><li><code>session_id</code> (string, requis) — Application session id. Not an MCP protocol session.</li><li><code>size</code> (integer, optionnel) — Byte count for read (default 64) or dump (default 256).</li><li><code>start_address</code> (string | number, optionnel) — Address as hex (&quot;0x140001000&quot;), decimal, or an engine expression (&quot;cip&quot;).</li><li>outputSchema : présent</li><li>annotations : présentes (openWorldHint=true, readOnlyHint=false)</li></ul>
+<h3 id="debug_open"><code>debug_open</code></h3>
+<p>Ouvre une cible PE pour le débogage live sur le moteur de debug de cette session. Auto-détecte x86/x64 et laisse le débogué en pause. x64dbg s'arrête à l'entrée ; cdb s'arrête au breakpoint initial du chargeur et rapporte l'entrée PE.</p>
+<ul><li>Champs d'entrée :</li><li><code>auto_analyze</code> (boolean, optionnel) — Run x64dbg auto-analysis after loading (slower).</li><li><code>break_on_entry</code> (boolean, optionnel) — Stop at the entry point after loading.</li><li><code>command_line_args</code> (string, optionnel) — Command line arguments for the debuggee.</li><li><code>path</code> (string, requis) — Filesystem path of the PE binary to debug.</li><li><code>session_id</code> (string, requis) — Application session id. Not an MCP protocol session.</li><li>outputSchema : présent (champs : architecture, attached, engine, entry_point, mode, module_base, module_entry, opened, path, pid, session_id)</li><li>annotations : présentes (destructiveHint=true, openWorldHint=true, readOnlyHint=false)</li></ul>
+<h3 id="debug_pause"><code>debug_pause</code></h3>
+<p>Interrompt de façon asynchrone un débogué en cours d'exécution. Idempotent quand déjà en pause.</p>
+<ul><li>Champs d'entrée :</li><li><code>session_id</code> (string, requis) — Application session id. Not an MCP protocol session.</li><li>outputSchema : présent (champs : address, reason, session_id)</li><li>annotations : présentes (destructiveHint=true, openWorldHint=true, readOnlyHint=false)</li></ul>
+<h3 id="debug_plugin"><code>debug_plugin</code></h3>
+<p>x64dbg Scylla et ScyllaHide. status rapporte les fichiers sur disque. dump et hide n'ouvrent pas de fenêtre : un plugin headless manquant renvoie engine_unavailable avec le chemin des plugins. Exige confirm:true. cdb et frida renvoient capability_unsupported.</p>
+<ul><li>Champs d'entrée :</li><li><code>action</code> (enum, requis)</li><li><code>confirm</code> (boolean, optionnel) — Must be true or the tool returns confirmation_required and does not touch the debuggee.</li><li><code>session_id</code> (string, requis) — Application session id. Not an MCP protocol session.</li><li>outputSchema : présent</li><li>annotations : présentes (openWorldHint=true, readOnlyHint=false)</li></ul>
+<h3 id="debug_registers"><code>debug_registers</code></h3>
+<p>Lit les registres du débogué (généraux + flags ; segment/debug en option).</p>
+<ul><li>Champs d'entrée :</li><li><code>include_debug</code> (boolean, optionnel) — Include debug registers.</li><li><code>include_segment</code> (boolean, optionnel) — Include segment registers.</li><li><code>session_id</code> (string, requis) — Application session id. Not an MCP protocol session.</li><li>outputSchema : présent (champs : debug, flags, general, segment, session_id)</li><li>annotations : présentes (openWorldHint=true, readOnlyHint=false)</li></ul>
+<h3 id="debug_state"><code>debug_state</code></h3>
+<p>Rapporte l'état de debug live (en cours/en pause/terminé + raison de pause) et la cible ouverte, le cas échéant.</p>
+<ul><li>Champs d'entrée :</li><li><code>session_id</code> (string, requis) — Application session id. Not an MCP protocol session.</li><li>outputSchema : présent</li><li>annotations : présentes (openWorldHint=true, readOnlyHint=false)</li></ul>
+<h3 id="debug_step"><code>debug_step</code></h3>
+<p>Exécute le débogué au pas-à-pas (dans ou par-dessus les appels) et rapporte le nouvel emplacement.</p>
+<ul><li>Champs d'entrée :</li><li><code>count</code> (integer, optionnel) — Steps to take (default 1).</li><li><code>kind</code> (enum, optionnel)</li><li><code>session_id</code> (string, requis) — Application session id. Not an MCP protocol session.</li><li>outputSchema : présent (champs : address, disassembly, function, kind, module, registers, session_id)</li><li>annotations : présentes (destructiveHint=true, openWorldHint=true, readOnlyHint=false)</li></ul>
+<h3 id="debug_thread"><code>debug_thread</code></h3>
+<p>Threads live : liste, sélection, gel, dégel, ou lecture du contexte d'un thread. L'id est la valeur renvoyée par list (index cdb, id de thread OS x64dbg/frida). Exige confirm:true. Frida n'a pas d'API de suspension ni de commutation.</p>
+<ul><li>Champs d'entrée :</li><li><code>action</code> (enum, requis)</li><li><code>confirm</code> (boolean, optionnel) — Must be true or the tool returns confirmation_required and does not touch the debuggee.</li><li><code>session_id</code> (string, requis) — Application session id. Not an MCP protocol session.</li><li><code>thread_id</code> (integer, optionnel)</li><li>outputSchema : présent</li><li>annotations : présentes (destructiveHint=true, openWorldHint=true, readOnlyHint=false)</li></ul>
+<h3 id="debug_time"><code>debug_time</code></h3>
+<p>Instantané de checkpoint, chronologie des checkpoints, et retour en arrière d'un checkpoint. Un checkpoint comprend les registres du thread actif, la liste des threads et une fenêtre mémoire. Exige confirm:true.</p>
+<ul><li>Champs d'entrée :</li><li><code>action</code> (enum, requis)</li><li><code>checkpoint_id</code> (string, optionnel)</li><li><code>confirm</code> (boolean, optionnel) — Must be true or the tool returns confirmation_required and does not touch the debuggee.</li><li><code>memory_size</code> (integer, optionnel) — Bytes captured at the instruction pointer (default 64).</li><li><code>session_id</code> (string, requis) — Application session id. Not an MCP protocol session.</li><li>outputSchema : présent</li><li>annotations : présentes (destructiveHint=true, openWorldHint=true, readOnlyHint=false)</li></ul>
+<h3 id="disassemble"><code>disassemble</code></h3>
+<p>Désassemble les instructions à une adresse (linéaire, <code>count</code> ops) ou une fonction entière. Par défaut la fonction d'entrée.</p>
+<ul><li>Champs d'entrée :</li><li><code>address</code> (string | number, optionnel) — Target address as hex (&quot;0x400200&quot;), decimal, or flag name (&quot;entry0&quot;).</li><li><code>count</code> (integer, optionnel) — Ops for address mode (default 32).</li><li><code>function</code> (string, optionnel) — Function name or address, e.g. &quot;entry0&quot;.</li><li><code>session_id</code> (string, requis) — Application session id. Not an MCP protocol session.</li><li>outputSchema : présent (champs : count, location, ops, session_id, text)</li><li>annotations : présentes (openWorldHint=true, readOnlyHint=false)</li></ul>
+<h3 id="dump"><code>dump</code></h3>
+<p>Lit des octets bruts à une adresse comme texte hexdump ou tableau d'octets JSON.</p>
+<ul><li>Champs d'entrée :</li><li><code>address</code> (string | number, requis) — Target address as hex (&quot;0x400200&quot;), decimal, or flag name (&quot;entry0&quot;).</li><li><code>format</code> (enum, optionnel)</li><li><code>length</code> (integer, optionnel) — Bytes to read (default 128).</li><li><code>session_id</code> (string, requis) — Application session id. Not an MCP protocol session.</li><li>outputSchema : présent (champs : address, bytes, format, length, session_id, text)</li><li>annotations : présentes (openWorldHint=true, readOnlyHint=false)</li></ul>
+<h3 id="events_pull"><code>events_pull</code></h3>
+<p>Tire les événements stockés pour une session applicative depuis un numéro de séquence. Ne souscrit pas aux notifications push.</p>
+<ul><li>Champs d'entrée :</li><li><code>after</code> (integer, optionnel) — Return events with seq greater than this.</li><li><code>limit</code> (integer, optionnel)</li><li><code>session_id</code> (string, requis) — Application session id. Not an MCP protocol session.</li><li>outputSchema : présent (champs : events, retainedFrom, session_id)</li><li>annotations : présentes (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
+<h3 id="explain"><code>explain</code></h3>
+<p>Courte explication en français d'une fenêtre d'assemblage : ce que fait la région, où elle saute, et quels appels notifient l'utilisateur ou le système. Passez des instructions déjà désassemblées, ou un session_id. Une session de debug live n'est lue que quand confirm vaut true. Appelez ceci quand l'utilisateur demande ce que signifie l'assemblage.</p>
+<ul><li>Champs d'entrée :</li><li><code>address</code> (string | number, optionnel) — Address to disassemble when instructions are omitted.</li><li><code>confirm</code> (boolean, optionnel) — Required only when explain itself disassembles a live debug session. Pasted instructions skip this.</li><li><code>count</code> (integer, optionnel) — How many instructions to read (default 16).</li><li><code>instructions</code> (object[], optionnel) — Already fetched ops. When set, the debugger is not called.</li><li><code>session_id</code> (string, optionnel) — Application session id. Not an MCP protocol session.</li><li>outputSchema : présent (champs : atlamalar, bildirimler, cagrilar, dil, gosterilen, kaynak, komut_sayisi, ozet, satirlar)</li><li>annotations : présentes (openWorldHint=true, readOnlyHint=false)</li></ul>
+<h3 id="get_cfg"><code>get_cfg</code></h3>
+<p>Graphe de flot de contrôle d'une fonction en JSON et/ou DOT Graphviz. Par défaut la fonction d'entrée.</p>
+<ul><li>Champs d'entrée :</li><li><code>address</code> (string | number, optionnel) — Target address as hex (&quot;0x400200&quot;), decimal, or flag name (&quot;entry0&quot;).</li><li><code>format</code> (enum, optionnel)</li><li><code>function</code> (string, optionnel) — Function name or address, e.g. &quot;entry0&quot;.</li><li><code>session_id</code> (string, requis) — Application session id. Not an MCP protocol session.</li><li>outputSchema : présent (champs : dot, function, json, location, session_id)</li><li>annotations : présentes (openWorldHint=true, readOnlyHint=false)</li></ul>
+<h3 id="health"><code>health</code></h3>
+<p>Rapporte la vivacité du pont. Ne touche à aucun moteur de débogage.</p>
+<ul><li>Champs d'entrée : aucun</li><li>outputSchema : présent (champs : name, protocol, sessions, status)</li><li>annotations : présentes (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
+<h3 id="open_target"><code>open_target</code></h3>
+<p>Ouvre une cible binaire pour l'analyse statique dans une session radare2. Seul le mode 'static' est pris en charge ; tout autre est une erreur de capacité. Exige r2 sur le PATH.</p>
+<ul><li>Champs d'entrée :</li><li><code>mode</code> (string, optionnel) — Analysis mode. Only &quot;static&quot; is supported.</li><li><code>path</code> (string, requis) — Filesystem path of the binary to analyze.</li><li><code>session_id</code> (string, requis) — Application session id. Not an MCP protocol session.</li><li>outputSchema : présent (champs : engine, mode, opened, path, session_id)</li><li>annotations : présentes (destructiveHint=true, openWorldHint=true, readOnlyHint=false)</li></ul>
+<h3 id="prerequisites"><code>prerequisites</code></h3>
+<p>Vérifie les programmes qu'utilise Conduit (radare2, x64dbg, cdb, Python, Frida, Graphviz, ScyllaHide). Les manquants incluent une URL de téléchargement et où déposer les fichiers. Le pont ne les télécharge pas. Appelez ceci quand un outil manque ou avant de choisir un moteur.</p>
+<ul><li>Champs d'entrée : aucun</li><li>outputSchema : présent (champs : araclar, ozet)</li><li>annotations : présentes (destructiveHint=false, idempotentHint=true, openWorldHint=true, readOnlyHint=true)</li></ul>
+<h3 id="rea_adb_devices"><code>rea_adb_devices</code></h3>
+<p>Liste des appareils connectés.</p>
+<ul><li>Champs d'entrée : aucun</li><li>outputSchema : présent (champs : arac, cihazlar, ok)</li><li>annotations : présentes (openWorldHint=true, readOnlyHint=false)</li></ul>
+<h3 id="rea_adb_install"><code>rea_adb_install</code></h3>
+<p>Installation d'un APK sur l'appareil.</p>
+<ul><li>Champs d'entrée :</li><li><code>apk_path</code> (string, requis)</li><li><code>seri</code> (string, optionnel)</li><li>outputSchema : présent (champs : apk, arac, ok, sonuc)</li><li>annotations : présentes (destructiveHint=true, openWorldHint=true, readOnlyHint=false)</li></ul>
+<h3 id="rea_adb_logcat"><code>rea_adb_logcat</code></h3>
+<p>Dump logcat de l'appareil.</p>
+<ul><li>Champs d'entrée :</li><li><code>seri</code> (string, optionnel)</li><li>outputSchema : présent (champs : arac, ok, satirlar, toplam_satir)</li><li>annotations : présentes (openWorldHint=true, readOnlyHint=false)</li></ul>
+<h3 id="rea_adb_packages"><code>rea_adb_packages</code></h3>
+<p>Liste des paquets installés.</p>
+<ul><li>Champs d'entrée :</li><li><code>filtre</code> (string, optionnel)</li><li><code>seri</code> (string, optionnel)</li><li>outputSchema : présent (champs : arac, ok, paketler)</li><li>annotations : présentes (openWorldHint=true, readOnlyHint=false)</li></ul>
+<h3 id="rea_adb_screencap"><code>rea_adb_screencap</code></h3>
+<p>Capture d'écran de l'appareil.</p>
+<ul><li>Champs d'entrée :</li><li><code>out</code> (string, requis)</li><li><code>seri</code> (string, optionnel)</li><li>outputSchema : présent (champs : arac, bayt, ok, yol)</li><li>annotations : présentes (destructiveHint=true, openWorldHint=true, readOnlyHint=false)</li></ul>
+<h3 id="rea_android_dinamik_recete"><code>rea_android_dinamik_recete</code></h3>
+<p>Production d'une recette d'analyse dynamique Android.</p>
+<ul><li>Champs d'entrée :</li><li><code>path</code> (string, requis)</li><li>outputSchema : présent (champs : arac, ok, recete)</li><li>annotations : présentes (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
+<h3 id="rea_android_recete_dogrula"><code>rea_android_recete_dogrula</code></h3>
+<p>Validation à sec d'une recette.</p>
+<ul><li>Champs d'entrée :</li><li><code>text</code> (string, requis)</li><li>outputSchema : présent (champs : adim_sayisi, arac, ok)</li><li>annotations : présentes (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
+<h3 id="rea_aot_detect"><code>rea_aot_detect</code></h3>
+<p>Signal NativeAOT.</p>
+<ul><li>Champs d'entrée :</li><li><code>b64dosya</code> (string, requis)</li><li><code>metin</code> (string, optionnel)</li><li>outputSchema : présent (champs : details, ok, summary, tool)</li><li>annotations : présentes (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
+<h3 id="rea_aot_objc"><code>rea_aot_objc</code></h3>
+<p>Traces de dispatch ObjC.</p>
+<ul><li>Champs d'entrée :</li><li><code>text</code> (string, requis)</li><li>outputSchema : présent (champs : details, ok, summary, tool)</li><li>annotations : présentes (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
+<h3 id="rea_aot_profile"><code>rea_aot_profile</code></h3>
+<p>Profil AOT.</p>
+<ul><li>Champs d'entrée :</li><li><code>b64dosya</code> (string, requis)</li><li><code>metin</code> (string, optionnel)</li><li>outputSchema : présent (champs : details, ok, summary, tool)</li><li>annotations : présentes (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
+<h3 id="rea_aot_swift"><code>rea_aot_swift</code></h3>
+<p>Traces de dispatch Swift.</p>
+<ul><li>Champs d'entrée :</li><li><code>text</code> (string, requis)</li><li>outputSchema : présent (champs : details, ok, summary, tool)</li><li>annotations : présentes (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
+<h3 id="rea_apktool_build"><code>rea_apktool_build</code></h3>
+<p>Reconstruction d'un APK depuis un répertoire décodé.</p>
+<ul><li>Champs d'entrée :</li><li><code>dir</code> (string, requis)</li><li><code>out</code> (string, requis)</li><li>outputSchema : présent (champs : arac, ciktiApk, ok, proje)</li><li>annotations : présentes (destructiveHint=true, openWorldHint=true, readOnlyHint=false)</li></ul>
+<h3 id="rea_apktool_caps"><code>rea_apktool_caps</code></h3>
+<p>Sondage des capacités apktool.</p>
+<ul><li>Champs d'entrée : aucun</li><li>outputSchema : présent (champs : aapt2, aapt2Tamam, apktool, arac, ok)</li><li>annotations : présentes (openWorldHint=true, readOnlyHint=false)</li></ul>
+<h3 id="rea_apktool_decode"><code>rea_apktool_decode</code></h3>
+<p>Décodage d'APK (resources).</p>
+<ul><li>Champs d'entrée :</li><li><code>apk_path</code> (string, requis)</li><li><code>out</code> (string, requis)</li><li>outputSchema : présent (champs : apk, arac, ciktiDir, ok)</li><li>annotations : présentes (destructiveHint=true, openWorldHint=true, readOnlyHint=false)</li></ul>
+<h3 id="rea_apktool_framework"><code>rea_apktool_framework</code></h3>
+<p>Installation d'un APK framework.</p>
+<ul><li>Champs d'entrée :</li><li><code>path</code> (string, requis)</li><li>outputSchema : présent (champs : apk, arac, ok)</li><li>annotations : présentes (destructiveHint=true, openWorldHint=true, readOnlyHint=false)</li></ul>
+<h3 id="rea_apktool_info"><code>rea_apktool_info</code></h3>
+<p>Versions apktool+aapt2.</p>
+<ul><li>Champs d'entrée : aucun</li><li>outputSchema : présent (champs : arac, ok, surum)</li><li>annotations : présentes (openWorldHint=true, readOnlyHint=false)</li></ul>
+<h3 id="rea_apple_bundle"><code>rea_apple_bundle</code></h3>
+<p>Anatomie d'un bundle.</p>
+<ul><li>Champs d'entrée :</li><li><code>path</code> (string, requis)</li><li>outputSchema : présent (champs : details, ok, summary, tool)</li><li>annotations : présentes (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
+<h3 id="rea_apple_macho"><code>rea_apple_macho</code></h3>
+<p>Magie Mach-O + liste dyld.</p>
+<ul><li>Champs d'entrée :</li><li><code>path</code> (string, requis)</li><li>outputSchema : présent (champs : details, ok, summary, tool)</li><li>annotations : présentes (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
+<h3 id="rea_apple_plist"><code>rea_apple_plist</code></h3>
+<p>Lecture de clés Info.plist.</p>
+<ul><li>Champs d'entrée :</li><li><code>path</code> (string, requis)</li><li>outputSchema : présent (champs : details, ok, summary, tool)</li><li>annotations : présentes (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
+<h3 id="rea_behavior_full"><code>rea_behavior_full</code></h3>
+<p>Rapport comportemental en un seul appel.</p>
+<ul><li>Champs d'entrée :</li><li><code>api</code> (string, requis)</li><li><code>net</code> (string, optionnel)</li><li>outputSchema : présent (champs : bulgular, cizelge, ok, ozet, tool)</li><li>annotations : présentes (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
+<h3 id="rea_behavior_timeline"><code>rea_behavior_timeline</code></h3>
+<p>Chronologie d'événements + résumé.</p>
+<ul><li>Champs d'entrée :</li><li><code>olaylar</code> (string, requis)</li><li>outputSchema : présent (champs : details, ok, summary, tool)</li><li>annotations : présentes (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
+<h3 id="rea_best_motor"><code>rea_best_motor</code></h3>
+<p>Meilleur moteur (score) pour un type de cible.</p>
+<ul><li>Champs d'entrée :</li><li><code>adaylar</code> (string[], requis)</li><li><code>tip</code> (string, requis)</li><li>outputSchema : absent</li><li>annotations : présentes (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
+<h3 id="rea_bindiff_fonksiyonlar"><code>rea_bindiff_fonksiyonlar</code></h3>
+<p>Liste de fonctions d'un binaire (nom/adresse + hash).</p>
+<ul><li>Champs d'entrée :</li><li><code>path</code> (string, requis)</li><li>outputSchema : présent (champs : arac, bicim, dosya, fonksiyonlar, istatistik, ok, sayi, sembollu)</li><li>annotations : présentes (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
+<h3 id="rea_bindiff_karsilastir"><code>rea_bindiff_karsilastir</code></h3>
+<p>Diff de fonctions entre deux versions.</p>
+<ul><li>Champs d'entrée :</li><li><code>text</code> (string, requis)</li><li>outputSchema : présent (champs : arac, aynen, cikarilan, degisen, eklenen, eski, istatistik, ok, ozet, yeni)</li><li>annotations : présentes (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
+<h3 id="rea_browser_caps"><code>rea_browser_caps</code></h3>
+<p>Sondage des capacités navigateur.</p>
+<ul><li>Champs d'entrée : aucun</li><li>outputSchema : présent (champs : details, ok, summary, tool)</li><li>annotations : présentes (openWorldHint=true, readOnlyHint=false)</li></ul>
+<h3 id="rea_browser_click"><code>rea_browser_click</code></h3>
+<p>Clic + état après clic.</p>
+<ul><li>Champs d'entrée :</li><li><code>selector</code> (string, requis)</li><li><code>url</code> (string, requis)</li><li>outputSchema : présent (champs : details, ok, summary, tool)</li><li>annotations : présentes (openWorldHint=true, readOnlyHint=false)</li></ul>
+<h3 id="rea_browser_har_import"><code>rea_browser_har_import</code></h3>
+<p>Import HAR.</p>
+<ul><li>Champs d'entrée :</li><li><code>path</code> (string, requis)</li><li>outputSchema : présent (champs : details, ok, summary, tool)</li><li>annotations : présentes (openWorldHint=true, readOnlyHint=false)</li></ul>
+<h3 id="rea_browser_nav"><code>rea_browser_nav</code></h3>
+<p>Ouverture de page + titre.</p>
+<ul><li>Champs d'entrée :</li><li><code>url</code> (string, requis)</li><li>outputSchema : présent (champs : details, ok, summary, tool)</li><li>annotations : présentes (openWorldHint=true, readOnlyHint=false)</li></ul>
+<h3 id="rea_browser_scenario"><code>rea_browser_scenario</code></h3>
+<p>Enregistrement de scénario.</p>
+<ul><li>Champs d'entrée :</li><li><code>text</code> (string, requis)</li><li>outputSchema : présent (champs : details, ok, summary, tool)</li><li>annotations : présentes (destructiveHint=true, openWorldHint=true, readOnlyHint=false)</li></ul>
+<h3 id="rea_browser_shot"><code>rea_browser_shot</code></h3>
+<p>Capture d'écran pleine page.</p>
+<ul><li>Champs d'entrée :</li><li><code>out</code> (string, requis)</li><li><code>url</code> (string, requis)</li><li>outputSchema : présent (champs : details, ok, summary, tool)</li><li>annotations : présentes (destructiveHint=true, openWorldHint=true, readOnlyHint=false)</li></ul>
+<h3 id="rea_config_suggest"><code>rea_config_suggest</code></h3>
+<p>Snippet de config MCP pour les outils trouvés.</p>
+<ul><li>Champs d'entrée :</li><li><code>bulunan</code> (string[], requis)</li><li>outputSchema : présent (champs : snippet)</li><li>annotations : présentes (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
+<h3 id="rea_console_yakala"><code>rea_console_yakala</code></h3>
+<p>Messages de console.</p>
+<ul><li>Champs d'entrée :</li><li><code>url</code> (string, requis)</li><li>outputSchema : présent (champs : details, ok, summary, tool)</li><li>annotations : présentes (openWorldHint=true, readOnlyHint=false)</li></ul>
+<h3 id="rea_coverage"><code>rea_coverage</code></h3>
+<p>Taux de couverture.</p>
+<ul><li>Champs d'entrée :</li><li><code>incelenen</code> (integer, requis)</li><li><code>toplam</code> (integer, requis)</li><li>outputSchema : présent (champs : arac, kalan, ok, oran)</li><li>annotations : présentes (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
+<h3 id="rea_crash_append"><code>rea_crash_append</code></h3>
+<p>Ajout d'un événement de plantage.</p>
+<ul><li>Champs d'entrée :</li><li><code>olay</code> (string, requis)</li><li><code>olaylar</code> (string, requis)</li><li>outputSchema : présent (champs : details, ok, summary, tool)</li><li>annotations : présentes (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
+<h3 id="rea_crash_hint"><code>rea_crash_hint</code></h3>
+<p>Indice de plantage.</p>
+<ul><li>Champs d'entrée :</li><li><code>olaylar</code> (string, requis)</li><li>outputSchema : présent (champs : details, ok, summary, tool)</li><li>annotations : présentes (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
+<h3 id="rea_crash_kayit_parse"><code>rea_crash_kayit_parse</code></h3>
+<p>Analyse d'une note de plantage.</p>
+<ul><li>Champs d'entrée :</li><li><code>text</code> (string, requis)</li><li>outputSchema : présent (champs : arac, ok, registerlar, sinyal, threadSayisi, threadler)</li><li>annotations : présentes (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
+<h3 id="rea_crash_ozet"><code>rea_crash_ozet</code></h3>
+<p>Résumé de plantage.</p>
+<ul><li>Champs d'entrée :</li><li><code>text</code> (string, requis)</li><li>outputSchema : présent (champs : arac, ilkFrame, ok, registerSayisi, sinyal, threadSayisi)</li><li>annotations : présentes (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
+<h3 id="rea_crash_timeline"><code>rea_crash_timeline</code></h3>
+<p>Chronologie de plantage.</p>
+<ul><li>Champs d'entrée :</li><li><code>olaylar</code> (string, requis)</li><li>outputSchema : présent (champs : details, ok, summary, tool)</li><li>annotations : présentes (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
+<h3 id="rea_cutter_caps"><code>rea_cutter_caps</code></h3>
+<p>Sondage des capacités Cutter/rizin.</p>
+<ul><li>Champs d'entrée : aucun</li><li>outputSchema : présent (champs : arac, ok, pdc, surum)</li><li>annotations : présentes (openWorldHint=true, readOnlyHint=false)</li></ul>
+<h3 id="rea_cutter_decompile"><code>rea_cutter_decompile</code></h3>
+<p>Pseudo-décompilation Cutter.</p>
+<ul><li>Champs d'entrée :</li><li><code>addr</code> (string, requis)</li><li><code>path</code> (string, requis)</li><li>outputSchema : présent (champs : addr, arac, hedef, kaynak, kod, not, ok)</li><li>annotations : présentes (openWorldHint=true, readOnlyHint=false)</li></ul>
+<h3 id="rea_cutter_disasm"><code>rea_cutter_disasm</code></h3>
+<p>Désassemblage Cutter/rizin.</p>
+<ul><li>Champs d'entrée :</li><li><code>addr</code> (string, requis)</li><li><code>path</code> (string, requis)</li><li>outputSchema : présent (champs : addr, arac, hedef, ok, ops)</li><li>annotations : présentes (openWorldHint=true, readOnlyHint=false)</li></ul>
+<h3 id="rea_cutter_funcs"><code>rea_cutter_funcs</code></h3>
+<p>Liste de fonctions Cutter/rizin.</p>
+<ul><li>Champs d'entrée :</li><li><code>path</code> (string, requis)</li><li>outputSchema : présent (champs : arac, fonksiyonlar, hedef, ok)</li><li>annotations : présentes (openWorldHint=true, readOnlyHint=false)</li></ul>
+<h3 id="rea_cutter_strings"><code>rea_cutter_strings</code></h3>
+<p>Liste de chaînes Cutter/rizin.</p>
+<ul><li>Champs d'entrée :</li><li><code>path</code> (string, requis)</li><li>outputSchema : présent (champs : arac, hedef, ok, strings)</li><li>annotations : présentes (openWorldHint=true, readOnlyHint=false)</li></ul>
+<h3 id="rea_cutter_xrefs"><code>rea_cutter_xrefs</code></h3>
+<p>Liste de xrefs Cutter/rizin.</p>
+<ul><li>Champs d'entrée :</li><li><code>addr</code> (string, requis)</li><li><code>path</code> (string, requis)</li><li>outputSchema : présent (champs : addr, arac, hedef, ok, xrefs)</li><li>annotations : présentes (openWorldHint=true, readOnlyHint=false)</li></ul>
+<h3 id="rea_diff_match"><code>rea_diff_match</code></h3>
+<p>Mise en correspondance de fonctions (tableaux JSON).</p>
+<ul><li>Champs d'entrée :</li><li><code>a</code> (string, requis)</li><li><code>b</code> (string, requis)</li><li>outputSchema : présent (champs : details, ok, summary, tool)</li><li>annotations : présentes (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
+<h3 id="rea_diff_summary"><code>rea_diff_summary</code></h3>
+<p>Résumé ajoutés/supprimés.</p>
+<ul><li>Champs d'entrée :</li><li><code>a</code> (string, requis)</li><li><code>b</code> (string, requis)</li><li>outputSchema : présent (champs : details, ok, summary, tool)</li><li>annotations : présentes (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
+<h3 id="rea_dos_com"><code>rea_dos_com</code></h3>
+<p>Détection COM.</p>
+<ul><li>Champs d'entrée :</li><li><code>path</code> (string, requis)</li><li>outputSchema : présent (champs : details, ok, summary, tool)</li><li>annotations : présentes (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
+<h3 id="rea_dos_int21"><code>rea_dos_int21</code></h3>
+<p>Balayage d'appels INT21.</p>
+<ul><li>Champs d'entrée :</li><li><code>b64</code> (string, requis)</li><li>outputSchema : présent (champs : details, ok, summary, tool)</li><li>annotations : présentes (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
+<h3 id="rea_dos_mz"><code>rea_dos_mz</code></h3>
+<p>Vérification d'en-tête MZ.</p>
+<ul><li>Champs d'entrée :</li><li><code>b64</code> (string, requis)</li><li>outputSchema : présent (champs : details, ok, summary, tool)</li><li>annotations : présentes (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
+<h3 id="rea_dos_psp"><code>rea_dos_psp</code></h3>
+<p>Analyse de struct PSP.</p>
+<ul><li>Champs d'entrée :</li><li><code>b64</code> (string, requis)</li><li>outputSchema : présent (champs : details, ok, summary, tool)</li><li>annotations : présentes (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
+<h3 id="rea_dosya_izi"><code>rea_dosya_izi</code></h3>
+<p>Écritures/lectures de fichiers depuis des événements API.</p>
+<ul><li>Champs d'entrée :</li><li><code>text</code> (string, requis)</li><li>outputSchema : présent (champs : details, ok, summary, tool)</li><li>annotations : présentes (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
+<h3 id="rea_dotnet_cil"><code>rea_dotnet_cil</code></h3>
+<p>Dump de méthodes CIL (dnfile).</p>
+<ul><li>Champs d'entrée :</li><li><code>filtre</code> (string, optionnel)</li><li><code>path</code> (string, requis)</li><li>outputSchema : présent (champs : arac, assembly, dosya, filtre, method_sayisi, methods, not, ok)</li><li>annotations : présentes (openWorldHint=true, readOnlyHint=false)</li></ul>
+<h3 id="rea_dotnet_metadata"><code>rea_dotnet_metadata</code></h3>
+<p>Lecture de métadonnées d'assembly.</p>
+<ul><li>Champs d'entrée :</li><li><code>path</code> (string, requis)</li><li>outputSchema : présent (champs : arac, clr, dosya, not, ok, okuyucu)</li><li>annotations : présentes (openWorldHint=true, readOnlyHint=false)</li></ul>
+<h3 id="rea_dwarf_ozet"><code>rea_dwarf_ozet</code></h3>
+<p>Résumé DWARF d'ELF.</p>
+<ul><li>Champs d'entrée :</li><li><code>path</code> (string, requis)</li><li>outputSchema : présent (champs : arac, dosya, fonksiyonAdlari, ok, subprogramSayisi, unitSayisi)</li><li>annotations : présentes (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
+<h3 id="rea_evidence_bundle"><code>rea_evidence_bundle</code></h3>
+<p>Assemblage d'un paquet de preuves.</p>
+<ul><li>Champs d'entrée :</li><li><code>ogeler</code> (string, requis)</li><li><code>sakli</code> (string, requis)</li><li>outputSchema : présent (champs : digest, items, retained, tools_sha256)</li><li>annotations : présentes (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
+<h3 id="rea_evidence_verify"><code>rea_evidence_verify</code></h3>
+<p>Vérification d'un paquet de preuves.</p>
+<ul><li>Champs d'entrée :</li><li><code>text</code> (string, requis)</li><li>outputSchema : présent (champs : ok)</li><li>annotations : présentes (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
+<h3 id="rea_evm_disasm"><code>rea_evm_disasm</code></h3>
+<p>Désassemblage de bytecode EVM (hors ligne).</p>
+<ul><li>Champs d'entrée :</li><li><code>hex</code> (string, requis)</li><li>outputSchema : présent (champs : arac, detay, ok, ozet)</li><li>annotations : présentes (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
+<h3 id="rea_evm_selector"><code>rea_evm_selector</code></h3>
+<p>Sélecteur EVM 4 octets (keccak, hors ligne).</p>
+<ul><li>Champs d'entrée :</li><li><code>sig</code> (string, requis)</li><li>outputSchema : présent (champs : details, ok, summary, tool)</li><li>annotations : présentes (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
+<h3 id="rea_evm_selectors"><code>rea_evm_selectors</code></h3>
+<p>Candidats sélecteurs EVM.</p>
+<ul><li>Champs d'entrée :</li><li><code>hex</code> (string, requis)</li><li>outputSchema : présent (champs : details, ok, summary, tool)</li><li>annotations : présentes (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
+<h3 id="rea_evm_stats"><code>rea_evm_stats</code></h3>
+<p>Statistique d'opcodes EVM.</p>
+<ul><li>Champs d'entrée :</li><li><code>hex</code> (string, requis)</li><li>outputSchema : présent (champs : details, ok, summary, tool)</li><li>annotations : présentes (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
+<h3 id="rea_fallback"><code>rea_fallback</code></h3>
+<p>Chaîne de repli quand le primaire manque.</p>
+<ul><li>Champs d'entrée :</li><li><code>birincil</code> (string, requis)</li><li><code>mevcut</code> (string[], requis)</li><li>outputSchema : absent</li><li>annotations : présentes (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
+<h3 id="rea_firmware_caps"><code>rea_firmware_caps</code></h3>
+<p>Sondage des capacités firmware.</p>
+<ul><li>Champs d'entrée : aucun</li><li>outputSchema : présent (champs : ok, summary, tool)</li><li>annotations : présentes (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
+<h3 id="rea_firmware_extract"><code>rea_firmware_extract</code></h3>
+<p>Extraction de firmware.</p>
+<ul><li>Champs d'entrée :</li><li><code>path</code> (string, requis)</li><li>outputSchema : présent (champs : ok, summary, tool)</li><li>annotations : présentes (destructiveHint=true, openWorldHint=true, readOnlyHint=false)</li></ul>
+<h3 id="rea_firmware_handoff"><code>rea_firmware_handoff</code></h3>
+<p>Note de handoff firmware.</p>
+<ul><li>Champs d'entrée :</li><li><code>neden</code> (string, requis)</li><li><code>path</code> (string, requis)</li><li>outputSchema : présent (champs : handoff, ok, summary, tool)</li><li>annotations : présentes (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
+<h3 id="rea_flutter_blutter"><code>rea_flutter_blutter</code></h3>
+<p>Analyse Dart avec Blutter (erreur honnête si absent).</p>
+<ul><li>Champs d'entrée :</li><li><code>path</code> (string, requis)</li><li>outputSchema : présent (champs : izler, ok, summary, tool)</li><li>annotations : présentes (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
+<h3 id="rea_flutter_payload"><code>rea_flutter_payload</code></h3>
+<p>Traces de payload Flutter.</p>
+<ul><li>Champs d'entrée :</li><li><code>path</code> (string, requis)</li><li>outputSchema : présent (champs : izler, ok, summary, tool)</li><li>annotations : présentes (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
+<h3 id="rea_flutter_scan"><code>rea_flutter_scan</code></h3>
+<p>Balayage de traces Flutter/Dart.</p>
+<ul><li>Champs d'entrée :</li><li><code>path</code> (string, requis)</li><li>outputSchema : présent (champs : buildId, dartMi, motor, ok, summary, tool, tur)</li><li>annotations : présentes (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
+<h3 id="rea_flutter_snapshot"><code>rea_flutter_snapshot</code></h3>
+<p>Infos de snapshot AOT Flutter (magie Dart + version).</p>
+<ul><li>Champs d'entrée :</li><li><code>path</code> (string, requis)</li><li>outputSchema : présent (champs : dartMi, dartSurumu, izolasyon, magic, ok, summary, tool, tur)</li><li>annotations : présentes (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
+<h3 id="rea_frida_api"><code>rea_frida_api</code></h3>
+<p>Traceur d'API (nom+args+retval).</p>
+<ul><li>Champs d'entrée :</li><li><code>desen</code> (string, optionnel)</li><li><code>pid</code> (integer, requis)</li><li>outputSchema : présent (champs : arac, cagrilar, ok, pid, sayi)</li><li>annotations : présentes (openWorldHint=true, readOnlyHint=false)</li></ul>
+<h3 id="rea_frida_cond"><code>rea_frida_cond</code></h3>
+<p>Breakpoint conditionnel.</p>
+<ul><li>Champs d'entrée :</li><li><code>adres</code> (string, requis)</li><li><code>kosul</code> (string, requis)</li><li><code>pid</code> (integer, requis)</li><li>outputSchema : présent (champs : adres, arac, hitSayisi, ok, pid, tuttu)</li><li>annotations : présentes (destructiveHint=true, openWorldHint=true, readOnlyHint=false)</li></ul>
+<h3 id="rea_frida_pause"><code>rea_frida_pause</code></h3>
+<p>Mise en pause du processus cible (NtSuspend).</p>
+<ul><li>Champs d'entrée :</li><li><code>pid</code> (integer, requis)</li><li>outputSchema : présent (champs : arac, durum, ok, pid)</li><li>annotations : présentes (destructiveHint=true, openWorldHint=true, readOnlyHint=false)</li></ul>
+<h3 id="rea_frida_resume"><code>rea_frida_resume</code></h3>
+<p>Reprise d'un processus en pause.</p>
+<ul><li>Champs d'entrée :</li><li><code>pid</code> (integer, requis)</li><li>outputSchema : présent (champs : arac, durum, ok, pid)</li><li>annotations : présentes (destructiveHint=true, openWorldHint=true, readOnlyHint=false)</li></ul>
+<h3 id="rea_frida_stalker"><code>rea_frida_stalker</code></h3>
+<p>Suivi d'appels Stalker.</p>
+<ul><li>Champs d'entrée :</li><li><code>pid</code> (integer, requis)</li><li><code>sure_ms</code> (integer, optionnel)</li><li>outputSchema : présent (champs : arac, cagrilar, ok, pid, sayi)</li><li>annotations : présentes (openWorldHint=true, readOnlyHint=false)</li></ul>
+<h3 id="rea_frida_step"><code>rea_frida_step</code></h3>
+<p>Émulation de l'instruction suivante.</p>
+<ul><li>Champs d'entrée :</li><li><code>adres</code> (string, optionnel)</li><li><code>pid</code> (integer, requis)</li><li>outputSchema : présent (champs : adres, arac, ok, pid, sonraki, vurdu)</li><li>annotations : présentes (destructiveHint=true, openWorldHint=true, readOnlyHint=false)</li></ul>
+<h3 id="rea_fs_diff"><code>rea_fs_diff</code></h3>
+<p>Diff d'instantanés.</p>
+<ul><li>Champs d'entrée :</li><li><code>once</code> (string, requis)</li><li><code>sonra</code> (string, requis)</li><li>outputSchema : présent (champs : kayıt, ok, summary, tool)</li><li>annotations : présentes (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
+<h3 id="rea_fs_snapshot"><code>rea_fs_snapshot</code></h3>
+<p>Instantané de répertoire.</p>
+<ul><li>Champs d'entrée :</li><li><code>path</code> (string, requis)</li><li>outputSchema : présent (champs : kayıt, ok, summary, tool)</li><li>annotations : présentes (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
+<h3 id="rea_ghidra_analyze"><code>rea_ghidra_analyze</code></h3>
+<p>Import+analyse Ghidra headless.</p>
+<ul><li>Champs d'entrée :</li><li><code>path</code> (string, requis)</li><li>outputSchema : présent (champs : arac, hedef, log, ok)</li><li>annotations : présentes (destructiveHint=true, openWorldHint=true, readOnlyHint=false)</li></ul>
+<h3 id="rea_ghidra_decompile"><code>rea_ghidra_decompile</code></h3>
+<p>Pseudo-code Ghidra.</p>
+<ul><li>Champs d'entrée :</li><li><code>addr</code> (string, requis)</li><li><code>path</code> (string, requis)</li><li>outputSchema : présent (champs : addr, arac, hedef, kod, ok)</li><li>annotations : présentes (openWorldHint=true, readOnlyHint=false)</li></ul>
+<h3 id="rea_ghidra_disasm"><code>rea_ghidra_disasm</code></h3>
+<p>Désassemblage Ghidra.</p>
+<ul><li>Champs d'entrée :</li><li><code>addr</code> (string, requis)</li><li><code>path</code> (string, requis)</li><li>outputSchema : présent (champs : addr, arac, hedef, kod, ok, sayi, talimatlar)</li><li>annotations : présentes (openWorldHint=true, readOnlyHint=false)</li></ul>
+<h3 id="rea_ghidra_funcs"><code>rea_ghidra_funcs</code></h3>
+<p>Liste de fonctions Ghidra.</p>
+<ul><li>Champs d'entrée :</li><li><code>path</code> (string, requis)</li><li>outputSchema : présent (champs : arac, fonksiyonlar, hedef, ok)</li><li>annotations : présentes (openWorldHint=true, readOnlyHint=false)</li></ul>
+<h3 id="rea_ghidra_strings"><code>rea_ghidra_strings</code></h3>
+<p>Liste de chaînes Ghidra.</p>
+<ul><li>Champs d'entrée :</li><li><code>path</code> (string, requis)</li><li>outputSchema : présent (champs : arac, hedef, ok, strings)</li><li>annotations : présentes (openWorldHint=true, readOnlyHint=false)</li></ul>
+<h3 id="rea_ghidra_trace"><code>rea_ghidra_trace</code></h3>
+<p>Import d'instantané vers Ghidra Trace.</p>
+<ul><li>Champs d'entrée :</li><li><code>kayit</code> (string, requis)</li><li><code>path</code> (string, requis)</li><li>outputSchema : présent (champs : arac, hedef, ok, sonuc)</li><li>annotations : présentes (destructiveHint=true, openWorldHint=true, readOnlyHint=false)</li></ul>
+<h3 id="rea_ghidra_vt"><code>rea_ghidra_vt</code></h3>
+<p>Diff de fonctions entre deux binaires (version tracking).</p>
+<ul><li>Champs d'entrée :</li><li><code>eski</code> (string, requis)</li><li><code>yeni</code> (string, requis)</li><li>outputSchema : présent (champs : arac, degisen, eklenen, eski, ok, ozet, silinen, yeni)</li><li>annotations : présentes (openWorldHint=true, readOnlyHint=false)</li></ul>
+<h3 id="rea_ghidra_xrefs"><code>rea_ghidra_xrefs</code></h3>
+<p>Liste de xrefs Ghidra.</p>
+<ul><li>Champs d'entrée :</li><li><code>addr</code> (string, requis)</li><li><code>path</code> (string, requis)</li><li>outputSchema : présent (champs : addr, arac, hedef, ok, xrefs)</li><li>annotations : présentes (openWorldHint=true, readOnlyHint=false)</li></ul>
+<h3 id="rea_go_buildinfo"><code>rea_go_buildinfo</code></h3>
+<p>Build-id Go + dépendances de modules.</p>
+<ul><li>Champs d'entrée :</li><li><code>path</code> (string, requis)</li><li>outputSchema : présent (champs : details, ok, summary, tool)</li><li>annotations : présentes (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
+<h3 id="rea_go_funclines"><code>rea_go_funclines</code></h3>
+<p>Fonctions Go + mise en correspondance fichier:ligne.</p>
+<ul><li>Champs d'entrée :</li><li><code>path</code> (string, requis)</li><li>outputSchema : présent (champs : details, ok, summary, tool)</li><li>annotations : présentes (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
+<h3 id="rea_go_goresym"><code>rea_go_goresym</code></h3>
+<p>Analyse GoReSym (erreur honnête si absent).</p>
+<ul><li>Champs d'entrée :</li><li><code>path</code> (string, requis)</li><li>outputSchema : présent (champs : details, ok, summary, tool)</li><li>annotations : présentes (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
+<h3 id="rea_go_module"><code>rea_go_module</code></h3>
+<p>Infos de module Go.</p>
+<ul><li>Champs d'entrée :</li><li><code>text</code> (string, requis)</li><li>outputSchema : présent (champs : details, ok, summary, tool)</li><li>annotations : présentes (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
+<h3 id="rea_go_version"><code>rea_go_version</code></h3>
+<p>Trace de version Go.</p>
+<ul><li>Champs d'entrée :</li><li><code>text</code> (string, requis)</li><li>outputSchema : présent (champs : details, ok, summary, tool)</li><li>annotations : présentes (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
+<h3 id="rea_hap_liste"><code>rea_hap_liste</code></h3>
+<p>Liste de fichiers HAP.</p>
+<ul><li>Champs d'entrée :</li><li><code>path</code> (string, requis)</li><li>outputSchema : présent (champs : arac, dosya, dosyalar, ok, sayi)</li><li>annotations : présentes (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
+<h3 id="rea_hap_manifest"><code>rea_hap_manifest</code></h3>
+<p>Manifeste HAP (bundle/version).</p>
+<ul><li>Champs d'entrée :</li><li><code>path</code> (string, requis)</li><li>outputSchema : présent (champs : arac, bundleName, dosya, kaynak, ok, version)</li><li>annotations : présentes (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
+<h3 id="rea_hopper_istek"><code>rea_hopper_istek</code></h3>
+<p>Production d'un fichier de requête Hopper.</p>
+<ul><li>Champs d'entrée :</li><li><code>path</code> (string, requis)</li><li>outputSchema : présent (champs : adresler, arac, hedef, hopper, istekDosyasi, ok)</li><li>annotations : présentes (destructiveHint=true, readOnlyHint=false)</li></ul>
+<h3 id="rea_hopper_tara"><code>rea_hopper_tara</code></h3>
+<p>Balayage string/regex dans un fichier.</p>
+<ul><li>Champs d'entrée :</li><li><code>desen</code> (string, requis)</li><li><code>path</code> (string, requis)</li><li>outputSchema : présent (champs : arac, desen, eslesmeler, hedef, ok, regex, sayi)</li><li>annotations : présentes (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
+<h3 id="rea_ida_flirt"><code>rea_ida_flirt</code></h3>
+<p>Estimation compilateur/bibliothèque basée sur les chaînes (pas une vraie signature FLIRT ; si IDA est installé, utilisez la sortie rea_ida_idb en appliquant la signature dans IDA pour vérifier).</p>
+<ul><li>Champs d'entrée :</li><li><code>path</code> (string, requis)</li><li>outputSchema : présent (champs : arac, eslesmeler, guven, hedef, idaMevcut, kutuphane, method, not, ok, sayi, surumler)</li><li>annotations : présentes (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
+<h3 id="rea_ida_idb"><code>rea_ida_idb</code></h3>
+<p>Production batch d'IDB (idat).</p>
+<ul><li>Champs d'entrée :</li><li><code>out</code> (string, requis)</li><li><code>path</code> (string, requis)</li><li>outputSchema : présent (champs : arac, hedef, idat, idb, ok)</li><li>annotations : présentes (destructiveHint=true, openWorldHint=true, readOnlyHint=false)</li></ul>
+<h3 id="rea_il2cpp_dump"><code>rea_il2cpp_dump</code></h3>
+<p>Dump avec Il2CppDumper (erreur honnête si absent).</p>
+<ul><li>Champs d'entrée :</li><li><code>path</code> (string, requis)</li><li>outputSchema : présent (champs : arac, cikti, dosya, dosyaSayisi, log, ok, ozet)</li><li>annotations : présentes (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
+<h3 id="rea_il2cpp_metadata"><code>rea_il2cpp_metadata</code></h3>
+<p>Comptage classes/méthodes des métadonnées globales IL2CPP.</p>
+<ul><li>Champs d'entrée :</li><li><code>path</code> (string, requis)</li><li>outputSchema : présent (champs : arac, assemblySayisi, dosya, goruntuSayisi, metodSayisi, not, ok, ozet, sinifSayisi, surum)</li><li>annotations : présentes (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
+<h3 id="rea_il2cpp_methods"><code>rea_il2cpp_methods</code></h3>
+<p>Signatures de méthodes IL2CPP (marqueur honnête si limité).</p>
+<ul><li>Champs d'entrée :</li><li><code>path</code> (string, requis)</li><li>outputSchema : présent (champs : arac, dosya, imzaSayisi, imzalar, metodSayisi, not, ok, sinirli, surum)</li><li>annotations : présentes (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
+<h3 id="rea_ilspy_decompile"><code>rea_ilspy_decompile</code></h3>
+<p>Décompilation .NET C#.</p>
+<ul><li>Champs d'entrée :</li><li><code>out</code> (string, requis)</li><li><code>path</code> (string, requis)</li><li>outputSchema : présent (champs : arac, ciktiDir, cs_sayisi, dosya, not, ok)</li><li>annotations : présentes (destructiveHint=true, openWorldHint=true, readOnlyHint=false)</li></ul>
+<h3 id="rea_investigate"><code>rea_investigate</code></h3>
+<p>Plan d'investigation automatique (reniflage+score+repli).</p>
+<ul><li>Champs d'entrée :</li><li><code>path</code> (string, requis)</li><li><code>soru</code> (string, optionnel)</li><li>outputSchema : présent (champs : arac, motor, ok, plan, skor, tip, yedekler)</li><li>annotations : présentes (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
+<h3 id="rea_jadx_classes"><code>rea_jadx_classes</code></h3>
+<p>Liste de classes d'APK.</p>
+<ul><li>Champs d'entrée :</li><li><code>apk_path</code> (string, requis)</li><li>outputSchema : présent (champs : arac, ok, siniflar, toplam_sinif)</li><li>annotations : présentes (openWorldHint=true, readOnlyHint=false)</li></ul>
+<h3 id="rea_jadx_decompile"><code>rea_jadx_decompile</code></h3>
+<p>Décompilation d'une seule classe d'APK.</p>
+<ul><li>Champs d'entrée :</li><li><code>apk_path</code> (string, requis)</li><li><code>out</code> (string, requis)</li><li><code>sinif</code> (string, requis)</li><li>outputSchema : présent (champs : arac, bayt, ciktiDir, dosya, ok, sinif)</li><li>annotations : présentes (destructiveHint=true, openWorldHint=true, readOnlyHint=false)</li></ul>
+<h3 id="rea_jadx_full"><code>rea_jadx_full</code></h3>
+<p>Décompilation complète d'APK.</p>
+<ul><li>Champs d'entrée :</li><li><code>apk_path</code> (string, requis)</li><li><code>out</code> (string, requis)</li><li>outputSchema : présent (champs : arac, ciktiDir, java_dosya_sayisi, ok)</li><li>annotations : présentes (destructiveHint=true, openWorldHint=true, readOnlyHint=false)</li></ul>
+<h3 id="rea_jadx_manifest"><code>rea_jadx_manifest</code></h3>
+<p>Résumé de manifeste APK.</p>
+<ul><li>Champs d'entrée :</li><li><code>apk_path</code> (string, requis)</li><li>outputSchema : présent (champs : aktiviteler, apk, arac, izinler, ok, paket)</li><li>annotations : présentes (openWorldHint=true, readOnlyHint=false)</li></ul>
+<h3 id="rea_jadx_methods"><code>rea_jadx_methods</code></h3>
+<p>Liste de méthodes dans une sortie décompilée.</p>
+<ul><li>Champs d'entrée :</li><li><code>dir</code> (string, requis)</li><li>outputSchema : présent (champs : arac, methodlar, ok)</li><li>annotations : présentes (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
+<h3 id="rea_jadx_read"><code>rea_jadx_read</code></h3>
+<p>Lecture de classe décompilée (400 lignes).</p>
+<ul><li>Champs d'entrée :</li><li><code>dir</code> (string, requis)</li><li><code>sinif</code> (string, requis)</li><li>outputSchema : présent (champs : arac, dosya, ok, satirlar, toplam_satir)</li><li>annotations : présentes (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
+<h3 id="rea_jadx_xrefs"><code>rea_jadx_xrefs</code></h3>
+<p>Recherche de terme dans une sortie décompilée.</p>
+<ul><li>Champs d'entrée :</li><li><code>dir</code> (string, requis)</li><li><code>terim</code> (string, requis)</li><li>outputSchema : présent (champs : arac, kayitlar, ok)</li><li>annotations : présentes (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
+<h3 id="rea_jeb_sorgu"><code>rea_jeb_sorgu</code></h3>
+<p>Requête MCP JEB.</p>
+<ul><li>Champs d'entrée :</li><li><code>govde</code> (string, optionnel)</li><li><code>url</code> (string, requis)</li><li><code>yontem</code> (string, requis)</li><li>outputSchema : présent (champs : arac, durum, govde, ok, url, yontem)</li><li>annotations : présentes (openWorldHint=true, readOnlyHint=false)</li></ul>
+<h3 id="rea_js_bundle"><code>rea_js_bundle</code></h3>
+<p>Résumé de bundle.</p>
+<ul><li>Champs d'entrée :</li><li><code>text</code> (string, requis)</li><li>outputSchema : présent (champs : ok, summary, tool)</li><li>annotations : présentes (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
+<h3 id="rea_js_export_shape"><code>rea_js_export_shape</code></h3>
+<p>Forme des exports.</p>
+<ul><li>Champs d'entrée :</li><li><code>path</code> (string, requis)</li><li>outputSchema : présent (champs : details, ok, summary, tool)</li><li>annotations : présentes (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
+<h3 id="rea_js_require"><code>rea_js_require</code></h3>
+<p>Graphe require/import.</p>
+<ul><li>Champs d'entrée :</li><li><code>path</code> (string, requis)</li><li>outputSchema : présent (champs : details, ok, summary, tool)</li><li>annotations : présentes (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
+<h3 id="rea_js_sourcemap"><code>rea_js_sourcemap</code></h3>
+<p>Résolution de source-map.</p>
+<ul><li>Champs d'entrée :</li><li><code>text</code> (string, requis)</li><li>outputSchema : présent (champs : ok, summary, tool)</li><li>annotations : présentes (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
+<h3 id="rea_macho_classdump"><code>rea_macho_classdump</code></h3>
+<p>Sortie class-dump (erreur honnête si absent).</p>
+<ul><li>Champs d'entrée :</li><li><code>path</code> (string, requis)</li><li>outputSchema : présent (champs : details, ok, summary, tool)</li><li>annotations : présentes (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
+<h3 id="rea_macho_info"><code>rea_macho_info</code></h3>
+<p>En-tête Mach-O (architecture + type de fichier).</p>
+<ul><li>Champs d'entrée :</li><li><code>path</code> (string, requis)</li><li>outputSchema : présent (champs : details, ok, summary, tool)</li><li>annotations : présentes (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
+<h3 id="rea_macho_loads"><code>rea_macho_loads</code></h3>
+<p>Commandes load Mach-O (segment/dylib).</p>
+<ul><li>Champs d'entrée :</li><li><code>path</code> (string, requis)</li><li>outputSchema : présent (champs : details, ok, summary, tool)</li><li>annotations : présentes (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
+<h3 id="rea_macho_objc"><code>rea_macho_objc</code></h3>
+<p>Liste classes/catégories ObjC (lecture pure).</p>
+<ul><li>Champs d'entrée :</li><li><code>path</code> (string, requis)</li><li>outputSchema : présent (champs : details, ok, summary, tool)</li><li>annotations : présentes (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
+<h3 id="rea_macho_otool"><code>rea_macho_otool</code></h3>
+<p>Sortie otool (erreur honnête si absent).</p>
+<ul><li>Champs d'entrée :</li><li><code>path</code> (string, requis)</li><li>outputSchema : présent (champs : details, ok, summary, tool)</li><li>annotations : présentes (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
+<h3 id="rea_managed_compare"><code>rea_managed_compare</code></h3>
+<p>Diff de membres managed.</p>
+<ul><li>Champs d'entrée :</li><li><code>a</code> (string, requis)</li><li><code>b</code> (string, requis)</li><li>outputSchema : présent (champs : arac, detay, ok, ozet)</li><li>annotations : présentes (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
+<h3 id="rea_managed_import"><code>rea_managed_import</code></h3>
+<p>Enregistrement de reconstruction.</p>
+<ul><li>Champs d'entrée :</li><li><code>path</code> (string, requis)</li><li>outputSchema : présent (champs : arac, detay, ok, ozet)</li><li>annotations : présentes (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
+<h3 id="rea_managed_verify"><code>rea_managed_verify</code></h3>
+<p>Vérification de dépendances natives.</p>
+<ul><li>Champs d'entrée :</li><li><code>beklenen</code> (string, requis)</li><li><code>path</code> (string, requis)</li><li>outputSchema : présent (champs : arac, detay, ok, ozet)</li><li>annotations : présentes (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
+<h3 id="rea_mips_funcs"><code>rea_mips_funcs</code></h3>
+<p>Pré-balayage de fonctions MIPS.</p>
+<ul><li>Champs d'entrée :</li><li><code>b64</code> (string, requis)</li><li>outputSchema : présent (champs : details, ok, summary, tool)</li><li>annotations : présentes (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
+<h3 id="rea_mips_psp_profile"><code>rea_mips_psp_profile</code></h3>
+<p>Profil MIPS/PSP.</p>
+<ul><li>Champs d'entrée :</li><li><code>b64</code> (string, requis)</li><li>outputSchema : présent (champs : details, ok, summary, tool)</li><li>annotations : présentes (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
+<h3 id="rea_missing_reason"><code>rea_missing_reason</code></h3>
+<p>Outil manquant + commande d'installation.</p>
+<ul><li>Champs d'entrée :</li><li><code>eksik</code> (string, requis)</li><li><code>platform</code> (string, optionnel)</li><li>outputSchema : présent (champs : alternatif, eksik, kur, neden)</li><li>annotations : présentes (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
+<h3 id="rea_net_capture"><code>rea_net_capture</code></h3>
+<p>Capture réseau locale (HAR).</p>
+<ul><li>Champs d'entrée :</li><li><code>url</code> (string, requis)</li><li>outputSchema : présent (champs : kayıt, ok, summary, tool)</li><li>annotations : présentes (destructiveHint=true, openWorldHint=true, readOnlyHint=false)</li></ul>
+<h3 id="rea_obligation_advance"><code>rea_obligation_advance</code></h3>
+<p>Avancement d'anneau.</p>
+<ul><li>Champs d'entrée :</li><li><code>bulgu</code> (string, requis)</li><li><code>defter</code> (string, requis)</li><li><code>kod</code> (string, requis)</li><li>outputSchema : présent (champs : links)</li><li>annotations : présentes (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
+<h3 id="rea_obligation_close"><code>rea_obligation_close</code></h3>
+<p>Scellement du registre.</p>
+<ul><li>Champs d'entrée :</li><li><code>text</code> (string, requis)</li><li>outputSchema : présent (champs : kapatıldı, links)</li><li>annotations : présentes (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
+<h3 id="rea_obligation_ledger"><code>rea_obligation_ledger</code></h3>
+<p>Création du registre.</p>
+<ul><li>Champs d'entrée :</li><li><code>bulgular</code> (string[], requis)</li><li><code>evidence_digest</code> (string, requis)</li><li><code>tools_sha256</code> (string, requis)</li><li>outputSchema : présent (champs : evidence_digest, kapatıldı, ledger_id, links, tools_sha256)</li><li>annotations : présentes (destructiveHint=false, idempotentHint=false, openWorldHint=false, readOnlyHint=true)</li></ul>
+<h3 id="rea_obligation_verify"><code>rea_obligation_verify</code></h3>
+<p>Vérification de chaîne.</p>
+<ul><li>Champs d'entrée :</li><li><code>text</code> (string, requis)</li><li>outputSchema : présent (champs : eksik, ok)</li><li>annotations : présentes (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
+<h3 id="rea_pcap_oku"><code>rea_pcap_oku</code></h3>
+<p>Fusion de flux PCAP + déchiffrement TLS par keylog.</p>
+<ul><li>Champs d'entrée :</li><li><code>keylog</code> (string, optionnel)</li><li><code>path</code> (string, requis)</li><li>outputSchema : présent (champs : details, ok, summary, tool)</li><li>annotations : présentes (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
+<h3 id="rea_pdb_indir"><code>rea_pdb_indir</code></h3>
+<p>Téléchargement de PDB depuis le serveur de symboles Microsoft via le record CodeView RSDS du répertoire de debug PE + intégrité + cache.</p>
+<ul><li>Champs d'entrée :</li><li><code>path</code> (string, requis)</li><li>outputSchema : présent (champs : arac, cache, dosya, guid, ok, pdb, url, yas, yol)</li><li>annotations : présentes (destructiveHint=true, openWorldHint=true, readOnlyHint=false)</li></ul>
+<h3 id="rea_pdb_yolu"><code>rea_pdb_yolu</code></h3>
+<p>Chemin PDB depuis le répertoire de debug PE.</p>
+<ul><li>Champs d'entrée :</li><li><code>path</code> (string, requis)</li><li>outputSchema : présent (champs : arac, dosya, guid, ok, pdb, yas)</li><li>annotations : présentes (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
+<h3 id="rea_pe_imports"><code>rea_pe_imports</code></h3>
+<p>Liste d'imports PE.</p>
+<ul><li>Champs d'entrée :</li><li><code>path</code> (string, requis)</li><li>outputSchema : présent (champs : arac, dlls, dosya, fonksiyonlar, not, ok, sayi)</li><li>annotations : présentes (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
+<h3 id="rea_pe_info"><code>rea_pe_info</code></h3>
+<p>Infos d'en-tête PE.</p>
+<ul><li>Champs d'entrée :</li><li><code>path</code> (string, requis)</li><li>outputSchema : présent (champs : arac, bit, dosya, entry, entry_hex, machine, machine_hex, ok, section_sayisi)</li><li>annotations : présentes (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
+<h3 id="rea_pe_sections"><code>rea_pe_sections</code></h3>
+<p>Table de sections PE.</p>
+<ul><li>Champs d'entrée :</li><li><code>path</code> (string, requis)</li><li>outputSchema : présent (champs : arac, bolumler, dosya, ok, sayi)</li><li>annotations : présentes (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
+<h3 id="rea_process_caps"><code>rea_process_caps</code></h3>
+<p>Sondage des capacités de processus.</p>
+<ul><li>Champs d'entrée : aucun</li><li>outputSchema : présent (champs : kayıt, ok, summary, tool)</li><li>annotations : présentes (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
+<h3 id="rea_process_compare"><code>rea_process_compare</code></h3>
+<p>Comparaison pipe/PTY.</p>
+<ul><li>Champs d'entrée :</li><li><code>cmd</code> (string, requis)</li><li>outputSchema : absent</li><li>annotations : présentes (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
+<h3 id="rea_process_run"><code>rea_process_run</code></h3>
+<p>Enregistrement d'exécution de processus.</p>
+<ul><li>Champs d'entrée :</li><li><code>cmd</code> (string, requis)</li><li>outputSchema : présent (champs : kayıt, ok, summary, tool)</li><li>annotations : présentes (destructiveHint=true, openWorldHint=true, readOnlyHint=false)</li></ul>
+<h3 id="rea_pwn_elf_layout"><code>rea_pwn_elf_layout</code></h3>
+<p>Disposition ELF + mitigations.</p>
+<ul><li>Champs d'entrée :</li><li><code>path</code> (string, requis)</li><li>outputSchema : absent</li><li>annotations : présentes (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
+<h3 id="rea_pwn_gadgets"><code>rea_pwn_gadgets</code></h3>
+<p>Indice de gadgets.</p>
+<ul><li>Champs d'entrée :</li><li><code>text</code> (string, requis)</li><li>outputSchema : présent (champs : details, ok, summary, tool)</li><li>annotations : présentes (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
+<h3 id="rea_r2_callgraph"><code>rea_r2_callgraph</code></h3>
+<p>Graphe d'appels de fonctions r2.</p>
+<ul><li>Champs d'entrée :</li><li><code>path</code> (string, requis)</li><li>outputSchema : présent (champs : arac, fonksiyonlar, hedef, ok)</li><li>annotations : présentes (openWorldHint=true, readOnlyHint=false)</li></ul>
+<h3 id="rea_r2_debug"><code>rea_r2_debug</code></h3>
+<p>Debug groupé r2 (bp+regs).</p>
+<ul><li>Champs d'entrée :</li><li><code>addr</code> (string, requis)</li><li><code>path</code> (string, requis)</li><li>outputSchema : présent (champs : arac, bpAddr, cikti, hedef, not, ok)</li><li>annotations : présentes (destructiveHint=true, openWorldHint=true, readOnlyHint=false)</li></ul>
+<h3 id="rea_r2_esil"><code>rea_r2_esil</code></h3>
+<p>Regs d'émulation r2 ESIL.</p>
+<ul><li>Champs d'entrée :</li><li><code>addr</code> (string, requis)</li><li><code>path</code> (string, requis)</li><li>outputSchema : présent (champs : addr, adim, arac, hedef, ok, regs)</li><li>annotations : présentes (openWorldHint=true, readOnlyHint=false)</li></ul>
+<h3 id="rea_readiness"><code>rea_readiness</code></h3>
+<p>Score de préparation à la reconstruction.</p>
+<ul><li>Champs d'entrée :</li><li><code>text</code> (string, requis)</li><li>outputSchema : présent (champs : arac, eksik, ok, seviye, skor)</li><li>annotations : présentes (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
+<h3 id="rea_recon_funcs"><code>rea_recon_funcs</code></h3>
+<p>Liste de fonctions en pseudo-code.</p>
+<ul><li>Champs d'entrée :</li><li><code>text</code> (string, requis)</li><li>outputSchema : présent (champs : details, ok, summary, tool)</li><li>annotations : présentes (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
+<h3 id="rea_recon_harness"><code>rea_recon_harness</code></h3>
+<p>Squelette de harnais C.</p>
+<ul><li>Champs d'entrée :</li><li><code>text</code> (string, requis)</li><li>outputSchema : présent (champs : details, ok, summary, tool)</li><li>annotations : présentes (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
+<h3 id="rea_recon_tag"><code>rea_recon_tag</code></h3>
+<p>Étiquette d'affaire.</p>
+<ul><li>Champs d'entrée : aucun</li><li>outputSchema : présent (champs : details, ok, summary, tool)</li><li>annotations : présentes (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
+<h3 id="rea_registry_izi"><code>rea_registry_izi</code></h3>
+<p>Écritures registre depuis des événements API.</p>
+<ul><li>Champs d'entrée :</li><li><code>text</code> (string, requis)</li><li>outputSchema : présent (champs : details, ok, summary, tool)</li><li>annotations : présentes (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
+<h3 id="rea_scan_repo"><code>rea_scan_repo</code></h3>
+<p>Analyse de dépôt (type+plan).</p>
+<ul><li>Champs d'entrée :</li><li><code>path</code> (string, requis)</li><li>outputSchema : présent (champs : details, ok, summary, tool)</li><li>annotations : présentes (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
+<h3 id="rea_scan_repo_paralel"><code>rea_scan_repo_paralel</code></h3>
+<p>Analyse parallèle de dépôt (pool de 4, annulable).</p>
+<ul><li>Champs d'entrée :</li><li><code>eszamanlilik</code> (integer, optionnel)</li><li><code>path</code> (string, requis)</li><li>outputSchema : présent (champs : details, iptalEdildi, ok, summary, tool)</li><li>annotations : présentes (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
+<h3 id="rea_sniff"><code>rea_sniff</code></h3>
+<p>Type de fichier + moteur suggéré (octets magiques).</p>
+<ul><li>Champs d'entrée :</li><li><code>b64dosya</code> (string, requis)</li><li>outputSchema : présent (champs : motor, tip)</li><li>annotations : présentes (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
+<h3 id="rea_storage_dump"><code>rea_storage_dump</code></h3>
+<p>Cookies + localStorage.</p>
+<ul><li>Champs d'entrée :</li><li><code>url</code> (string, requis)</li><li>outputSchema : présent (champs : details, ok, summary, tool)</li><li>annotations : présentes (openWorldHint=true, readOnlyHint=false)</li></ul>
+<h3 id="rea_typedef_oner"><code>rea_typedef_oner</code></h3>
+<p>Suggestion de noms d'arguments + propagation.</p>
+<ul><li>Champs d'entrée :</li><li><code>text</code> (string, requis)</li><li>outputSchema : présent (champs : arac, ok, oneriler, sayi)</li><li>annotations : présentes (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
+<h3 id="rea_unpack_hunt"><code>rea_unpack_hunt</code></h3>
+<p>Flux guidé pour packer inconnu.</p>
+<ul><li>Champs d'entrée :</li><li><code>path</code> (string, requis)</li><li>outputSchema : présent (champs : adimlar, arac, karar, ok)</li><li>annotations : présentes (openWorldHint=true, readOnlyHint=false)</li></ul>
+<h3 id="rea_unpack_try"><code>rea_unpack_try</code></h3>
+<p>Routage automatique d'unpack.</p>
+<ul><li>Champs d'entrée :</li><li><code>path</code> (string, requis)</li><li>outputSchema : présent (champs : sonuc, yontem)</li><li>annotations : présentes (destructiveHint=true, openWorldHint=true, readOnlyHint=false)</li></ul>
+<h3 id="rea_upx_info"><code>rea_upx_info</code></h3>
+<p>Info « compressé UPX ou non ».</p>
+<ul><li>Champs d'entrée :</li><li><code>path</code> (string, requis)</li><li>outputSchema : présent (champs : arac, cikti, dosya, not, ok, sikisik)</li><li>annotations : présentes (openWorldHint=true, readOnlyHint=false)</li></ul>
+<h3 id="rea_upx_unpack"><code>rea_upx_unpack</code></h3>
+<p>Décompression UPX.</p>
+<ul><li>Champs d'entrée :</li><li><code>out</code> (string, requis)</li><li><code>path</code> (string, requis)</li><li>outputSchema : présent (champs : arac, cikti, dosya, log, ok)</li><li>annotations : présentes (destructiveHint=true, openWorldHint=true, readOnlyHint=false)</li></ul>
+<h3 id="rea_wasm_decode"><code>rea_wasm_decode</code></h3>
+<p>Décodage WASM/WAT (wabt).</p>
+<ul><li>Champs d'entrée :</li><li><code>path</code> (string, requis)</li><li>outputSchema : présent (champs : details, ok, summary, tool)</li><li>annotations : présentes (openWorldHint=true, readOnlyHint=false)</li></ul>
+<h3 id="rea_wasm_exports"><code>rea_wasm_exports</code></h3>
+<p>Liste d'exports WAT (hors ligne).</p>
+<ul><li>Champs d'entrée :</li><li><code>wat</code> (string, requis)</li><li>outputSchema : présent (champs : details, ok, summary, tool)</li><li>annotations : présentes (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
+<h3 id="rea_wasm_imports"><code>rea_wasm_imports</code></h3>
+<p>Liste d'imports WASM.</p>
+<ul><li>Champs d'entrée :</li><li><code>b64</code> (string, requis)</li><li>outputSchema : présent (champs : details, ok, summary, tool)</li><li>annotations : présentes (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
+<h3 id="rea_wasm_sections"><code>rea_wasm_sections</code></h3>
+<p>Table de sections WASM.</p>
+<ul><li>Champs d'entrée :</li><li><code>b64</code> (string, requis)</li><li>outputSchema : présent (champs : details, ok, summary, tool)</li><li>annotations : présentes (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
+<h3 id="rea_wasm_validate"><code>rea_wasm_validate</code></h3>
+<p>Validation WASM (wasm-validate).</p>
+<ul><li>Champs d'entrée :</li><li><code>path</code> (string, requis)</li><li>outputSchema : présent (champs : arac, detay, ok, ozet)</li><li>annotations : présentes (openWorldHint=true, readOnlyHint=false)</li></ul>
+<h3 id="session_close"><code>session_close</code></h3>
+<p>Abandonne une session applicative et son tampon d'événements.</p>
+<ul><li>Champs d'entrée :</li><li><code>session_id</code> (string, requis) — Application session id. Not an MCP protocol session.</li><li>outputSchema : présent (champs : closed, session_id)</li><li>annotations : présentes (destructiveHint=true, openWorldHint=true, readOnlyHint=false)</li></ul>
+<h3 id="session_list"><code>session_list</code></h3>
+<p>Liste les sessions applicatives détenues dans ce processus.</p>
+<ul><li>Champs d'entrée : aucun</li><li>outputSchema : présent (champs : sessions)</li><li>annotations : présentes (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
+<h3 id="session_open"><code>session_open</code></h3>
+<p>Ouvre une session applicative pour un moteur. Renvoie session_id pour les arguments d'outils ultérieurs.</p>
+<ul><li>Champs d'entrée :</li><li><code>engine</code> (enum, requis)</li><li>outputSchema : présent (champs : createdAt, engine, session_id)</li><li>annotations : présentes (destructiveHint=false, idempotentHint=false, openWorldHint=false, readOnlyHint=false)</li></ul>
+<h3 id="static_info"><code>static_info</code></h3>
+<p>Rapporte les capacités du moteur statique radare2, la disponibilité de r2 et la cible ouverte (le cas échéant).</p>
+<ul><li>Champs d'entrée :</li><li><code>session_id</code> (string, requis) — Application session id. Not an MCP protocol session.</li><li>outputSchema : présent (champs : capabilities, engine, r2, session_id, target)</li><li>annotations : présentes (openWorldHint=true, readOnlyHint=false)</li></ul>
+<h3 id="strings"><code>strings</code></h3>
+<p>Chaînes trouvées dans le binaire (adresse, section, longueur, texte).</p>
+<ul><li>Champs d'entrée :</li><li><code>limit</code> (integer, optionnel) — Max strings returned (default 200).</li><li><code>min_length</code> (integer, optionnel) — Keep strings with length &gt;= this (default 0).</li><li><code>offset</code> (integer, optionnel) — Skip this many matches (default 0).</li><li><code>section</code> (string, optionnel) — Only strings from this section, e.g. &quot;.rodata&quot;.</li><li><code>session_id</code> (string, requis) — Application session id. Not an MCP protocol session.</li><li>outputSchema : présent (champs : offset, session_id, strings, total)</li><li>annotations : présentes (openWorldHint=true, readOnlyHint=false)</li></ul>
+<h3 id="xrefs"><code>xrefs</code></h3>
+<p>Références croisées vers et/ou depuis une adresse (code et données).</p>
+<ul><li>Champs d'entrée :</li><li><code>address</code> (string | number, requis) — Target address as hex (&quot;0x400200&quot;), decimal, or flag name (&quot;entry0&quot;).</li><li><code>direction</code> (enum, optionnel)</li><li><code>session_id</code> (string, requis) — Application session id. Not an MCP protocol session.</li><li>outputSchema : présent (champs : address, from, session_id, to)</li><li>annotations : présentes (openWorldHint=true, readOnlyHint=false)</li></ul>
+<h2 id="ressources">Ressources</h2>
+<ul><li><code>rea-plus://capabilities-safety</code> — nom : <code>capabilities-safety</code> — mimeType : <code>application/json</code> — Résumé statique des capacités et des règles de sécurité (lecture seule).</li><li><code>rea-plus://server-info</code> — nom : <code>server-info</code> — mimeType : <code>application/json</code> — Identité statique du serveur et résumé de surface (lecture seule).</li></ul>
+<h2 id="prompts">Prompts</h2>
+<ul><li><code>android-triage</code> — arguments : <code>focus</code> (optionnel), <code>path</code> (requis) — Flux de triage statique basé sur jadx pour APK (prompt sans effets secondaires).</li><li><code>dotnet-malware-triage</code> — arguments : <code>focus</code> (optionnel), <code>path</code> (requis) — Flux de triage statique de logiciels malveillants pour échantillon .NET (prompt sans effets secondaires).</li><li><code>packer-triage</code> — arguments : <code>focus</code> (optionnel), <code>path</code> (requis) — Flux rea ordonné, statique d'abord, pour la détection de packers/protections (prompt sans effets secondaires).</li></ul>
+</div></main>
+<footer class="altbilgi"><p>ReaPlus Docs — site statique. Production : <code>node scripts/site-uret.mjs</code> · Nombres du résumé TOOLS.md (exécution réelle).</p></footer>
+</div>
+<script>
+document.documentElement.classList.add("js");
+(function(){var k="reaplus-tema";var d=document.getElementById("tema-toggle");
+function uygula(t){document.documentElement.dataset.theme=t;try{localStorage.setItem(k,t);}catch(e){}if(d){d.setAttribute("aria-pressed",String(t==="dark"));d.textContent=t==="dark"?"Thème clair":"Thème sombre";}}
+if(d){d.addEventListener("click",function(){uygula(document.documentElement.dataset.theme==="dark"?"light":"dark");});
+if(document.documentElement.dataset.theme){d.setAttribute("aria-pressed",String(document.documentElement.dataset.theme==="dark"));d.textContent=document.documentElement.dataset.theme==="dark"?"Thème clair":"Thème sombre";}}
+var azalt=window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+var beliren=document.querySelectorAll(".reveal");
+if(azalt||!("IntersectionObserver" in window)){beliren.forEach(function(el){el.classList.add("gorunur");});}
+else{var gozcu=new IntersectionObserver(function(girdiler){girdiler.forEach(function(g){if(g.isIntersecting){g.target.classList.add("gorunur");gozcu.unobserve(g.target);}});},{threshold:.12,rootMargin:"0px 0px -8% 0px"});beliren.forEach(function(el){gozcu.observe(el);});}
+var sayilar=document.querySelectorAll(".sayi");
+function bitir(el){el.textContent=el.getAttribute("data-sayi");}
+if(azalt||!("IntersectionObserver" in window)){sayilar.forEach(bitir);}
+else{var sayac=new IntersectionObserver(function(girdiler){girdiler.forEach(function(g){if(!g.isIntersecting)return;var el=g.target;sayac.unobserve(el);var hedef=Number(el.getAttribute("data-sayi"));if(!isFinite(hedef))return;var baslangic=null;var sure=850;function kare(t){if(baslangic===null)baslangic=t;var oran=Math.min(1,(t-baslangic)/sure);var yumru=1-Math.pow(1-oran,3);el.textContent=String(Math.round(hedef*yumru));if(oran<1){requestAnimationFrame(kare);}else{bitir(el);}}requestAnimationFrame(kare);});},{threshold:.4});sayilar.forEach(function(el){sayac.observe(el);});}
+})();
+</script>
+</body>
+</html>

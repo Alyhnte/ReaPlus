@@ -39,7 +39,7 @@ Key/value reference; code, path and number placeholders (`{tool}`, `{schema}`,
 
 | Key | English |
 |---|---|
-| summary.template | Surface summary (real run, TOOLS.md): {tool} tools · {schema} outputSchema · {anno} annotations · {res} resources · {prompt} prompts |
+| summary.template | Surface summary (real run, TOOLS.md): {arac} tools · {sema} outputSchema · {ann} annotations · {res} resources · {prompt} prompts |
 
 ## Index Intro
 

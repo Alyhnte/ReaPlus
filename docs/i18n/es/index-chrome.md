@@ -1,40 +1,54 @@
-ReaPlus Docs (ES) — textos de la carcasa del sitio estático.
+# ReaPlus Docs – Chrome Strings (Spanish)
 
-Fuente: `scripts/site-uret.mjs` (definiciones de página, navegación, búsqueda
-y línea de resumen). Este archivo traduce solo las cadenas visibles de la
-carcasa; el contenido de cada página vive en sus propios archivos
-(`README.md`, `TOOLS.md`, `EXAMPLES.md`, `ROADMAP.md`, `CHANGELOG.md`,
-`PROMPTS.md` de esta misma carpeta).
+Spanish chrome strings for the static docs site (`scripts/site-uret.mjs`):
+navigation labels, search placeholder and summary-bar patterns.
+Key/value reference; code, path and number placeholders (`{arac}`, `{sema}`,
+`{ann}`, `{res}`, `{prompt}`, page filenames) stay unchanged.
 
-**Páginas y navegación** (`html` → título → descripción):
+## Navigation
 
-- `index.html` → "Página principal" → sitio estático único con todo el contenido.
-- `readme.html` → "README" → "Instalación, clientes, características, seguridad".
-- `tools.html` → "Referencia de herramientas" → "Catálogo completo generado (superficie real)".
-- `examples.html` → "Ejemplos" → "5 escenarios de ejecuciones reales".
-- `roadmap.html` → "Hoja de ruta" → "Tareas prioritarias y cerradas".
-- `changelog.html` → "Cambios" → "Notas de versión (Keep a Changelog)".
-- `prompts.html` → "Biblioteca de prompts" → "10 plantillas de preguntas listas".
+| Key | Spanish |
+|---|---|
+| nav.home | Página principal |
+| nav.readme | README |
+| nav.tools | Referencia de herramientas |
+| nav.examples | Ejemplos |
+| nav.roadmap | Hoja de ruta |
+| nav.changelog | Cambios |
+| nav.prompts | Biblioteca de prompts |
 
-La página activa se muestra destacada; las demás son enlaces (separados por "·").
+## Page Descriptions (Index Navigation)
 
-**Búsqueda del índice:**
+| Key | Spanish |
+|---|---|
+| desc.readme | Instalación, clientes, características, seguridad |
+| desc.tools | Catálogo completo generado (superficie real) |
+| desc.examples | 5 escenarios de ejecuciones reales |
+| desc.roadmap | Tareas prioritarias y cerradas |
+| desc.changelog | Notas de versión (Keep a Changelog) |
+| desc.prompts | 10 plantillas de preguntas listas |
 
-- Etiqueta: "Buscar en el sitio:".
-- Marcador del campo: "p. ej., pcap, receta, fuzz".
-- Las entradas del índice de prompts llevan la descripción "prompt listo".
+## Search
 
-**Línea de resumen de superficie** (encabezado de cada página):
+| Key | Spanish |
+|---|---|
+| search.label | Buscar en el sitio: |
+| search.placeholder | p. ej., pcap, receta, fuzz |
 
-- Prefijo: "Resumen de superficie (ejecución real, TOOLS.md):".
-- Formato: "<n> herramientas · <n> outputSchema · <n> annotations · <n> recursos · <n> prompts".
+## Summary Bar
 
-**Cuerpo del índice:**
+| Key | Spanish |
+|---|---|
+| summary.template | Resumen de superficie (ejecución real, TOOLS.md): {arac} herramientas · {sema} outputSchema · {ann} annotations · {res} recursos · {prompt} prompts |
 
-- "README + Referencia de herramientas + Ejemplos + Hoja de ruta + Cambios + Biblioteca de prompts — un solo sitio estático. Generación: `node scripts/site-uret.mjs`."
+## Index Intro
 
-**Notas de generación (ES):**
+| Key | Spanish |
+|---|---|
+| index.intro | README + Referencia de herramientas + Ejemplos + Hoja de ruta + Cambios + Biblioteca de prompts — un solo sitio estático. Generación: <code>node scripts/site-uret.mjs</code>. |
 
-- Atributo de idioma: `<html lang="es">`.
-- Sufijo de título: "— ReaPlus Docs".
-- Enlaces relativos desconocidos a `.md` se escriben como URL blob de GitHub (sin enlaces rotos); las anclas `#` se resuelven con los id generados por el slugger de estilo GitHub.
+## Page Titles
+
+| Key | Spanish |
+|---|---|
+| title.suffix | — ReaPlus Docs |
