@@ -5,54 +5,46 @@ Durum: rea'nın tüm kamusal yetenekleri ReaPlus'ta (191 araç, 2 resource, 3 pr
 (binwalk). v0.11.0'da kapananlar: 5 dilli site i18n + `--check`, örnek oturum (metin),
 npm OIDC provenance + SBOM release asset'i, Pages deploy, CONTRIBUTING + issue formları.
 
-Önceki revizyondan kapanan maddeler:
+## Önceki revizyonun maddeleri — kanıtla kapandı (2026-10-18 sayımı)
 
-- NEXT-3 syscall + dosya/registry izi → **KAPANDI** (v0.10.0, ROADMAP-F: ntdll numara
+- ~~NEXT-1 `rea_investigate` orkestrasyonu~~ → **KAPANDI**: `src/facade/investigate.ts`
+  (60 satır) + `sniff/confidence/evidenceBundle/readiness/missingReasons` facadeleri;
+  kayıt `src/server/registerReaTools.ts:480`; şema `toolMetadata.ts:781`;
+  `tests/investigate.test.mjs`, `evidence.test.mjs`, `sniff.test.mjs`,
+  `confidence.test.mjs`, `readiness.test.mjs` yeşil. Prompt'lar zaten
+  `rea_investigate(path)` çağırıyor. (v0.5.0 full port'ta girmiş, dosya bayat kalmış.)
+- ~~NEXT-2 `rea_typedef` tip yayılımı~~ → **KAPANDI**: `rea_typedef_oner` aracı
+  `src/rea-domains/typedef/TypeSpread.ts` altında kayıtlı; `tests/typedef.test.mjs` yeşil.
+- ~~NEXT-3 syscall + dosya/registry izi~~ → **KAPANDI** (v0.10.0, ROADMAP-F: ntdll numara
   eşleme + CreateFileW/RegSet profilleri + tek-çağrı davranış koşusu).
-- NEXT-6 Android dinamik → **KAPANDI** (v0.10.0: 5 adımlı üretim reçetesi + kuru-doğrulama).
+- ~~NEXT-4 `rea_scan_repo` repo-tarama~~ → **KAPANDI**: `rea_scan_repo` +
+  `rea_scan_repo_paralel` (4'lü havuz, iptal) `src/rea-domains/reposcan/RepoScan.ts`;
+  `tests/reposcan.test.mjs`, `parallel-scan.test.mjs` yeşil.
+- ~~NEXT-6 Android dinamik~~ → **KAPANDI** (v0.10.0: 5 adımlı üretim reçetesi + kuru-doğrulama).
 
-## 1. Derinlikten akla: soruşturma orkestrasyonu (en yüksek değer)
-
-Araçlar var, dedektif yok. Sıradaki iş: hedef tipine göre otomatik plan kuran
-`rea_investigate(hedef, soru)` — sniff→confidence→uygun provider→evidence bundle→readiness.
-Bugün ajan bunu elle diziyor; orkestrasyon 5 çağrıyı 1'e indirir, kanıt formatı
-standartlaşır. Maliyet: saf TS planlayıcı + 10 test. Risk: yok (salt-okunur).
-
-## 2. Decompile kalitesi: tip yayılımı
-
-Ghidra pseudo-C + ilspycmd C# + rizin disasm var; ama tipler çağrılar arası
-yayılmıyor. `rea_typedef` (imza→struct önerisi, DWARF/PDB varsa okuma) eklensin.
-Windows'ta `symchk`/DIA ile PDB çekme mümkün. Değer: okunabilirlik 10x.
-
-## 3. Ölçek: repo-tarama modu
-
-Tek dosya iyi; 10.000 dosyalı repo yavaş (her çağrı process spawn).
-Çözüm: kalıcı worker + sonuç cache (probeCache deseni) + paralel kuyruk (4'lü).
-`rea_scan_repo` toplu API. Maliyet: orta. Değer: CI entegrasyonu açılır.
-
-## 4. Doğruluk: golden korpus (kısmen kapandı → genişlet)
+## 1. Doğruluk: golden korpus (açık — kısmen kapandı → genişlet)
 
 Kısmen kapandı (v0.10.1): `tests/corpus/mini.dex` (sentetik) + mini_branch/mini_pe
-fixture'ları + HASHES girdisi var. Hedef: **her provider için 5 gerçek binary'lik
-korpus + beklenen çıktı hash'i**. Korpus büyüdükçe regresyon yakalanır.
-Maliyet: düşük, sürekli.
+fixture'ları + HASHES girdisi var. Hedef: **gerçek (derlenmiş) binary'lik korpus +
+beklenen çıktı hash'i**; korpus büyüdükçe regresyon yakalanır. Maliyet: düşük, sürekli.
 
-## 5. MCP tam hizmet: kanıt şeması + görev şablonları
+## 2. MCP tam hizmet: görev şablonları (açık)
 
-Orkestrasyon (1) kanıt zarfını standart şemaya bağlamalı: tüm provider çıktıları aynı
-tipte paketlensin (hedef, yöntem, güven, kanıt, kalan belirsizlik). Prompt kütüphanesi
-bugün 10 prompt + 2 resource; tam hizmet için RE görev şablonlarıyla (triage → static →
-dynamic → diff → rapor) genişletilsin. Orkestrasyon + şema birlikte tek oturumda
-"analiz + rapor"u kapatır. Maliyet: M.
+Kanıt zarfı ayakta (`src/facade/evidenceBundle.ts` + `tests/evidence.test.mjs`).
+Kalan: prompt kütüphanesi (bugün 10 prompt + 2 resource) RE görev şablonlarıyla
+genişletilsin (triage → static → dynamic → diff → rapor); `docs/PROMPTS.md` senkron.
+Maliyet: S/M.
 
-## 6. Uzun vade (ağır — kod dalgası değil, araştırma/L)
+## 3. Uzun vade (ağır — kod dalgası değil, araştırma/L)
 
 - angr/Triton sembolik yürütme (VMProtect sınıfı için tek gerçek yol; WSL+conda).
 - Fuzzing harness (AFL++ WSL).
 - IDA/Hopper canlı köprü (lisans + headless API araştırması).
 - LLDB motoru (Linux/macOS), WinDbg TTD okuma (ROADMAP-D P3).
+- asciinema/GIF örnek oturum (ROADMAP-I P1; render aracı kurulu değil — README'de
+  metin transkriptleri var, görsel kayıt araç kurulumu bekliyor).
 
-## Açık dış kapılar (P0 — kod dalgası değil)
+## Açık dış kapılar (P0 — kod dalgası değil, kullanıcı/altyapı ayarı)
 
 - Frida canlı VM exception onayı.
 - Self-hosted Windows runner (Frida/debug testleri CI'da koşmuyor).
@@ -60,23 +52,25 @@ dynamic → diff → rapor) genişletilsin. Orkestrasyon + şema birlikte tek ot
 
 ## Öncelik sırası
 
-orkestrasyon → typedef → repo-tarama → korpus → kanıt şeması/prompt → ağır işler.
+korpus → görev şablonları → SEA portable (ROADMAP-A P2) → araştırma/L.
 
 ---
 
 ## Dalga planı (4'erli; her iş izole worktree + TDD; dalga bitince tam test, sonra sonraki 4)
 
-### dalga-11 — 4 iş (paralel, dosya sahiplikleri ayrışık)
+### dalga-11 — 3 açık iş (paralel, dosya sahiplikleri ayrışık)
 
-1. `rea_investigate` orkestrasyon — yeni planlayıcı modülü + `tests/investigate*.test.mjs`.
-2. `rea_typedef` tip yayılımı — decompile/okunabilirlik alanı + `tests/typedef*.test.mjs`.
-3. `rea_scan_repo` repo-tarama — worker/cache alanı (mevcut worker-cache'e dokunmadan) +
-   `tests/scan-repo*.test.mjs`.
-4. Golden korpus genişletme — `tests/corpus/` + HASHES girdileri + korpus testi.
+1. Golden korpus genişletme — `tests/corpus/` + HASHES girdileri + korpus testi.
+2. Prompt görev şablonları — `src/server/registerResourcesPrompts.ts` + `docs/PROMPTS.md`
+   + `tests/resources-prompts.test.mjs`.
+3. SEA tek-dosya/portable bundle — `scripts/` + release asset yolu (ROADMAP-A P2).
 
-### dalga-12 — 4 iş
+### dalga-12 — release + doküman senkronu
 
-5. Kanıt zarfı şeması + orkestrasyon entegrasyonu (dalga-11.1'in üzerine; ortak tipler).
-6. Prompt/resource yüzeyi: RE görev şablonları + `docs/PROMPTS.md` güncelleme.
-7. asciinema/GIF örnek oturumlar (README + docs; ROADMAP-I P1).
-8. SEA tek-dosya exe: fizibiliteden portable node bundle yolu (ROADMAP-A P2).
+4. README + ROADMAP senkron, CHANGELOG (5 dil), v0.12.0 bump, manifest (winget/scoop/brew),
+   SBOM, site regen → tag `v0.12.0` → CI/publish/docker izleme.
+
+### son iş
+
+5. `github.com/morluto/rea` karşılaştırması: doğrulanmış/enleşmiş PR'lar, release'ler,
+   commitler → ReaPlus'a karşı tam tablo (olası bug'lar + yeni yükseltme/ekleme adayları).
