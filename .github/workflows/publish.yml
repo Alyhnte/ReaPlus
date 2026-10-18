@@ -80,6 +80,8 @@ jobs:
 
       - name: GitHub Release olustur (SBOM ekli)
         run: gh release create "$GITHUB_REF_NAME" --generate-notes sbom.cdx.json
+        env:
+          GH_TOKEN: ${{ github.token }}
 
   publish-registry:
     needs: publish-npm

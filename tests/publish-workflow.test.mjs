@@ -125,4 +125,20 @@ describe("npm provenance + SBOM release zinciri", () => {
     assert.match(wf, /gh release create "\$GITHUB_REF_NAME"/, "gh release create tag adiyla ($GITHUB_REF_NAME) cagirilmali");
     assert.ok(wf.includes("--generate-notes"), "gh release create --generate-notes ile cagirilmali");
   });
+
+  it("release-artifacts: gh release create adimi GH_TOKEN tasir", () => {
+    // gh CLI Actions icinde token'ı yalnizca GH_TOKEN env'inden okur; job izni
+    // (contents: write) tek basina yetmez — dogrulanmazsa adim exit code 4 ile duser.
+    const adim = wf.match(
+      /- name: GitHub Release olustur \(SBOM ekli\)\r?\n([\s\S]*?)(?=\r?\n  \S|\r?\n*$)/,
+    );
+    assert.ok(adim, "GitHub Release olustur adimi bulunmali");
+    const blok = adim[1];
+    assert.match(blok, /env:/, "adimin env blogu olmali");
+    assert.match(
+      blok,
+      /GH_TOKEN:\s*\$\{\{\s*github\.token\s*\}\}/,
+      "GH_TOKEN github.token ile bagli olmali",
+    );
+  });
 });
