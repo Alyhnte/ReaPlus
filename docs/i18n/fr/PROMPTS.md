@@ -3,7 +3,7 @@
 Les 10 formulations de questions prêtes à l'emploi que l'agent posera à rea-plus. Chaque prompt : **Objectif** +
 **Exemple d'appel** (forme réelle MCP/`rea-plus-cli`, noms de champs identiques à la
 référence générée [`TOOLS.md`](TOOLS.md)) + type de **Sortie attendue**.
-Surface : **187 outils**, **183 outputSchema**, **187 annotations**, 2 resources, 3 prompts.
+Surface : **191 outils**, **187 outputSchema**, **191 annotations**, 2 resources, 7 prompts.
 
 > Remarque : les appels de débogage live exigeant `confirm:true` ne figurent pas dans la liste ; les
 > 10 prompts ci-dessous sont tous des flux en lecture seule / statiques.

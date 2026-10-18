@@ -26,7 +26,7 @@ Ihr Agent stellt Fragen; rea-plus untersucht die Binärdatei und antwortet mit B
 - 🐞 **Echtes Debugging statt Screenshots** — x64dbg-, cdb- (WinDbg-) und Frida-Engines hinter einem eingefrorenen 30-Werkzeug-Kern: Breakpoints, Stepping, Register, Speicher, Callstacks, Time-Travel-Checkpoints.
 - 🧰 **157 statische Werkzeuge** — Ghidra headless, rizin/radare2, .NET-CIL (dnfile) und ILSpy, jadx/apktool/adb, WASM + EVM, Firmware, Browser/HAR, UPX, PE-/ELF-/Mach-O-Reader und mehr.
 - 🤝 **Ehrlich per Design** — ein fehlendes Backend antwortet `capability_unsupported` mit Installationshinweis. Nichts fälscht ein Ergebnis, Fehler kommen als saubere MCP-`isError` zurück, und mutierende Live-Debug-Aufrufe erfordern `confirm:true`.
-- 🧩 **191 Werkzeuge, 2 Ressourcen, 3 Prompts** — der vollständige generierte Katalog liegt in [`docs/TOOLS.md`](docs/TOOLS.md); mit `REA_TOOLSETS` laden kleine Clients nur einen Profil-Ausschnitt (siehe [Konfiguration](#-konfiguration)). Ohne HTTP-Token wird statt der vollen Oberfläche nur eine schreibgeschützte Allowlist mit 44 Werkzeugen registriert.
+- 🧩 **191 Werkzeuge, 2 Ressourcen, 7 Prompts** — der vollständige generierte Katalog liegt in [`docs/TOOLS.md`](docs/TOOLS.md); mit `REA_TOOLSETS` laden kleine Clients nur einen Profil-Ausschnitt (siehe [Konfiguration](#-konfiguration)). Ohne HTTP-Token wird statt der vollen Oberfläche nur eine schreibgeschützte Allowlist mit 44 Werkzeugen registriert.
 - 🔌 **Zwei Transporte** — stdio für lokale Agenten, streambarer HTTP (`/mcp` + `/health`, Bearer-Token, localhost-Host-/Origin-Validierung) für geteilte Setups.
 - 🧪 **Bewährt statt versprochen** — eine 91-Dateien-Standard-Teststrecke, Ubuntu-CI für die releaste Linie und Protokolltests, die den echten kompilierten Server ansteuern.
 
@@ -204,7 +204,7 @@ Analyse, CLI und beide Transporte funktionieren.
 
 ## 🧰 Funktionen
 
-Die vollständige, generierte Referenz — **191 Werkzeuge + 2 Ressourcen (`rea-plus://server-info`, `rea-plus://capabilities-safety`) + 3 Prompts (`packer-triage`, `dotnet-malware-triage`, `android-triage`)** — liegt in [`docs/TOOLS.md`](docs/TOOLS.md). Die Tabelle unten ist nur eine Domänenübersicht.
+Die vollständige, generierte Referenz — **191 Werkzeuge + 2 Ressourcen (`rea-plus://server-info`, `rea-plus://capabilities-safety`) + 7 Prompts (`packer-triage`, `dotnet-malware-triage`, `android-triage`, `pe-crash-triage`, `elf-linux-triage`, `binary-diff`, `evidence-report`)** — liegt in [`docs/TOOLS.md`](docs/TOOLS.md). Die Tabelle unten ist nur eine Domänenübersicht.
 
 | Domäne | Was Sie erhalten | Engine / Backend |
 |---|---|---|

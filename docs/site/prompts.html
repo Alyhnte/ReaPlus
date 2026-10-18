@@ -18,18 +18,19 @@
 <button id="tema-toggle" type="button" aria-pressed="false">Koyu tema</button>
 </header>
 <section class="ozet reveal" aria-label="Yüzey özeti">
-<p class="ozet-metin">Yüzey özeti (gerçek koşu, TOOLS.md): 191 araç · 187 outputSchema · 191 annotations · 2 resource · 3 prompt</p>
-<dl class="istatistik"><div><dt>araç</dt><dd><span class="sayi" data-sayi="191">191</span></dd></div><div><dt>outputSchema</dt><dd><span class="sayi" data-sayi="187">187</span></dd></div><div><dt>annotations</dt><dd><span class="sayi" data-sayi="191">191</span></dd></div><div><dt>resource</dt><dd><span class="sayi" data-sayi="2">2</span></dd></div><div><dt>prompt</dt><dd><span class="sayi" data-sayi="3">3</span></dd></div></dl>
+<p class="ozet-metin">Yüzey özeti (gerçek koşu, TOOLS.md): 191 araç · 187 outputSchema · 191 annotations · 2 resource · 7 prompt</p>
+<dl class="istatistik"><div><dt>araç</dt><dd><span class="sayi" data-sayi="191">191</span></dd></div><div><dt>outputSchema</dt><dd><span class="sayi" data-sayi="187">187</span></dd></div><div><dt>annotations</dt><dd><span class="sayi" data-sayi="191">191</span></dd></div><div><dt>resource</dt><dd><span class="sayi" data-sayi="2">2</span></dd></div><div><dt>prompt</dt><dd><span class="sayi" data-sayi="7">7</span></dd></div></dl>
 </section>
 <main id="icerik"><div class="reveal">
 <h1>Prompt Kütüphanesi</h1>
-<h1 id="reaplus-prompt-kütüphanesi-10-hazır-prompt">ReaPlus Prompt Kütüphanesi (10 hazır prompt)</h1>
-<p>Ajanın rea-plus'a soracağı 10 hazır soru kalıbı. Her prompt: <strong>Amaç</strong> +
+<h1 id="reaplus-prompt-kütüphanesi-10-hazır-prompt--4-görev-şablonu">ReaPlus Prompt Kütüphanesi (10 hazır prompt + 4 görev şablonu)</h1>
+<p>Ajanın rea-plus'a soracağı 10 hazır soru kalıbı + 4 MCP görev şablonu akışı.
+Her prompt: <strong>Amaç</strong> +
 <strong>Örnek çağrı</strong> (gerçek MCP/<code>rea-plus-cli</code> formu, alan adları üretilmiş
 referans <a href="tools.html"><code>TOOLS.md</code></a> ile aynı) + <strong>Beklenen çıktı</strong> türü.
-Yüzey: <strong>187 araç</strong>, <strong>183 outputSchema</strong>, <strong>187 annotations</strong>, 2 resource, 3 prompt.</p>
+Yüzey: <strong>191 araç</strong>, <strong>187 outputSchema</strong>, <strong>191 annotations</strong>, 2 resource, 7 prompt.</p>
 <blockquote>Not: <code>confirm:true</code> isteyen canlı-debug çağrıları listede yok; buradaki
-10 promptun tamamı salt-okunur/statik akışlardır.</blockquote>
+14 promptun tamamı salt-okunur/statik akışlardır.</blockquote>
 <h2 id="1-triage--bu-dosya-nedir-nereden-başlarım">1) Triage — &quot;bu dosya nedir, nereden başlarım?&quot;</h2>
 <p><strong>Amaç:</strong> Bilinmeyen bir dosyayı tek çağrıda sınıfla ve sonraki adım planını al.</p>
 <p><strong>Örnek çağrı:</strong></p>
@@ -115,6 +116,56 @@ regresyonu testle yakala.</p>
 <p><strong>Beklenen çıktı:</strong> node:test çıktısı (bütçe eşikleri <code>tests/perf-budget.test.mjs</code>
 içinde tanımlı); eşik aşımı testi kırmızıya düşürür, süreler konsolda
 milisaniye olarak raporlanır.</p>
+<h2 id="görev-şablonu-promptları-mcp-kayıtlı-4-akış">Görev şablonu prompt'ları (MCP kayıtlı, 4 akış)</h2>
+<p>Aşağıdaki 4 prompt <code>prompts/list</code> üzerinden kayıtlıdır: her biri yalnızca
+<strong>sıralı akış metni</strong> döndürür (<code>promptSonuc</code>), araç çağırmaz. <code>path</code> (veya
+<code>eski</code>/<code>yeni</code>) zorunlu, <code>focus</code> opsiyoneldir. Kullanılan araç adları
+<a href="tools.html"><code>TOOLS.md</code></a> ile doğrulanmıştır. Tüm akışlar VM/CI'da <code>confirm:true</code>
+isteyen canlı-debug adımlarını atlar ve örneği asla çalıştırmaz.</p>
+<h3 id="11-pecrash-triage---çöken-peyi-statikten-davranışa-nasıl-inceleyeyim">11) PE/crash triage - &quot;çöken PE'yi statikten davranışa nasıl inceleyeyim?&quot;</h3>
+<p><strong>Amaç:</strong> PE hedefte triage → statik → crash kanıtı → davranış sırasıyla
+ilerlet; crash kaydı yoksa davranışı uydurmadan eksikliği yaz.</p>
+<p><strong>Örnek çağrı:</strong></p>
+<pre><code class="language-json">{ &quot;name&quot;: &quot;pe-crash-triage&quot;, &quot;arguments&quot;: { &quot;path&quot;: &quot;ornek.exe&quot;, &quot;focus&quot;: &quot;yuksek entropi&quot; } }</code></pre>
+<p><strong>Beklenen çıktı:</strong> metin akışı: <code>rea_investigate</code> → <code>rea_pe_info</code> /
+<code>rea_pe_sections</code> / <code>rea_pe_imports</code> → <code>rea_crash_kayit_parse</code> /
+<code>rea_crash_ozet</code> / <code>rea_crash_timeline</code> / <code>rea_crash_hint</code> →
+<code>rea_behavior_full</code> / <code>rea_behavior_timeline</code> → <code>rea_pdb_yolu</code> (varsa);
+sonuçta triage öğesi, statik bulgular, crash kanıtının derecesi ve
+davranış özeti + her bulgu için güven düzeyi.</p>
+<h3 id="12-elflinux-triage---elf-hedefi-sembolekipman-açısından-nasıl-taranır">12) ELF/Linux triage - &quot;ELF hedefi sembol/ekipman açısından nasıl taranır?&quot;</h3>
+<p><strong>Amaç:</strong> ELF/Linux hedefte segment/kesit düzeni, DWARF sembolleri, Go
+derleme bilgisi ve gadget adaylarını sırayla topla.</p>
+<p><strong>Örnek çağrı:</strong></p>
+<pre><code class="language-json">{ &quot;name&quot;: &quot;elf-linux-triage&quot;, &quot;arguments&quot;: { &quot;path&quot;: &quot;hedef.elf&quot; } }</code></pre>
+<p><strong>Beklenen çıktı:</strong> metin akışı: <code>rea_investigate</code> → <code>rea_pwn_elf_layout</code> →
+<code>rea_dwarf_ozet</code> → <code>rea_go_buildinfo</code> / <code>rea_go_funclines</code> (Go ise) →
+<code>rea_cutter_funcs</code> / <code>rea_cutter_strings</code> (veya Ghidra: <code>rea_ghidra_analyze</code> →
+<code>rea_ghidra_funcs</code> / <code>rea_ghidra_strings</code>) → <code>rea_pwn_gadgets</code>; sonuçta ELF
+tipi + mitigation (NX/PIE/RELRO/canary) durumu, sembol/gadget kanıtları ve
+güven düzeyi.</p>
+<h3 id="13-binary-diff---iki-sürüm-arasında-ne-değişmiş-yamanın-etkisi-ne">13) Binary diff - &quot;iki sürüm arasında ne değişmiş, yamanın etkisi ne?&quot;</h3>
+<p><strong>Amaç:</strong> İki sürüm arası fonksiyon diff'ini çıkar, değişen fonksiyonları
+decompile ederek yamanın etki alanını belirle.</p>
+<p><strong>Örnek çağrı:</strong></p>
+<pre><code class="language-json">{ &quot;name&quot;: &quot;binary-diff&quot;, &quot;arguments&quot;: { &quot;eski&quot;: &quot;v1.exe&quot;, &quot;yeni&quot;: &quot;v2.exe&quot;, &quot;focus&quot;: &quot;acik yamasi&quot; } }</code></pre>
+<p><strong>Beklenen çıktı:</strong> metin akışı: <code>rea_investigate</code> (iki sürüm) →
+<code>rea_bindiff_fonksiyonlar</code> (eski+yeni) → <code>rea_bindiff_karsilastir</code> (girdi
+JSON: <code>{&quot;eski&quot;: &quot;&lt;eski&gt;&quot;, &quot;yeni&quot;: &quot;&lt;yeni&gt;&quot;}</code>) → <code>rea_ghidra_vt</code> (Ghidra varsa) →
+<code>rea_ghidra_decompile</code> (değişen fonksiyon adresleri); sonuçta eklenen /
+çıkarılan / değişen fonksiyonlar + her biri için kanıt (hash/imza/adres) ve
+yamanın etki alanı.</p>
+<h3 id="14-evidence-report---topladığım-kanıtları-rapora-nasıl-dönüştürürüm">14) Evidence report - &quot;topladığım kanıtları rapora nasıl dönüştürürüm?&quot;</h3>
+<p><strong>Amaç:</strong> Kanıt paketini digest'leyip doğrula, obligation defteriyle her
+bulgunun kanıt zincirini kapat, hazırlık skoru + kapsam oranını raporla.</p>
+<p><strong>Örnek çağrı:</strong></p>
+<pre><code class="language-json">{ &quot;name&quot;: &quot;evidence-report&quot;, &quot;arguments&quot;: { &quot;path&quot;: &quot;ornek.bin&quot;, &quot;focus&quot;: &quot;rapor kapsami&quot; } }</code></pre>
+<p><strong>Beklenen çıktı:</strong> metin akışı: <code>rea_investigate</code> → <code>rea_evidence_bundle</code> →
+<code>rea_evidence_verify</code> → <code>rea_obligation_ledger</code> / <code>rea_obligation_advance</code> /
+<code>rea_obligation_verify</code> / <code>rea_obligation_close</code> → <code>rea_readiness</code> /
+<code>rea_coverage</code> → <code>rea_missing_reason</code> (eksik araç); sonuçta yönetici özeti,
+bulgu listesi (bulgu + kanıt + güven), kanıt digest'i, obligation zincir
+durumu, hazırlık skoru ve kapsam oranı.</p>
 </div></main>
 <footer class="altbilgi"><p>ReaPlus Docs — statik site. Üretim: <code>node scripts/site-uret.mjs</code> · Sayılar docs/TOOLS.md özetinden alınır (gerçek koşu).</p></footer>
 </div>

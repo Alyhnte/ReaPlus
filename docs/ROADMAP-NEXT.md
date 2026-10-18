@@ -1,6 +1,6 @@
 # ROADMAP-NEXT — v0.11.0 sonrası derin işler
 
-Durum: rea'nın tüm kamusal yetenekleri ReaPlus'ta (191 araç, 2 resource, 3 prompt,
+Durum: rea'nın tüm kamusal yetenekleri ReaPlus'ta (191 araç, 2 resource, 7 prompt,
 101 test dosyası). Ticari lisanslılar kapılı (Hopper/IDA/JEB), Linux-özeller belgeli
 (binwalk). v0.11.0'da kapananlar: 5 dilli site i18n + `--check`, örnek oturum (metin),
 npm OIDC provenance + SBOM release asset'i, Pages deploy, CONTRIBUTING + issue formları.

@@ -3,7 +3,7 @@
 10 plantillas de preguntas que el agente le hace a rea-plus. Cada prompt: **Objetivo** +
 **Llamada de ejemplo** (forma real MCP/`rea-plus-cli`; los nombres de campo coinciden con la
 referencia generada [`TOOLS.md`](TOOLS.md)) + tipo de **Salida esperada**.
-Superficie: **187 herramientas**, **183 outputSchema**, **187 annotations**, 2 recursos, 3 prompts.
+Superficie: **191 herramientas**, **187 outputSchema**, **191 annotations**, 2 recursos, 7 prompts.
 
 > Nota: las llamadas de depuración en vivo que piden `confirm:true` no están en la lista; los
 > 10 prompts son todos flujos de solo lectura/estáticos.

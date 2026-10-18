@@ -5,7 +5,7 @@ comando y cada número aquí provienen de una ejecución real (sin salidas
 inventadas); `tests/docs-examples.test.mjs` los ejecuta y los verifica.
 
 Superficie (resumen de la referencia generada [`TOOLS.md`](TOOLS.md)): **191 herramientas**,
-**187 outputSchema**, **191 annotations**, 2 recursos, 3 prompts.
+**187 outputSchema**, **191 annotations**, 2 recursos, 7 prompts.
 
 Requisito previo: `npm run build` (los ejemplos se ejecutan sobre `dist/`). Los
 archivos del corpus son de solo lectura (`tests/corpus/`); ningún ejemplo los modifica.

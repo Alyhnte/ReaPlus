@@ -14,7 +14,7 @@
 
 ## v0.10.0 tabanıyla kapananlar (özet)
 
-- MCP yüzeyi: 191 araç + 2 resource + 3 prompt; üretilmiş tam referans [`TOOLS.md`](TOOLS.md).
+- MCP yüzeyi: 191 araç + 2 resource + 7 prompt; üretilmiş tam referans [`TOOLS.md`](TOOLS.md).
 - `REA_TOOLSETS` profilleri: `all` 191 (varsayılan), `minimal` 8, `static` 98, `android` 27, `dotnet` 20, `web` 26, `debug` 50; virgüllü birleşim, bilinmeyen profil açılış hatası. Yeni araç yalnız `all`'da (fail-closed).
 - `REA_WORKSPACE_ROOT`: `rea_*` + conduit yolları + kullanıcıya görünür türev yazmalar kök içinde; operatör temp/cache yüzeyleri bilinçli istisna. Roots (legacy + modern MRTR) yalnız daraltır.
 - Tokensiz HTTP: 44 salt-okunur araçlık allowlist (toolset ile kesişim) + `REA_AUDIT_LOG` (argümansız JSONL) + rate limit (120/dk) + eşzamanlılık tavanı (16) + oturum TTL (30dk).

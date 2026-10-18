@@ -11,7 +11,7 @@
 
 ## Closed on the v0.10.0 baseline (summary)
 
-- MCP surface: 191 tools + 2 resources + 3 prompts; generated full reference [`TOOLS.md`](TOOLS.md).
+- MCP surface: 191 tools + 2 resources + 7 prompts; generated full reference [`TOOLS.md`](TOOLS.md).
 - `REA_TOOLSETS` profiles: `all` 191 (default), `minimal` 8, `static` 98, `android` 27, `dotnet` 20, `web` 26, `debug` 50; comma-separated union, unknown profile is a startup error. New tools land in `all` only (fail-closed).
 - `REA_WORKSPACE_ROOT`: `rea_*` + conduit paths + user-visible derived writes stay inside the root; operator temp/cache surfaces are a deliberate exception. Roots (legacy + modern MRTR) only narrows.
 - Tokenless HTTP: 44 read-only-tool allowlist (intersected with toolset) + `REA_AUDIT_LOG` (argument-free JSONL) + rate limit (120/min) + concurrency cap (16) + session TTL (30min).

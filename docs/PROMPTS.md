@@ -4,7 +4,7 @@ Ajanın rea-plus'a soracağı 10 hazır soru kalıbı + 4 MCP görev şablonu ak
 Her prompt: **Amaç** +
 **Örnek çağrı** (gerçek MCP/`rea-plus-cli` formu, alan adları üretilmiş
 referans [`TOOLS.md`](TOOLS.md) ile aynı) + **Beklenen çıktı** türü.
-Yüzey: **187 araç**, **183 outputSchema**, **187 annotations**, 2 resource, 7 prompt.
+Yüzey: **191 araç**, **187 outputSchema**, **191 annotations**, 2 resource, 7 prompt.
 
 > Not: `confirm:true` isteyen canlı-debug çağrıları listede yok; buradaki
 > 14 promptun tamamı salt-okunur/statik akışlardır.

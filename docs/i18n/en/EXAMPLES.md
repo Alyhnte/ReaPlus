@@ -5,7 +5,7 @@ command and every number here comes from a real run** (no fabricated output);
 `tests/docs-examples.test.mjs` executes and verifies all of them.
 
 Surface (generated reference [`TOOLS.md`](TOOLS.md) summary): **191 tools**,
-**187 outputSchemas**, **191 annotations**, 2 resources, 3 prompts.
+**187 outputSchemas**, **191 annotations**, 2 resources, 7 prompts.
 
 Prerequisite: `npm run build` (examples run against `dist/`). Corpus
 files are read-only (`tests/corpus/`); no example modifies them.

@@ -5,7 +5,7 @@
 `tests/docs-examples.test.mjs` führt sie alle aus und verifiziert sie.
 
 Oberfläche (Zusammenfassung der erzeugten Referenz [`TOOLS.md`](TOOLS.md)): **191 Werkzeuge**,
-**187 outputSchema**, **191 annotations**, 2 Ressourcen, 3 Prompts.
+**187 outputSchema**, **191 annotations**, 2 Ressourcen, 7 Prompts.
 
 Voraussetzung: `npm run build` (Beispiele laufen über `dist/`). Korpus-
 dateien sind schreibgeschützt (`tests/corpus/`); kein Beispiel verändert sie.

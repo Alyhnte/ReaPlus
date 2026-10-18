@@ -3,7 +3,7 @@
 10 fertige Fragevorlagen, die der Agent an rea-plus stellt. Jeder Prompt: **Ziel** +
 **Beispielaufruf** (echte MCP-/`rea-plus-cli`-Form, Feldnamen identisch mit der erzeugten
 Referenz [`TOOLS.md`](TOOLS.md)) + Art der **erwarteten Ausgabe**.
-Oberfläche: **187 Werkzeuge**, **183 outputSchema**, **187 annotations**, 2 Ressourcen, 3 Prompts.
+Oberfläche: **191 Werkzeuge**, **187 outputSchema**, **191 annotations**, 2 Ressourcen, 7 Prompts.
 
 > Hinweis: Live-Debug-Aufrufe, die `confirm:true` verlangen, stehen nicht in der Liste; alle
 > 10 Prompts hier sind schreibgeschützte/statische Abläufe.

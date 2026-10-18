@@ -10,7 +10,7 @@
 
 ## Cerrados con la base v0.10.0 (resumen)
 
-- Superficie MCP: 191 herramientas + 2 recursos + 3 prompts; referencia completa generada en [`TOOLS.md`](TOOLS.md).
+- Superficie MCP: 191 herramientas + 2 recursos + 7 prompts; referencia completa generada en [`TOOLS.md`](TOOLS.md).
 - Perfiles `REA_TOOLSETS`: `all` 191 (predeterminado), `minimal` 8, `static` 98, `android` 27, `dotnet` 20, `web` 26, `debug` 50; unión con comas, perfil desconocido = error de arranque. Herramienta nueva solo en `all` (fail-closed).
 - `REA_WORKSPACE_ROOT`: rutas `rea_*` + conduit + escrituras derivadas visibles al usuario dentro de la raíz; superficies temp/caché del operador como excepción consciente. Roots (legacy + modern MRTR) solo estrecha.
 - HTTP sin token: allowlist de 44 herramientas de solo lectura (intersección con toolset) + `REA_AUDIT_LOG` (JSONL sin argumentos) + límite de tasa (120/min) + techo de concurrencia (16) + TTL de sesión (30 min).

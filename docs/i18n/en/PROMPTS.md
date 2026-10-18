@@ -3,8 +3,8 @@
 10 ready-made question patterns for an agent to ask rea-plus. Each prompt:
 **Goal** + **Sample call** (real MCP/`rea-plus-cli` form; field names match
 the generated reference [`TOOLS.md`](TOOLS.md)) + **Expected output** kind.
-Surface: **187 tools**, **183 outputSchemas**, **187 annotations**, 2
-resources, 3 prompts.
+Surface: **191 tools**, **187 outputSchemas**, **191 annotations**, 2
+resources, 7 prompts.
 
 > Note: live-debug calls requiring `confirm:true` are not in this list; all
 > 10 prompts here are read-only/static flows.

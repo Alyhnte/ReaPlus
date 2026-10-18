@@ -6,10 +6,10 @@
 
 ## Özet
 
-- Sunucu: `rea-plus` 0.9.0
+- Sunucu: `rea-plus` 0.11.0
 - Toplam araç: 191
 - Toplam resource: 2
-- Toplam prompt: 3
+- Toplam prompt: 7
 - outputSchema taşıyan araç: 187
 - annotations taşıyan araç: 191
 
@@ -1854,5 +1854,9 @@ Cross-references to and/or from an address (code and data).
 ## Prompts
 
 - `android-triage` — argümanlar: `focus` (opsiyonel), `path` (zorunlu) — APK icin jadx tabanli statik triage akisi (yan etkisiz prompt).
+- `binary-diff` — argümanlar: `eski` (zorunlu), `focus` (opsiyonel), `yeni` (zorunlu) — Iki surum arasi fonksiyon diff ve yama incelemesi akisi (yan etkisiz prompt).
 - `dotnet-malware-triage` — argümanlar: `focus` (opsiyonel), `path` (zorunlu) — .NET ornegi icin statik zararli-yazilim triage akisi (yan etkisiz prompt).
+- `elf-linux-triage` — argümanlar: `focus` (opsiyonel), `path` (zorunlu) — ELF hedefte layout -> sembol -> gadget statik triage akisi (yan etkisiz prompt).
+- `evidence-report` — argümanlar: `focus` (opsiyonel), `path` (zorunlu) — Kanit paketini dogrulanmis rapora donduren akis (yan etkisiz prompt).
 - `packer-triage` — argümanlar: `focus` (opsiyonel), `path` (zorunlu) — Packer/koruma tespiti icin sirali, statik-oncelikli rea akisi (yan etkisiz prompt).
+- `pe-crash-triage` — argümanlar: `focus` (opsiyonel), `path` (zorunlu) — PE hedefte triage -> statik -> crash -> davranis akisi (yan etkisiz prompt).

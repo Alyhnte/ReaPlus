@@ -26,7 +26,7 @@ Your agent asks questions; rea-plus inspects the binary and answers with evidenc
 - 🐞 **Real debugging, not screenshots** — x64dbg, cdb (WinDbg), and Frida engines behind one frozen 30-tool core: breakpoints, stepping, registers, memory, call stacks, time-travel checkpoints.
 - 🧰 **157 static tools** — Ghidra headless, rizin/radare2, .NET CIL (dnfile) and ILSpy, jadx/apktool/adb, WASM + EVM, firmware, browser/HAR, UPX, PE/ELF/Mach-O readers, and more.
 - 🤝 **Honest by design** — a missing backend answers `capability_unsupported` with an install hint. Nothing fakes a result, errors come back as proper MCP `isError`, and mutating live-debug calls require `confirm:true`.
-- 🧩 **191 tools, 2 resources, 3 prompts** — the full generated catalog lives in [`docs/TOOLS.md`](docs/TOOLS.md); `REA_TOOLSETS` lets small-context clients load only a profile slice (see [Configuration](#-configuration)). Without an HTTP token, only a 44-tool read-only allowlist is registered instead of the full surface.
+- 🧩 **191 tools, 2 resources, 7 prompts** — the full generated catalog lives in [`docs/TOOLS.md`](docs/TOOLS.md); `REA_TOOLSETS` lets small-context clients load only a profile slice (see [Configuration](#-configuration)). Without an HTTP token, only a 44-tool read-only allowlist is registered instead of the full surface.
 - 🔌 **Two transports** — stdio for local agents, streamable HTTP (`/mcp` + `/health`, bearer token, localhost Host/Origin validation) for shared setups.
 - 🧪 **Proven, not promised** — a 91-file default test lane, Ubuntu CI for the released line, and protocol tests that drive the real compiled server.
 
@@ -204,7 +204,7 @@ analysis, the CLI, and both transports work.
 
 ## 🧰 Features
 
-The complete, generated reference — **191 tools + 2 resources (`rea-plus://server-info`, `rea-plus://capabilities-safety`) + 3 prompts (`packer-triage`, `dotnet-malware-triage`, `android-triage`)** — is in [`docs/TOOLS.md`](docs/TOOLS.md). The table below is only a domain summary.
+The complete, generated reference — **191 tools + 2 resources (`rea-plus://server-info`, `rea-plus://capabilities-safety`) + 7 prompts (`packer-triage`, `dotnet-malware-triage`, `android-triage`, `pe-crash-triage`, `elf-linux-triage`, `binary-diff`, `evidence-report`)** — is in [`docs/TOOLS.md`](docs/TOOLS.md). The table below is only a domain summary.
 
 | Domain | What you get | Engine / backend |
 |---|---|---|

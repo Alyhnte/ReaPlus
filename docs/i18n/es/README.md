@@ -26,7 +26,7 @@ Tu agente hace las preguntas; rea-plus inspecciona el binario y responde con evi
 - 🐞 **Depuración real, no capturas** — motores x64dbg, cdb (WinDbg) y Frida tras un núcleo congelado de 30 herramientas: puntos de interrupción, paso a paso, registros, memoria, pilas de llamadas, puntos de control con viaje en el tiempo.
 - 🧩 **157 herramientas estáticas** — Ghidra headless, rizin/radare2, CIL .NET (dnfile) e ILSpy, jadx/apktool/adb, WASM + EVM, firmware, navegador/HAR, UPX, lectores PE/ELF/Mach-O y más.
 - 🤝 **Honesto por diseño** — un backend faltante responde `capability_unsupported` con pista de instalación. Nada finge un resultado, los errores vuelven como `isError` MCP propio, y las llamadas mutantes de depuración en vivo exigen `confirm:true`.
-- 🧩 **191 herramientas, 2 recursos, 3 prompts** — el catálogo completo generado vive en [`docs/TOOLS.md`](docs/TOOLS.md); `REA_TOOLSETS` deja que los clientes pequeños carguen solo un perfil (ver [Configuración](#-configuration)). Sin token HTTP, solo se registra una allowlist de solo lectura de 44 herramientas en lugar de la superficie completa.
+- 🧩 **191 herramientas, 2 recursos, 7 prompts** — el catálogo completo generado vive en [`docs/TOOLS.md`](docs/TOOLS.md); `REA_TOOLSETS` deja que los clientes pequeños carguen solo un perfil (ver [Configuración](#-configuration)). Sin token HTTP, solo se registra una allowlist de solo lectura de 44 herramientas en lugar de la superficie completa.
 - 🔌 **Dos transportes** — stdio para agentes locales, HTTP streamable (`/mcp` + `/health`, token bearer, validación Host/Origin de localhost) para setups compartidos.
 - 🧪 **Probado, no prometido** — un carril de pruebas por defecto de 91 archivos, Ubuntu CI para la línea publicada y pruebas de protocolo que manejan el servidor compilado real.
 
@@ -204,7 +204,7 @@ estático, el CLI y ambos transportes funcionan.
 
 ## 🧰 Características
 
-La referencia completa generada — **191 herramientas + 2 recursos (`rea-plus://server-info`, `rea-plus://capabilities-safety`) + 3 prompts (`packer-triage`, `dotnet-malware-triage`, `android-triage`)** — está en [`docs/TOOLS.md`](docs/TOOLS.md). La tabla de abajo es solo un resumen por dominio.
+La referencia completa generada — **191 herramientas + 2 recursos (`rea-plus://server-info`, `rea-plus://capabilities-safety`) + 7 prompts (`packer-triage`, `dotnet-malware-triage`, `android-triage`, `pe-crash-triage`, `elf-linux-triage`, `binary-diff`, `evidence-report`)** — está en [`docs/TOOLS.md`](docs/TOOLS.md). La tabla de abajo es solo un resumen por dominio.
 
 | Dominio | Qué obtienes | Motor / backend |
 |---|---|---|

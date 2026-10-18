@@ -11,7 +11,7 @@
 
 ## Mit v0.10.0-Basis Geschlossenes (Zusammenfassung)
 
-- MCP-Oberfläche: 191 Werkzeuge + 2 Ressourcen + 3 Prompts; erzeugte Vollreferenz [`TOOLS.md`](TOOLS.md).
+- MCP-Oberfläche: 191 Werkzeuge + 2 Ressourcen + 7 Prompts; erzeugte Vollreferenz [`TOOLS.md`](TOOLS.md).
 - `REA_TOOLSETS`-Profile: `all` 191 (Standard), `minimal` 8, `static` 98, `android` 27, `dotnet` 20, `web` 26, `debug` 50; Komma-Vereinigung, unbekanntes Profil = Startfehler. Neues Werkzeug nur in `all` (fail-closed).
 - `REA_WORKSPACE_ROOT`: `rea_*` + Conduit-Pfade + nutzersichtbare abgeleitete Schreibvorgänge innerhalb der Wurzel; Operator-Temp-/Cache-Oberflächen bewusste Ausnahme. Roots (legacy + modern MRTR) engen nur ein.
 - Tokenloses HTTP: Allowlist mit 44 schreibgeschützten Werkzeugen (Schnittmenge mit Toolset) + `REA_AUDIT_LOG` (argumentloses JSONL) + Ratenlimit (120/Min) + Nebenläufigkeitsdeckel (16) + Sitzungs-TTL (30 Min).
