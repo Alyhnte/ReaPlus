@@ -11,6 +11,19 @@ Bu dizin, offline testlerin kanonik fixture'larını tutar.
 | `ornek.js` | `scripts/korpus-kur.mjs` ile üretilir (deterministik) | bilinmiyor |
 | `ornek.wasm` | `scripts/korpus-kur.mjs` ile üretilir (deterministik) | bilinmiyor |
 | `sahte.apk` | `scripts/korpus-kur.mjs` ile üretilir (deterministik) | bilinmiyor |
+| `real_tiny.exe` | `src/tiny_exit.c` + `scripts/corpus-gercek-derle.mjs` (yerel gcc, PE32+ x64) | MIT |
+| `real_tiny_console.exe` | `src/hello.c` + `scripts/corpus-gercek-derle.mjs` (yerel gcc, PE32+ x64) | MIT |
+| `real_tiny_o2.exe` | `src/hello.c` + `scripts/corpus-gercek-derle.mjs` (yerel gcc, PE32+ x64) | MIT |
+| `real_dll.dll` | `src/dll_add.c` + `scripts/corpus-gercek-derle.mjs` (yerel gcc, PE32+ x64 DLL) | MIT |
+| `real_tiny.obj` | `src/tiny_exit.c` + `scripts/corpus-gercek-derle.mjs` (yerel gcc, COFF obj) | MIT |
+| `mini.dex` | `scripts/dex-fixture-uret.mjs` ile üretilir (deterministik) | bilinmiyor |
+
+`real_*` dosyalar GERÇEKTİR: bu dizindeki `src/*.c` kaynaklarından yerel
+`gcc` (MinGW-w64) ile derlenir. `-Wl,--no-insert-timestamp` ile COFF
+TimeDateStamp gömülmez; aynı toolchain ile yeniden derleme aynı baytları
+üretir (deterministik). Hash'ler derleyici çıktısından alınır, uydurulmaz.
+ELF tarafında yerel `gcc` PE hedeflediğinden gerçek ELF üretilemez (cross
+toolchain yok); `mini_branch.elf` sentetik kalmaya devam eder.
 
 Bilinmeyen kaynak/lisans alanları bilerek `bilinmiyor` bırakıldı; uydurma
 lisans yazılmaz. Kökeni bilinen bir fixture eklendiğinde `HASHES.json`
