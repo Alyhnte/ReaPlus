@@ -1,0 +1,58 @@
+name: "Bug raporu"
+description: "Yeniden uretilebilir bir hata bildirimi"
+title: "[bug] "
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: "Once CONTRIBUTING.md dosyasini okuyun. Formu doldurmadan once hatayi main dalinda deneyin; kisisel worktree/degisiklik uzerindeyse belirtin."
+  - type: textarea
+    id: yeniden-uretme
+    attributes:
+      label: "Yeniden ureme adimlari"
+      description: "Kucuk, tekrarlanabilir adimlar. Komutlari ve girisleriyle yazin ki bakimci aynisini kosabilsin."
+      placeholder: "1. npm ci | 2. node dist/cli/index.js ... | 3. ..."
+    validations:
+      required: true
+  - type: textarea
+    id: beklenen
+    attributes:
+      label: "Beklenen sonuc"
+      description: "Ne olmaliydi? Beklenen ciktiyi/sonucu yazin."
+      placeholder: "Ornek: araclar listelenmeli ve doctor ciktisi temiz"
+    validations:
+      required: true
+  - type: textarea
+    id: gerceklesen
+    attributes:
+      label: "Gerceklesen sonuc"
+      description: "Ne oldu? Hata mesaji, exit kodu ya da gerceklesen davranisi yapistirin."
+      placeholder: "Ornek: capability_unsupported hatasi + tam hata metni"
+    validations:
+      required: true
+  - type: textarea
+    id: ortam
+    attributes:
+      label: "Ortam"
+      description: "Isletim sistemi, node -v ciktisi, rea-plus surumu ve kullanilan arka uc (ghidra/rizin/jadx/frida kurulu mu)."
+      placeholder: "OS: ... | node -v: ... | rea-plus: ... | arka uc: ..."
+    validations:
+      required: true
+  - type: textarea
+    id: loglar
+    attributes:
+      label: "Log / hata ciktisi"
+      description: "Varsa tam kuyruk ya da ilgili log parcasi. Kisisel yol/ev dizini sizdirmayin (tmpdir kullanin)."
+      placeholder: "ham cikti"
+    validations:
+      required: false
+  - type: checkboxes
+    id: on-kontrol
+    attributes:
+      label: "On kontrol"
+      description: "Gondermeden once asagidakileri dogrulayin."
+      options:
+        - label: "CONTRIBUTING.md okundu ve adimlar main dalinda tekrarlanabiliyor"
+          required: true
+        - label: "Ayni hata zaten acik bir issue'da aranip bulunamadi"
+          required: true
