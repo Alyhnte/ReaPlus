@@ -1,9 +1,12 @@
 # ROADMAP — ReaPlus yol haritası
 
-> Durum: v0.10.1 yayında (npm + MCP Registry + CI yeşil). Bu belge ilk
+> Durum: v0.11.0 yayında (npm `latest` + MCP Registry + GitHub Release + SBOM asset
+> + GHCR imajı + CI/pages/docker yeşil). Bu belge ilk
 > 2026-10-12 incelemesinin bulgularıyla doğmuş, her dalga sonunda gerçekleşenle
-> senkronlanmıştır. v0.10.1 P1 kod maddelerini kapattı (ölü facade temizliği +
-> golden DEX fixture); araç yüzeyi değişmedi. Sayılar derlenmiş sunucunun gerçek yüzeyindendir
+> senkronlanmıştır. v0.11.0 dalgaları kapattı: 5 dilli docs sitesi i18n + `--check`,
+> örnek oturumlar (metin), npm OIDC provenance + SBOM release asset'i, CONTRIBUTING
+> (6 bölüm) + issue formları, Pages deploy. Araç yüzeyi değişmedi (191 araç).
+> Sayılar derlenmiş sunucunun gerçek yüzeyindendir
 > ([`TOOLS.md`](TOOLS.md) üretim çıktısı).
 >
 > **Ölçütler:** Etki = kullanıcı/ajan değerine katkı · Efor = S (günler) / M (1-2 hafta) / L (ay+)
@@ -41,7 +44,7 @@
 | ✅ `doctor --fix` | KAPANDI (v0.10.0): onay kapılı kurulum önerisi (winget/brew/apt); onaysız çalıştırmaz | Eksik araçta tek komut | M | — |
 | ◐ Tek dosya Windows exe (Node SEA) | FİZİBİLİTE TAMAM (v0.10.0): hello-world SEA çalıştı; tam uygulama 3 engelli (129MB Frida binding, dinamik playwright, imzalama) — alternatif: portable node bundle | Node'suz dağıtım; release asset'i olarak | M | P2 |
 | ✅ winget/scoop/homebrew manifesti | KAPANDI (v0.10.0): üç manifest sürümlü + hash'li; mağaza gönderimi yapılmadı | Paket yöneticisiyle keşif | S | — |
-| ◐ İmzalı release + SBOM | YARIM (v0.10.0): SBOM (CycloneDX) üretildi; imza + provenance/Trusted Publisher yok | Tedarik zinciri güveni | S | P2 |
+| ◐ İmzalı release + SBOM | KISMEN (v0.11.0): npm OIDC `--provenance` imzalı publish + CycloneDX SBOM GitHub Release asset'i + GHCR `release` tetikli; **npm Trusted Publisher (OIDC) hâlâ yok** | Tedarik zinciri güveni | S | P2 |
 
 ## B) MCP protokolü ve ajan deneyimi
 
@@ -112,7 +115,7 @@
 | ✅ Ölü facade temizliği (`probeCache`/`parallelProbe`) | KAPANDI (v0.10.1): davranış `workerCache`'e taşındı (`ResultCache` TTL + `runProbes`); `probe.test.mjs` `worker-cache.test.mjs` altına taşındı | Ölü kod kalktı | S | — |
 | ✅ Paralel tarama (4'lü havuz) | KAPANDI (v0.10.0): sıralı birleştirme + iptal + hata izolasyonu | CI entegrasyonu | M | — |
 | ✅ Şema bütçesi | KAPANDI (v0.10.0): ölçülü eşikler (200KB/110KB/600B) | Şişme biter | S | — |
-| Şema bütçesi CI zorlaması | Test var, CI adımı yok | Bütçe CI'da kırar | S | P2 |
+| ✅ Şema bütçesi CI zorlaması | KAPANDI (v0.11.0): bütçe testleri CI koşusunda | Bütçe CI'da kırar | S | — |
 | ✅ Streaming okuma | KAPANDI (v0.10.0): 64KB tampon + iptalde durma | OOM biter | M | — |
 
 ## H) Test ve kalite
@@ -130,14 +133,18 @@
 | Öneri | Bugün ne var / boşluk | Etki | Efor | Öncelik |
 |---|---|---|---|---|
 | ✅ Otomatik araç referansı | KAPANDI (v0.10.0): [`TOOLS.md`](TOOLS.md) gerçek yüzeyden (191 araç + 2 resource + 3 prompt) | Güncel katalog | S | — |
-| Örnek oturumlar (asciinema/GIF) README'de | Görsel kanıt yok | İlk 10 saniyede ikna (yıldız dönüşümü) | S | P1 |
+| ◐ Örnek oturumlar (asciinema/GIF) README'de | METİN VAR (v0.11.0): `docs/` altında örnek oturum transkriptleri; görsel kayıt (asciinema/GIF) yok | İlk 10 saniyede ikna (yıldız dönüşümü) | S | P1 |
 | ◐ Docs sitesi | ÜRETİLDİ (v0.10.0): 7 statik sayfa + 0 kırık link | Aranabilir doküman | M | P2 |
-| Pages deployu (site hazır, yayın yok) | `docs/site/` üretildi ama GitHub Pages'e bağlanmadı | Tek URL'de doküman | S | P2 |
+| ✅ Pages deployu | KAPANDI (v0.11.0): `pages.yml` main push'ta deploy eder + `site-uret --check` 35/35 | Tek URL'de doküman | S | — |
+| ✅ Docs sitesi i18n | KAPANDI (v0.11.0): 5 dil (tr/en/de/fr/es) statik site + CHANGELOG senkronu | Uluslararası erişim | M | — |
 | ✅ Prompt kütüphanesi | KAPANDI (v0.10.0): `docs/PROMPTS.md` (10 prompt, örnek çağrılı) | İlk değer dakikalar içinde | S | — |
-| good-first-issue + CONTRIBUTING genişletme | Tek paragraf | Katkı hunisi açılır | S | P3 |
+| ✅ good-first-issue + CONTRIBUTING genişletme | KAPANDI (v0.11.0): CONTRIBUTING 6 bölüm + bug/feature/PR issue formları | Katkı hunisi açılır | S | — |
 
 ---
 
-**Önerilen sıra (açık kalanlar):** Frida canlı VM → runner → trusted publisher → örnek oturumlar → Pages deployu → P3 araştırma.
-v0.10.1'de kapananlar: ölü facade temizliği + golden DEX korpusu (yukarıda ✅ işaretliler); v0.10.0'da kapananlar: I/J/K dalgalarının tamamı.
+**Önerilen sıra (açık kalanlar):** Frida canlı VM → self-hosted Windows runner →
+npm Trusted Publisher → asciinema/GIF örnek oturumlar → SEA tek-dosya exe → P3 araştırma.
+v0.11.0'da kapananlar: 5 dilli site i18n + `--check`, örnek oturum (metin), provenance
++ SBOM release asset'i, Pages deploy, CONTRIBUTING + issue formları; v0.10.1'de kapananlar:
+ölü facade temizliği + golden DEX korpusu; v0.10.0'da kapananlar: I/J/K dalgalarının tamamı.
 
