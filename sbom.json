@@ -1,24 +1,24 @@
 {
   "bomFormat": "CycloneDX",
   "specVersion": "1.6",
-  "serialNumber": "urn:uuid:29e81860-eeb5-415a-b336-201e0623c2dc",
+  "serialNumber": "urn:uuid:c916511c-9a0d-4ca0-ae74-c9d8e4f9ef03",
   "version": 1,
   "metadata": {
-    "timestamp": "2026-10-18T01:17:01.140Z",
+    "timestamp": "2026-10-18T03:08:37.100Z",
     "tools": [
       {
         "vendor": "ReaPlus",
         "name": "scripts/sbom-uret.mjs",
-        "version": "0.11.0"
+        "version": "0.12.0"
       }
     ],
     "component": {
       "type": "application",
-      "bom-ref": "pkg:npm/rea-plus@0.11.0",
+      "bom-ref": "pkg:npm/rea-plus@0.12.0",
       "name": "rea-plus",
-      "version": "0.11.0",
+      "version": "0.12.0",
       "description": "Conduit live-debug core + Rea static domains. 30 frozen tools + prefixed rea domains over stdio/HTTP.",
-      "purl": "pkg:npm/rea-plus@0.11.0",
+      "purl": "pkg:npm/rea-plus@0.12.0",
       "licenses": [
         {
           "license": {
@@ -29,17 +29,17 @@
       "externalReferences": [
         {
           "type": "distribution",
-          "url": "https://registry.npmjs.org/rea-plus/-/rea-plus-0.11.0.tgz"
+          "url": "https://registry.npmjs.org/rea-plus/-/rea-plus-0.12.0.tgz"
         }
       ],
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "7a4cb731e03249ed0a6a2b6d413ee746b69200e823b9163cd9408c5a7b20a6cf"
+          "content": "7ec5a729eb9a9ec0fc0f31c72b28602d2591bd6232f5c58ce7e96b7d66cfd33a"
         },
         {
           "alg": "SHA-512",
-          "content": "1eb0fdc10d664ed4830f7012b2e865d56e50d6565c0425cf3b73a7eb97e159ee3ab00e388a28b000efc987083940870267bfb1e69ae7187abdccfe829dbe1fdd"
+          "content": "7456ca7115958b0f6b9507771951d4e20e6e53c82dbda24dcee541d33c94fa0ff33b3f0ce5a914008206485089b5c5c95cf09fae35169c69d66c56ca2cfde853"
         }
       ]
     }

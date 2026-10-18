@@ -3,6 +3,41 @@
 Todos los cambios notables se guardan en este archivo. Formato: Keep a Changelog + SemVer.
 All notable changes are documented here (resumen en español + English detail).
 
+## [0.12.0] — 2026-10-18
+
+Versión 0.12.0: dalga-11 — 4 prompts de plantillas de tarea (3 → 7) +
+corpus golden (5 binarios gcc reales) + portable node bundle + corrección
+realpath del guard CLI + sincronía docs/site/tool-reference (191
+herramientas · 187 outputSchema · 191 annotations · 2 recursos ·
+7 prompts, 6 idiomas). 103/103 pruebas en verde.
+
+### Añadido / Added
+
+- 4 prompts de plantillas de tarea: `packer-triage`,
+  `dotnet-malware-triage`, `android-triage`, `pe-crash-triage`
+  (7 prompts en total; `docs/PROMPTS.md` con 10 secciones numeradas,
+  cada una con propósito + llamada de ejemplo + salida esperada).
+- Corpus golden: 5 binarios gcc reales (PE32+/DLL/COFF obj) +
+  `tests/corpus/HASHES.json` + script de reconstrucción determinista +
+  16 nuevas pruebas sdk-surface (fs 14, scan_repo 10/pe5).
+- Portable node bundle: `scripts/portable-paketle.mjs` (distribución sin
+  Node; cierre de deps de producción, frida binding transportado como
+  archivo, MANIFEST + humo) + 7 pruebas; `publish.yml` release-artifacts
+  sube el zip portable como asset de release de GitHub (bundle linux; CI
+  ubuntu).
+- Corrección realpath del guard CLI de `generate-tool-reference.mjs`:
+  junction vs ruta real ya no es un no-op silencioso (exit 0, sin
+  salida) + `tests/generate-tool-reference-cli.test.mjs`.
+
+### Corregido / Fixed
+
+- Líneas de resumen actuales ahora «7 prompts» en 6 idiomas
+  (TR/EN/DE/FR/ES + raíz): README, EXAMPLES, PROMPTS, ROADMAP;
+  líneas históricas v0.10.0/CERRADO intactas a propósito (eran ciertas
+  entonces).
+- TOOLS.md volvió a igualar la superficie real (191/2/7) + regeneración
+  del sitio (5 idiomas × 7 páginas).
+
 ## [0.11.0] — 2026-10-18
 
 Versión 0.11.0: sitio i18n de 5 idiomas + tema premium + sesiones de

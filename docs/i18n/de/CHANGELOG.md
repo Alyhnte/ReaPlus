@@ -3,6 +3,38 @@
 Alle wichtigen Änderungen werden in dieser Datei festgehalten. Format: Keep a Changelog + SemVer.
 Alle nennenswerten Änderungen sind hier dokumentiert (deutsche Zusammenfassung + englisches Detail).
 
+## [0.12.0] — 2026-10-18
+
+Release 0.12.0: dalga-11 — 4 Aufgabenvorlagen-Prompts (3 → 7) + Golden-
+Korpus (5 echte gcc-Binaries) + portable node bundle + CLI-Guard-realpath-
+Fix + Docs/Site/Tool-Reference-Sync (191 Tools · 187 outputSchema ·
+191 Annotations · 2 Resources · 7 Prompts, 6 Sprachen). 103/103 Tests grün.
+
+### Hinzugefügt
+
+- 4 Aufgabenvorlagen-Prompts: `packer-triage`, `dotnet-malware-triage`,
+  `android-triage`, `pe-crash-triage` (7 Prompts gesamt; `docs/PROMPTS.md`
+  mit 10 nummerierten Abschnitten, je Zweck + Beispielaufruf +
+  erwartete Ausgabe).
+- Golden-Korpus: 5 echte gcc-Binaries (PE32+/DLL/COFF obj) +
+  `tests/corpus/HASHES.json` + deterministisches Rebuild-Skript +
+  16 neue sdk-surface-Tests (fs 14, scan_repo 10/pe5).
+- Portable node bundle: `scripts/portable-paketle.mjs` (Node-freie
+  Verteilung; Prod-Abhängigkeitsmenge, frida binding als Datei, MANIFEST
+  + Rauchtest) + 7 Tests; `publish.yml` release-artifacts lädt das
+  portable Zip als GitHub-Release-Asset (linux bundle; CI ubuntu).
+- CLI-Guard-realpath-Fix: Junction vs. echter Pfad ist kein stilles
+  No-Op mehr (exit 0, keine Ausgabe) +
+  `tests/generate-tool-reference-cli.test.mjs`.
+
+### Behoben
+
+- Aktuelle Zusammenfassungszeilen jetzt „7 prompts" in 6 Sprachen
+  (TR/EN/DE/FR/ES + Stamm): README, EXAMPLES, PROMPTS, ROADMAP;
+  historische v0.10.0/CERRADO-Zeilen bewusst unverändert (damals wahr).
+- TOOLS.md wieder echter Fläche gleich (191/2/7) + Site-Regen
+  (5 Sprachen × 7 Seiten).
+
 ## [0.11.0] — 2026-10-18
 
 Release 0.11.0: 5-sprachige i18n-Website + Premium-Theme + Beispiel-

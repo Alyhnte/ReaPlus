@@ -1,11 +1,14 @@
 # ROADMAP — ReaPlus yol haritası
 
-> Durum: v0.11.0 yayında (npm `latest` + MCP Registry + GitHub Release + SBOM asset
+> Durum: v0.12.0 yayında (npm `latest` + MCP Registry + GitHub Release + SBOM asset
 > + GHCR imajı + CI/pages/docker yeşil). Bu belge ilk
 > 2026-10-12 incelemesinin bulgularıyla doğmuş, her dalga sonunda gerçekleşenle
-> senkronlanmıştır. v0.11.0 dalgaları kapattı: 5 dilli docs sitesi i18n + `--check`,
-> örnek oturumlar (metin), npm OIDC provenance + SBOM release asset'i, CONTRIBUTING
-> (6 bölüm) + issue formları, Pages deploy. Araç yüzeyi değişmedi (191 araç).
+> senkronlanmıştır. v0.12.0 dalgaları kapattı: golden korpus (5 gerçek gcc binary
+> + 16 test), 4 görev şablonu prompt'u (toplam 7), portable node bundle + release
+> asset, docs senkronu (6 dilde 3 → 7). v0.11.0'da kapananlar: 5 dilli docs sitesi
+> i18n + `--check`, örnek oturumlar (metin), npm OIDC provenance + SBOM release
+> asset'i, CONTRIBUTING (6 bölüm) + issue formları, Pages deploy. Araç yüzeyi
+> değişmedi (191 araç).
 > Sayılar derlenmiş sunucunun gerçek yüzeyindendir
 > ([`TOOLS.md`](TOOLS.md) üretim çıktısı).
 >

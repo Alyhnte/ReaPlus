@@ -3,6 +3,37 @@
 Tüm önemli değişiklikler bu dosyada tutulur. Format: Keep a Changelog + SemVer.
 All notable changes are documented here (Türkçe özet + English detail).
 
+## [0.12.0] — 2026-10-18
+
+Sürüm 0.12.0: dalga-11 — 4 görev şablonu prompt'u (3 → 7) + golden korpus
+(5 gerçek gcc binary) + portable node bundle + CLI guard realpath fix +
+docs/site/tool-reference senkronu (191 araç · 187 outputSchema ·
+191 annotations · 2 resource · 7 prompt, 6 dil). 103/103 test yeşil.
+
+### Eklendi / Added
+
+- 4 görev şablonu prompt'u: `packer-triage`, `dotnet-malware-triage`,
+  `android-triage`, `pe-crash-triage` (toplam 7 prompt; `docs/PROMPTS.md`
+  10 numaralı bölüm, her birinde amaç + örnek çağrı + beklenen çıktı).
+- Golden korpus: 5 gerçek gcc binary (PE32+/DLL/COFF obj) +
+  `tests/corpus/HASHES.json` + deterministik derleme betiği + 16 yeni
+  sdk-surface testi (fs 14, scan_repo 10/pe5).
+- Portable node bundle: `scripts/portable-paketle.mjs` (Node'suz dağıtım;
+  prod bağımlı kapanır kume, frida binding dosya olarak, MANIFEST +
+  duman) + 7 test; `publish.yml` release-artifacts adımı `--zip` ile
+  portable'i GitHub Release asset'i yapar (linux bundle; CI ubuntu).
+- `docs/generate-tool-reference` CLI guard realpath fix: junction/gerçek
+  yol ayrımı sessiz no-op değil (exit 0 + çıktı yoktu) +
+  `tests/generate-tool-reference-cli.test.mjs` (gerçek yol + junction).
+
+### Düzeltildi / Fixed
+
+- Güncel özet satırları 6 dilde (TR/EN/DE/FR/ES + kök) 3 → 7 prompt:
+  README, EXAMPLES, PROMPTS, ROADMAP; tarihsel v0.10.0/CERRADO
+  satırları bilinçli olarak değişmedi (o dönemde doğruydu).
+- TOOLS.md gerçek yüzeyle yeniden eşleşti (191/2/7) + site regen
+  (5 dil × 7 sayfa).
+
 ## [0.11.0] — 2026-10-18
 
 Sürüm 0.11.0: 5 dil i18n site + premium tema + örnek oturumlar + release

@@ -1,9 +1,11 @@
 # ROADMAP-NEXT — v0.11.0 sonrası derin işler
 
 Durum: rea'nın tüm kamusal yetenekleri ReaPlus'ta (191 araç, 2 resource, 7 prompt,
-101 test dosyası). Ticari lisanslılar kapılı (Hopper/IDA/JEB), Linux-özeller belgeli
+103 test dosyası). Ticari lisanslılar kapılı (Hopper/IDA/JEB), Linux-özeller belgeli
 (binwalk). v0.11.0'da kapananlar: 5 dilli site i18n + `--check`, örnek oturum (metin),
 npm OIDC provenance + SBOM release asset'i, Pages deploy, CONTRIBUTING + issue formları.
+v0.12.0'da kapananlar: golden korpus (5 gerçek gcc binary + 16 test), 4 görev şablonu
+prompt'u (toplam 7 prompt), portable node bundle (+ release asset), docs/site senkronu.
 
 ## Önceki revizyonun maddeleri — kanıtla kapandı (2026-10-18 sayımı)
 
@@ -22,18 +24,19 @@ npm OIDC provenance + SBOM release asset'i, Pages deploy, CONTRIBUTING + issue f
   `tests/reposcan.test.mjs`, `parallel-scan.test.mjs` yeşil.
 - ~~NEXT-6 Android dinamik~~ → **KAPANDI** (v0.10.0: 5 adımlı üretim reçetesi + kuru-doğrulama).
 
-## 1. Doğruluk: golden korpus (açık — kısmen kapandı → genişlet)
+## 1. Doğruluk: golden korpus → KAPANDI (v0.12.0)
 
-Kısmen kapandı (v0.10.1): `tests/corpus/mini.dex` (sentetik) + mini_branch/mini_pe
-fixture'ları + HASHES girdisi var. Hedef: **gerçek (derlenmiş) binary'lik korpus +
-beklenen çıktı hash'i**; korpus büyüdükçe regresyon yakalanır. Maliyet: düşük, sürekli.
+5 gerçek gcc binary (`tests/corpus/real_tiny*.exe`, `real_dll.dll`,
+`real_tiny.obj`) + `HASHES.json` + deterministik derleme betiği + 16 yeni
+sdk-surface testi (fs 14, scan_repo 10/pe5); korpus regresyonu canlı.
+Genişletme isteği varsa ekleme olarak sürer.
 
-## 2. MCP tam hizmet: görev şablonları (açık)
+## 2. MCP tam hizmet: görev şablonları → KAPANDI (v0.12.0)
 
+4 görev şablonu prompt'u girdi (`packer-triage`, `dotnet-malware-triage`,
+`android-triage`, `pe-crash-triage`); toplam **7 prompt** + `docs/PROMPTS.md`
+10 numaralı bölüm senkron (amaç + örnek çağrı + beklenen çıktı).
 Kanıt zarfı ayakta (`src/facade/evidenceBundle.ts` + `tests/evidence.test.mjs`).
-Kalan: prompt kütüphanesi (bugün 10 prompt + 2 resource) RE görev şablonlarıyla
-genişletilsin (triage → static → dynamic → diff → rapor); `docs/PROMPTS.md` senkron.
-Maliyet: S/M.
 
 ## 3. Uzun vade (ağır — kod dalgası değil, araştırma/L)
 
@@ -52,18 +55,19 @@ Maliyet: S/M.
 
 ## Öncelik sırası
 
-korpus → görev şablonları → SEA portable (ROADMAP-A P2) → araştırma/L.
+araştırma/L (angr/fuzzing/IDA/LLDB) → dış kapılar (Frida VM, self-hosted runner,
+Trusted Publisher).
 
 ---
 
 ## Dalga planı (4'erli; her iş izole worktree + TDD; dalga bitince tam test, sonra sonraki 4)
 
-### dalga-11 — 3 açık iş (paralel, dosya sahiplikleri ayrışık)
+### dalga-11 — 3 iş → KAPANDI (v0.12.0, üçü de)
 
-1. Golden korpus genişletme — `tests/corpus/` + HASHES girdileri + korpus testi.
-2. Prompt görev şablonları — `src/server/registerResourcesPrompts.ts` + `docs/PROMPTS.md`
-   + `tests/resources-prompts.test.mjs`.
-3. SEA tek-dosya/portable bundle — `scripts/` + release asset yolu (ROADMAP-A P2).
+1. Golden korpus ✓ — `tests/corpus/` + `HASHES.json` + 16 test (`63e775f`).
+2. Prompt görev şablonları ✓ — 4 şablon, toplam 7 prompt (`d5ef760`).
+3. Portable bundle ✓ — `scripts/portable-paketle.mjs` + 7 test +
+   publish.yml release asset (`a0ea39b`, merge `582b9b2`).
 
 ### dalga-12 — release + doküman senkronu
 

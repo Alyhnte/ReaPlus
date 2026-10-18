@@ -2,6 +2,39 @@
 
 All notable changes are kept in this file. Format: Keep a Changelog + SemVer.
 
+## [0.12.0] — 2026-10-18
+
+Release 0.12.0: dalga-11 — 4 task-template prompts (3 → 7) + golden
+corpus (5 real gcc binaries) + portable node bundle + CLI guard realpath
+fix + docs/site/tool-reference sync (191 tools · 187 outputSchema ·
+191 annotations · 2 resources · 7 prompts, 6 languages). 103/103 tests green.
+
+### Added
+
+- 4 task-template prompts: `packer-triage`, `dotnet-malware-triage`,
+  `android-triage`, `pe-crash-triage` (7 prompts total; `docs/PROMPTS.md`
+  has 10 numbered sections, each with purpose + example call + expected
+  output).
+- Golden corpus: 5 real gcc binaries (PE32+/DLL/COFF obj) +
+  `tests/corpus/HASHES.json` + deterministic rebuild script + 16 new
+  sdk-surface tests (fs 14, scan_repo 10/pe5).
+- Portable node bundle: `scripts/portable-paketle.mjs` (node-less
+  distribution; prod-dependency closure, frida binding carried as a file,
+  MANIFEST + smoke) + 7 tests; `publish.yml` release-artifacts step
+  uploads the portable zip as a GitHub Release asset (linux bundle; CI
+  runs ubuntu).
+- `generate-tool-reference.mjs` CLI guard realpath fix: junction vs
+  real path no longer a silent no-op (exit 0, no output) +
+  `tests/generate-tool-reference-cli.test.mjs`.
+
+### Fixed
+
+- Current summary lines now say 7 prompts across 6 languages
+  (TR/EN/DE/FR/ES + root): README, EXAMPLES, PROMPTS, ROADMAP;
+  historical v0.10.0/CERRADO lines intentionally untouched (true then).
+- TOOLS.md re-matched to the real surface (191/2/7) + site regen
+  (5 languages × 7 pages).
+
 ## [0.11.0] — 2026-10-18
 
 Release 0.11.0: 5-language i18n site + premium theme + sample sessions +

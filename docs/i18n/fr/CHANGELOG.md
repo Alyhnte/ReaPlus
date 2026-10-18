@@ -3,6 +3,41 @@
 Tous les changements notables sont consignés dans ce fichier. Format : Keep a Changelog + SemVer.
 All notable changes are documented here (résumé en français + détail en anglais).
 
+## [0.12.0] — 2026-10-18
+
+Version 0.12.0 : dalga-11 — 4 prompts de modèles de tâches (3 → 7) +
+corpus golden (5 binaires gcc réels) + portable node bundle + correctif
+realpath du garde CLI + sync docs/site/tool-reference (191 outils ·
+187 outputSchema · 191 annotations · 2 ressources · 7 prompts, 6 langues).
+103/103 tests verts.
+
+### Ajouté / Added
+
+- 4 prompts de modèles de tâches : `packer-triage`,
+  `dotnet-malware-triage`, `android-triage`, `pe-crash-triage`
+  (7 prompts au total ; `docs/PROMPTS.md` avec 10 sections numérotées,
+  chacune avec objectif + appel exemple + sortie attendue).
+- Corpus golden : 5 binaires gcc réels (PE32+/DLL/COFF obj) +
+  `tests/corpus/HASHES.json` + script de reconstruction déterministe +
+  16 nouveaux tests sdk-surface (fs 14, scan_repo 10/pe5).
+- Portable node bundle : `scripts/portable-paketle.mjs` (distribution
+  sans Node ; fermeture des deps de prod, frida binding transporté en
+  fichier, MANIFEST + fumée) + 7 tests ; `publish.yml` release-artifacts
+  téléverse le zip portable en asset de release GitHub (bundle linux ;
+  CI ubuntu).
+- Correctif realpath du garde CLI de `generate-tool-reference.mjs` :
+  junction vs chemin réel n'est plus un no-op silencieux (exit 0, aucune
+  sortie) + `tests/generate-tool-reference-cli.test.mjs`.
+
+### Corrigé / Fixed
+
+- Lignes de résumé courantes : « 7 prompts » en 6 langues
+  (TR/EN/DE/FR/ES + racine) : README, EXAMPLES, PROMPTS, ROADMAP ;
+  lignes historiques v0.10.0/CERRADO volontairement inchangées (vraies
+  à l'époque).
+- TOOLS.md re-aligné sur la surface réelle (191/2/7) + régénération du
+  site (5 langues × 7 pages).
+
 ## [0.11.0] — 2026-10-18
 
 Version 0.11.0 : site i18n 5 langues + thème premium + sessions
