@@ -11,3 +11,4 @@ coverage/
 # Python artığı (Ghidra scriptleri yanında üretilir).
 __pycache__/
 *.pyc
+sbom.cdx.json
