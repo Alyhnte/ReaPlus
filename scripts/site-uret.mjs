@@ -6,7 +6,7 @@
 // Bağımlılık yok (yalnız node:fs/path/url), ağ/süreç/timer yok.
 // Bilinmeyen göreli .md linkleri GitHub blob URL'ine yazılır (kırık link yok);
 // sayfa-içi #çapalar github-slugger ile üretilen id'lere çözülür.
-import { mkdirSync, readFileSync, writeFileSync } from "node:fs";
+import { existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 
@@ -321,7 +321,41 @@ function sayfaSar(lang, chrome, baslik, govde, aktif, ozetSatir, sayilar) {
   return `<!DOCTYPE html>\n<html lang="${lang}">\n<head>\n<meta charset="utf-8">\n<meta name="viewport" content="width=device-width, initial-scale=1">\n<meta name="description" content="${kacis(chrome["meta.desc"])}">\n<title>${kacis(baslik)}${titleSuffix ? " " + kacis(titleSuffix) : ""}</title>\n${baslikJs}\n<style>${css}</style>\n</head>\n<body>\n<div class="sarmal">\n<a class="atla" href="#icerik">${kacis(chrome["skip"])}</a>\n<header class="ust">\n<div class="marka"><span class="marka-ad">ReaPlus Docs</span><span class="marka-alt">${kacis(chrome["brand.tagline"])}</span></div>\n${navEtkin(aktif, chrome)}\n${dilSecici(lang, aktif, chrome)}\n<button id="tema-toggle" type="button" aria-pressed="false">${kacis(chrome["theme.dark"])}</button>\n</header>\n<section class="ozet reveal" aria-label="${kacis(chrome["a11y.summary"])}">\n<p class="ozet-metin">${kacis(ozetSatir)}</p>\n<dl class="istatistik">${ist.map(([etiket, deger]) => `<div><dt>${kacis(etiket)}</dt><dd><span class="sayi" data-sayi="${deger}">${deger}</span></dd></div>`).join("")}</dl>\n</section>\n<main id="icerik"><div class="reveal">\n<h1>${kacis(baslik)}</h1>\n${govde}\n</div></main>\n<footer class="altbilgi"><p>${chrome["footer.gen"]}</p></footer>\n</div>\n${sonJs}\n</body>\n</html>\n`;
 }
 
+// --- --check modu (Dalga-10): üretim YAZMAZ, mevcut docs/site/ çıktılarını doğrular.
+// 5 dil × 7 sayfa = 35 HTML: varlık, ≥1000 karakter, <html lang> doğru dil kodu,
+// index.html'de dil seçici (id="dil"). Hata → console.error + exit 1; geçer → exit 0.
+function siteDogrula() {
+  const sayfaAdlari = ["index.html", ...SAYFALAR.map((s) => s.html)];
+  const hatalar = [];
+  let toplam = 0;
+  let gecen = 0;
+  for (const lang of DILLER) {
+    const hedefDir = lang === VARSAYILAN_DIL ? siteDir : join(siteDir, lang);
+    for (const ad of sayfaAdlari) {
+      toplam++;
+      const dosya = join(hedefDir, ad);
+      const gorsel = lang === VARSAYILAN_DIL ? `docs/site/${ad}` : `docs/site/${lang}/${ad}`;
+      if (!existsSync(dosya)) { hatalar.push(`${gorsel}: dosya yok`); continue; }
+      const html = readFileSync(dosya, "utf8");
+      if (html.length < 1000) { hatalar.push(`${gorsel}: çok kısa (${html.length} karakter < 1000)`); continue; }
+      const langEslesme = html.match(/<html\s+lang="([^"]*)"/);
+      if (!langEslesme) { hatalar.push(`${gorsel}: <html lang="..."> yok`); continue; }
+      if (langEslesme[1] !== lang) { hatalar.push(`${gorsel}: lang="${langEslesme[1]}", beklenen "${lang}"`); continue; }
+      if (ad === "index.html" && !html.includes('id="dil"')) { hatalar.push(`${gorsel}: dil seçici (id="dil") yok`); continue; }
+      gecen++;
+    }
+  }
+  if (hatalar.length) {
+    for (const h of hatalar) console.error(`site doğrulama hatası: ${h}`);
+    console.error(`site doğrulama BAŞARISIZ: ${gecen}/${toplam} sayfa geçti, ${hatalar.length} hata`);
+    process.exit(1);
+  }
+  console.log(`✓ Site doğrulama geçti: ${gecen}/${toplam} sayfa`);
+  process.exit(0);
+}
+
 // --- main ---
+if (process.argv.includes("--check")) siteDogrula();
 const toolsMdTR = oku("docs/TOOLS.md");
 const sayilar = ozetSayilari(toolsMdTR);
 
