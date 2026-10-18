@@ -12,3 +12,5 @@ coverage/
 __pycache__/
 *.pyc
 sbom.cdx.json
+# Portable bundle çıktısı (scripts/portable-paketle.mjs; release asset'i kaynağı).
+portable/
