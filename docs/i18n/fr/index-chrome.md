@@ -1,42 +1,54 @@
-# Chrome du site — chaînes françaises (docs/i18n/fr)
+# ReaPlus Docs – Chrome Strings (French)
 
-> Source : `scripts/site-uret.mjs` (`SAYFALAR` + page d'accueil). Ce fichier ne duplique aucun contenu ;
-> il fournit uniquement les libellés français du site pour la vague i18n-fr.
-> Génération : `npm run build && node scripts/site-uret.mjs`.
+French chrome strings for the static docs site (`scripts/site-uret.mjs`):
+navigation labels, search placeholder and summary-bar patterns.
+Key/value reference; code, path and number placeholders (`{arac}`, `{sema}`,
+`{ann}`, `{res}`, `{prompt}`, page filenames) stay unchanged.
 
-## Pages — titres et descriptions
+## Navigation
 
-| Page (`html`) | Source | Titre (FR) | Description (FR) |
-|---|---|---|---|
-| `readme.html` | `README.md` | README | Installation, clients, fonctionnalités, sécurité |
-| `tools.html` | `docs/TOOLS.md` | Référence des outils | Catalogue complet généré (surface réelle) |
-| `examples.html` | `docs/EXAMPLES.md` | Exemples | 5 scénarios d'exécution réelle |
-| `roadmap.html` | `docs/ROADMAP.md` | Feuille de route | Travaux prioritaires et clôtures |
-| `changelog.html` | `CHANGELOG.md` | Journal des modifications | Notes de version (Keep a Changelog) |
-| `prompts.html` | `docs/PROMPTS.md` | Bibliothèque de prompts | 10 formulations de questions prêtes à l'emploi |
+| Key | French |
+|---|---|
+| nav.home | Page d'accueil |
+| nav.readme | README |
+| nav.tools | Référence des outils |
+| nav.examples | Exemples |
+| nav.roadmap | Feuille de route |
+| nav.changelog | Journal des modifications |
+| nav.prompts | Bibliothèque de prompts |
 
-## Navigation (FR)
+## Page Descriptions (Index Navigation)
 
-- Page d'accueil : `Page d'accueil` (`index.html`)
-- Ordre de navigation : Page d'accueil · README · Référence des outils · Exemples · Feuille de route · Journal des modifications · Bibliothèque de prompts
-- Titre du site : `ReaPlus Docs`
-- Modèle de titre : `<Titre> — ReaPlus Docs`
+| Key | French |
+|---|---|
+| desc.readme | Installation, clients, fonctionnalités, sécurité |
+| desc.tools | Catalogue complet généré (surface réelle) |
+| desc.examples | 5 scénarios d'exécution réelle |
+| desc.roadmap | Travaux prioritaires et clôtures |
+| desc.changelog | Notes de version (Keep a Changelog) |
+| desc.prompts | 10 formulations de questions prêtes à l'emploi |
 
-## Page d'accueil — textes (FR)
+## Search
 
-- Introduction : `README + Référence des outils + Exemples + Feuille de route + Journal des modifications + Bibliothèque de prompts — un seul site statique. Production : node scripts/site-uret.mjs.`
-- Libellé de recherche : `Rechercher dans le site :`
-- Placeholder de recherche : `par ex. pcap, recette, fuzz`
-- Description de prompt prêt : `prompt prêt`
+| Key | French |
+|---|---|
+| search.label | Rechercher dans le site : |
+| search.placeholder | par ex. pcap, recette, fuzz |
 
-## Bandeau de résumé — modèle (FR)
+## Summary Bar
 
-- Préfixe : `Résumé de surface (exécution réelle, TOOLS.md) :`
-- Modèle : `<N> outils · <N> outputSchema · <N> annotations · <N> resources · <N> prompts`
-- Exemple : `191 outils · 187 outputSchema · 191 annotations · 2 resources · 3 prompts`
+| Key | French |
+|---|---|
+| summary.template | Résumé de surface (exécution réelle, TOOLS.md) : {arac} outils · {sema} outputSchema · {ann} annotations · {res} resources · {prompt} prompts |
 
-## Notes de traduction (FR)
+## Index Intro
 
-- Noms d'outils, commandes, code, chemins, nombres et URL conservés tels quels.
-- `confirm:true`, `capability_unsupported`, `confirmation_required`, `engine_unavailable` jamais traduits.
-- Noms de champs de schémas (`session_id`, `path`, `ok`, `plan`, …) jamais traduits.
+| Key | French |
+|---|---|
+| index.intro | README + Référence des outils + Exemples + Feuille de route + Journal des modifications + Bibliothèque de prompts — un seul site statique. Production : <code>node scripts/site-uret.mjs</code>. |
+
+## Page Titles
+
+| Key | French |
+|---|---|
+| title.suffix | — ReaPlus Docs |
