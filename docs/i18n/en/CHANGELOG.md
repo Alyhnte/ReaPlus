@@ -2,6 +2,31 @@
 
 All notable changes are kept in this file. Format: Keep a Changelog + SemVer.
 
+## [0.11.0] — 2026-10-18
+
+Release 0.11.0: 5-language i18n site + premium theme + sample sessions +
+release provenance. Tool surface unchanged (191 tools + 2 resources +
+3 prompts). 101/101 default tests green.
+
+### Added
+
+- 5-language site (TR/EN/DE/FR/ES): `scripts/site-uret.mjs` with i18n
+  chrome + language switcher; 5 languages × 7 pages = 35 HTML.
+- Premium site theme (scroll-reveal + light/dark toggle).
+- Sample sessions (README "🎬 Örnek Oturumlar" + `docs/ornek-oturumlar/`:
+  ghidra / ida / r2 — real output evidence, nothing fabricated).
+- npm publish provenance (OIDC `--provenance`) + `release-artifacts`
+  job: the CycloneDX SBOM becomes an automatic GitHub Release asset.
+- CONTRIBUTING split into 6 H2 sections + `bug-raporu` / `ozellik-istegi`
+  issue forms (GitHub issue-form schema).
+- `site-uret.mjs --check` mode: 35-page asset/size/language validation,
+  `exit(1)` on a broken file.
+
+### Internal
+
+- Waves 6–10 built in isolated worktrees with TDD; the full suite is
+  green at the gate.
+
 ## [0.10.2] — 2026-10-16
 
 Release 0.10.2: P2 distribution/quality waves + Mach-O depth + P3

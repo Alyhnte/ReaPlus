@@ -3,6 +3,33 @@
 Tous les changements notables sont consignés dans ce fichier. Format : Keep a Changelog + SemVer.
 All notable changes are documented here (résumé en français + détail en anglais).
 
+## [0.11.0] — 2026-10-18
+
+Version 0.11.0 : site i18n 5 langues + thème premium + sessions
+d'exemple + provenance de publication. Surface d'outils inchangée
+(191 outils + 2 ressources + 3 prompts). 101/101 tests par défaut verts.
+
+### Ajouté / Added
+
+- Site 5 langues (TR/EN/DE/FR/ES) : `scripts/site-uret.mjs` avec chrome
+  i18n + sélecteur de langue ; 5 langues × 7 pages = 35 HTML.
+- Thème de site premium (scroll-reveal + bascule clair/sombre).
+- Sessions d'exemple (README "🎬 Örnek Oturumlar" +
+  `docs/ornek-oturumlar/` : ghidra / ida / r2 — preuves de sorties
+  réelles, rien d'inventé).
+- Provenance de publication npm (OIDC `--provenance`) + job
+  `release-artifacts` : le SBOM CycloneDX devient une pièce jointe
+  automatique de la release GitHub.
+- CONTRIBUTING découpé en 6 sections H2 + formulaires d'issues
+  `bug-raporu` / `ozellik-istegi` (schéma GitHub issue form).
+- Mode `site-uret.mjs --check` : validation présence/taille/langue
+  des 35 pages, `exit(1)` sur fichier corrompu.
+
+### Interne
+
+- Vagues 6 à 10 construites en worktrees isolés avec TDD ; la suite
+  complète est verte à la porte.
+
 ## [0.10.2] — 2026-10-16
 
 Version 0.10.2 : vagues distribution/qualité P2 + profondeur Mach-O + notes de

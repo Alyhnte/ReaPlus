@@ -3,6 +3,30 @@
 Tüm önemli değişiklikler bu dosyada tutulur. Format: Keep a Changelog + SemVer.
 All notable changes are documented here (Türkçe özet + English detail).
 
+## [0.11.0] — 2026-10-18
+
+Sürüm 0.11.0: 5 dil i18n site + premium tema + örnek oturumlar + release
+güveni. Araç yüzeyi değişmedi (191 araç + 2 resource + 3 prompt).
+101/101 varsayılan test yeşil.
+
+### Eklendi / Added
+
+- 5 dil site (TR/EN/DE/FR/ES): `scripts/site-uret.mjs` i18n chrome +
+  dil seçici; 5 dil × 7 sayfa = 35 HTML.
+- Premium site teması (scroll-reveal + light/dark toggle).
+- Örnek oturumlar (README "🎬 Örnek Oturumlar" + `docs/ornek-oturumlar/`:
+  ghidra / ida / r2 — gerçek çıktı kanıtı, uydurma yok).
+- npm publish provenance (OIDC `--provenance`) + `release-artifacts`
+  job'u: CycloneDX SBOM otomatik GitHub Release asset'i olur.
+- CONTRIBUTING 6 H2 bölüm + `bug-raporu` / `ozellik-istegi` issue
+  formları (GitHub issue-form şeması).
+- `site-uret.mjs --check` modu: 35 sayfa varlık/boyut/dil doğrulaması,
+  bozuk dosyada `exit(1)`.
+
+### Altyapı / Internal
+
+- Dalga 6–10 izole worktree + TDD ile üretildi; tam küme kapıda yeşil.
+
 ## [0.10.2] — 2026-10-16
 
 Sürüm 0.10.2: P2 dağıtım/kalite dalgaları + Mach-O derinliği + P3

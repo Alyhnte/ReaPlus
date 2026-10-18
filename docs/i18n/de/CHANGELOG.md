@@ -3,6 +3,33 @@
 Alle wichtigen Änderungen werden in dieser Datei festgehalten. Format: Keep a Changelog + SemVer.
 Alle nennenswerten Änderungen sind hier dokumentiert (deutsche Zusammenfassung + englisches Detail).
 
+## [0.11.0] — 2026-10-18
+
+Release 0.11.0: 5-sprachige i18n-Website + Premium-Theme + Beispiel-
+Sitzungen + Release-Provenienz. Werkzeugfläche unverändert (191 Tools +
+2 Resources + 3 Prompts). 101/101 Standardtests grün.
+
+### Hinzugefügt
+
+- 5-sprachige Website (TR/EN/DE/FR/ES): `scripts/site-uret.mjs` mit
+  i18n-Chrome + Sprachumschalter; 5 Sprachen × 7 Seiten = 35 HTML.
+- Premium-Website-Theme (Scroll-Reveal + Light/Dark-Umschalter).
+- Beispiel-Sitzungen (README "🎬 Örnek Oturumlar" +
+  `docs/ornek-oturumlar/`: ghidra / ida / r2 — echte Ausgabenachweise,
+  nichts erfunden).
+- npm-Publish-Provenienz (OIDC `--provenance`) + Job
+  `release-artifacts`: das CycloneDX-SBOM wird automatisch zum
+  GitHub-Release-Asset.
+- CONTRIBUTING in 6 H2-Abschnitte aufgeteilt + Issue-Formulare
+  `bug-raporu` / `ozellik-istegi` (GitHub-Issue-Form-Schema).
+- Modus `site-uret.mjs --check`: Prüfung von 35 Seiten auf Vorhanden-
+  sein/Größe/Sprache, bei defekter Datei `exit(1)`.
+
+### Intern
+
+- Wellen 6–10 in isolierten Worktrees mit TDD gebaut; die volle Suite
+  ist am Gate grün.
+
 ## [0.10.2] — 2026-10-16
 
 Release 0.10.2: P2-Verteilungs-/Qualitätswellen + Mach-O-Tiefe + P3-
