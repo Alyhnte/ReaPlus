@@ -78,8 +78,16 @@ jobs:
       - name: SBOM uret (CycloneDX)
         run: node scripts/sbom-uret.mjs --cikti sbom.cdx.json
 
+      - name: Derle (portable bundle onkosulu)
+        run: npm run build
+
+      # portable node bundle (dalga-11): Node'suz Linux dagitimi; --zip ile portable/<surum>.zip.
+      # CI ubuntu-oldugu icin cikti linux-node bundle'dir; Windows bundle'i platform bagli uretilir.
+      - name: Portable bundle uret (--zip)
+        run: node scripts/portable-paketle.mjs --zip
+
       - name: GitHub Release olustur (SBOM ekli)
-        run: gh release create "$GITHUB_REF_NAME" --generate-notes sbom.cdx.json
+        run: gh release create "$GITHUB_REF_NAME" --generate-notes sbom.cdx.json portable/*.zip
         env:
           GH_TOKEN: ${{ github.token }}
 

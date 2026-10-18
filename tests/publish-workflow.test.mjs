@@ -126,6 +126,27 @@ describe("npm provenance + SBOM release zinciri", () => {
     assert.ok(wf.includes("--generate-notes"), "gh release create --generate-notes ile cagirilmali");
   });
 
+  it("release-artifacts: npm ci -> sbom -> build -> portable-paketle --zip -> gh release sirasi", () => {
+    // Sira yalnizca release-artifacts blogu icinde kontrol edilir; publish-npm'deki
+    // ilk "npm run build" burada kirmizi yapmasin diye dilim uzerinden okunur.
+    const ra = wf.slice(wf.indexOf("  release-artifacts:"), wf.indexOf("  publish-registry:"));
+    assert.ok(ra.length > 0, "release-artifacts blogu bulunmali");
+    let onceki = -1;
+    for (const p of ["run: npm ci", "node scripts/sbom-uret.mjs", "run: npm run build", "node scripts/portable-paketle.mjs --zip", "gh release create"]) {
+      const idx = ra.indexOf(p);
+      assert.ok(idx > onceki, `release-artifacts icinde '${p}' sirayla gelmeli (idx=${idx}, onceki=${onceki})`);
+      onceki = idx;
+    }
+  });
+
+  it("release-artifacts: gh release create portable zip dosyasini da ekler", () => {
+    assert.match(
+      wf,
+      /gh release create "\$GITHUB_REF_NAME"[^\r\n]*portable\/\*\.zip/,
+      "gh release create --generate-notes sbom.cdx.json portable/*.zip formatinda olmali (portable asset release'e gider)",
+    );
+  });
+
   it("release-artifacts: gh release create adimi GH_TOKEN tasir", () => {
     // gh CLI Actions icinde token'ı yalnizca GH_TOKEN env'inden okur; job izni
     // (contents: write) tek basina yetmez — dogrulanmazsa adim exit code 4 ile duser.
