@@ -315,6 +315,14 @@ node --test tests/evm.test.mjs # single-domain runs work too
 
 Details: [`docs/VERIFY.md`](docs/VERIFY.md) · [`docs/MCP-CONTRACTS.md`](docs/MCP-CONTRACTS.md) · [`CHANGELOG.md`](CHANGELOG.md)
 
+## 🎬 Örnek Oturumlar
+
+Uçtan uca, **gerçek araç komutları ve gerçek çıktılarla** yazılmış üç örnek analiz oturumu (uydurma sayı yok; eksik araçta `capability_unsupported` akışı anlatılır):
+
+- [`docs/ornek-oturumlar/ghidra-analiz.md`](docs/ornek-oturumlar/ghidra-analiz.md) — Ghidra headless: import + analiz, `rea_ghidra_*` (funcs/disasm/strings/decompile), ham `analyzeHeadless`/`pyghidraRun` karşılıkları, sık hatalar
+- [`docs/ornek-oturumlar/ida-karsilastirma.md`](docs/ornek-oturumlar/ida-karsilastirma.md) — IDA `idat` batch (`rea_ida_idb`/`rea_ida_flirt`), IDA kurulu değilse kapı davranışı, Ghidra ↔ r2 fonksiyon karşılaştırması (`rea_diff_*`)
+- [`docs/ornek-oturumlar/r2-triage.md`](docs/ornek-oturumlar/r2-triage.md) — radare2 ile 60 sn triage (`iI`/`iz`/`afl`/`pdf`) + `rea_r2_callgraph`/`rea_r2_esil`
+
 ## 🗺️ Roadmap
 
 Near the top of the list — the full, prioritized table lives in [`docs/ROADMAP.md`](docs/ROADMAP.md):
