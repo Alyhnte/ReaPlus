@@ -43,10 +43,16 @@ describe("registerResourcesPrompts kayit sekilleri", () => {
     }
   });
 
-  it("uc prompt kaydeder; argsSchema path zorunlu + focus opsiyoneldir", () => {
-    assert.equal(s.prompts.size, 3);
+  it("yedi prompt kaydeder; triage argsSchema path zorunlu + focus opsiyoneldir", () => {
+    assert.equal(s.prompts.size, 7);
     assert.deepEqual([...s.prompts.keys()], [...REA_PROMPT_NAMES]);
-    for (const [, p] of s.prompts) {
+    const triage = [
+      "packer-triage", "dotnet-malware-triage", "android-triage",
+      "pe-crash-triage", "elf-linux-triage", "evidence-report",
+    ];
+    for (const ad of triage) {
+      const p = s.prompts.get(ad);
+      assert.ok(p, `${ad} kayitli olmali`);
       assert.equal(typeof p.cb, "function");
       assert.ok(p.cfg.argsSchema?.safeParse, "argsSchema zod semasi olmali");
       assert.equal(p.cfg.argsSchema.safeParse({ path: "ornek.bin" }).success, true);
@@ -54,6 +60,18 @@ describe("registerResourcesPrompts kayit sekilleri", () => {
       assert.equal(p.cfg.argsSchema.safeParse({}).success, false);
       assert.equal(p.cfg.argsSchema.safeParse({ path: "" }).success, false);
     }
+  });
+
+  it("binary-diff argsSchema eski+yeni zorunlu + focus opsiyoneldir", () => {
+    const p = s.prompts.get("binary-diff");
+    assert.ok(p, "binary-diff kayitli olmali");
+    assert.equal(typeof p.cb, "function");
+    assert.ok(p.cfg.argsSchema?.safeParse, "argsSchema zod semasi olmali");
+    assert.equal(p.cfg.argsSchema.safeParse({ eski: "v1.exe", yeni: "v2.exe" }).success, true);
+    assert.equal(p.cfg.argsSchema.safeParse({ eski: "v1.exe", yeni: "v2.exe", focus: "yama" }).success, true);
+    assert.equal(p.cfg.argsSchema.safeParse({}).success, false);
+    assert.equal(p.cfg.argsSchema.safeParse({ eski: "v1.exe" }).success, false);
+    assert.equal(p.cfg.argsSchema.safeParse({ yeni: "v2.exe" }).success, false);
   });
 });
 
@@ -154,6 +172,58 @@ describe("prompt callback icerikleri", () => {
     assert.ok(t.includes("uygulama.apk"));
     siraIle(t, ["rea_investigate", "rea_jadx_manifest", "rea_jadx_classes", "rea_jadx_decompile"]);
     assert.match(t, /rea_adb_install.*disindadir/);
+    assert.match(t, /VM\/CI/);
+  });
+
+  it("pe-crash-triage: triage -> statik -> crash -> davranis sirasi, calistirma yasagi", async () => {
+    const t = await metin("pe-crash-triage", { path: "coken.exe", focus: "yuksek entropi" });
+    assert.ok(t.includes("coken.exe"));
+    assert.ok(t.includes("yuksek entropi"));
+    siraIle(t, [
+      "rea_investigate", "rea_pe_info", "rea_pe_imports",
+      "rea_crash_kayit_parse", "rea_crash_ozet", "rea_crash_hint",
+      "rea_behavior_full", "rea_behavior_timeline",
+    ]);
+    assert.match(t, /hicbir arac calistirmaz/);
+    assert.match(t, /asla calistirma/);
+    assert.match(t, /VM\/CI/);
+  });
+
+  it("elf-linux-triage: layout -> dwarf -> go -> cutter -> gadget sirasi, odak satiri islenir", async () => {
+    const t = await metin("elf-linux-triage", { path: "hedef.elf" });
+    assert.ok(t.includes("hedef.elf"));
+    assert.match(t, /Odak belirtilmedi/);
+    siraIle(t, [
+      "rea_investigate", "rea_pwn_elf_layout", "rea_dwarf_ozet", "rea_go_buildinfo",
+      "rea_cutter_funcs", "rea_cutter_strings", "rea_pwn_gadgets",
+    ]);
+    assert.match(t, /hicbir arac calistirmaz/);
+    assert.match(t, /VM\/CI/);
+  });
+
+  it("binary-diff: eski+yeni islenir, fonksiyon -> karsilastir -> vt -> decompile sirasi", async () => {
+    const t = await metin("binary-diff", { eski: "v1.exe", yeni: "v2.exe", focus: "acik yamasi" });
+    assert.ok(t.includes("v1.exe"));
+    assert.ok(t.includes("v2.exe"));
+    assert.ok(t.includes("acik yamasi"));
+    siraIle(t, [
+      "rea_investigate", "rea_bindiff_fonksiyonlar", "rea_bindiff_karsilastir",
+      "rea_ghidra_vt", "rea_ghidra_decompile",
+    ]);
+    assert.match(t, /hicbir arac calistirmaz/);
+    assert.match(t, /VM\/CI/);
+  });
+
+  it("evidence-report: kanit -> bundle -> dogrulama -> obligation -> hazirlik sirasi", async () => {
+    const t = await metin("evidence-report", { path: "ornek.bin", focus: "rapor kapsami" });
+    assert.ok(t.includes("ornek.bin"));
+    assert.ok(t.includes("rapor kapsami"));
+    siraIle(t, [
+      "rea_evidence_bundle", "rea_evidence_verify",
+      "rea_obligation_ledger", "rea_obligation_advance", "rea_obligation_verify", "rea_obligation_close",
+      "rea_readiness", "rea_coverage",
+    ]);
+    assert.match(t, /hicbir arac calistirmaz/);
     assert.match(t, /VM\/CI/);
   });
 });
