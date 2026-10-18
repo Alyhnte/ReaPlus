@@ -1,12 +1,13 @@
-# ReaPlus Prompt Kütüphanesi (10 hazır prompt)
+# ReaPlus Prompt Kütüphanesi (10 hazır prompt + 4 görev şablonu)
 
-Ajanın rea-plus'a soracağı 10 hazır soru kalıbı. Her prompt: **Amaç** +
+Ajanın rea-plus'a soracağı 10 hazır soru kalıbı + 4 MCP görev şablonu akışı.
+Her prompt: **Amaç** +
 **Örnek çağrı** (gerçek MCP/`rea-plus-cli` formu, alan adları üretilmiş
 referans [`TOOLS.md`](TOOLS.md) ile aynı) + **Beklenen çıktı** türü.
-Yüzey: **187 araç**, **183 outputSchema**, **187 annotations**, 2 resource, 3 prompt.
+Yüzey: **187 araç**, **183 outputSchema**, **187 annotations**, 2 resource, 7 prompt.
 
 > Not: `confirm:true` isteyen canlı-debug çağrıları listede yok; buradaki
-> 10 promptun tamamı salt-okunur/statik akışlardır.
+> 14 promptun tamamı salt-okunur/statik akışlardır.
 
 ## 1) Triage — "bu dosya nedir, nereden başlarım?"
 
@@ -170,3 +171,83 @@ node tests/perf-budget.test.mjs
 **Beklenen çıktı:** node:test çıktısı (bütçe eşikleri `tests/perf-budget.test.mjs`
 içinde tanımlı); eşik aşımı testi kırmızıya düşürür, süreler konsolda
 milisaniye olarak raporlanır.
+
+## Görev şablonu prompt'ları (MCP kayıtlı, 4 akış)
+
+Aşağıdaki 4 prompt `prompts/list` üzerinden kayıtlıdır: her biri yalnızca
+**sıralı akış metni** döndürür (`promptSonuc`), araç çağırmaz. `path` (veya
+`eski`/`yeni`) zorunlu, `focus` opsiyoneldir. Kullanılan araç adları
+[`TOOLS.md`](TOOLS.md) ile doğrulanmıştır. Tüm akışlar VM/CI'da `confirm:true`
+isteyen canlı-debug adımlarını atlar ve örneği asla çalıştırmaz.
+
+### 11) PE/crash triage - "çöken PE'yi statikten davranışa nasıl inceleyeyim?"
+
+**Amaç:** PE hedefte triage → statik → crash kanıtı → davranış sırasıyla
+ilerlet; crash kaydı yoksa davranışı uydurmadan eksikliği yaz.
+
+**Örnek çağrı:**
+
+```json
+{ "name": "pe-crash-triage", "arguments": { "path": "ornek.exe", "focus": "yuksek entropi" } }
+```
+
+**Beklenen çıktı:** metin akışı: `rea_investigate` → `rea_pe_info` /
+`rea_pe_sections` / `rea_pe_imports` → `rea_crash_kayit_parse` /
+`rea_crash_ozet` / `rea_crash_timeline` / `rea_crash_hint` →
+`rea_behavior_full` / `rea_behavior_timeline` → `rea_pdb_yolu` (varsa);
+sonuçta triage öğesi, statik bulgular, crash kanıtının derecesi ve
+davranış özeti + her bulgu için güven düzeyi.
+
+### 12) ELF/Linux triage - "ELF hedefi sembol/ekipman açısından nasıl taranır?"
+
+**Amaç:** ELF/Linux hedefte segment/kesit düzeni, DWARF sembolleri, Go
+derleme bilgisi ve gadget adaylarını sırayla topla.
+
+**Örnek çağrı:**
+
+```json
+{ "name": "elf-linux-triage", "arguments": { "path": "hedef.elf" } }
+```
+
+**Beklenen çıktı:** metin akışı: `rea_investigate` → `rea_pwn_elf_layout` →
+`rea_dwarf_ozet` → `rea_go_buildinfo` / `rea_go_funclines` (Go ise) →
+`rea_cutter_funcs` / `rea_cutter_strings` (veya Ghidra: `rea_ghidra_analyze` →
+`rea_ghidra_funcs` / `rea_ghidra_strings`) → `rea_pwn_gadgets`; sonuçta ELF
+tipi + mitigation (NX/PIE/RELRO/canary) durumu, sembol/gadget kanıtları ve
+güven düzeyi.
+
+### 13) Binary diff - "iki sürüm arasında ne değişmiş, yamanın etkisi ne?"
+
+**Amaç:** İki sürüm arası fonksiyon diff'ini çıkar, değişen fonksiyonları
+decompile ederek yamanın etki alanını belirle.
+
+**Örnek çağrı:**
+
+```json
+{ "name": "binary-diff", "arguments": { "eski": "v1.exe", "yeni": "v2.exe", "focus": "acik yamasi" } }
+```
+
+**Beklenen çıktı:** metin akışı: `rea_investigate` (iki sürüm) →
+`rea_bindiff_fonksiyonlar` (eski+yeni) → `rea_bindiff_karsilastir` (girdi
+JSON: `{"eski": "<eski>", "yeni": "<yeni>"}`) → `rea_ghidra_vt` (Ghidra varsa) →
+`rea_ghidra_decompile` (değişen fonksiyon adresleri); sonuçta eklenen /
+çıkarılan / değişen fonksiyonlar + her biri için kanıt (hash/imza/adres) ve
+yamanın etki alanı.
+
+### 14) Evidence report - "topladığım kanıtları rapora nasıl dönüştürürüm?"
+
+**Amaç:** Kanıt paketini digest'leyip doğrula, obligation defteriyle her
+bulgunun kanıt zincirini kapat, hazırlık skoru + kapsam oranını raporla.
+
+**Örnek çağrı:**
+
+```json
+{ "name": "evidence-report", "arguments": { "path": "ornek.bin", "focus": "rapor kapsami" } }
+```
+
+**Beklenen çıktı:** metin akışı: `rea_investigate` → `rea_evidence_bundle` →
+`rea_evidence_verify` → `rea_obligation_ledger` / `rea_obligation_advance` /
+`rea_obligation_verify` / `rea_obligation_close` → `rea_readiness` /
+`rea_coverage` → `rea_missing_reason` (eksik araç); sonuçta yönetici özeti,
+bulgu listesi (bulgu + kanıt + güven), kanıt digest'i, obligation zincir
+durumu, hazırlık skoru ve kapsam oranı.
