@@ -1,6 +1,7 @@
 # rea-plus publish zinciri — TEK tetikleyici: v* tag push.
 # Sira: kapilar (typecheck/build/test) -> npm publish (NPM_TOKEN secret) ->
 # npm'de surum gorunene kadar yoklama -> MCP Registry publish (GitHub OIDC).
+# npm provenance: OIDC ile imzalı publish; SBOM: CycloneDX, release asset'i olarak eklenir.
 # Manuel publish-registry workflow'u emeklidir; cift-kosucu yarisi bitti,
 # duplicate-version gürültüsü olmaz. Kuru prova için: tag açmadan önce yerelde
 # `npm publish` provası koşulur (CI'da prova job'u yoktur).
@@ -49,10 +50,36 @@ jobs:
           node --test tests/publish.test.mjs tests/version-sync.test.mjs tests/publish-workflow.test.mjs
           node scripts/publish-kontrol.mjs
 
+      # npm provenance: OIDC ile imzalı publish; SBOM: CycloneDX, release asset'i olarak eklenir.
       - name: npm publish (NPM_TOKEN secret)
-        run: npm publish --access public
+        run: npm publish --access public --provenance
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+  release-artifacts:
+    needs: publish-npm
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Node 22 kur
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Temiz kurulum (npm ci)
+        run: npm ci
+
+      # npm provenance: OIDC ile imzalı publish; SBOM: CycloneDX, release asset'i olarak eklenir.
+      - name: SBOM uret (CycloneDX)
+        run: node scripts/sbom-uret.mjs --cikti sbom.cdx.json
+
+      - name: GitHub Release olustur (SBOM ekli)
+        run: gh release create "$GITHUB_REF_NAME" --generate-notes sbom.cdx.json
 
   publish-registry:
     needs: publish-npm

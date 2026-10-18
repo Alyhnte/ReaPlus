@@ -6,9 +6,10 @@ import { fileURLToPath } from "node:url";
 
 // Statik guvenlik testi: .github/workflows/publish.yml canli kosulmadan,
 // yalniz metin uzerinden zincir modeli dogrulanir.
-// Model: TEK tetikleyici (v* tag push) -> kapilar -> npm publish (NPM_TOKEN) ->
-// npm gorunurluk bekleme -> MCP Registry publish (OIDC). Manuel tetikleyici
-// yoktur (cift-kosucu duplicate-version yarisini bitirir).
+// Model: TEK tetikleyici (v* tag push) -> kapilar -> npm publish (NPM_TOKEN,
+// --provenance ile OIDC imzali) -> npm gorunurluk bekleme -> MCP Registry
+// publish (OIDC) + release-artifacts (SBOM'u GitHub Release'e ekler).
+// Manuel tetikleyici yoktur (cift-kosucu duplicate-version yarisini bitirir).
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const wfPath = path.join(root, ".github", "workflows", "publish.yml");
@@ -42,11 +43,16 @@ describe("publish zincir guvenlik kosullari", () => {
     }
   });
 
-  it("izinler yalniz contents:read + id-token:write", () => {
-    assert.match(wf, /^permissions:\s*\n\s+contents:\s*read\s*\n\s+id-token:\s*write\s*$/m, "permissions tam olarak contents:read + id-token:write olmali");
-    for (const yasak of ["write-all", "contents: write", "packages: write", "actions: write", "id-token: read"]) {
+  it("global izinler yalniz contents:read + id-token:write", () => {
+    assert.match(wf, /^permissions:\s*\n\s+contents:\s*read\s*\n\s+id-token:\s*write\s*$/m, "global permissions tam olarak contents:read + id-token:write olmali");
+    for (const yasak of ["write-all", "packages: write", "actions: write", "id-token: read"]) {
       assert.ok(!wf.includes(yasak), `'${yasak}' olmamali`);
     }
+    // contents: write yalnizca release-artifacts job'unun kendi izin blogunda olabilir.
+    const icYazan = wf.split("contents: write").length - 1;
+    assert.ok(icYazan <= 1, "contents: write en fazla bir kez (release-artifacts job'unda) olmali");
+    assert.ok(wf.includes("  release-artifacts:"), "release-artifacts job'u olmali");
+    assert.match(wf, /release-artifacts:[\s\S]*?permissions:\s*\n\s+contents:\s*write/, "contents: write yalnizca release-artifacts job'unda olmali");
   });
 
   it("Ubuntu + Node 22 + npm registry-url kullanir", () => {
@@ -96,5 +102,27 @@ describe("publish zincir guvenlik kosullari", () => {
     for (const yasak of ["git push", "git tag", "continue-on-error", "test:live", "npm install\n", "npm i ", "workflow_dispatch", "confirm_publish", "--dry-run"]) {
       assert.ok(!wf.includes(yasak), `'${yasak.trim()}' workflow'da olmamali`);
     }
+  });
+});
+
+describe("npm provenance + SBOM release zinciri", () => {
+  it("npm publish adiminda --provenance flag'i vardir", () => {
+    assert.ok(wf.includes("npm publish --access public --provenance"), "npm publish --provenance ile yapilmali (OIDC imzali publish)");
+    assert.ok(wf.includes("id-token: write"), "provenance icin id-token:write izni olmali");
+  });
+
+  it("release-artifacts job'u publish-npm'e baglidir (needs)", () => {
+    assert.match(wf, /release-artifacts:\s*\n\s+needs:\s*publish-npm/, "release-artifacts needs: publish-npm icermeli");
+    assert.match(wf, /release-artifacts:[\s\S]*?runs-on:\s*ubuntu-latest/, "release-artifacts ubuntu-latest uzerinde kosmali");
+  });
+
+  it("release-artifacts: SBOM uretimi icin sbom-uret.mjs cagirilir", () => {
+    assert.ok(wf.includes("node scripts/sbom-uret.mjs"), "sbom-uret.mjs cagrisi olmali");
+  });
+
+  it("release-artifacts: gh release create SBOM dosyasini release'e ekler", () => {
+    assert.ok(wf.includes("gh release create"), "gh release create cagrisi olmali");
+    assert.match(wf, /gh release create "\$GITHUB_REF_NAME"/, "gh release create tag adiyla ($GITHUB_REF_NAME) cagirilmali");
+    assert.ok(wf.includes("--generate-notes"), "gh release create --generate-notes ile cagirilmali");
   });
 });
