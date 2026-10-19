@@ -27,10 +27,37 @@ export function rea_js_sourcemap(mapText: string): ReaJsResult {
   }
 }
 
+// Kaynak yolu normalizasyonu: ters bölü -> eğik çizgi + baştaki "./" kırpılır
+// (JsDepth/JadxBridge'deki mevcut yol normalizasyonuyla aynı idiom).
+function kaynakYolu(yol: string): string {
+  return yol.replace(/\\/g, "/").replace(/^\.\//, "");
+}
+
+// İlişki şekli: normalize edilmiş kaynak kümeleri, alfabetik (deterministik) üçlü.
+type Iliskiler = { paylasilanKaynaklar: string[]; yalnizA: string[]; yalnizB: string[] };
+
+// İki source-map metninden ilişki çıkarır; bozuk map'te null döner (çağıran kapıya çevirir).
+function kaynakİlişkileri(mapA: string, mapB: string): Iliskiler | null {
+  try {
+    const sa = new Set(((JSON.parse(mapA) as { sources?: string[] }).sources ?? []).map(kaynakYolu));
+    const sb = new Set(((JSON.parse(mapB) as { sources?: string[] }).sources ?? []).map(kaynakYolu));
+    return {
+      paylasilanKaynaklar: [...sa].filter((s) => sb.has(s)).sort(),
+      yalnizA: [...sa].filter((s) => !sb.has(s)).sort(),
+      yalnizB: [...sb].filter((s) => !sa.has(s)).sort(),
+    };
+  } catch { return null; }
+}
+
 // Bundle diff: iki bundle metni satır bazında karşılaştırır.
-export function compare_source_to_bundle(a: string, b: string): ReaJsResult {
+// mapA+mapB verilirse details'a additive iliskiler eklenir; satır farkı alanları değişmez.
+export function compare_source_to_bundle(a: string, b: string, mapA?: string, mapB?: string): ReaJsResult {
   const env = needNode();
   if (env) return env;
+  // İlişki kurtarma iki map'i birlikte ister; tek map sessizce yok sayılmaz.
+  if ((mapA === undefined) !== (mapB === undefined)) {
+    return { ok: false, code: "capability_unsupported", reason: "iki source-map gerekli" };
+  }
   const la = a.split("\n");
   const lb = b.split("\n");
   // Ucuz LCS yerine satır kümesi farkı (iskelet, hızlı).
@@ -38,7 +65,16 @@ export function compare_source_to_bundle(a: string, b: string): ReaJsResult {
   const onlyA = la.filter((l) => !setB.has(l)).length;
   const setA = new Set(la);
   const onlyB = lb.filter((l) => !setA.has(l)).length;
-  return { ok: true, tool: "rea_js_bundle_diff", summary: `onlyA=${onlyA} onlyB=${onlyB}`, details: { onlyA, onlyB } };
+  const iliskiler = mapA !== undefined && mapB !== undefined ? kaynakİlişkileri(mapA, mapB) : null;
+  if (mapA !== undefined && mapB !== undefined && !iliskiler) {
+    return { ok: false, code: "capability_unsupported", reason: "source-map parse edilemedi" };
+  }
+  return {
+    ok: true,
+    tool: "rea_js_bundle_diff",
+    summary: `onlyA=${onlyA} onlyB=${onlyB}`,
+    details: iliskiler ? { onlyA, onlyB, iliskiler } : { onlyA, onlyB },
+  };
 }
 
 // Tek giriş: bundle + opsiyonel map ile özet çıkarır.
