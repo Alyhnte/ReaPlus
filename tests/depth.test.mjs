@@ -50,6 +50,62 @@ function exportSahnesi() {
   return dir;
 }
 
+// Çözümleme sahnesi: tüm spek sınıfları + sahte node_modules/lodash (main'li).
+function cozumSahnesi() {
+  const dir = tazeKlasör("cozum");
+  writeFileSync(
+    join(dir, "main.js"),
+    'const util = require("./lib/util");\n' +
+      'const yok = require("./yok");\n' +
+      'const yok2 = require("./yok2");\n' +
+      'const path = require("node:path");\n' +
+      'const lodash = require("lodash");\n' +
+      'const scoped = require("@sc/k");\n' +
+      'import "https://cdn.ornek/x.mjs";\n' +
+      'import "data:text/javascript,1";\n' +
+      "console.log(util, yok, yok2, path, lodash, scoped);\n",
+  );
+  mkdirSync(join(dir, "lib"));
+  writeFileSync(join(dir, "lib", "util.js"), "module.exports = 1;\n");
+  mkdirSync(join(dir, "node_modules", "lodash"), { recursive: true });
+  writeFileSync(join(dir, "node_modules", "lodash", "package.json"), '{"name":"lodash","main":"lodash.js"}');
+  writeFileSync(join(dir, "node_modules", "lodash", "lodash.js"), "module.exports = {};\n");
+  return dir;
+}
+
+// Çözümleme ek sahnesi: dizin index'i, main+.js fallback'i, çözülemeyen bare.
+function cozumEkSahnesi() {
+  const dir = tazeKlasör("cozum-ek");
+  writeFileSync(
+    join(dir, "giris.js"),
+    'require("./dizin");\n' +
+      'require("./veri.json");\n' +
+      'require("fs");\n' +
+      'require("yokpaket");\n' +
+      'require("paket");\n',
+  );
+  mkdirSync(join(dir, "dizin"));
+  writeFileSync(join(dir, "dizin", "index.mjs"), "export {};\n");
+  writeFileSync(join(dir, "veri.json"), '{"a":1}\n');
+  mkdirSync(join(dir, "node_modules", "paket"), { recursive: true });
+  writeFileSync(join(dir, "node_modules", "paket", "package.json"), '{"name":"paket","main":"ana"}');
+  writeFileSync(join(dir, "node_modules", "paket", "ana.js"), "module.exports = 1;\n");
+  return dir;
+}
+
+// CJS sahnesi: exports.NAME, module.exports.NAME, defineProperty(exports,...) + tekrar.
+function cjsSahnesi() {
+  const dir = tazeKlasör("cjs");
+  writeFileSync(
+    join(dir, "cjs.js"),
+    'exports.foo = 1;\n' +
+      'module.exports.bar = 2;\n' +
+      'Object.defineProperty(exports, "baz", { get() { return 3; } });\n' +
+      'exports.foo = 4;\n',
+  );
+  return dir;
+}
+
 describe("rea_fs_snapshot (gerçek fs)", () => {
   // Recursive yürüyüş kök + alt dizin dosyasını göreli yolla listeler.
   it("dosyaları recursive listeler", () => {
@@ -225,6 +281,50 @@ describe("rea_js_require (sahte dosyalar)", () => {
   });
 });
 
+describe("rea_js_require çözümleme (sahte dosyalar)", () => {
+  // Graf dokunulmaz; cozumleme her spek için tur, çözülenlerde göreli yol verir.
+  it("spec'leri sınıflar ve göreli/bare çözümü yapar", () => {
+    const dir = cozumSahnesi();
+    try {
+      const r = rea_js_require(dir);
+      assert.equal(r.ok, true);
+      assert.equal(r.summary, "3 dosya, 8 kenar");
+      assert.deepEqual(r.details.graf["main.js"], [
+        "./lib/util", "./yok", "./yok2", "node:path", "lodash", "@sc/k",
+        "https://cdn.ornek/x.mjs", "data:text/javascript,1",
+      ]);
+      const c = r.details.cozumleme["main.js"];
+      assert.deepEqual(c["./lib/util"], { tur: "relative", cozum: "lib/util.js" });
+      assert.deepEqual(c["./yok"], { tur: "relative" });
+      assert.deepEqual(c["./yok2"], { tur: "relative" });
+      assert.deepEqual(c["node:path"], { tur: "builtin" });
+      assert.deepEqual(c["lodash"], { tur: "bare", cozum: "node_modules/lodash/lodash.js" });
+      assert.deepEqual(c["@sc/k"], { tur: "scoped" });
+      assert.deepEqual(c["https://cdn.ornek/x.mjs"], { tur: "url" });
+      assert.deepEqual(c["data:text/javascript,1"], { tur: "url" });
+      assert.deepEqual(r.details.eksik, ["main.js -> ./yok", "main.js -> ./yok2"]);
+      assert.deepEqual(r.details.cozumleme["lib/util.js"], {});
+    } finally { rmSync(dir, { recursive: true, force: true }); }
+  });
+
+  // Dizin index'i, main+.js fallback'i ve çözülemeyen bare: eksik'e yalnız göreli girer.
+  it("index/main fallback'i ve bare ayrımını işler", () => {
+    const dir = cozumEkSahnesi();
+    try {
+      const r = rea_js_require(dir);
+      assert.equal(r.ok, true);
+      assert.equal(r.summary, "3 dosya, 5 kenar");
+      const c = r.details.cozumleme["giris.js"];
+      assert.deepEqual(c["./dizin"], { tur: "relative", cozum: "dizin/index.mjs" });
+      assert.deepEqual(c["./veri.json"], { tur: "relative", cozum: "veri.json" });
+      assert.deepEqual(c["fs"], { tur: "builtin" });
+      assert.deepEqual(c["yokpaket"], { tur: "bare" });
+      assert.deepEqual(c["paket"], { tur: "bare", cozum: "node_modules/paket/ana.js" });
+      assert.deepEqual(r.details.eksik, []);
+    } finally { rmSync(dir, { recursive: true, force: true }); }
+  });
+});
+
 describe("rea_js_export_shape (sahte dosya)", () => {
   // function + ok-fonksiyon + class + default hepsi özetlenir.
   it("fonksiyon/sınıf/default özetini çıkarır", () => {
@@ -237,6 +337,7 @@ describe("rea_js_export_shape (sahte dosya)", () => {
       assert.ok(r.details.fonksiyonlar.includes("ikiKat"), "ikiKat bulunmalı");
       assert.ok(r.details.siniflar.includes("Kutu"), "Kutu bulunmalı");
       assert.equal(r.details.defaultVarMi, true);
+      assert.deepEqual(r.details.cjsExportlar, []);
     } finally { rmSync(dir, { recursive: true, force: true }); }
   });
 
@@ -245,5 +346,19 @@ describe("rea_js_export_shape (sahte dosya)", () => {
     const r = rea_js_export_shape(join(tmpdir(), "rea-depth-olmayan-12345.js"));
     assert.equal(r.ok, false);
     assert.equal(r.code, "capability_unsupported");
+  });
+});
+
+describe("rea_js_export_shape CJS (sahte dosya)", () => {
+  // exports/module.exports/defineProperty adları sıralı+tekilleşik ayrı alanda toplanır.
+  it("CJS dışa aktarım adlarını toplar", () => {
+    const dir = cjsSahnesi();
+    try {
+      const r = rea_js_export_shape(join(dir, "cjs.js"));
+      assert.equal(r.ok, true);
+      assert.deepEqual(r.details.cjsExportlar, ["bar", "baz", "foo"]);
+      assert.equal(r.details.defaultVarMi, false);
+      assert.ok(!r.details.fonksiyonlar.includes("foo"), "CJS adı fonksiyonlar alanına karışmamalı");
+    } finally { rmSync(dir, { recursive: true, force: true }); }
   });
 });
