@@ -766,7 +766,20 @@ const OUTPUT_SCHEMAS: Readonly<Record<string, StandardSchemaWithJSON>> = {
     ok: z.literal(true),
     tool: z.string(),
     summary: z.string(),
-    details: z.object({ graf: z.record(z.string(), z.array(z.string())) }),
+    details: z.object({
+      graf: z.record(z.string(), z.array(z.string())),
+      cozumleme: z.record(
+        z.string(),
+        z.record(
+          z.string(),
+          z.object({
+            tur: z.enum(["relative", "builtin", "scoped", "bare", "url"]),
+            cozum: z.string().optional(),
+          }),
+        ),
+      ).optional(),
+      eksik: z.array(z.string()).optional(),
+    }),
   }),
   rea_js_export_shape: z.object({
     ok: z.literal(true),
@@ -776,6 +789,7 @@ const OUTPUT_SCHEMAS: Readonly<Record<string, StandardSchemaWithJSON>> = {
       fonksiyonlar: z.array(z.string()),
       siniflar: z.array(z.string()),
       defaultVarMi: z.boolean(),
+      cjsExportlar: z.array(z.string()).optional(),
     }),
   }),
   rea_investigate: z.object({
