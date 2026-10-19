@@ -69,12 +69,16 @@ Trusted Publisher).
 3. Portable bundle ✓ — `scripts/portable-paketle.mjs` + 7 test +
    publish.yml release asset (`a0ea39b`, merge `582b9b2`).
 
-### dalga-12 — release + doküman senkronu
+### dalga-12 — release + doküman senkronu → KAPANDI (v0.12.0, `9fd2057`)
 
-4. README + ROADMAP senkron, CHANGELOG (5 dil), v0.12.0 bump, manifest (winget/scoop/brew),
-   SBOM, site regen → tag `v0.12.0` → CI/publish/docker izleme.
+4. ✓ Kapandı: README + ROADMAP senkron, CHANGELOG (5 dil), v0.12.0 bump, manifest
+   (winget/scoop/brew), SBOM, site regen → tag `v0.12.0` → CI/publish izleme.
+   Kanıt: CI publish/ci/pages 3/3 SUCCESS; npm `rea-plus@0.12.0`; release asset
+   `0.12.0.zip` + `sbom.cdx.json`; v0.11.0 + v0.12.0 release notları düzeltildi
+   (BOM/mojibake temizliği, 2026-10-19).
 
-### son iş
+### son iş → KAPANDI (2026-10-19; v0.12.0 dönemi)
 
-5. `github.com/morluto/rea` karşılaştırması: doğrulanmış/enleşmiş PR'lar, release'ler,
-   commitler → ReaPlus'a karşı tam tablo (olası bug'lar + yeni yükseltme/ekleme adayları).
+5. ✓ Kapandı: `github.com/morluto/rea` karşılaştırması (6.1.0→6.7.0, 26 merge PR, son
+   commit dalgası) → tam tablo `docs/morluto-rea-karsilastirma.md` (4 bug adayı B1-B4 +
+   10 port adayı).
