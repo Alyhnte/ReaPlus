@@ -9,15 +9,47 @@ import type { ReaPlusEngine } from "./sessionRouter.js";
 export type SniffTip = "elf" | "apk" | "dex" | "wasm" | "pe" | "macho" | "bilinmiyor";
 
 // Tanı sonucu: tür + bu türe en uygun motor önerisi.
-export interface SniffSonuc { tip: SniffTip; motor: ReaPlusEngine; }
+// makine yalnız ELF'te, en az 20 baytlık tamponda ve e_machine tanınıyorsa doludur
+// (opsiyonel; diğer türlerde ve tanınmayan makinede alan hiç eklenmez).
+export interface SniffSonuc { tip: SniffTip; motor: ReaPlusEngine; makine?: string; }
 
 // Tür bilinmeyince güvenli varsayılan: statik analiz motoru.
 const VARSAYILAN: SniffSonuc = { tip: "bilinmiyor", motor: "radare2" };
 
+// ELF e_machine adları: kanonik, küçük harfli, tireli; e_machine başına tek ad.
+// (Kaynak: ELF gABI EM_* sabitleri; Hexagon = Qualcomm DSP, 164.)
+const ELF_MAKINE: Readonly<Record<number, string>> = {
+  2: "sparc",
+  3: "x86",
+  8: "mips",
+  20: "ppc",
+  21: "ppc64",
+  22: "s390",
+  40: "arm",
+  43: "sparcv9",
+  62: "x86-64",
+  164: "hexagon",
+  183: "aarch64",
+  243: "risc-v",
+  247: "bpf",
+  258: "loongarch",
+};
+
+// ELF başlığından e_machine adı (offset 18, u16; EI_DATA=2 ise big-endian).
+// Kapılar: en az 20 bayt + tanınan makine; aksi halde undefined (uydurma ad yok).
+function elfMakine(buf: Uint8Array): string | undefined {
+  if (buf.length < 20) return undefined;
+  const makine = buf[5] === 2 ? (buf[18] << 8) | buf[19] : buf[18] | (buf[19] << 8);
+  return ELF_MAKINE[makine];
+}
+
 // Saf imza eşleştirme: ELF, DEX, WASM, ZIP/APK, MZ/PE, Mach-O.
 export function sniffBytes(buf: Uint8Array): SniffSonuc {
   const imza = [...buf.slice(0, 4)].map((b) => b.toString(16).padStart(2, "0")).join("");
-  if (imza.startsWith("7f454c46")) return { tip: "elf", motor: "radare2" }; // ELF
+  if (imza.startsWith("7f454c46")) { // ELF: tür+motor sabit, makine yalnız tanınırsa eklenir
+    const m = elfMakine(buf);
+    return m ? { tip: "elf", motor: "radare2", makine: m } : { tip: "elf", motor: "radare2" };
+  }
   if (imza.startsWith("6465780a")) return { tip: "dex", motor: "jadx" }; // DEX ("dex\n")
   if (imza.startsWith("0061736d")) return { tip: "wasm", motor: "wasm" }; // WASM
   if (imza.startsWith("504b0304")) return { tip: "apk", motor: "jadx" }; // ZIP/APK/JAR
