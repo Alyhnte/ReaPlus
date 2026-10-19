@@ -1,7 +1,7 @@
 # ROADMAP-NEXT — v0.11.0 sonrası derin işler
 
 Durum: rea'nın tüm kamusal yetenekleri ReaPlus'ta (191 araç, 2 resource, 7 prompt,
-103 test dosyası). Ticari lisanslılar kapılı (Hopper/IDA/JEB), Linux-özeller belgeli
+104 test dosyası). Ticari lisanslılar kapılı (Hopper/IDA/JEB), Linux-özeller belgeli
 (binwalk). v0.11.0'da kapananlar: 5 dilli site i18n + `--check`, örnek oturum (metin),
 npm OIDC provenance + SBOM release asset'i, Pages deploy, CONTRIBUTING + issue formları.
 v0.12.0'da kapananlar: golden korpus (5 gerçek gcc binary + 16 test), 4 görev şablonu
@@ -82,3 +82,17 @@ Trusted Publisher).
 5. ✓ Kapandı: `github.com/morluto/rea` karşılaştırması (6.1.0→6.7.0, 26 merge PR, son
    commit dalgası) → tam tablo `docs/morluto-rea-karsilastirma.md` (4 bug adayı B1-B4 +
    10 port adayı).
+
+### dalga-13 — davranışsal B-listesi → KAPANDI (2026-10-19; v0.12.0 dönemi)
+
+6. ✓ B3 JS çözümleme — `rea_js_require` spek sınıflandırma + relative/node_modules
+   çözümü (güvenli yürüyüş), `rea_js_export_shape` CJS export şekli (`6c7d403`).
+7. ✓ B2 plist sadakat — tip duyarlı kayıpsız değer okuma + `details.anahtarTipleri`
+   (`6a21424`).
+8. ✓ B5 map-guard — `analyze-js` dizin-vs-dosya kapısı, net hata mesajı (`9805553`).
+9. ✓ B1 sniff makine kimliği — ELF `e_machine` → `makine` (LE/BE, ≥20B; Hexagon dahil)
+   (`dd3acf1`).
+
+Kanıt: 4/4 branch merge (`fa9fcbd`→`38f7dcf`); tam suite **104/104 PASS**; yüzey
+191 araç/187 şema sabit (yeni araç yok); şema bütçesi 176598B liste / 92353B şema
+(limitler 204800/112640). B4+ (version-sync genişletme) ve kalan adaylar dalga-14.
