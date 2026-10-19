@@ -655,6 +655,7 @@ const OUTPUT_SCHEMAS: Readonly<Record<string, StandardSchemaWithJSON>> = {
     }),
   }),
   // Iki anahtardan biri dolu olabilir; her biri tek basina null olabilir.
+  // anahtarTipleri katki alan: degerler ham metin (integer/real kayipsiz), opsiyoneldir.
   rea_apple_plist: z.object({
     ok: z.literal(true),
     tool: z.string(),
@@ -662,6 +663,9 @@ const OUTPUT_SCHEMAS: Readonly<Record<string, StandardSchemaWithJSON>> = {
     details: z.object({
       bundleId: z.string().nullable(),
       executable: z.string().nullable(),
+      anahtarTipleri: z
+        .record(z.string(), z.object({ tip: z.enum(["string", "integer", "real", "boolean"]), deger: z.string() }))
+        .optional(),
     }),
   }),
   rea_apple_bundle: z.object({
