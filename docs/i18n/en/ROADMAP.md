@@ -1,6 +1,6 @@
 # ROADMAP — ReaPlus roadmap
 
-> Status: v0.10.1 released (npm + MCP Registry + green CI). This document was
+> Status: v0.12.0 released (npm + MCP Registry + green CI). This document was
 > born from the findings of the first 2026-10-12 review and is synced with
 > what actually shipped at the end of every wave. v0.10.1 closed the P1 code
 > items (dead facade cleanup + golden DEX fixture); the tool surface is

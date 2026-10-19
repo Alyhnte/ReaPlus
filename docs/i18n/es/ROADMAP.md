@@ -1,6 +1,6 @@
 # ROADMAP — hoja de ruta de ReaPlus
 
-> Estado: v0.10.1 publicada (npm + MCP Registry + CI en verde). Este documento nació
+> Estado: v0.12.0 publicada (npm + MCP Registry + CI en verde). Este documento nació
 > con los hallazgos de la revisión inicial del 2026-10-12 y se sincroniza con lo realizado
 > al final de cada oleada. v0.10.1 cerró los puntos de código P1 (limpieza de facade muerta +
 > fixture DEX dorado); la superficie de herramientas no cambió. Los números provienen de la superficie real

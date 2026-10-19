@@ -83,7 +83,7 @@ Cualquier cliente MCP stdio puede lanzarlo directo desde el registro npm:
 }
 ```
 
-> **Estado de publicación:** `rea-plus@0.8.2` está en vivo en el [registro npm](https://www.npmjs.com/package/rea-plus) y [`io.github.Alyhnte/rea-plus`](https://registry.modelcontextprotocol.io) está publicado en el MCP Registry. Las instalaciones soportadas son `npx -y rea-plus` (arriba) y GHCR (ver [Docker](#-docker)).
+> **Estado de publicación:** `rea-plus@0.12.0` está en vivo en el [registro npm](https://www.npmjs.com/package/rea-plus) y [`io.github.Alyhnte/rea-plus`](https://registry.modelcontextprotocol.io) está publicado en el MCP Registry. Las instalaciones soportadas son `npx -y rea-plus` (arriba) y GHCR (ver [Docker](#-docker)).
 
 ### Clonar y compilar
 
@@ -319,7 +319,7 @@ Detalles: [`docs/VERIFY.md`](docs/VERIFY.md) · [`docs/MCP-CONTRACTS.md`](docs/M
 
 Al tope de la lista — la tabla completa priorizada vive en [`docs/ROADMAP.md`](docs/ROADMAP.md):
 
-- npm + MCP Registry en vivo (`rea-plus@0.8.2`, `io.github.Alyhnte/rea-plus`) — installs soportadas: `npx -y rea-plus` y GHCR
+- npm + MCP Registry en vivo (`rea-plus@0.12.0`, `io.github.Alyhnte/rea-plus`) — installs soportadas: `npx -y rea-plus` y GHCR
 - Superficie tipada cerrada: 183 herramientas llevan `outputSchema` (4 permanentemente sin esquema) y 187 llevan annotations; whitelist asíncrona de 3 herramientas, ayudantes de progress cubren las herramientas con etapas
 - Completando el corpus dorado de binarios (hashes de salida esperada por proveedor) — incluidos el pendiente check Frida en VM en vivo y la prueba de aceptación DEX dorada del APK
 - Releases firmados + SBOM, y un perfil VM documentado para trabajo en vivo
@@ -339,7 +339,7 @@ Mutan un objetivo en ejecución (puntos de interrupción, paso, escrituras de me
 No. Conduit usa el puerto 3847 por defecto; rea-plus sirve 3848, y los 30 nombres de herramienta conduit están congelados.
 
 **¿npm dice que el paquete no existe?**
-Actualiza tu caché — `rea-plus@0.8.2` está en el [registro npm](https://www.npmjs.com/package/rea-plus) y publicado en el MCP Registry. Usa `npx -y rea-plus` en todas partes o la imagen GHCR.
+Actualiza tu caché — `rea-plus@0.12.0` está en el [registro npm](https://www.npmjs.com/package/rea-plus) y publicado en el MCP Registry. Usa `npx -y rea-plus` en todas partes o la imagen GHCR.
 
 ## 🤝 Contribución
 
