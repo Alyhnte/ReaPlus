@@ -9,8 +9,8 @@ import type { ReaPlusEngine } from "./sessionRouter.js";
 export type SniffTip = "elf" | "apk" | "dex" | "wasm" | "pe" | "macho" | "bilinmiyor";
 
 // Tanı sonucu: tür + bu türe en uygun motor önerisi.
-// makine yalnız ELF'te, en az 20 baytlık tamponda ve e_machine tanınıyorsa doludur
-// (opsiyonel; diğer türlerde ve tanınmayan makinede alan hiç eklenmez).
+// makine: ELF'te (>=20 bayt + tanınan e_machine) veya PE'de ARMNT/ARM64 COFF
+// machine'inde dolar; diğer türlerde ve tanınmayan makinede alan hiç eklenmez (opsiyonel).
 export interface SniffSonuc { tip: SniffTip; motor: ReaPlusEngine; makine?: string; }
 
 // Tür bilinmeyince güvenli varsayılan: statik analiz motoru.
@@ -43,6 +43,28 @@ function elfMakine(buf: Uint8Array): string | undefined {
   return ELF_MAKINE[makine];
 }
 
+// PE COFF machine kimlikleri: yalnız ARM aileleri (upstream 6.6.0 deltası, PR #3965).
+// x86 (0x14c) / x86-64 (0x8664) bilinçli olarak YOK: bu makinelerde mevcut PE kaydı
+// (tip+motor) ve alan kümesi birebir korunur. Legacy ARM (0x01c0), Thumb (0x01c2) ve
+// ARM64EC (0xa641) upstream'de kabul edilmez; kimlik üretilmez.
+const PE_MAKINE: Readonly<Record<number, string>> = {
+  0x01c4: "armnt",
+  0xaa64: "arm64",
+};
+
+// PE başlığından COFF machine adı: MZ + e_lfanew (0x3C, u32LE) + "PE\0\0" + machine (u16LE).
+// Kapılar: tampon e_lfanew + 6 baytı kapsamalı, imza "PE\0\0" olmalı, machine tanınmalı;
+// aksi halde undefined (uydurma ad yok; kısa/bozuk başlıkta alan eklenmez).
+function peMakine(buf: Uint8Array): string | undefined {
+  if (buf.length < 0x40) return undefined;
+  const e = buf[0x3c] | (buf[0x3d] << 8) | (buf[0x3e] << 16) | (buf[0x3f] << 24);
+  if (e < 0x40 || e + 6 > buf.length) return undefined;
+  if (buf[e] !== 0x50 || buf[e + 1] !== 0x45 || buf[e + 2] !== 0x00 || buf[e + 3] !== 0x00) {
+    return undefined;
+  }
+  return PE_MAKINE[buf[e + 4] | (buf[e + 5] << 8)];
+}
+
 // Saf imza eşleştirme: ELF, DEX, WASM, ZIP/APK, MZ/PE, Mach-O.
 export function sniffBytes(buf: Uint8Array): SniffSonuc {
   const imza = [...buf.slice(0, 4)].map((b) => b.toString(16).padStart(2, "0")).join("");
@@ -53,7 +75,10 @@ export function sniffBytes(buf: Uint8Array): SniffSonuc {
   if (imza.startsWith("6465780a")) return { tip: "dex", motor: "jadx" }; // DEX ("dex\n")
   if (imza.startsWith("0061736d")) return { tip: "wasm", motor: "wasm" }; // WASM
   if (imza.startsWith("504b0304")) return { tip: "apk", motor: "jadx" }; // ZIP/APK/JAR
-  if (imza.startsWith("4d5a")) return { tip: "pe", motor: "x64dbg" }; // MZ/PE
+  if (imza.startsWith("4d5a")) { // MZ/PE: motor sabit, makine yalnız ARMNT/ARM64'ta eklenir
+    const m = peMakine(buf);
+    return m ? { tip: "pe", motor: "x64dbg", makine: m } : { tip: "pe", motor: "x64dbg" };
+  }
   if (imza === "feedfacf" || imza === "cefaedfe" || imza === "cafebabe") return { tip: "macho", motor: "hopper" };
   return { ...VARSAYILAN }; // tanınmayan imza
 }

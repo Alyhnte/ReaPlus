@@ -65,7 +65,8 @@ const OUTPUT_SCHEMAS: Readonly<Record<string, StandardSchemaWithJSON>> = {
   }),
   // Dalga 2: facade saf hesaplar
   // sniffBytes'in ok alani yoktur; tip/motor her kosulda dolu iki dizgidir;
-  // makine yalniz >=20 baytlik ELF'te taninan e_machine icin dolar (opsiyonel).
+  // makine; >=20 baytlik ELF'te taninan e_machine veya PE'de ARMNT/ARM64 COFF
+  // machine icin dolar (opsiyonel; diger turlerde alan hic eklenmez).
   rea_sniff: z.object({ tip: z.string(), motor: z.string(), makine: z.string().optional() }),
   // alternatif yalniz bazi araclarda doludur; bosken JSON'da alan hic yoktur.
   rea_missing_reason: z.object({
