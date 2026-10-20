@@ -1,0 +1,630 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="Documentación técnica de ReaPlus: instalación, referencia de herramientas, ejemplos, hoja de ruta.">
+<title>Referencia de herramientas — ReaPlus Docs</title>
+<script>try{var t=localStorage.getItem("reaplus-tema");if(!t){t=window.matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light";}document.documentElement.dataset.theme=t;}catch(e){}</script>
+<style>:root{color-scheme:light;--zemin:#F6F6F3;--yuzey:#FCFCFA;--metin:#1D1F24;--silik:#5A6270;--sinir:#DFDFD6;--vurgu:#2E6B4E;--vurgu-arka:#E4EFE8;--kod-zemin:#EBEBE4;--golge:rgba(23,28,24,.08)}[data-theme="light"]{color-scheme:light;--zemin:#F6F6F3;--yuzey:#FCFCFA;--metin:#1D1F24;--silik:#5A6270;--sinir:#DFDFD6;--vurgu:#2E6B4E;--vurgu-arka:#E4EFE8;--kod-zemin:#EBEBE4;--golge:rgba(23,28,24,.08)}[data-theme="dark"]{color-scheme:dark;--zemin:#15181D;--yuzey:#1D2229;--metin:#E9E7E1;--silik:#A7B0BC;--sinir:#2F3742;--vurgu:#7BC9A2;--vurgu-arka:#1D3328;--kod-zemin:#232A33;--golge:rgba(8,10,12,.45)}@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){color-scheme:dark;--zemin:#15181D;--yuzey:#1D2229;--metin:#E9E7E1;--silik:#A7B0BC;--sinir:#2F3742;--vurgu:#7BC9A2;--vurgu-arka:#1D3328;--kod-zemin:#232A33;--golge:rgba(8,10,12,.45)}}*{box-sizing:border-box}html{-webkit-text-size-adjust:100%}body{margin:0;background:var(--zemin);color:var(--metin);font-family:system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;line-height:1.65}h1,h2,h3,.marka-ad{font-family:"Avenir Next","Segoe UI",system-ui,-apple-system,"Helvetica Neue",Arial,sans-serif;letter-spacing:-.01em;line-height:1.25}.sarmal{max-width:62rem;margin:0 auto;padding:0 1.25rem 3rem}.atla{position:absolute;left:-999px;top:0;background:var(--vurgu);color:var(--zemin);padding:.5rem 1rem;z-index:10}.atla:focus{left:0}.ust{display:flex;flex-wrap:wrap;align-items:center;gap:.6rem 1rem;padding:1rem 0;border-bottom:1px solid var(--sinir)}.marka-ad{font-weight:650;font-size:1.05rem}.marka-alt{color:var(--silik);font-size:.84rem;margin-left:.6rem}.gezinme{display:flex;flex-wrap:wrap;gap:.15rem .9rem;font-size:.92rem}.gezinme a{color:var(--silik);text-decoration:none;border-bottom:1px solid transparent}.gezinme a:hover{color:var(--metin);border-bottom-color:var(--vurgu)}.dil{display:flex;gap:.35rem;font-size:.8rem;color:var(--silik)}.dil a{color:var(--silik);text-decoration:none}.dil a:hover{color:var(--vurgu)}.dil strong{color:var(--metin)}#tema-toggle{margin-left:auto;font:inherit;font-size:.85rem;color:var(--metin);background:var(--yuzey);border:1px solid var(--sinir);border-radius:999px;padding:.32rem .85rem;cursor:pointer;transition:background-color .2s ease,border-color .2s ease}#tema-toggle:hover{border-color:var(--vurgu)}.ozet{margin:1.5rem 0 0;background:var(--yuzey);border:1px solid var(--sinir);border-radius:.6rem;padding:1rem 1.25rem}.ozet-metin{margin:0 0 .8rem;font-size:.92rem;color:var(--silik)}.istatistik{display:grid;grid-template-columns:repeat(auto-fit,minmax(8.5rem,1fr));gap:.6rem;margin:0}.istatistik div{border-top:2px solid var(--vurgu);padding-top:.45rem}.istatistik dt{font-size:.74rem;text-transform:uppercase;letter-spacing:.06em;color:var(--silik)}.istatistik dd{margin:.15rem 0 0;font-size:1.35rem;font-weight:650;font-variant-numeric:tabular-nums}#icerik{margin-top:1.5rem}#icerik a{color:var(--vurgu);text-decoration:underline;text-underline-offset:.15em}#icerik a:hover{text-decoration-thickness:2px}pre{background:var(--kod-zemin);border:1px solid var(--sinir);border-radius:.5rem;padding:1rem;overflow:auto;font-size:.86rem}code{font-family:ui-monospace,"Cascadia Code","SF Mono",Consolas,Menlo,monospace;font-size:.88em;background:var(--kod-zemin);border-radius:.3rem;padding:.1em .35em}pre code{background:none;padding:0;border-radius:0}table{border-collapse:collapse;width:100%;font-size:.9rem}th,td{border:1px solid var(--sinir);padding:.45rem .6rem;text-align:left;vertical-align:top}thead th{background:var(--yuzey)}blockquote{margin:1rem 0;padding:.6rem 1rem;border-left:3px solid var(--vurgu);background:var(--yuzey);color:var(--silik)}hr{border:none;border-top:1px solid var(--sinir);margin:1.75rem 0}img{max-width:100%}#arama{font:inherit;color:var(--metin);background:var(--yuzey);border:1px solid var(--sinir);border-radius:.5rem;padding:.5rem .8rem;width:min(22rem,100%)}#sonuclar{list-style:none;margin:.8rem 0 0;padding:0;display:grid;gap:.4rem}#sonuclar li{background:var(--yuzey);border:1px solid var(--sinir);border-radius:.5rem;padding:.5rem .8rem}.altbilgi{margin-top:2.5rem;padding-top:1rem;border-top:1px solid var(--sinir);color:var(--silik);font-size:.85rem}.js .reveal{opacity:0;transform:translateY(10px);transition:opacity .45s ease,transform .45s ease}.js .reveal.gorunur{opacity:1;transform:none}:focus-visible{outline:.16rem solid var(--vurgu);outline-offset:.18rem;border-radius:.25rem}::selection{background:var(--vurgu);color:var(--zemin)}@media (prefers-reduced-motion: reduce){.js .reveal{opacity:1;transform:none;transition:none}*{animation:none;transition:none}}@media (max-width:40rem){.sarmal{padding:0 1rem 2.5rem}#tema-toggle{margin-left:0}.istatistik{grid-template-columns:repeat(2,1fr)}table{font-size:.82rem}th,td{padding:.35rem .45rem}}@media (max-width:26rem){.istatistik{grid-template-columns:1fr}}</style>
+</head>
+<body>
+<div class="sarmal">
+<a class="atla" href="#icerik">Saltar al contenido</a>
+<header class="ust">
+<div class="marka"><span class="marka-ad">ReaPlus Docs</span><span class="marka-alt">superficie de trabajo de ingeniería inversa</span></div>
+<nav class="gezinme" aria-label="Sitio"><a href="index.html">Página principal</a> · <a href="readme.html">README</a> · <strong>Referencia de herramientas</strong> · <a href="examples.html">Ejemplos</a> · <a href="roadmap.html">Hoja de ruta</a> · <a href="changelog.html">Cambios</a> · <a href="prompts.html">Biblioteca de prompts</a></nav>
+<nav id="dil" class="dil" aria-label="Idioma"><a href="../tools.html" hreflang="tr">TR</a> · <a href="../en/tools.html" hreflang="en">EN</a> · <a href="../de/tools.html" hreflang="de">DE</a> · <a href="../fr/tools.html" hreflang="fr">FR</a> · <strong aria-current="true">ES</strong></nav>
+<button id="tema-toggle" type="button" aria-pressed="false">Tema oscuro</button>
+</header>
+<section class="ozet reveal" aria-label="Resumen de superficie">
+<p class="ozet-metin">Resumen de superficie (ejecución real, TOOLS.md): 191 herramientas · 187 outputSchema · 191 annotations · 2 recursos · 7 prompts</p>
+<dl class="istatistik"><div><dt>herramientas</dt><dd><span class="sayi" data-sayi="191">191</span></dd></div><div><dt>outputSchema</dt><dd><span class="sayi" data-sayi="187">187</span></dd></div><div><dt>annotations</dt><dd><span class="sayi" data-sayi="191">191</span></dd></div><div><dt>recursos</dt><dd><span class="sayi" data-sayi="2">2</span></dd></div><div><dt>prompts</dt><dd><span class="sayi" data-sayi="7">7</span></dd></div></dl>
+</section>
+<main id="icerik"><div class="reveal">
+<h1>Referencia de herramientas</h1>
+<h1 id="referencia-de-herramientas-reaplus">Referencia de herramientas ReaPlus</h1>
+<blockquote>Este archivo se genera automáticamente; no lo edite a mano. Fuente: la superficie MCP real del servidor compilado
+(<code>dist/server.js</code>). Para regenerar:
+<code>npm run build &amp;&amp; node scripts/generate-tool-reference.mjs</code></blockquote>
+<h2 id="resumen">Resumen</h2>
+<ul><li>Servidor: <code>rea-plus</code> 0.13.0</li><li>Herramientas totales: 191</li><li>Recursos totales: 2</li><li>Prompts totales: 3</li><li>Herramientas con outputSchema: 187</li><li>Herramientas con annotations: 191</li></ul>
+<h2 id="herramientas">Herramientas</h2>
+<h3 id="close_target"><code>close_target</code></h3>
+<p>Libera el objetivo binario (y su proceso radare2) retenido por una sesión.</p>
+<ul><li>Campos de entrada:</li><li><code>session_id</code> (string, obligatorio) — Id de sesión de la aplicación. No es una sesión del protocolo MCP.</li><li>outputSchema: sí (campos: closed, session_id)</li><li>annotations: sí (destructiveHint=true, openWorldHint=true, readOnlyHint=false)</li></ul>
+<h3 id="debug_attach"><code>debug_attach</code></h3>
+<p>Attach por pid o, en una sesión frida, conecta a un Frida Gadget en escucha (gadget host:puerto) o a un paquete móvil en ejecución en USB (usb + package). El objetivo sigue corriendo tras debug_close.</p>
+<ul><li>Campos de entrada:</li><li><code>auto_analyze</code> (boolean, opcional) — Ejecuta el autoanálisis x64dbg tras adjuntar (más lento).</li><li><code>break_on_entry</code> (boolean, opcional) — Pausa el debugueado justo tras adjuntar.</li><li><code>gadget</code> (string, opcional) — Dirección de escucha host:puerto de Frida Gadget. Para objetivos que no admiten attach por pid.</li><li><code>package</code> (string, opcional) — Nombre de proceso o paquete móvil. Por defecto Gadget. Obligatorio con usb.</li><li><code>pid</code> (integer, opcional) — Id de proceso en vivo. Obligatorio salvo que se defina gadget o usb.</li><li><code>session_id</code> (string, obligatorio) — Id de sesión de la aplicación. No es una sesión del protocolo MCP.</li><li><code>usb</code> (boolean, opcional) — Usa el dispositivo Frida USB (teléfono o tableta) en lugar de un Gadget host:puerto.</li><li>outputSchema: sí (campos: architecture, attached, engine, entry_point, mode, module_base, module_entry, path, pid, session_id)</li><li>annotations: sí (destructiveHint=true, openWorldHint=true, readOnlyHint=false)</li></ul>
+<h3 id="debug_breakpoint"><code>debug_breakpoint</code></h3>
+<p>Define, elimina o lista puntos de interrupción. La dirección puede ser hex, un número o una expresión x64dbg.</p>
+<ul><li>Campos de entrada:</li><li><code>action</code> (enum, opcional)</li><li><code>address</code> (string | number, opcional) — Obligatorio para set/remove; ignorado para list.</li><li><code>condition</code> (string, opcional) — Expresión de condición de ruptura (solo set).</li><li><code>log_text</code> (string, opcional) — Texto de log al acertar (solo set).</li><li><code>name</code> (string, opcional) — Nombre del punto de interrupción (solo set).</li><li><code>session_id</code> (string, obligatorio) — Id de sesión de la aplicación. No es una sesión del protocolo MCP.</li><li><code>type</code> (enum, opcional)</li><li>outputSchema: sí</li><li>annotations: sí (destructiveHint=true, openWorldHint=true, readOnlyHint=false)</li></ul>
+<h3 id="debug_callstack"><code>debug_callstack</code></h3>
+<p>Lee la pila de llamadas del hilo actual (dirección, módulo, función por frame).</p>
+<ul><li>Campos de entrada:</li><li><code>max_frames</code> (integer, opcional) — Máximos frames devueltos (por defecto 50).</li><li><code>session_id</code> (string, obligatorio) — Id de sesión de la aplicación. No es una sesión del protocolo MCP.</li><li>outputSchema: sí (campos: frames, session_id, threadId)</li><li>annotations: sí (openWorldHint=true, readOnlyHint=false)</li></ul>
+<h3 id="debug_close"><code>debug_close</code></h3>
+<p>Desmonta el proceso x64dbg oculto retenido por una sesión. Los objetivos lanzados se detienen; los adjuntados se sueltan y siguen corriendo.</p>
+<ul><li>Campos de entrada:</li><li><code>session_id</code> (string, obligatorio) — Id de sesión de la aplicación. No es una sesión del protocolo MCP.</li><li>outputSchema: sí (campos: closed, session_id)</li><li>annotations: sí (destructiveHint=true, openWorldHint=true, readOnlyHint=false)</li></ul>
+<h3 id="debug_code"><code>debug_code</code></h3>
+<p>Código en vivo: desensambla en una dirección (por defecto, el puntero de instrucción detenido), ensambla una instrucción o ejecuta hasta una dirección. Requiere confirm:true.</p>
+<ul><li>Campos de entrada:</li><li><code>action</code> (enum, obligatorio)</li><li><code>address</code> (string | number, opcional) — Dirección como hex (&quot;0x140001000&quot;), decimal o expresión del motor (&quot;cip&quot;).</li><li><code>confirm</code> (boolean, opcional) — Debe ser true o la herramienta devuelve confirmation_required y no toca el debugueado.</li><li><code>count</code> (integer, opcional) — Conteo de instrucciones a desensamblar (por defecto 12).</li><li><code>instruction</code> (string, opcional) — Una sola instrucción para ensamblar.</li><li><code>session_id</code> (string, obligatorio) — Id de sesión de la aplicación. No es una sesión del protocolo MCP.</li><li>outputSchema: sí</li><li>annotations: sí (destructiveHint=true, openWorldHint=true, readOnlyHint=false)</li></ul>
+<h3 id="debug_continue"><code>debug_continue</code></h3>
+<p>Reanuda el debugueado hasta el próximo punto de interrupción, paso único o salida. La parada publica un evento (debug.breakpoint_hit / debug.exited / debug.paused) recuperable con events_pull.</p>
+<ul><li>Campos de entrada:</li><li><code>session_id</code> (string, obligatorio) — Id de sesión de la aplicación. No es una sesión del protocolo MCP.</li><li>outputSchema: sí (campos: address, reason, session_id)</li><li>annotations: sí (destructiveHint=true, openWorldHint=true, readOnlyHint=false)</li></ul>
+<h3 id="debug_memory"><code>debug_memory</code></h3>
+<p>Memoria de proceso en vivo: leer, buscar o volcar. Requiere confirm:true. Sin él, la llamada devuelve confirmation_required y no toca el debugueado.</p>
+<ul><li>Campos de entrada:</li><li><code>action</code> (enum, obligatorio)</li><li><code>address</code> (string | number, opcional) — Dirección de lectura/volcado.</li><li><code>confirm</code> (boolean, opcional) — Debe ser true o la herramienta devuelve confirmation_required y no toca el debugueado.</li><li><code>length</code> (integer, opcional) — Longitud de búsqueda en bytes (por defecto 4096, o el módulo principal).</li><li><code>max_results</code> (integer, opcional)</li><li><code>pattern</code> (string, opcional) — Patrón de búsqueda. Bytes hex, o ascii cuando search_type es ascii.</li><li><code>search_type</code> (enum, opcional)</li><li><code>session_id</code> (string, obligatorio) — Id de sesión de la aplicación. No es una sesión del protocolo MCP.</li><li><code>size</code> (integer, opcional) — Conteo de bytes para lectura (por defecto 64) o volcado (por defecto 256).</li><li><code>start_address</code> (string | number, opcional) — Dirección como hex (&quot;0x140001000&quot;), decimal o expresión del motor (&quot;cip&quot;).</li><li>outputSchema: sí</li><li>annotations: sí (openWorldHint=true, readOnlyHint=false)</li></ul>
+<h3 id="debug_open"><code>debug_open</code></h3>
+<p>Abre un objetivo PE para depuración en vivo en el motor de depuración de esta sesión. Autodetecta x86/x64 y deja el debugueado pausado. x64dbg rompe en la entrada; cdb se detiene en el breakpoint inicial del cargador e informa la entrada PE.</p>
+<ul><li>Campos de entrada:</li><li><code>auto_analyze</code> (boolean, opcional) — Ejecuta el autoanálisis x64dbg tras cargar (más lento).</li><li><code>break_on_entry</code> (boolean, opcional) — Se detiene en el punto de entrada tras cargar.</li><li><code>command_line_args</code> (string, opcional) — Argumentos de línea de comandos para el debugueado.</li><li><code>path</code> (string, obligatorio) — Ruta de sistema de archivos del binario PE a depurar.</li><li><code>session_id</code> (string, obligatorio) — Id de sesión de la aplicación. No es una sesión del protocolo MCP.</li><li>outputSchema: sí (campos: architecture, attached, engine, entry_point, mode, module_base, module_entry, opened, path, pid, session_id)</li><li>annotations: sí (destructiveHint=true, openWorldHint=true, readOnlyHint=false)</li></ul>
+<h3 id="debug_pause"><code>debug_pause</code></h3>
+<p>Pausa asíncronamente un debugueado en ejecución. Idempotente si ya está pausado.</p>
+<ul><li>Campos de entrada:</li><li><code>session_id</code> (string, obligatorio) — Id de sesión de la aplicación. No es una sesión del protocolo MCP.</li><li>outputSchema: sí (campos: address, reason, session_id)</li><li>annotations: sí (destructiveHint=true, openWorldHint=true, readOnlyHint=false)</li></ul>
+<h3 id="debug_plugin"><code>debug_plugin</code></h3>
+<p>Scylla y ScyllaHide de x64dbg. status informa archivos en disco; dump y hide no abren ventana: un plugin headless faltante devuelve engine_unavailable con la ruta de plugins. Requiere confirm:true. cdb y frida devuelven capability_unsupported.</p>
+<ul><li>Campos de entrada:</li><li><code>action</code> (enum, obligatorio)</li><li><code>confirm</code> (boolean, opcional) — Debe ser true o la herramienta devuelve confirmation_required y no toca el debugueado.</li><li><code>session_id</code> (string, obligatorio) — Id de sesión de la aplicación. No es una sesión del protocolo MCP.</li><li>outputSchema: sí</li><li>annotations: sí (openWorldHint=true, readOnlyHint=false)</li></ul>
+<h3 id="debug_registers"><code>debug_registers</code></h3>
+<p>Lee los registros del debugueado (generales + flags; segmento/depuración opcionales).</p>
+<ul><li>Campos de entrada:</li><li><code>include_debug</code> (boolean, opcional) — Incluye registros de depuración.</li><li><code>include_segment</code> (boolean, opcional) — Incluye registros de segmento.</li><li><code>session_id</code> (string, obligatorio) — Id de sesión de la aplicación. No es una sesión del protocolo MCP.</li><li>outputSchema: sí (campos: debug, flags, general, segment, session_id)</li><li>annotations: sí (openWorldHint=true, readOnlyHint=false)</li></ul>
+<h3 id="debug_state"><code>debug_state</code></h3>
+<p>Informa el estado de depuración en vivo (en ejecución/pausado/terminado + motivo de pausa) y el objetivo abierto, si hay.</p>
+<ul><li>Campos de entrada:</li><li><code>session_id</code> (string, obligatorio) — Id de sesión de la aplicación. No es una sesión del protocolo MCP.</li><li>outputSchema: sí</li><li>annotations: sí (openWorldHint=true, readOnlyHint=false)</li></ul>
+<h3 id="debug_step"><code>debug_step</code></h3>
+<p>Avanza el debugueado un paso (dentro o sobre llamadas) e informa la nueva ubicación.</p>
+<ul><li>Campos de entrada:</li><li><code>count</code> (integer, opcional) — Pasos a dar (por defecto 1).</li><li><code>kind</code> (enum, opcional)</li><li><code>session_id</code> (string, obligatorio) — Id de sesión de la aplicación. No es una sesión del protocolo MCP.</li><li>outputSchema: sí (campos: address, disassembly, function, kind, module, registers, session_id)</li><li>annotations: sí (destructiveHint=true, openWorldHint=true, readOnlyHint=false)</li></ul>
+<h3 id="debug_thread"><code>debug_thread</code></h3>
+<p>Hilos en vivo: lista, selecciona, congela, reanuda o lee el contexto de un hilo. El id es el valor devuelto por list (índice cdb, id de hilo OS x64dbg/frida). Requiere confirm:true. Frida no tiene API de suspender ni cambiar.</p>
+<ul><li>Campos de entrada:</li><li><code>action</code> (enum, obligatorio)</li><li><code>confirm</code> (boolean, opcional) — Debe ser true o la herramienta devuelve confirmation_required y no toca el debugueado.</li><li><code>session_id</code> (string, obligatorio) — Id de sesión de la aplicación. No es una sesión del protocolo MCP.</li><li><code>thread_id</code> (integer, opcional)</li><li>outputSchema: sí</li><li>annotations: sí (destructiveHint=true, openWorldHint=true, readOnlyHint=false)</li></ul>
+<h3 id="debug_time"><code>debug_time</code></h3>
+<p>Instantánea de checkpoint, línea de tiempo de checkpoints y rebobinado de un checkpoint. Un checkpoint son los registros del hilo activo, la lista de hilos y una ventana de memoria. Requiere confirm:true.</p>
+<ul><li>Campos de entrada:</li><li><code>action</code> (enum, obligatorio)</li><li><code>checkpoint_id</code> (string, opcional)</li><li><code>confirm</code> (boolean, opcional) — Debe ser true o la herramienta devuelve confirmation_required y no toca el debugueado.</li><li><code>memory_size</code> (integer, opcional) — Bytes capturados en el puntero de instrucción (por defecto 64).</li><li><code>session_id</code> (string, obligatorio) — Id de sesión de la aplicación. No es una sesión del protocolo MCP.</li><li>outputSchema: sí</li><li>annotations: sí (destructiveHint=true, openWorldHint=true, readOnlyHint=false)</li></ul>
+<h3 id="disassemble"><code>disassemble</code></h3>
+<p>Desensambla instrucciones en una dirección (lineal, <code>count</code> ops) o una función entera. Por defecto, la función de entrada.</p>
+<ul><li>Campos de entrada:</li><li><code>address</code> (string | number, opcional) — Dirección objetivo como hex (&quot;0x400200&quot;), decimal o nombre de flag (&quot;entry0&quot;).</li><li><code>count</code> (integer, opcional) — Ops para modo dirección (por defecto 32).</li><li><code>function</code> (string, opcional) — Nombre o dirección de función, p. ej. &quot;entry0&quot;.</li><li><code>session_id</code> (string, obligatorio) — Id de sesión de la aplicación. No es una sesión del protocolo MCP.</li><li>outputSchema: sí (campos: count, location, ops, session_id, text)</li><li>annotations: sí (openWorldHint=true, readOnlyHint=false)</li></ul>
+<h3 id="dump"><code>dump</code></h3>
+<p>Lee bytes crudos en una dirección como texto hexdump o arreglo JSON de bytes.</p>
+<ul><li>Campos de entrada:</li><li><code>address</code> (string | number, obligatorio) — Dirección objetivo como hex (&quot;0x400200&quot;), decimal o nombre de flag (&quot;entry0&quot;).</li><li><code>format</code> (enum, opcional)</li><li><code>length</code> (integer, opcional) — Bytes a leer (por defecto 128).</li><li><code>session_id</code> (string, obligatorio) — Id de sesión de la aplicación. No es una sesión del protocolo MCP.</li><li>outputSchema: sí (campos: address, bytes, format, length, session_id, text)</li><li>annotations: sí (openWorldHint=true, readOnlyHint=false)</li></ul>
+<h3 id="events_pull"><code>events_pull</code></h3>
+<p>Recupera eventos guardados de una sesión de aplicación desde un número de secuencia. No suscribe a notificaciones push.</p>
+<ul><li>Campos de entrada:</li><li><code>after</code> (integer, opcional) — Devuelve eventos con seq mayor que este.</li><li><code>limit</code> (integer, opcional)</li><li><code>session_id</code> (string, obligatorio) — Id de sesión de la aplicación. No es una sesión del protocolo MCP.</li><li>outputSchema: sí (campos: events, retainedFrom, session_id)</li><li>annotations: sí (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
+<h3 id="explain"><code>explain</code></h3>
+<p>Breve explicación en turco de una ventana de ensamblado: qué hace la región, a dónde salta y qué llamadas notifican al usuario o al sistema. Pasa las instrucciones ya desensambladas o un session_id. Una sesión de depuración en vivo solo se lee cuando confirm es true. Llama a esto cuando el usuario pregunte qué significa el ensamblado.</p>
+<ul><li>Campos de entrada:</li><li><code>address</code> (string | number, opcional) — Dirección a desensamblar cuando se omiten las instrucciones.</li><li><code>confirm</code> (boolean, opcional) — Obligatorio solo cuando explain desensambla por sí mismo una sesión de depuración en vivo. Las instrucciones pegadas omiten esto.</li><li><code>count</code> (integer, opcional) — Cuántas instrucciones leer (por defecto 16).</li><li><code>instructions</code> (object[], opcional) — Ops ya obtenidas. Cuando se define, no se llama al depurador.</li><li><code>session_id</code> (string, opcional) — Id de sesión de la aplicación. No es una sesión del protocolo MCP.</li><li>outputSchema: sí (campos: atlamalar, bildirimler, cagrilar, dil, gosterilen, kaynak, komut_sayisi, ozet, satirlar)</li><li>annotations: sí (openWorldHint=true, readOnlyHint=false)</li></ul>
+<h3 id="get_cfg"><code>get_cfg</code></h3>
+<p>Grafo de flujo de control de una función como JSON y/o DOT de Graphviz. Por defecto, la función de entrada.</p>
+<ul><li>Campos de entrada:</li><li><code>address</code> (string | number, opcional) — Dirección objetivo como hex (&quot;0x400200&quot;), decimal o nombre de flag (&quot;entry0&quot;).</li><li><code>format</code> (enum, opcional)</li><li><code>function</code> (string, opcional) — Nombre o dirección de función, p. ej. &quot;entry0&quot;.</li><li><code>session_id</code> (string, obligatorio) — Id de sesión de la aplicación. No es una sesión del protocolo MCP.</li><li>outputSchema: sí (campos: dot, function, json, location, session_id)</li><li>annotations: sí (openWorldHint=true, readOnlyHint=false)</li></ul>
+<h3 id="health"><code>health</code></h3>
+<p>Informa la vida del puente. No toca ningún motor de depuración.</p>
+<ul><li>Campos de entrada: ninguno</li><li>outputSchema: sí (campos: name, protocol, sessions, status)</li><li>annotations: sí (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
+<h3 id="open_target"><code>open_target</code></h3>
+<p>Abre un objetivo binario para análisis estático en una sesión radare2. Solo se admite mode 'static'; cualquier otro es error de capacidad. Requiere r2 en PATH.</p>
+<ul><li>Campos de entrada:</li><li><code>mode</code> (string, opcional) — Modo de análisis. Solo se admite &quot;static&quot;.</li><li><code>path</code> (string, obligatorio) — Ruta de sistema de archivos del binario a analizar.</li><li><code>session_id</code> (string, obligatorio) — Id de sesión de la aplicación. No es una sesión del protocolo MCP.</li><li>outputSchema: sí (campos: engine, mode, opened, path, session_id)</li><li>annotations: sí (destructiveHint=true, openWorldHint=true, readOnlyHint=false)</li></ul>
+<h3 id="prerequisites"><code>prerequisites</code></h3>
+<p>Comprueba los programas que usa Conduit (radare2, x64dbg, cdb, Python, Frida, Graphviz, ScyllaHide). Los faltantes incluyen URL de descarga y dónde poner los archivos. El puente no los descarga. Llama a esto cuando falte una herramienta o antes de elegir motor.</p>
+<ul><li>Campos de entrada: ninguno</li><li>outputSchema: sí (campos: araclar, ozet)</li><li>annotations: sí (destructiveHint=false, idempotentHint=true, openWorldHint=true, readOnlyHint=true)</li></ul>
+<h3 id="rea_adb_devices"><code>rea_adb_devices</code></h3>
+<p>Lista de dispositivos conectados.</p>
+<ul><li>Campos de entrada: ninguno</li><li>outputSchema: sí (campos: arac, cihazlar, ok)</li><li>annotations: sí (openWorldHint=true, readOnlyHint=false)</li></ul>
+<h3 id="rea_adb_install"><code>rea_adb_install</code></h3>
+<p>Instalación de APK en el dispositivo.</p>
+<ul><li>Campos de entrada:</li><li><code>apk_path</code> (string, obligatorio)</li><li><code>seri</code> (string, opcional)</li><li>outputSchema: sí (campos: apk, arac, ok, sonuc)</li><li>annotations: sí (destructiveHint=true, openWorldHint=true, readOnlyHint=false)</li></ul>
+<h3 id="rea_adb_logcat"><code>rea_adb_logcat</code></h3>
+<p>Volcado logcat del dispositivo.</p>
+<ul><li>Campos de entrada:</li><li><code>seri</code> (string, opcional)</li><li>outputSchema: sí (campos: arac, ok, satirlar, toplam_satir)</li><li>annotations: sí (openWorldHint=true, readOnlyHint=false)</li></ul>
+<h3 id="rea_adb_packages"><code>rea_adb_packages</code></h3>
+<p>Lista de paquetes instalados.</p>
+<ul><li>Campos de entrada:</li><li><code>filtre</code> (string, opcional)</li><li><code>seri</code> (string, opcional)</li><li>outputSchema: sí (campos: arac, ok, paketler)</li><li>annotations: sí (openWorldHint=true, readOnlyHint=false)</li></ul>
+<h3 id="rea_adb_screencap"><code>rea_adb_screencap</code></h3>
+<p>Captura de pantalla del dispositivo.</p>
+<ul><li>Campos de entrada:</li><li><code>out</code> (string, obligatorio)</li><li><code>seri</code> (string, opcional)</li><li>outputSchema: sí (campos: arac, bayt, ok, yol)</li><li>annotations: sí (destructiveHint=true, openWorldHint=true, readOnlyHint=false)</li></ul>
+<h3 id="rea_android_dinamik_recete"><code>rea_android_dinamik_recete</code></h3>
+<p>Generación de receta de análisis dinámico Android.</p>
+<ul><li>Campos de entrada:</li><li><code>path</code> (string, obligatorio)</li><li>outputSchema: sí (campos: arac, ok, recete)</li><li>annotations: sí (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
+<h3 id="rea_android_recete_dogrula"><code>rea_android_recete_dogrula</code></h3>
+<p>Validación en seco de la receta.</p>
+<ul><li>Campos de entrada:</li><li><code>text</code> (string, obligatorio)</li><li>outputSchema: sí (campos: adim_sayisi, arac, ok)</li><li>annotations: sí (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
+<h3 id="rea_aot_detect"><code>rea_aot_detect</code></h3>
+<p>Señal NativeAOT.</p>
+<ul><li>Campos de entrada:</li><li><code>b64dosya</code> (string, obligatorio)</li><li><code>metin</code> (string, opcional)</li><li>outputSchema: sí (campos: details, ok, summary, tool)</li><li>annotations: sí (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
+<h3 id="rea_aot_objc"><code>rea_aot_objc</code></h3>
+<p>Trazas de dispatch ObjC.</p>
+<ul><li>Campos de entrada:</li><li><code>text</code> (string, obligatorio)</li><li>outputSchema: sí (campos: details, ok, summary, tool)</li><li>annotations: sí (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
+<h3 id="rea_aot_profile"><code>rea_aot_profile</code></h3>
+<p>Perfil AOT.</p>
+<ul><li>Campos de entrada:</li><li><code>b64dosya</code> (string, obligatorio)</li><li><code>metin</code> (string, opcional)</li><li>outputSchema: sí (campos: details, ok, summary, tool)</li><li>annotations: sí (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
+<h3 id="rea_aot_swift"><code>rea_aot_swift</code></h3>
+<p>Trazas de dispatch Swift.</p>
+<ul><li>Campos de entrada:</li><li><code>text</code> (string, obligatorio)</li><li>outputSchema: sí (campos: details, ok, summary, tool)</li><li>annotations: sí (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
+<h3 id="rea_apktool_build"><code>rea_apktool_build</code></h3>
+<p>Reconstrucción de APK desde el dir decodificado.</p>
+<ul><li>Campos de entrada:</li><li><code>dir</code> (string, obligatorio)</li><li><code>out</code> (string, obligatorio)</li><li>outputSchema: sí (campos: arac, ciktiApk, ok, proje)</li><li>annotations: sí (destructiveHint=true, openWorldHint=true, readOnlyHint=false)</li></ul>
+<h3 id="rea_apktool_caps"><code>rea_apktool_caps</code></h3>
+<p>Sondeo de capacidades apktool.</p>
+<ul><li>Campos de entrada: ninguno</li><li>outputSchema: sí (campos: aapt2, aapt2Tamam, apktool, arac, ok)</li><li>annotations: sí (openWorldHint=true, readOnlyHint=false)</li></ul>
+<h3 id="rea_apktool_decode"><code>rea_apktool_decode</code></h3>
+<p>Decodificación de APK (recursos).</p>
+<ul><li>Campos de entrada:</li><li><code>apk_path</code> (string, obligatorio)</li><li><code>out</code> (string, obligatorio)</li><li>outputSchema: sí (campos: apk, arac, ciktiDir, ok)</li><li>annotations: sí (destructiveHint=true, openWorldHint=true, readOnlyHint=false)</li></ul>
+<h3 id="rea_apktool_framework"><code>rea_apktool_framework</code></h3>
+<p>Instalación de APK framework.</p>
+<ul><li>Campos de entrada:</li><li><code>path</code> (string, obligatorio)</li><li>outputSchema: sí (campos: apk, arac, ok)</li><li>annotations: sí (destructiveHint=true, openWorldHint=true, readOnlyHint=false)</li></ul>
+<h3 id="rea_apktool_info"><code>rea_apktool_info</code></h3>
+<p>Versiones apktool+aapt2.</p>
+<ul><li>Campos de entrada: ninguno</li><li>outputSchema: sí (campos: arac, ok, surum)</li><li>annotations: sí (openWorldHint=true, readOnlyHint=false)</li></ul>
+<h3 id="rea_apple_bundle"><code>rea_apple_bundle</code></h3>
+<p>Anatomía del bundle.</p>
+<ul><li>Campos de entrada:</li><li><code>path</code> (string, obligatorio)</li><li>outputSchema: sí (campos: details, ok, summary, tool)</li><li>annotations: sí (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
+<h3 id="rea_apple_macho"><code>rea_apple_macho</code></h3>
+<p>Magia Mach-O + lista dyld.</p>
+<ul><li>Campos de entrada:</li><li><code>path</code> (string, obligatorio)</li><li>outputSchema: sí (campos: details, ok, summary, tool)</li><li>annotations: sí (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
+<h3 id="rea_apple_plist"><code>rea_apple_plist</code></h3>
+<p>Lectura de claves Info.plist.</p>
+<ul><li>Campos de entrada:</li><li><code>path</code> (string, obligatorio)</li><li>outputSchema: sí (campos: details, ok, summary, tool)</li><li>annotations: sí (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
+<h3 id="rea_behavior_full"><code>rea_behavior_full</code></h3>
+<p>Informe de comportamiento en una llamada.</p>
+<ul><li>Campos de entrada:</li><li><code>api</code> (string, obligatorio)</li><li><code>net</code> (string, opcional)</li><li>outputSchema: sí (campos: bulgular, cizelge, ok, ozet, tool)</li><li>annotations: sí (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
+<h3 id="rea_behavior_timeline"><code>rea_behavior_timeline</code></h3>
+<p>Línea de tiempo de eventos + resumen.</p>
+<ul><li>Campos de entrada:</li><li><code>olaylar</code> (string, obligatorio)</li><li>outputSchema: sí (campos: details, ok, summary, tool)</li><li>annotations: sí (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
+<h3 id="rea_best_motor"><code>rea_best_motor</code></h3>
+<p>Mejor motor para el tipo objetivo (puntuación).</p>
+<ul><li>Campos de entrada:</li><li><code>adaylar</code> (string[], obligatorio)</li><li><code>tip</code> (string, obligatorio)</li><li>outputSchema: no</li><li>annotations: sí (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
+<h3 id="rea_bindiff_fonksiyonlar"><code>rea_bindiff_fonksiyonlar</code></h3>
+<p>Lista de funciones del binario (nombre/dirección + hash).</p>
+<ul><li>Campos de entrada:</li><li><code>path</code> (string, obligatorio)</li><li>outputSchema: sí (campos: arac, bicim, dosya, fonksiyonlar, istatistik, ok, sayi, sembollu)</li><li>annotations: sí (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
+<h3 id="rea_bindiff_karsilastir"><code>rea_bindiff_karsilastir</code></h3>
+<p>Diferencia de funciones entre dos versiones.</p>
+<ul><li>Campos de entrada:</li><li><code>text</code> (string, obligatorio)</li><li>outputSchema: sí (campos: arac, aynen, cikarilan, degisen, eklenen, eski, istatistik, ok, ozet, yeni)</li><li>annotations: sí (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
+<h3 id="rea_browser_caps"><code>rea_browser_caps</code></h3>
+<p>Sondeo de capacidades del navegador.</p>
+<ul><li>Campos de entrada: ninguno</li><li>outputSchema: sí (campos: details, ok, summary, tool)</li><li>annotations: sí (openWorldHint=true, readOnlyHint=false)</li></ul>
+<h3 id="rea_browser_click"><code>rea_browser_click</code></h3>
+<p>Clic + estado posterior.</p>
+<ul><li>Campos de entrada:</li><li><code>selector</code> (string, obligatorio)</li><li><code>url</code> (string, obligatorio)</li><li>outputSchema: sí (campos: details, ok, summary, tool)</li><li>annotations: sí (openWorldHint=true, readOnlyHint=false)</li></ul>
+<h3 id="rea_browser_har_import"><code>rea_browser_har_import</code></h3>
+<p>Importación HAR.</p>
+<ul><li>Campos de entrada:</li><li><code>path</code> (string, obligatorio)</li><li>outputSchema: sí (campos: details, ok, summary, tool)</li><li>annotations: sí (openWorldHint=true, readOnlyHint=false)</li></ul>
+<h3 id="rea_browser_nav"><code>rea_browser_nav</code></h3>
+<p>Apertura de página + título.</p>
+<ul><li>Campos de entrada:</li><li><code>url</code> (string, obligatorio)</li><li>outputSchema: sí (campos: details, ok, summary, tool)</li><li>annotations: sí (openWorldHint=true, readOnlyHint=false)</li></ul>
+<h3 id="rea_browser_scenario"><code>rea_browser_scenario</code></h3>
+<p>Grabación de escenario.</p>
+<ul><li>Campos de entrada:</li><li><code>text</code> (string, obligatorio)</li><li>outputSchema: sí (campos: details, ok, summary, tool)</li><li>annotations: sí (destructiveHint=true, openWorldHint=true, readOnlyHint=false)</li></ul>
+<h3 id="rea_browser_shot"><code>rea_browser_shot</code></h3>
+<p>Captura de pantalla de página completa.</p>
+<ul><li>Campos de entrada:</li><li><code>out</code> (string, obligatorio)</li><li><code>url</code> (string, obligatorio)</li><li>outputSchema: sí (campos: details, ok, summary, tool)</li><li>annotations: sí (destructiveHint=true, openWorldHint=true, readOnlyHint=false)</li></ul>
+<h3 id="rea_config_suggest"><code>rea_config_suggest</code></h3>
+<p>Fragmento de config MCP para las herramientas halladas.</p>
+<ul><li>Campos de entrada:</li><li><code>bulunan</code> (string[], obligatorio)</li><li>outputSchema: sí (campos: snippet)</li><li>annotations: sí (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
+<h3 id="rea_console_yakala"><code>rea_console_yakala</code></h3>
+<p>Mensajes de consola.</p>
+<ul><li>Campos de entrada:</li><li><code>url</code> (string, obligatorio)</li><li>outputSchema: sí (campos: details, ok, summary, tool)</li><li>annotations: sí (openWorldHint=true, readOnlyHint=false)</li></ul>
+<h3 id="rea_coverage"><code>rea_coverage</code></h3>
+<p>Tasa de cobertura.</p>
+<ul><li>Campos de entrada:</li><li><code>incelenen</code> (integer, obligatorio)</li><li><code>toplam</code> (integer, obligatorio)</li><li>outputSchema: sí (campos: arac, kalan, ok, oran)</li><li>annotations: sí (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
+<h3 id="rea_crash_append"><code>rea_crash_append</code></h3>
+<p>Adición de evento de fallo.</p>
+<ul><li>Campos de entrada:</li><li><code>olay</code> (string, obligatorio)</li><li><code>olaylar</code> (string, obligatorio)</li><li>outputSchema: sí (campos: details, ok, summary, tool)</li><li>annotations: sí (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
+<h3 id="rea_crash_hint"><code>rea_crash_hint</code></h3>
+<p>Pista de fallo.</p>
+<ul><li>Campos de entrada:</li><li><code>olaylar</code> (string, obligatorio)</li><li>outputSchema: sí (campos: details, ok, summary, tool)</li><li>annotations: sí (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
+<h3 id="rea_crash_kayit_parse"><code>rea_crash_kayit_parse</code></h3>
+<p>Análisis de nota de fallo.</p>
+<ul><li>Campos de entrada:</li><li><code>text</code> (string, obligatorio)</li><li>outputSchema: sí (campos: arac, ok, registerlar, sinyal, threadSayisi, threadler)</li><li>annotations: sí (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
+<h3 id="rea_crash_ozet"><code>rea_crash_ozet</code></h3>
+<p>Resumen de fallo.</p>
+<ul><li>Campos de entrada:</li><li><code>text</code> (string, obligatorio)</li><li>outputSchema: sí (campos: arac, ilkFrame, ok, sinyal, registerSayisi, threadSayisi)</li><li>annotations: sí (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
+<h3 id="rea_crash_timeline"><code>rea_crash_timeline</code></h3>
+<p>Línea de tiempo de fallos.</p>
+<ul><li>Campos de entrada:</li><li><code>olaylar</code> (string, obligatorio)</li><li>outputSchema: sí (campos: details, ok, summary, tool)</li><li>annotations: sí (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
+<h3 id="rea_cutter_caps"><code>rea_cutter_caps</code></h3>
+<p>Sondeo de capacidades Cutter/rizin.</p>
+<ul><li>Campos de entrada: ninguno</li><li>outputSchema: sí (campos: arac, ok, pdc, surum)</li><li>annotations: sí (openWorldHint=true, readOnlyHint=false)</li></ul>
+<h3 id="rea_cutter_decompile"><code>rea_cutter_decompile</code></h3>
+<p>Pseudodescompilación Cutter.</p>
+<ul><li>Campos de entrada:</li><li><code>addr</code> (string, obligatorio)</li><li><code>path</code> (string, obligatorio)</li><li>outputSchema: sí (campos: addr, arac, hedef, kaynak, kod, not, ok)</li><li>annotations: sí (openWorldHint=true, readOnlyHint=false)</li></ul>
+<h3 id="rea_cutter_disasm"><code>rea_cutter_disasm</code></h3>
+<p>Desensamblado Cutter/rizin.</p>
+<ul><li>Campos de entrada:</li><li><code>addr</code> (string, obligatorio)</li><li><code>path</code> (string, obligatorio)</li><li>outputSchema: sí (campos: addr, arac, hedef, ok, ops)</li><li>annotations: sí (openWorldHint=true, readOnlyHint=false)</li></ul>
+<h3 id="rea_cutter_funcs"><code>rea_cutter_funcs</code></h3>
+<p>Lista de funciones Cutter/rizin.</p>
+<ul><li>Campos de entrada:</li><li><code>path</code> (string, obligatorio)</li><li>outputSchema: sí (campos: arac, fonksiyonlar, hedef, ok)</li><li>annotations: sí (openWorldHint=true, readOnlyHint=false)</li></ul>
+<h3 id="rea_cutter_strings"><code>rea_cutter_strings</code></h3>
+<p>Lista de strings Cutter/rizin.</p>
+<ul><li>Campos de entrada:</li><li><code>path</code> (string, obligatorio)</li><li>outputSchema: sí (campos: arac, hedef, ok, strings)</li><li>annotations: sí (openWorldHint=true, readOnlyHint=false)</li></ul>
+<h3 id="rea_cutter_xrefs"><code>rea_cutter_xrefs</code></h3>
+<p>Lista de xrefs Cutter/rizin.</p>
+<ul><li>Campos de entrada:</li><li><code>addr</code> (string, obligatorio)</li><li><code>path</code> (string, obligatorio)</li><li>outputSchema: sí (campos: addr, arac, hedef, ok, xrefs)</li><li>annotations: sí (openWorldHint=true, readOnlyHint=false)</li></ul>
+<h3 id="rea_diff_match"><code>rea_diff_match</code></h3>
+<p>Correspondencia de funciones (arreglos JSON).</p>
+<ul><li>Campos de entrada:</li><li><code>a</code> (string, obligatorio)</li><li><code>b</code> (string, obligatorio)</li><li>outputSchema: sí (campos: details, ok, summary, tool)</li><li>annotations: sí (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
+<h3 id="rea_diff_summary"><code>rea_diff_summary</code></h3>
+<p>Resumen de añadidos/eliminados.</p>
+<ul><li>Campos de entrada:</li><li><code>a</code> (string, obligatorio)</li><li><code>b</code> (string, obligatorio)</li><li>outputSchema: sí (campos: details, ok, summary, tool)</li><li>annotations: sí (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
+<h3 id="rea_dos_com"><code>rea_dos_com</code></h3>
+<p>Detección COM.</p>
+<ul><li>Campos de entrada:</li><li><code>path</code> (string, obligatorio)</li><li>outputSchema: sí (campos: details, ok, summary, tool)</li><li>annotations: sí (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
+<h3 id="rea_dos_int21"><code>rea_dos_int21</code></h3>
+<p>Barrido de llamadas INT21.</p>
+<ul><li>Campos de entrada:</li><li><code>b64</code> (string, obligatorio)</li><li>outputSchema: sí (campos: details, ok, summary, tool)</li><li>annotations: sí (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
+<h3 id="rea_dos_mz"><code>rea_dos_mz</code></h3>
+<p>Comprobación de encabezado MZ.</p>
+<ul><li>Campos de entrada:</li><li><code>b64</code> (string, obligatorio)</li><li>outputSchema: sí (campos: details, ok, summary, tool)</li><li>annotations: sí (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
+<h3 id="rea_dos_psp"><code>rea_dos_psp</code></h3>
+<p>Análisis de struct PSP.</p>
+<ul><li>Campos de entrada:</li><li><code>b64</code> (string, obligatorio)</li><li>outputSchema: sí (campos: details, ok, summary, tool)</li><li>annotations: sí (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
+<h3 id="rea_dosya_izi"><code>rea_dosya_izi</code></h3>
+<p>Escrituras/lecturas de archivo desde eventos API.</p>
+<ul><li>Campos de entrada:</li><li><code>text</code> (string, obligatorio)</li><li>outputSchema: sí (campos: details, ok, summary, tool)</li><li>annotations: sí (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
+<h3 id="rea_dotnet_cil"><code>rea_dotnet_cil</code></h3>
+<p>Volcado de métodos CIL (dnfile).</p>
+<ul><li>Campos de entrada:</li><li><code>filtre</code> (string, opcional)</li><li><code>path</code> (string, obligatorio)</li><li>outputSchema: sí (campos: arac, assembly, dosya, filtre, method_sayisi, methods, not, ok)</li><li>annotations: sí (openWorldHint=true, readOnlyHint=false)</li></ul>
+<h3 id="rea_dotnet_metadata"><code>rea_dotnet_metadata</code></h3>
+<p>Lectura de metadatos del ensamblado.</p>
+<ul><li>Campos de entrada:</li><li><code>path</code> (string, obligatorio)</li><li>outputSchema: sí (campos: arac, clr, dosya, not, ok, okuyucu)</li><li>annotations: sí (openWorldHint=true, readOnlyHint=false)</li></ul>
+<h3 id="rea_dwarf_ozet"><code>rea_dwarf_ozet</code></h3>
+<p>Resumen DWARF de ELF.</p>
+<ul><li>Campos de entrada:</li><li><code>path</code> (string, obligatorio)</li><li>outputSchema: sí (campos: arac, dosya, fonksiyonAdlari, ok, subprogramSayisi, unitSayisi)</li><li>annotations: sí (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
+<h3 id="rea_evidence_bundle"><code>rea_evidence_bundle</code></h3>
+<p>Construcción del paquete de evidencias.</p>
+<ul><li>Campos de entrada:</li><li><code>ogeler</code> (string, obligatorio)</li><li><code>sakli</code> (string, obligatorio)</li><li>outputSchema: sí (campos: digest, items, retained, tools_sha256)</li><li>annotations: sí (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
+<h3 id="rea_evidence_verify"><code>rea_evidence_verify</code></h3>
+<p>Verificación del paquete de evidencias.</p>
+<ul><li>Campos de entrada:</li><li><code>text</code> (string, obligatorio)</li><li>outputSchema: sí (campos: ok)</li><li>annotations: sí (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
+<h3 id="rea_evm_disasm"><code>rea_evm_disasm</code></h3>
+<p>Desensamblado de bytecode EVM (offline).</p>
+<ul><li>Campos de entrada:</li><li><code>hex</code> (string, obligatorio)</li><li>outputSchema: sí (campos: arac, detay, ok, ozet)</li><li>annotations: sí (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
+<h3 id="rea_evm_selector"><code>rea_evm_selector</code></h3>
+<p>Selector de 4 bytes EVM (keccak, offline).</p>
+<ul><li>Campos de entrada:</li><li><code>sig</code> (string, obligatorio)</li><li>outputSchema: sí (campos: details, ok, summary, tool)</li><li>annotations: sí (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
+<h3 id="rea_evm_selectors"><code>rea_evm_selectors</code></h3>
+<p>Selectores EVM candidatos.</p>
+<ul><li>Campos de entrada:</li><li><code>hex</code> (string, obligatorio)</li><li>outputSchema: sí (campos: details, ok, summary, tool)</li><li>annotations: sí (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
+<h3 id="rea_evm_stats"><code>rea_evm_stats</code></h3>
+<p>Estadística de opcodes EVM.</p>
+<ul><li>Campos de entrada:</li><li><code>hex</code> (string, obligatorio)</li><li>outputSchema: sí (campos: details, ok, summary, tool)</li><li>annotations: sí (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
+<h3 id="rea_fallback"><code>rea_fallback</code></h3>
+<p>Cadena alternativa si falta la primaria.</p>
+<ul><li>Campos de entrada:</li><li><code>birincil</code> (string, obligatorio)</li><li><code>mevcut</code> (string[], obligatorio)</li><li>outputSchema: no</li><li>annotations: sí (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
+<h3 id="rea_firmware_caps"><code>rea_firmware_caps</code></h3>
+<p>Sondeo de capacidades de firmware.</p>
+<ul><li>Campos de entrada: ninguno</li><li>outputSchema: sí (campos: ok, summary, tool)</li><li>annotations: sí (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
+<h3 id="rea_firmware_extract"><code>rea_firmware_extract</code></h3>
+<p>Extracción de firmware.</p>
+<ul><li>Campos de entrada:</li><li><code>path</code> (string, obligatorio)</li><li>outputSchema: sí (campos: ok, summary, tool)</li><li>annotations: sí (destructiveHint=true, openWorldHint=true, readOnlyHint=false)</li></ul>
+<h3 id="rea_firmware_handoff"><code>rea_firmware_handoff</code></h3>
+<p>Nota de handoff de firmware.</p>
+<ul><li>Campos de entrada:</li><li><code>neden</code> (string, obligatorio)</li><li><code>path</code> (string, obligatorio)</li><li>outputSchema: sí (campos: handoff, ok, summary, tool)</li><li>annotations: sí (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
+<h3 id="rea_flutter_blutter"><code>rea_flutter_blutter</code></h3>
+<p>Análisis Dart con Blutter (error honesto si falta).</p>
+<ul><li>Campos de entrada:</li><li><code>path</code> (string, obligatorio)</li><li>outputSchema: sí (campos: izler, ok, summary, tool)</li><li>annotations: sí (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
+<h3 id="rea_flutter_payload"><code>rea_flutter_payload</code></h3>
+<p>Trazas de payload Flutter.</p>
+<ul><li>Campos de entrada:</li><li><code>path</code> (string, obligatorio)</li><li>outputSchema: sí (campos: izler, ok, summary, tool)</li><li>annotations: sí (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
+<h3 id="rea_flutter_scan"><code>rea_flutter_scan</code></h3>
+<p>Barrido de trazas Flutter/Dart.</p>
+<ul><li>Campos de entrada:</li><li><code>path</code> (string, obligatorio)</li><li>outputSchema: sí (campos: buildId, dartMi, motor, ok, summary, tool, tur)</li><li>annotations: sí (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
+<h3 id="rea_flutter_snapshot"><code>rea_flutter_snapshot</code></h3>
+<p>Info de instantánea AOT Flutter (magia Dart + versión).</p>
+<ul><li>Campos de entrada:</li><li><code>path</code> (string, obligatorio)</li><li>outputSchema: sí (campos: dartMi, dartSurumu, izolasyon, magic, ok, summary, tool, tur)</li><li>annotations: sí (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
+<h3 id="rea_frida_api"><code>rea_frida_api</code></h3>
+<p>Trazador de API (nombre+args+retval).</p>
+<ul><li>Campos de entrada:</li><li><code>desen</code> (string, opcional)</li><li><code>pid</code> (integer, obligatorio)</li><li>outputSchema: sí (campos: arac, cagrilar, ok, pid, sayi)</li><li>annotations: sí (openWorldHint=true, readOnlyHint=false)</li></ul>
+<h3 id="rea_frida_cond"><code>rea_frida_cond</code></h3>
+<p>Punto de interrupción condicional.</p>
+<ul><li>Campos de entrada:</li><li><code>adres</code> (string, obligatorio)</li><li><code>kosul</code> (string, obligatorio)</li><li><code>pid</code> (integer, obligatorio)</li><li>outputSchema: sí (campos: adres, arac, hitSayisi, ok, pid, tuttu)</li><li>annotations: sí (destructiveHint=true, openWorldHint=true, readOnlyHint=false)</li></ul>
+<h3 id="rea_frida_pause"><code>rea_frida_pause</code></h3>
+<p>Pausa del proceso objetivo (NtSuspend).</p>
+<ul><li>Campos de entrada:</li><li><code>pid</code> (integer, obligatorio)</li><li>outputSchema: sí (campos: arac, durum, ok, pid)</li><li>annotations: sí (destructiveHint=true, openWorldHint=true, readOnlyHint=false)</li></ul>
+<h3 id="rea_frida_resume"><code>rea_frida_resume</code></h3>
+<p>Reanudación del proceso pausado.</p>
+<ul><li>Campos de entrada:</li><li><code>pid</code> (integer, obligatorio)</li><li>outputSchema: sí (campos: arac, durum, ok, pid)</li><li>annotations: sí (destructiveHint=true, openWorldHint=true, readOnlyHint=false)</li></ul>
+<h3 id="rea_frida_stalker"><code>rea_frida_stalker</code></h3>
+<p>Traza de llamadas Stalker.</p>
+<ul><li>Campos de entrada:</li><li><code>pid</code> (integer, obligatorio)</li><li><code>sure_ms</code> (integer, opcional)</li><li>outputSchema: sí (campos: arac, cagrilar, ok, pid, sayi)</li><li>annotations: sí (openWorldHint=true, readOnlyHint=false)</li></ul>
+<h3 id="rea_frida_step"><code>rea_frida_step</code></h3>
+<p>Emulación de próxima instrucción.</p>
+<ul><li>Campos de entrada:</li><li><code>adres</code> (string, opcional)</li><li><code>pid</code> (integer, obligatorio)</li><li>outputSchema: sí (campos: adres, arac, ok, pid, sonraki, vurdu)</li><li>annotations: sí (destructiveHint=true, openWorldHint=true, readOnlyHint=false)</li></ul>
+<h3 id="rea_fs_diff"><code>rea_fs_diff</code></h3>
+<p>Diff de instantáneas.</p>
+<ul><li>Campos de entrada:</li><li><code>once</code> (string, obligatorio)</li><li><code>sonra</code> (string, obligatorio)</li><li>outputSchema: sí (campos: kayıt, ok, summary, tool)</li><li>annotations: sí (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
+<h3 id="rea_fs_snapshot"><code>rea_fs_snapshot</code></h3>
+<p>Instantánea de directorio.</p>
+<ul><li>Campos de entrada:</li><li><code>path</code> (string, obligatorio)</li><li>outputSchema: sí (campos: kayıt, ok, summary, tool)</li><li>annotations: sí (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
+<h3 id="rea_ghidra_analyze"><code>rea_ghidra_analyze</code></h3>
+<p>Importación+análisis headless Ghidra.</p>
+<ul><li>Campos de entrada:</li><li><code>path</code> (string, obligatorio)</li><li>outputSchema: sí (campos: arac, hedef, log, ok)</li><li>annotations: sí (destructiveHint=true, openWorldHint=true, readOnlyHint=false)</li></ul>
+<h3 id="rea_ghidra_decompile"><code>rea_ghidra_decompile</code></h3>
+<p>Pseudocódigo Ghidra.</p>
+<ul><li>Campos de entrada:</li><li><code>addr</code> (string, obligatorio)</li><li><code>path</code> (string, obligatorio)</li><li>outputSchema: sí (campos: addr, arac, hedef, kod, ok)</li><li>annotations: sí (openWorldHint=true, readOnlyHint=false)</li></ul>
+<h3 id="rea_ghidra_disasm"><code>rea_ghidra_disasm</code></h3>
+<p>Desensamblado Ghidra.</p>
+<ul><li>Campos de entrada:</li><li><code>addr</code> (string, obligatorio)</li><li><code>path</code> (string, obligatorio)</li><li>outputSchema: sí (campos: addr, arac, hedef, kod, ok, sayi, talimatlar)</li><li>annotations: sí (openWorldHint=true, readOnlyHint=false)</li></ul>
+<h3 id="rea_ghidra_funcs"><code>rea_ghidra_funcs</code></h3>
+<p>Lista de funciones Ghidra.</p>
+<ul><li>Campos de entrada:</li><li><code>path</code> (string, obligatorio)</li><li>outputSchema: sí (campos: arac, fonksiyonlar, hedef, ok)</li><li>annotations: sí (openWorldHint=true, readOnlyHint=false)</li></ul>
+<h3 id="rea_ghidra_strings"><code>rea_ghidra_strings</code></h3>
+<p>Lista de strings Ghidra.</p>
+<ul><li>Campos de entrada:</li><li><code>path</code> (string, obligatorio)</li><li>outputSchema: sí (campos: arac, hedef, ok, strings)</li><li>annotations: sí (openWorldHint=true, readOnlyHint=false)</li></ul>
+<h3 id="rea_ghidra_trace"><code>rea_ghidra_trace</code></h3>
+<p>Instantánea → importación Ghidra Trace.</p>
+<ul><li>Campos de entrada:</li><li><code>kayit</code> (string, obligatorio)</li><li><code>path</code> (string, obligatorio)</li><li>outputSchema: sí (campos: arac, hedef, ok, sonuc)</li><li>annotations: sí (destructiveHint=true, openWorldHint=true, readOnlyHint=false)</li></ul>
+<h3 id="rea_ghidra_vt"><code>rea_ghidra_vt</code></h3>
+<p>Diff de funciones entre dos binarios (version tracking).</p>
+<ul><li>Campos de entrada:</li><li><code>eski</code> (string, obligatorio)</li><li><code>yeni</code> (string, obligatorio)</li><li>outputSchema: sí (campos: arac, degisen, eklenen, eski, ok, ozet, silinen, yeni)</li><li>annotations: sí (openWorldHint=true, readOnlyHint=false)</li></ul>
+<h3 id="rea_ghidra_xrefs"><code>rea_ghidra_xrefs</code></h3>
+<p>Lista de xrefs Ghidra.</p>
+<ul><li>Campos de entrada:</li><li><code>addr</code> (string, obligatorio)</li><li><code>path</code> (string, obligatorio)</li><li>outputSchema: sí (campos: addr, arac, hedef, ok, xrefs)</li><li>annotations: sí (openWorldHint=true, readOnlyHint=false)</li></ul>
+<h3 id="rea_go_buildinfo"><code>rea_go_buildinfo</code></h3>
+<p>Build-id Go + dependencias de módulo.</p>
+<ul><li>Campos de entrada:</li><li><code>path</code> (string, obligatorio)</li><li>outputSchema: sí (campos: details, ok, summary, tool)</li><li>annotations: sí (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
+<h3 id="rea_go_funclines"><code>rea_go_funclines</code></h3>
+<p>Asignación función Go + archivo:línea.</p>
+<ul><li>Campos de entrada:</li><li><code>path</code> (string, obligatorio)</li><li>outputSchema: sí (campos: details, ok, summary, tool)</li><li>annotations: sí (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
+<h3 id="rea_go_goresym"><code>rea_go_goresym</code></h3>
+<p>Análisis GoReSym (error honesto si falta).</p>
+<ul><li>Campos de entrada:</li><li><code>path</code> (string, obligatorio)</li><li>outputSchema: sí (campos: details, ok, summary, tool)</li><li>annotations: sí (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
+<h3 id="rea_go_module"><code>rea_go_module</code></h3>
+<p>Info de módulo Go.</p>
+<ul><li>Campos de entrada:</li><li><code>text</code> (string, obligatorio)</li><li>outputSchema: sí (campos: details, ok, summary, tool)</li><li>annotations: sí (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
+<h3 id="rea_go_version"><code>rea_go_version</code></h3>
+<p>Traza de versión Go.</p>
+<ul><li>Campos de entrada:</li><li><code>text</code> (string, obligatorio)</li><li>outputSchema: sí (campos: details, ok, summary, tool)</li><li>annotations: sí (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
+<h3 id="rea_hap_liste"><code>rea_hap_liste</code></h3>
+<p>Lista de archivos HAP.</p>
+<ul><li>Campos de entrada:</li><li><code>path</code> (string, obligatorio)</li><li>outputSchema: sí (campos: arac, dosya, dosyalar, ok, sayi)</li><li>annotations: sí (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
+<h3 id="rea_hap_manifest"><code>rea_hap_manifest</code></h3>
+<p>Manifiesto HAP (bundle/versión).</p>
+<ul><li>Campos de entrada:</li><li><code>path</code> (string, obligatorio)</li><li>outputSchema: sí (campos: arac, bundleName, dosya, kaynak, ok, version)</li><li>annotations: sí (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
+<h3 id="rea_hopper_istek"><code>rea_hopper_istek</code></h3>
+<p>Generación de archivo de solicitud Hopper.</p>
+<ul><li>Campos de entrada:</li><li><code>path</code> (string, obligatorio)</li><li>outputSchema: sí (campos: adresler, arac, hedef, hopper, istekDosyasi, ok)</li><li>annotations: sí (destructiveHint=true, readOnlyHint=false)</li></ul>
+<h3 id="rea_hopper_tara"><code>rea_hopper_tara</code></h3>
+<p>Búsqueda de string/regex en archivo.</p>
+<ul><li>Campos de entrada:</li><li><code>desen</code> (string, obligatorio)</li><li><code>path</code> (string, obligatorio)</li><li>outputSchema: sí (campos: arac, desen, eslesmeler, hedef, ok, regex, sayi)</li><li>annotations: sí (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
+<h3 id="rea_ida_flirt"><code>rea_ida_flirt</code></h3>
+<p>Estimación de compilador/biblioteca por strings (no firma FLIRT real; si IDA está instalado, usa la salida rea_ida_idb para verificar aplicando la firma en IDA).</p>
+<ul><li>Campos de entrada:</li><li><code>path</code> (string, obligatorio)</li><li>outputSchema: sí (campos: arac, eslesmeler, guven, hedef, idaMevcut, kutuphane, method, not, ok, sayi, surumler)</li><li>annotations: sí (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
+<h3 id="rea_ida_idb"><code>rea_ida_idb</code></h3>
+<p>Generación batch de IDB (idat).</p>
+<ul><li>Campos de entrada:</li><li><code>out</code> (string, obligatorio)</li><li><code>path</code> (string, obligatorio)</li><li>outputSchema: sí (campos: arac, hedef, idat, idb, ok)</li><li>annotations: sí (destructiveHint=true, openWorldHint=true, readOnlyHint=false)</li></ul>
+<h3 id="rea_il2cpp_dump"><code>rea_il2cpp_dump</code></h3>
+<p>Volcado con Il2CppDumper (error honesto si falta).</p>
+<ul><li>Campos de entrada:</li><li><code>path</code> (string, obligatorio)</li><li>outputSchema: sí (campos: arac, cikti, dosya, dosyaSayisi, log, ok, ozet)</li><li>annotations: sí (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
+<h3 id="rea_il2cpp_metadata"><code>rea_il2cpp_metadata</code></h3>
+<p>Conteo clases/métodos de global-metadata IL2CPP.</p>
+<ul><li>Campos de entrada:</li><li><code>path</code> (string, obligatorio)</li><li>outputSchema: sí (campos: arac, assemblySayisi, dosya, goruntuSayisi, metodSayisi, not, ok, ozet, sinifSayisi, surum)</li><li>annotations: sí (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
+<h3 id="rea_il2cpp_methods"><code>rea_il2cpp_methods</code></h3>
+<p>Firmas de métodos IL2CPP (marca honesta si limitado).</p>
+<ul><li>Campos de entrada:</li><li><code>path</code> (string, obligatorio)</li><li>outputSchema: sí (campos: arac, dosya, imzaSayisi, imzalar, metodSayisi, not, ok, sinirli, surum)</li><li>annotations: sí (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
+<h3 id="rea_ilspy_decompile"><code>rea_ilspy_decompile</code></h3>
+<p>Decompilación C# .NET.</p>
+<ul><li>Campos de entrada:</li><li><code>out</code> (string, obligatorio)</li><li><code>path</code> (string, obligatorio)</li><li>outputSchema: sí (campos: arac, ciktiDir, cs_sayisi, dosya, not, ok)</li><li>annotations: sí (destructiveHint=true, openWorldHint=true, readOnlyHint=false)</li></ul>
+<h3 id="rea_investigate"><code>rea_investigate</code></h3>
+<p>Plan de investigación automática (sniff+puntuación+alternativas).</p>
+<ul><li>Campos de entrada:</li><li><code>path</code> (string, obligatorio)</li><li><code>soru</code> (string, opcional)</li><li>outputSchema: sí (campos: arac, motor, ok, plan, skor, tip, yedekler)</li><li>annotations: sí (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
+<h3 id="rea_jadx_classes"><code>rea_jadx_classes</code></h3>
+<p>Lista de clases del APK.</p>
+<ul><li>Campos de entrada:</li><li><code>apk_path</code> (string, obligatorio)</li><li>outputSchema: sí (campos: arac, ok, siniflar, toplam_sinif)</li><li>annotations: sí (openWorldHint=true, readOnlyHint=false)</li></ul>
+<h3 id="rea_jadx_decompile"><code>rea_jadx_decompile</code></h3>
+<p>Decompilación de una clase del APK.</p>
+<ul><li>Campos de entrada:</li><li><code>apk_path</code> (string, obligatorio)</li><li><code>out</code> (string, obligatorio)</li><li><code>sinif</code> (string, obligatorio)</li><li>outputSchema: sí (campos: arac, bayt, ciktiDir, dosya, ok, sinif)</li><li>annotations: sí (destructiveHint=true, openWorldHint=true, readOnlyHint=false)</li></ul>
+<h3 id="rea_jadx_full"><code>rea_jadx_full</code></h3>
+<p>Decompilación total del APK.</p>
+<ul><li>Campos de entrada:</li><li><code>apk_path</code> (string, obligatorio)</li><li><code>out</code> (string, obligatorio)</li><li>outputSchema: sí (campos: arac, ciktiDir, java_dosya_sayisi, ok)</li><li>annotations: sí (destructiveHint=true, openWorldHint=true, readOnlyHint=false)</li></ul>
+<h3 id="rea_jadx_manifest"><code>rea_jadx_manifest</code></h3>
+<p>Resumen del manifiesto del APK.</p>
+<ul><li>Campos de entrada:</li><li><code>apk_path</code> (string, obligatorio)</li><li>outputSchema: sí (campos: aktiviteler, apk, arac, izinler, ok, paket)</li><li>annotations: sí (openWorldHint=true, readOnlyHint=false)</li></ul>
+<h3 id="rea_jadx_methods"><code>rea_jadx_methods</code></h3>
+<p>Lista de métodos en la salida decompilada.</p>
+<ul><li>Campos de entrada:</li><li><code>dir</code> (string, obligatorio)</li><li>outputSchema: sí (campos: arac, methodlar, ok)</li><li>annotations: sí (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
+<h3 id="rea_jadx_read"><code>rea_jadx_read</code></h3>
+<p>Lectura de clase decompilada (400 líneas).</p>
+<ul><li>Campos de entrada:</li><li><code>dir</code> (string, obligatorio)</li><li><code>sinif</code> (string, obligatorio)</li><li>outputSchema: sí (campos: arac, dosya, ok, satirlar, toplam_satir)</li><li>annotations: sí (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
+<h3 id="rea_jadx_xrefs"><code>rea_jadx_xrefs</code></h3>
+<p>Búsqueda de término en la salida decompilada.</p>
+<ul><li>Campos de entrada:</li><li><code>dir</code> (string, obligatorio)</li><li><code>terim</code> (string, obligatorio)</li><li>outputSchema: sí (campos: arac, kayitlar, ok)</li><li>annotations: sí (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
+<h3 id="rea_jeb_sorgu"><code>rea_jeb_sorgu</code></h3>
+<p>Consulta MCP JEB.</p>
+<ul><li>Campos de entrada:</li><li><code>govde</code> (string, opcional)</li><li><code>url</code> (string, obligatorio)</li><li><code>yontem</code> (string, obligatorio)</li><li>outputSchema: sí (campos: arac, durum, govde, ok, url, yontem)</li><li>annotations: sí (openWorldHint=true, readOnlyHint=false)</li></ul>
+<h3 id="rea_js_bundle"><code>rea_js_bundle</code></h3>
+<p>Resumen del bundle.</p>
+<ul><li>Campos de entrada:</li><li><code>text</code> (string, obligatorio)</li><li>outputSchema: sí (campos: ok, summary, tool)</li><li>annotations: sí (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
+<h3 id="rea_js_export_shape"><code>rea_js_export_shape</code></h3>
+<p>Forma de exports.</p>
+<ul><li>Campos de entrada:</li><li><code>path</code> (string, obligatorio)</li><li>outputSchema: sí (campos: details, ok, summary, tool)</li><li>annotations: sí (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
+<h3 id="rea_js_require"><code>rea_js_require</code></h3>
+<p>Grafo require/import.</p>
+<ul><li>Campos de entrada:</li><li><code>path</code> (string, obligatorio)</li><li>outputSchema: sí (campos: details, ok, summary, tool)</li><li>annotations: sí (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
+<h3 id="rea_js_sourcemap"><code>rea_js_sourcemap</code></h3>
+<p>Resolución de source-map.</p>
+<ul><li>Campos de entrada:</li><li><code>text</code> (string, obligatorio)</li><li>outputSchema: sí (campos: ok, summary, tool)</li><li>annotations: sí (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
+<h3 id="rea_macho_classdump"><code>rea_macho_classdump</code></h3>
+<p>Salida class-dump (error honesto si falta).</p>
+<ul><li>Campos de entrada:</li><li><code>path</code> (string, obligatorio)</li><li>outputSchema: sí (campos: details, ok, summary, tool)</li><li>annotations: sí (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
+<h3 id="rea_macho_info"><code>rea_macho_info</code></h3>
+<p>Encabezado Mach-O (arquitectura + tipo de archivo).</p>
+<ul><li>Campos de entrada:</li><li><code>path</code> (string, obligatorio)</li><li>outputSchema: sí (campos: details, ok, summary, tool)</li><li>annotations: sí (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
+<h3 id="rea_macho_loads"><code>rea_macho_loads</code></h3>
+<p>Comandos load Mach-O (segmento/dylib).</p>
+<ul><li>Campos de entrada:</li><li><code>path</code> (string, obligatorio)</li><li>outputSchema: sí (campos: details, ok, summary, tool)</li><li>annotations: sí (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
+<h3 id="rea_macho_objc"><code>rea_macho_objc</code></h3>
+<p>Lista clases/categorías ObjC (lectura pura).</p>
+<ul><li>Campos de entrada:</li><li><code>path</code> (string, obligatorio)</li><li>outputSchema: sí (campos: details, ok, summary, tool)</li><li>annotations: sí (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
+<h3 id="rea_macho_otool"><code>rea_macho_otool</code></h3>
+<p>Salida otool (error honesto si falta).</p>
+<ul><li>Campos de entrada:</li><li><code>path</code> (string, obligatorio)</li><li>outputSchema: sí (campos: details, ok, summary, tool)</li><li>annotations: sí (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
+<h3 id="rea_managed_compare"><code>rea_managed_compare</code></h3>
+<p>Diff de miembros managed.</p>
+<ul><li>Campos de entrada:</li><li><code>a</code> (string, obligatorio)</li><li><code>b</code> (string, obligatorio)</li><li>outputSchema: sí (campos: arac, detay, ok, ozet)</li><li>annotations: sí (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
+<h3 id="rea_managed_import"><code>rea_managed_import</code></h3>
+<p>Registro de reconstrucción.</p>
+<ul><li>Campos de entrada:</li><li><code>path</code> (string, obligatorio)</li><li>outputSchema: sí (campos: arac, detay, ok, ozet)</li><li>annotations: sí (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
+<h3 id="rea_managed_verify"><code>rea_managed_verify</code></h3>
+<p>Verificación de dependencia nativa.</p>
+<ul><li>Campos de entrada:</li><li><code>beklenen</code> (string, obligatorio)</li><li><code>path</code> (string, obligatorio)</li><li>outputSchema: sí (campos: arac, detay, ok, ozet)</li><li>annotations: sí (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
+<h3 id="rea_mips_funcs"><code>rea_mips_funcs</code></h3>
+<p>Pre-barrido de funciones MIPS.</p>
+<ul><li>Campos de entrada:</li><li><code>b64</code> (string, obligatorio)</li><li>outputSchema: sí (campos: details, ok, summary, tool)</li><li>annotations: sí (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
+<h3 id="rea_mips_psp_profile"><code>rea_mips_psp_profile</code></h3>
+<p>Perfil MIPS/PSP.</p>
+<ul><li>Campos de entrada:</li><li><code>b64</code> (string, obligatorio)</li><li>outputSchema: sí (campos: details, ok, summary, tool)</li><li>annotations: sí (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
+<h3 id="rea_missing_reason"><code>rea_missing_reason</code></h3>
+<p>Herramienta faltante + comando de instalación.</p>
+<ul><li>Campos de entrada:</li><li><code>eksik</code> (string, obligatorio)</li><li><code>platform</code> (string, opcional)</li><li>outputSchema: sí (campos: alternatif, eksik, kur, neden)</li><li>annotations: sí (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
+<h3 id="rea_net_capture"><code>rea_net_capture</code></h3>
+<p>Captura de red local (HAR).</p>
+<ul><li>Campos de entrada:</li><li><code>url</code> (string, obligatorio)</li><li>outputSchema: sí (campos: kayıt, ok, summary, tool)</li><li>annotations: sí (destructiveHint=true, openWorldHint=true, readOnlyHint=false)</li></ul>
+<h3 id="rea_obligation_advance"><code>rea_obligation_advance</code></h3>
+<p>Avance del anillo.</p>
+<ul><li>Campos de entrada:</li><li><code>bulgu</code> (string, obligatorio)</li><li><code>defter</code> (string, obligatorio)</li><li><code>kod</code> (string, obligatorio)</li><li>outputSchema: sí (campos: links)</li><li>annotations: sí (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
+<h3 id="rea_obligation_close"><code>rea_obligation_close</code></h3>
+<p>Sellado del libro.</p>
+<ul><li>Campos de entrada:</li><li><code>text</code> (string, obligatorio)</li><li>outputSchema: sí (campos: kapatıldı, links)</li><li>annotations: sí (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
+<h3 id="rea_obligation_ledger"><code>rea_obligation_ledger</code></h3>
+<p>Creación del libro.</p>
+<ul><li>Campos de entrada:</li><li><code>bulgular</code> (string[], obligatorio)</li><li><code>evidence_digest</code> (string, obligatorio)</li><li><code>tools_sha256</code> (string, obligatorio)</li><li>outputSchema: sí (campos: evidence_digest, kapatıldı, ledger_id, links, tools_sha256)</li><li>annotations: sí (destructiveHint=false, idempotentHint=false, openWorldHint=false, readOnlyHint=true)</li></ul>
+<h3 id="rea_obligation_verify"><code>rea_obligation_verify</code></h3>
+<p>Verificación de la cadena.</p>
+<ul><li>Campos de entrada:</li><li><code>text</code> (string, obligatorio)</li><li>outputSchema: sí (campos: eksik, ok)</li><li>annotations: sí (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
+<h3 id="rea_pcap_oku"><code>rea_pcap_oku</code></h3>
+<p>Reensamblaje de flujos PCAP + descifrado TLS con keylog.</p>
+<ul><li>Campos de entrada:</li><li><code>keylog</code> (string, opcional)</li><li><code>path</code> (string, obligatorio)</li><li>outputSchema: sí (campos: details, ok, summary, tool)</li><li>annotations: sí (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
+<h3 id="rea_pdb_indir"><code>rea_pdb_indir</code></h3>
+<p>Descarga de PDB desde el servidor de símbolos Microsoft vía registro CodeView RSDS del dir de depuración PE + integridad + caché.</p>
+<ul><li>Campos de entrada:</li><li><code>path</code> (string, obligatorio)</li><li>outputSchema: sí (campos: arac, cache, dosya, guid, ok, pdb, url, yas, yol)</li><li>annotations: sí (destructiveHint=true, openWorldHint=true, readOnlyHint=false)</li></ul>
+<h3 id="rea_pdb_yolu"><code>rea_pdb_yolu</code></h3>
+<p>Ruta PDB desde el dir de depuración PE.</p>
+<ul><li>Campos de entrada:</li><li><code>path</code> (string, obligatorio)</li><li>outputSchema: sí (campos: arac, dosya, guid, ok, pdb, yas)</li><li>annotations: sí (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
+<h3 id="rea_pe_imports"><code>rea_pe_imports</code></h3>
+<p>Lista de imports PE.</p>
+<ul><li>Campos de entrada:</li><li><code>path</code> (string, obligatorio)</li><li>outputSchema: sí (campos: arac, dlls, dosya, fonksiyonlar, not, ok, sayi)</li><li>annotations: sí (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
+<h3 id="rea_pe_info"><code>rea_pe_info</code></h3>
+<p>Info de encabezado PE.</p>
+<ul><li>Campos de entrada:</li><li><code>path</code> (string, obligatorio)</li><li>outputSchema: sí (campos: arac, bit, dosya, entry, entry_hex, machine, machine_hex, ok, section_sayisi)</li><li>annotations: sí (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
+<h3 id="rea_pe_sections"><code>rea_pe_sections</code></h3>
+<p>Tabla de secciones PE.</p>
+<ul><li>Campos de entrada:</li><li><code>path</code> (string, obligatorio)</li><li>outputSchema: sí (campos: arac, bolumler, dosya, ok, sayi)</li><li>annotations: sí (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
+<h3 id="rea_process_caps"><code>rea_process_caps</code></h3>
+<p>Sondeo de capacidades de proceso.</p>
+<ul><li>Campos de entrada: ninguno</li><li>outputSchema: sí (campos: kayıt, ok, summary, tool)</li><li>annotations: sí (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
+<h3 id="rea_process_compare"><code>rea_process_compare</code></h3>
+<p>Comparación pipe/PTY.</p>
+<ul><li>Campos de entrada:</li><li><code>cmd</code> (string, obligatorio)</li><li>outputSchema: no</li><li>annotations: sí (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
+<h3 id="rea_process_run"><code>rea_process_run</code></h3>
+<p>Registro de ejecución de proceso.</p>
+<ul><li>Campos de entrada:</li><li><code>cmd</code> (string, obligatorio)</li><li>outputSchema: sí (campos: kayıt, ok, summary, tool)</li><li>annotations: sí (destructiveHint=true, openWorldHint=true, readOnlyHint=false)</li></ul>
+<h3 id="rea_pwn_elf_layout"><code>rea_pwn_elf_layout</code></h3>
+<p>Layout ELF + mitigaciones.</p>
+<ul><li>Campos de entrada:</li><li><code>path</code> (string, obligatorio)</li><li>outputSchema: no</li><li>annotations: sí (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
+<h3 id="rea_pwn_gadgets"><code>rea_pwn_gadgets</code></h3>
+<p>Pista de gadgets.</p>
+<ul><li>Campos de entrada:</li><li><code>text</code> (string, obligatorio)</li><li>outputSchema: sí (campos: details, ok, summary, tool)</li><li>annotations: sí (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
+<h3 id="rea_r2_callgraph"><code>rea_r2_callgraph</code></h3>
+<p>Grafo de llamadas de funciones r2.</p>
+<ul><li>Campos de entrada:</li><li><code>path</code> (string, obligatorio)</li><li>outputSchema: sí (campos: arac, fonksiyonlar, hedef, ok)</li><li>annotations: sí (openWorldHint=true, readOnlyHint=false)</li></ul>
+<h3 id="rea_r2_debug"><code>rea_r2_debug</code></h3>
+<p>Depuración por lotes r2 (bp+regs).</p>
+<ul><li>Campos de entrada:</li><li><code>addr</code> (string, obligatorio)</li><li><code>path</code> (string, obligatorio)</li><li>outputSchema: sí (campos: arac, bpAddr, cikti, hedef, not, ok)</li><li>annotations: sí (destructiveHint=true, openWorldHint=true, readOnlyHint=false)</li></ul>
+<h3 id="rea_r2_esil"><code>rea_r2_esil</code></h3>
+<p>Regs de emulación ESIL r2.</p>
+<ul><li>Campos de entrada:</li><li><code>addr</code> (string, obligatorio)</li><li><code>path</code> (string, obligatorio)</li><li>outputSchema: sí (campos: addr, adim, arac, hedef, ok, regs)</li><li>annotations: sí (openWorldHint=true, readOnlyHint=false)</li></ul>
+<h3 id="rea_readiness"><code>rea_readiness</code></h3>
+<p>Puntuación de preparación de reconstrucción.</p>
+<ul><li>Campos de entrada:</li><li><code>text</code> (string, obligatorio)</li><li>outputSchema: sí (campos: arac, eksik, ok, seviye, skor)</li><li>annotations: sí (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
+<h3 id="rea_recon_funcs"><code>rea_recon_funcs</code></h3>
+<p>Lista de funciones en pseudocódigo.</p>
+<ul><li>Campos de entrada:</li><li><code>text</code> (string, obligatorio)</li><li>outputSchema: sí (campos: details, ok, summary, tool)</li><li>annotations: sí (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
+<h3 id="rea_recon_harness"><code>rea_recon_harness</code></h3>
+<p>Esqueleto de harness C.</p>
+<ul><li>Campos de entrada:</li><li><code>text</code> (string, obligatorio)</li><li>outputSchema: sí (campos: details, ok, summary, tool)</li><li>annotations: sí (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
+<h3 id="rea_recon_tag"><code>rea_recon_tag</code></h3>
+<p>Etiqueta de caso.</p>
+<ul><li>Campos de entrada: ninguno</li><li>outputSchema: sí (campos: details, ok, summary, tool)</li><li>annotations: sí (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
+<h3 id="rea_registry_izi"><code>rea_registry_izi</code></h3>
+<p>Escrituras de registro desde eventos API.</p>
+<ul><li>Campos de entrada:</li><li><code>text</code> (string, obligatorio)</li><li>outputSchema: sí (campos: details, ok, summary, tool)</li><li>annotations: sí (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
+<h3 id="rea_scan_repo"><code>rea_scan_repo</code></h3>
+<p>Escaneo de repo (tipo+plan).</p>
+<ul><li>Campos de entrada:</li><li><code>path</code> (string, obligatorio)</li><li>outputSchema: sí (campos: details, ok, summary, tool)</li><li>annotations: sí (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
+<h3 id="rea_scan_repo_paralel"><code>rea_scan_repo_paralel</code></h3>
+<p>Escaneo paralelo de repo (pool de 4, cancelable).</p>
+<ul><li>Campos de entrada:</li><li><code>eszamanlilik</code> (integer, opcional)</li><li><code>path</code> (string, obligatorio)</li><li>outputSchema: sí (campos: details, iptalEdildi, ok, summary, tool)</li><li>annotations: sí (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
+<h3 id="rea_sniff"><code>rea_sniff</code></h3>
+<p>Tipo de archivo + sugerencia de motor (bytes mágicos).</p>
+<ul><li>Campos de entrada:</li><li><code>b64dosya</code> (string, obligatorio)</li><li>outputSchema: sí (campos: motor, tip)</li><li>annotations: sí (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
+<h3 id="rea_storage_dump"><code>rea_storage_dump</code></h3>
+<p>Cookies + localStorage.</p>
+<ul><li>Campos de entrada:</li><li><code>url</code> (string, obligatorio)</li><li>outputSchema: sí (campos: details, ok, summary, tool)</li><li>annotations: sí (openWorldHint=true, readOnlyHint=false)</li></ul>
+<h3 id="rea_typedef_oner"><code>rea_typedef_oner</code></h3>
+<p>Sugerencia de nombre de argumento + propagación.</p>
+<ul><li>Campos de entrada:</li><li><code>text</code> (string, obligatorio)</li><li>outputSchema: sí (campos: arac, ok, oneriler, sayi)</li><li>annotations: sí (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
+<h3 id="rea_unpack_hunt"><code>rea_unpack_hunt</code></h3>
+<p>Flujo guiado de packer desconocido.</p>
+<ul><li>Campos de entrada:</li><li><code>path</code> (string, obligatorio)</li><li>outputSchema: sí (campos: adimlar, arac, karar, ok)</li><li>annotations: sí (openWorldHint=true, readOnlyHint=false)</li></ul>
+<h3 id="rea_unpack_try"><code>rea_unpack_try</code></h3>
+<p>Enrutamiento automático de desempaquetado.</p>
+<ul><li>Campos de entrada:</li><li><code>path</code> (string, obligatorio)</li><li>outputSchema: sí (campos: sonuc, yontem)</li><li>annotations: sí (destructiveHint=true, openWorldHint=true, readOnlyHint=false)</li></ul>
+<h3 id="rea_upx_info"><code>rea_upx_info</code></h3>
+<p>Info de si está comprimido con UPX.</p>
+<ul><li>Campos de entrada:</li><li><code>path</code> (string, obligatorio)</li><li>outputSchema: sí (campos: arac, cikti, dosya, not, ok, sikisik)</li><li>annotations: sí (openWorldHint=true, readOnlyHint=false)</li></ul>
+<h3 id="rea_upx_unpack"><code>rea_upx_unpack</code></h3>
+<p>Descompresión UPX.</p>
+<ul><li>Campos de entrada:</li><li><code>out</code> (string, obligatorio)</li><li><code>path</code> (string, obligatorio)</li><li>outputSchema: sí (campos: arac, cikti, dosya, log, ok)</li><li>annotations: sí (destructiveHint=true, openWorldHint=true, readOnlyHint=false)</li></ul>
+<h3 id="rea_wasm_decode"><code>rea_wasm_decode</code></h3>
+<p>Decodificación WASM/WAT (wabt).</p>
+<ul><li>Campos de entrada:</li><li><code>path</code> (string, obligatorio)</li><li>outputSchema: sí (campos: details, ok, summary, tool)</li><li>annotations: sí (openWorldHint=true, readOnlyHint=false)</li></ul>
+<h3 id="rea_wasm_exports"><code>rea_wasm_exports</code></h3>
+<p>Lista de exports WAT (offline).</p>
+<ul><li>Campos de entrada:</li><li><code>wat</code> (string, obligatorio)</li><li>outputSchema: sí (campos: details, ok, summary, tool)</li><li>annotations: sí (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
+<h3 id="rea_wasm_imports"><code>rea_wasm_imports</code></h3>
+<p>Lista de imports WASM.</p>
+<ul><li>Campos de entrada:</li><li><code>b64</code> (string, obligatorio)</li><li>outputSchema: sí (campos: details, ok, summary, tool)</li><li>annotations: sí (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
+<h3 id="rea_wasm_sections"><code>rea_wasm_sections</code></h3>
+<p>Tabla de secciones WASM.</p>
+<ul><li>Campos de entrada:</li><li><code>b64</code> (string, obligatorio)</li><li>outputSchema: sí (campos: details, ok, summary, tool)</li><li>annotations: sí (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
+<h3 id="rea_wasm_validate"><code>rea_wasm_validate</code></h3>
+<p>Validación WASM (wasm-validate).</p>
+<ul><li>Campos de entrada:</li><li><code>path</code> (string, obligatorio)</li><li>outputSchema: sí (campos: arac, detay, ok, ozet)</li><li>annotations: sí (openWorldHint=true, readOnlyHint=false)</li></ul>
+<h3 id="session_close"><code>session_close</code></h3>
+<p>Descarta una sesión de aplicación y su búfer de eventos.</p>
+<ul><li>Campos de entrada:</li><li><code>session_id</code> (string, obligatorio) — Id de sesión de la aplicación. No es una sesión del protocolo MCP.</li><li>outputSchema: sí (campos: closed, session_id)</li><li>annotations: sí (destructiveHint=true, openWorldHint=true, readOnlyHint=false)</li></ul>
+<h3 id="session_list"><code>session_list</code></h3>
+<p>Lista las sesiones de aplicación retenidas en este proceso.</p>
+<ul><li>Campos de entrada: ninguno</li><li>outputSchema: sí (campos: sessions)</li><li>annotations: sí (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
+<h3 id="session_open"><code>session_open</code></h3>
+<p>Abre una sesión de aplicación para un motor. Devuelve session_id para argumentos posteriores de herramientas.</p>
+<ul><li>Campos de entrada:</li><li><code>engine</code> (enum, obligatorio)</li><li>outputSchema: sí (campos: createdAt, engine, session_id)</li><li>annotations: sí (destructiveHint=false, idempotentHint=false, openWorldHint=false, readOnlyHint=false)</li></ul>
+<h3 id="static_info"><code>static_info</code></h3>
+<p>Informa capacidades del motor estático radare2, disponibilidad de r2 y el objetivo abierto (si hay).</p>
+<ul><li>Campos de entrada:</li><li><code>session_id</code> (string, obligatorio) — Id de sesión de la aplicación. No es una sesión del protocolo MCP.</li><li>outputSchema: sí (campos: capabilities, engine, r2, session_id, target)</li><li>annotations: sí (openWorldHint=true, readOnlyHint=false)</li></ul>
+<h3 id="strings"><code>strings</code></h3>
+<p>Strings halladas en el binario (dirección, sección, longitud, texto).</p>
+<ul><li>Campos de entrada:</li><li><code>limit</code> (integer, opcional) — Máximas strings devueltas (por defecto 200).</li><li><code>min_length</code> (integer, opcional) — Conserva strings con longitud &gt;= esta (por defecto 0).</li><li><code>offset</code> (integer, opcional) — Omite estas coincidencias (por defecto 0).</li><li><code>section</code> (string, opcional) — Solo strings de esta sección, p. ej. &quot;.rodata&quot;.</li><li><code>session_id</code> (string, obligatorio) — Id de sesión de la aplicación. No es una sesión del protocolo MCP.</li><li>outputSchema: sí (campos: offset, session_id, strings, total)</li><li>annotations: sí (openWorldHint=true, readOnlyHint=false)</li></ul>
+<h3 id="xrefs"><code>xrefs</code></h3>
+<p>Referencias cruzadas hacia y/o desde una dirección (código y datos).</p>
+<ul><li>Campos de entrada:</li><li><code>address</code> (string | number, obligatorio) — Dirección objetivo como hex (&quot;0x400200&quot;), decimal o nombre de flag (&quot;entry0&quot;).</li><li><code>direction</code> (enum, opcional)</li><li><code>session_id</code> (string, obligatorio) — Id de sesión de la aplicación. No es una sesión del protocolo MCP.</li><li>outputSchema: sí (campos: address, from, session_id, to)</li><li>annotations: sí (openWorldHint=true, readOnlyHint=false)</li></ul>
+<h2 id="recursos">Recursos</h2>
+<ul><li><code>rea-plus://capabilities-safety</code> — nombre: <code>capabilities-safety</code> — mimeType: <code>application/json</code> — Resumen de capacidades estáticas y reglas de seguridad (solo lectura).</li><li><code>rea-plus://server-info</code> — nombre: <code>server-info</code> — mimeType: <code>application/json</code> — Identidad estática del servidor y resumen de superficie (solo lectura).</li></ul>
+<h2 id="prompts">Prompts</h2>
+<ul><li><code>android-triage</code> — argumentos: <code>focus</code> (opcional), <code>path</code> (obligatorio) — Flujo de triage estático del APK basado en jadx (prompt sin efectos secundarios).</li><li><code>dotnet-malware-triage</code> — argumentos: <code>focus</code> (opcional), <code>path</code> (obligatorio) — Flujo de triage de malware estático para muestra .NET (prompt sin efectos secundarios).</li><li><code>packer-triage</code> — argumentos: <code>focus</code> (opcional), <code>path</code> (obligatorio) — Flujo rea ordenado con prioridad estática para detección de packer/protección (prompt sin efectos secundarios).</li></ul>
+</div></main>
+<footer class="altbilgi"><p>ReaPlus Docs — sitio estático. Generación: <code>node scripts/site-uret.mjs</code> · Números del resumen TOOLS.md (ejecución real).</p></footer>
+</div>
+<script>
+document.documentElement.classList.add("js");
+(function(){var k="reaplus-tema";var d=document.getElementById("tema-toggle");
+function uygula(t){document.documentElement.dataset.theme=t;try{localStorage.setItem(k,t);}catch(e){}if(d){d.setAttribute("aria-pressed",String(t==="dark"));d.textContent=t==="dark"?"Tema claro":"Tema oscuro";}}
+if(d){d.addEventListener("click",function(){uygula(document.documentElement.dataset.theme==="dark"?"light":"dark");});
+if(document.documentElement.dataset.theme){d.setAttribute("aria-pressed",String(document.documentElement.dataset.theme==="dark"));d.textContent=document.documentElement.dataset.theme==="dark"?"Tema claro":"Tema oscuro";}}
+var azalt=window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+var beliren=document.querySelectorAll(".reveal");
+if(azalt||!("IntersectionObserver" in window)){beliren.forEach(function(el){el.classList.add("gorunur");});}
+else{var gozcu=new IntersectionObserver(function(girdiler){girdiler.forEach(function(g){if(g.isIntersecting){g.target.classList.add("gorunur");gozcu.unobserve(g.target);}});},{threshold:.12,rootMargin:"0px 0px -8% 0px"});beliren.forEach(function(el){gozcu.observe(el);});}
+var sayilar=document.querySelectorAll(".sayi");
+function bitir(el){el.textContent=el.getAttribute("data-sayi");}
+if(azalt||!("IntersectionObserver" in window)){sayilar.forEach(bitir);}
+else{var sayac=new IntersectionObserver(function(girdiler){girdiler.forEach(function(g){if(!g.isIntersecting)return;var el=g.target;sayac.unobserve(el);var hedef=Number(el.getAttribute("data-sayi"));if(!isFinite(hedef))return;var baslangic=null;var sure=850;function kare(t){if(baslangic===null)baslangic=t;var oran=Math.min(1,(t-baslangic)/sure);var yumru=1-Math.pow(1-oran,3);el.textContent=String(Math.round(hedef*yumru));if(oran<1){requestAnimationFrame(kare);}else{bitir(el);}}requestAnimationFrame(kare);});},{threshold:.4});sayilar.forEach(function(el){sayac.observe(el);});}
+})();
+</script>
+</body>
+</html>

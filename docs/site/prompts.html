@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="ReaPlus teknik dokümantasyon sitesi: kurulum, araç referansı, örnekler, yol haritası.">
+<title>Prompt Kütüphanesi — ReaPlus Docs</title>
+<script>try{var t=localStorage.getItem("reaplus-tema");if(!t){t=window.matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light";}document.documentElement.dataset.theme=t;}catch(e){}</script>
+<style>:root{color-scheme:light;--zemin:#F6F6F3;--yuzey:#FCFCFA;--metin:#1D1F24;--silik:#5A6270;--sinir:#DFDFD6;--vurgu:#2E6B4E;--vurgu-arka:#E4EFE8;--kod-zemin:#EBEBE4;--golge:rgba(23,28,24,.08)}[data-theme="light"]{color-scheme:light;--zemin:#F6F6F3;--yuzey:#FCFCFA;--metin:#1D1F24;--silik:#5A6270;--sinir:#DFDFD6;--vurgu:#2E6B4E;--vurgu-arka:#E4EFE8;--kod-zemin:#EBEBE4;--golge:rgba(23,28,24,.08)}[data-theme="dark"]{color-scheme:dark;--zemin:#15181D;--yuzey:#1D2229;--metin:#E9E7E1;--silik:#A7B0BC;--sinir:#2F3742;--vurgu:#7BC9A2;--vurgu-arka:#1D3328;--kod-zemin:#232A33;--golge:rgba(8,10,12,.45)}@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){color-scheme:dark;--zemin:#15181D;--yuzey:#1D2229;--metin:#E9E7E1;--silik:#A7B0BC;--sinir:#2F3742;--vurgu:#7BC9A2;--vurgu-arka:#1D3328;--kod-zemin:#232A33;--golge:rgba(8,10,12,.45)}}*{box-sizing:border-box}html{-webkit-text-size-adjust:100%}body{margin:0;background:var(--zemin);color:var(--metin);font-family:system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;line-height:1.65}h1,h2,h3,.marka-ad{font-family:"Avenir Next","Segoe UI",system-ui,-apple-system,"Helvetica Neue",Arial,sans-serif;letter-spacing:-.01em;line-height:1.25}.sarmal{max-width:62rem;margin:0 auto;padding:0 1.25rem 3rem}.atla{position:absolute;left:-999px;top:0;background:var(--vurgu);color:var(--zemin);padding:.5rem 1rem;z-index:10}.atla:focus{left:0}.ust{display:flex;flex-wrap:wrap;align-items:center;gap:.6rem 1rem;padding:1rem 0;border-bottom:1px solid var(--sinir)}.marka-ad{font-weight:650;font-size:1.05rem}.marka-alt{color:var(--silik);font-size:.84rem;margin-left:.6rem}.gezinme{display:flex;flex-wrap:wrap;gap:.15rem .9rem;font-size:.92rem}.gezinme a{color:var(--silik);text-decoration:none;border-bottom:1px solid transparent}.gezinme a:hover{color:var(--metin);border-bottom-color:var(--vurgu)}.dil{display:flex;gap:.35rem;font-size:.8rem;color:var(--silik)}.dil a{color:var(--silik);text-decoration:none}.dil a:hover{color:var(--vurgu)}.dil strong{color:var(--metin)}#tema-toggle{margin-left:auto;font:inherit;font-size:.85rem;color:var(--metin);background:var(--yuzey);border:1px solid var(--sinir);border-radius:999px;padding:.32rem .85rem;cursor:pointer;transition:background-color .2s ease,border-color .2s ease}#tema-toggle:hover{border-color:var(--vurgu)}.ozet{margin:1.5rem 0 0;background:var(--yuzey);border:1px solid var(--sinir);border-radius:.6rem;padding:1rem 1.25rem}.ozet-metin{margin:0 0 .8rem;font-size:.92rem;color:var(--silik)}.istatistik{display:grid;grid-template-columns:repeat(auto-fit,minmax(8.5rem,1fr));gap:.6rem;margin:0}.istatistik div{border-top:2px solid var(--vurgu);padding-top:.45rem}.istatistik dt{font-size:.74rem;text-transform:uppercase;letter-spacing:.06em;color:var(--silik)}.istatistik dd{margin:.15rem 0 0;font-size:1.35rem;font-weight:650;font-variant-numeric:tabular-nums}#icerik{margin-top:1.5rem}#icerik a{color:var(--vurgu);text-decoration:underline;text-underline-offset:.15em}#icerik a:hover{text-decoration-thickness:2px}pre{background:var(--kod-zemin);border:1px solid var(--sinir);border-radius:.5rem;padding:1rem;overflow:auto;font-size:.86rem}code{font-family:ui-monospace,"Cascadia Code","SF Mono",Consolas,Menlo,monospace;font-size:.88em;background:var(--kod-zemin);border-radius:.3rem;padding:.1em .35em}pre code{background:none;padding:0;border-radius:0}table{border-collapse:collapse;width:100%;font-size:.9rem}th,td{border:1px solid var(--sinir);padding:.45rem .6rem;text-align:left;vertical-align:top}thead th{background:var(--yuzey)}blockquote{margin:1rem 0;padding:.6rem 1rem;border-left:3px solid var(--vurgu);background:var(--yuzey);color:var(--silik)}hr{border:none;border-top:1px solid var(--sinir);margin:1.75rem 0}img{max-width:100%}#arama{font:inherit;color:var(--metin);background:var(--yuzey);border:1px solid var(--sinir);border-radius:.5rem;padding:.5rem .8rem;width:min(22rem,100%)}#sonuclar{list-style:none;margin:.8rem 0 0;padding:0;display:grid;gap:.4rem}#sonuclar li{background:var(--yuzey);border:1px solid var(--sinir);border-radius:.5rem;padding:.5rem .8rem}.altbilgi{margin-top:2.5rem;padding-top:1rem;border-top:1px solid var(--sinir);color:var(--silik);font-size:.85rem}.js .reveal{opacity:0;transform:translateY(10px);transition:opacity .45s ease,transform .45s ease}.js .reveal.gorunur{opacity:1;transform:none}:focus-visible{outline:.16rem solid var(--vurgu);outline-offset:.18rem;border-radius:.25rem}::selection{background:var(--vurgu);color:var(--zemin)}@media (prefers-reduced-motion: reduce){.js .reveal{opacity:1;transform:none;transition:none}*{animation:none;transition:none}}@media (max-width:40rem){.sarmal{padding:0 1rem 2.5rem}#tema-toggle{margin-left:0}.istatistik{grid-template-columns:repeat(2,1fr)}table{font-size:.82rem}th,td{padding:.35rem .45rem}}@media (max-width:26rem){.istatistik{grid-template-columns:1fr}}</style>
+</head>
+<body>
+<div class="sarmal">
+<a class="atla" href="#icerik">İçeriğe atla</a>
+<header class="ust">
+<div class="marka"><span class="marka-ad">ReaPlus Docs</span><span class="marka-alt">tersine mühendislik çalışma yüzeyi</span></div>
+<nav class="gezinme" aria-label="Site"><a href="index.html">Ana Sayfa</a> · <a href="readme.html">README</a> · <a href="tools.html">Araç Referansı</a> · <a href="examples.html">Örnekler</a> · <a href="roadmap.html">Yol Haritası</a> · <a href="changelog.html">Değişiklikler</a> · <strong>Prompt Kütüphanesi</strong></nav>
+<nav id="dil" class="dil" aria-label="Dil"><strong aria-current="true">TR</strong> · <a href="en/prompts.html" hreflang="en">EN</a> · <a href="de/prompts.html" hreflang="de">DE</a> · <a href="fr/prompts.html" hreflang="fr">FR</a> · <a href="es/prompts.html" hreflang="es">ES</a></nav>
+<button id="tema-toggle" type="button" aria-pressed="false">Koyu tema</button>
+</header>
+<section class="ozet reveal" aria-label="Yüzey özeti">
+<p class="ozet-metin">Yüzey özeti (gerçek koşu, TOOLS.md): 191 araç · 187 outputSchema · 191 annotations · 2 resource · 7 prompt</p>
+<dl class="istatistik"><div><dt>araç</dt><dd><span class="sayi" data-sayi="191">191</span></dd></div><div><dt>outputSchema</dt><dd><span class="sayi" data-sayi="187">187</span></dd></div><div><dt>annotations</dt><dd><span class="sayi" data-sayi="191">191</span></dd></div><div><dt>resource</dt><dd><span class="sayi" data-sayi="2">2</span></dd></div><div><dt>prompt</dt><dd><span class="sayi" data-sayi="7">7</span></dd></div></dl>
+</section>
+<main id="icerik"><div class="reveal">
+<h1>Prompt Kütüphanesi</h1>
+<h1 id="reaplus-prompt-kütüphanesi-10-hazır-prompt--4-görev-şablonu">ReaPlus Prompt Kütüphanesi (10 hazır prompt + 4 görev şablonu)</h1>
+<p>Ajanın rea-plus'a soracağı 10 hazır soru kalıbı + 4 MCP görev şablonu akışı.
+Her prompt: <strong>Amaç</strong> +
+<strong>Örnek çağrı</strong> (gerçek MCP/<code>rea-plus-cli</code> formu, alan adları üretilmiş
+referans <a href="tools.html"><code>TOOLS.md</code></a> ile aynı) + <strong>Beklenen çıktı</strong> türü.
+Yüzey: <strong>191 araç</strong>, <strong>187 outputSchema</strong>, <strong>191 annotations</strong>, 2 resource, 7 prompt.</p>
+<blockquote>Not: <code>confirm:true</code> isteyen canlı-debug çağrıları listede yok; buradaki
+14 promptun tamamı salt-okunur/statik akışlardır.</blockquote>
+<h2 id="1-triage--bu-dosya-nedir-nereden-başlarım">1) Triage — &quot;bu dosya nedir, nereden başlarım?&quot;</h2>
+<p><strong>Amaç:</strong> Bilinmeyen bir dosyayı tek çağrıda sınıfla ve sonraki adım planını al.</p>
+<p><strong>Örnek çağrı:</strong></p>
+<pre><code class="language-json">{ &quot;name&quot;: &quot;rea_investigate&quot;, &quot;arguments&quot;: { &quot;path&quot;: &quot;sample.exe&quot; } }</code></pre>
+<p><strong>Beklenen çıktı:</strong> <code>ok/plan/skor/tip/motor/yedekler</code> alanlı nesne (<code>outputSchema</code>
+alanları: <code>arac, motor, ok, plan, skor, tip, yedekler</code>); tip (pe/elf/apk/…),
+güven skoru ve önerilen motor + yedek plan listesi.</p>
+<h2 id="2-manifest--bu-apknın-paketi-izinleri-aktiviteleri">2) Manifest — &quot;bu APK'nın paketi, izinleri, aktiviteleri?&quot;</h2>
+<p><strong>Amaç:</strong> APK'nın <code>AndroidManifest.xml</code> kimliğini jadx ile çöz.</p>
+<p><strong>Örnek çağrı:</strong></p>
+<pre><code class="language-bash">node -e &quot;import('./dist/rea-domains/android/JadxBridge.js').then(m=&gt;console.log(JSON.stringify(m.rea_jadx_manifest('tests/corpus/sahte.apk'))))&quot;</code></pre>
+<p><strong>Beklenen çıktı:</strong> <code>ok/paket/izinler/aktiviteler</code> alanlı nesne; jadx yoksa
+uydurma manifest yerine <code>capability_unsupported</code> + kurulum ipucu.</p>
+<h2 id="3-davranış--olayları-zaman-çizgisine-diz">3) Davranış — &quot;olayları zaman çizgisine diz&quot;</h2>
+<p><strong>Amaç:</strong> API/syscall/net/dosya/process olaylarından kaynak-öncelikli özet üret
+(yürütme yok, saf fonksiyon).</p>
+<p><strong>Örnek çağrı:</strong></p>
+<pre><code class="language-bash">node -e &quot;import('./dist/rea-domains/behavior/BehaviorTimeline.js').then(m=&gt;console.log(m.rea_behavior_timeline([
+ {\&quot;kaynak\&quot;:\&quot;api\&quot;,\&quot;zaman\&quot;:3,\&quot;detay\&quot;:\&quot;CreateFileW\&quot;},
+ {\&quot;kaynak\&quot;:\&quot;net\&quot;,\&quot;zaman\&quot;:1,\&quot;detay\&quot;:\&quot;dns:ornek.test\&quot;},
+ {\&quot;kaynak\&quot;:\&quot;api\&quot;,\&quot;zaman\&quot;:2,\&quot;detay\&quot;:\&quot;CreateFileW\&quot;},
+ {\&quot;kaynak\&quot;:\&quot;process\&quot;,\&quot;zaman\&quot;:4,\&quot;detay\&quot;:\&quot;exit:0\&quot;}
+]).summary))&quot;</code></pre>
+<p><strong>Beklenen çıktı:</strong> Metin özet (<code>4 olay api@2 -&gt; process@4 top_api=CreateFileW</code>
+biçimi) + <code>sıralı/sayılar/top_api/ilk/son</code> detayları; boş listede
+<code>capability_unsupported</code>.</p>
+<h2 id="4-repo--bu-dizinde-ne-tür-dosyalar-var">4) Repo — &quot;bu dizinde ne tür dosyalar var?&quot;</h2>
+<p><strong>Amaç:</strong> Bir dizindeki PE/ELF/APK/JS/WASM dosyalarını sihir baytla tespit edip
+dosya başına sonraki-araç planı al.</p>
+<p><strong>Örnek çağrı:</strong></p>
+<pre><code class="language-json">{ &quot;name&quot;: &quot;rea_scan_repo&quot;, &quot;arguments&quot;: { &quot;path&quot;: &quot;&lt;hedef-dizin&gt;&quot; } }</code></pre>
+<p><strong>Beklenen çıktı:</strong> <code>summary</code> metni (<code>5 dosya, 5 tip …</code> biçimi) +
+<code>details.tipler</code> sayımı + <code>details.planlar</code> (dosya → önerilen motor);
+hedefsiz dizinde boş liste (<code>ok:true</code>).</p>
+<h2 id="5-pdb--debug-kaydından-sembole-git">5) PDB — &quot;debug kaydından sembole git&quot;</h2>
+<p><strong>Amaç:</strong> PE'nin CodeView RSDS kaydından PDB kimliğini çöz, Microsoft symbol
+server düzeninde indir (bütünlüklü + önbellekli).</p>
+<p><strong>Örnek çağrı:</strong></p>
+<pre><code class="language-bash">node -e &quot;import('./dist/rea-domains/typedef/PdbReader.js').then(m=&gt;console.log(JSON.stringify(m.rea_pdb_yolu('&lt;debug-bilgili.exe&gt;'))))&quot;</code></pre>
+<p><strong>Beklenen çıktı:</strong> Adım 1'de <code>pdb/guid/yas</code> (<code>rea_pdb_yolu</code> alanları:
+<code>arac, dosya, guid, ok, pdb, yas</code>); adım 2'de <code>Ad/GUID-tiresiz+YAŞ/Ad</code>
+düzenli URL, <code>yol/cache</code> bilgisi (<code>rea_pdb_indir</code> alanları:
+<code>arac, cache, dosya, guid, ok, pdb, url, yas, yol</code>); bozuk içerikte
+<code>butunluk_hatasi</code>, ikinci çağrıda <code>cache:true</code>.</p>
+<h2 id="6-diff--iki-sürüm-arasında-fonksiyon-farkı-ne">6) Diff — &quot;iki sürüm arasında fonksiyon farkı ne?&quot;</h2>
+<p><strong>Amaç:</strong> İki ikili sürümün fonksiyon listelerini karşılaştırıp
+eklenen/çıkarılan/değişen/aynen kalan kümeleri al (N-day incelemesi girişi).</p>
+<p><strong>Örnek çağrı:</strong></p>
+<pre><code class="language-json">{ &quot;name&quot;: &quot;rea_bindiff_karsilastir&quot;, &quot;arguments&quot;: { &quot;text&quot;: &quot;&lt;rea_bindiff_fonksiyonlar çıktısı&gt;&quot; } }</code></pre>
+<p><strong>Beklenen çıktı:</strong> <code>aynen/cikarilan/degisen/eklenen/eski/yeni/istatistik/ozet</code>
+alanlı nesne; girdi <code>rea_bindiff_fonksiyonlar</code> (<code>path</code> zorunlu) çıktısıdır.</p>
+<h2 id="7-pcap--bu-yakalamada-hangi-akışlar-var-tls-çözülür-mü">7) Pcap — &quot;bu yakalamada hangi akışlar var, TLS çözülür mü?&quot;</h2>
+<p><strong>Amaç:</strong> PCAP dosyasındaki akışları birleştir; keylog varsa TLS içeriğini çöz.</p>
+<p><strong>Örnek çağrı:</strong></p>
+<pre><code class="language-json">{ &quot;name&quot;: &quot;rea_pcap_oku&quot;, &quot;arguments&quot;: { &quot;path&quot;: &quot;ornek.pcap&quot; } }</code></pre>
+<p>Keylog ile:</p>
+<pre><code class="language-json">{ &quot;name&quot;: &quot;rea_pcap_oku&quot;, &quot;arguments&quot;: { &quot;path&quot;: &quot;ornek.pcap&quot;, &quot;keylog&quot;: &quot;sslkeylog.txt&quot; } }</code></pre>
+<p><strong>Beklenen çıktı:</strong> <code>details/summary</code> içinde birleştirilmiş akış listesi
+(<code>outputSchema</code> var); <code>keylog</code> opsiyoneldir, verilmezse şifreli içerik
+çözülmeden meta-akışlar döner.</p>
+<h2 id="8-reçete--bu-apk-için-dinamik-analiz-planı-üret-ve-doğrula">8) Reçete — &quot;bu APK için dinamik analiz planı üret ve doğrula&quot;</h2>
+<p><strong>Amaç:</strong> APK yolundan kuru-doğrulamalı dinamik analiz reçetesi üret
+(çalıştırma yok, plan + doğrulama).</p>
+<p><strong>Örnek çağrı:</strong></p>
+<pre><code class="language-json">{ &quot;name&quot;: &quot;rea_android_dinamik_recete&quot;, &quot;arguments&quot;: { &quot;path&quot;: &quot;ornek.apk&quot; } }</code></pre>
+<p>Ardından reçete metniyle:</p>
+<pre><code class="language-json">{ &quot;name&quot;: &quot;rea_android_recete_dogrula&quot;, &quot;arguments&quot;: { &quot;text&quot;: &quot;&lt;recete-metni&gt;&quot; } }</code></pre>
+<p><strong>Beklenen çıktı:</strong> İlki <code>recete</code> alanlı nesne; ikincisi <code>adim_sayisi/ok</code>
+alanlı doğrulama sonucu.</p>
+<h2 id="9-fuzz--ayrıştırıcılar-bozuk-girdide-çökmüyor-mu">9) Fuzz — &quot;ayrıştırıcılar bozuk girdide çökmüyor mu?&quot;</h2>
+<p><strong>Amaç:</strong> PE/ELF/WASM/metadata ayrıştırıcılarına korpus tohumlarıyla bozuk
+girdi verip çökme/istisna taraması yap (yazma yalnız tmpdir'e).</p>
+<p><strong>Örnek çağrı:</strong></p>
+<pre><code class="language-bash">node scripts/fuzz-parsers.mjs</code></pre>
+<p><strong>Beklenen çıktı:</strong> Konsol özeti (tohum sayısı, çöken girdi listesi; temiz
+koşuda sıfır çökme) + <code>tests/parser-fuzz.test.mjs</code> yeşili; korpus
+(<code>tests/corpus/</code>) salt okunur kalır.</p>
+<h2 id="10-perf--listeaçılış-bütçeleri-tutuyor-mu">10) Perf — &quot;liste/açılış bütçeleri tutuyor mu?&quot;</h2>
+<p><strong>Amaç:</strong> <code>tools/list</code> yanıt süresi + sunucu açılış süresi bütçelerini ölç,
+regresyonu testle yakala.</p>
+<p><strong>Örnek çağrı:</strong></p>
+<pre><code class="language-bash">node tests/perf-budget.test.mjs</code></pre>
+<p><strong>Beklenen çıktı:</strong> node:test çıktısı (bütçe eşikleri <code>tests/perf-budget.test.mjs</code>
+içinde tanımlı); eşik aşımı testi kırmızıya düşürür, süreler konsolda
+milisaniye olarak raporlanır.</p>
+<h2 id="görev-şablonu-promptları-mcp-kayıtlı-4-akış">Görev şablonu prompt'ları (MCP kayıtlı, 4 akış)</h2>
+<p>Aşağıdaki 4 prompt <code>prompts/list</code> üzerinden kayıtlıdır: her biri yalnızca
+<strong>sıralı akış metni</strong> döndürür (<code>promptSonuc</code>), araç çağırmaz. <code>path</code> (veya
+<code>eski</code>/<code>yeni</code>) zorunlu, <code>focus</code> opsiyoneldir. Kullanılan araç adları
+<a href="tools.html"><code>TOOLS.md</code></a> ile doğrulanmıştır. Tüm akışlar VM/CI'da <code>confirm:true</code>
+isteyen canlı-debug adımlarını atlar ve örneği asla çalıştırmaz.</p>
+<h3 id="11-pecrash-triage---çöken-peyi-statikten-davranışa-nasıl-inceleyeyim">11) PE/crash triage - &quot;çöken PE'yi statikten davranışa nasıl inceleyeyim?&quot;</h3>
+<p><strong>Amaç:</strong> PE hedefte triage → statik → crash kanıtı → davranış sırasıyla
+ilerlet; crash kaydı yoksa davranışı uydurmadan eksikliği yaz.</p>
+<p><strong>Örnek çağrı:</strong></p>
+<pre><code class="language-json">{ &quot;name&quot;: &quot;pe-crash-triage&quot;, &quot;arguments&quot;: { &quot;path&quot;: &quot;ornek.exe&quot;, &quot;focus&quot;: &quot;yuksek entropi&quot; } }</code></pre>
+<p><strong>Beklenen çıktı:</strong> metin akışı: <code>rea_investigate</code> → <code>rea_pe_info</code> /
+<code>rea_pe_sections</code> / <code>rea_pe_imports</code> → <code>rea_crash_kayit_parse</code> /
+<code>rea_crash_ozet</code> / <code>rea_crash_timeline</code> / <code>rea_crash_hint</code> →
+<code>rea_behavior_full</code> / <code>rea_behavior_timeline</code> → <code>rea_pdb_yolu</code> (varsa);
+sonuçta triage öğesi, statik bulgular, crash kanıtının derecesi ve
+davranış özeti + her bulgu için güven düzeyi.</p>
+<h3 id="12-elflinux-triage---elf-hedefi-sembolekipman-açısından-nasıl-taranır">12) ELF/Linux triage - &quot;ELF hedefi sembol/ekipman açısından nasıl taranır?&quot;</h3>
+<p><strong>Amaç:</strong> ELF/Linux hedefte segment/kesit düzeni, DWARF sembolleri, Go
+derleme bilgisi ve gadget adaylarını sırayla topla.</p>
+<p><strong>Örnek çağrı:</strong></p>
+<pre><code class="language-json">{ &quot;name&quot;: &quot;elf-linux-triage&quot;, &quot;arguments&quot;: { &quot;path&quot;: &quot;hedef.elf&quot; } }</code></pre>
+<p><strong>Beklenen çıktı:</strong> metin akışı: <code>rea_investigate</code> → <code>rea_pwn_elf_layout</code> →
+<code>rea_dwarf_ozet</code> → <code>rea_go_buildinfo</code> / <code>rea_go_funclines</code> (Go ise) →
+<code>rea_cutter_funcs</code> / <code>rea_cutter_strings</code> (veya Ghidra: <code>rea_ghidra_analyze</code> →
+<code>rea_ghidra_funcs</code> / <code>rea_ghidra_strings</code>) → <code>rea_pwn_gadgets</code>; sonuçta ELF
+tipi + mitigation (NX/PIE/RELRO/canary) durumu, sembol/gadget kanıtları ve
+güven düzeyi.</p>
+<h3 id="13-binary-diff---iki-sürüm-arasında-ne-değişmiş-yamanın-etkisi-ne">13) Binary diff - &quot;iki sürüm arasında ne değişmiş, yamanın etkisi ne?&quot;</h3>
+<p><strong>Amaç:</strong> İki sürüm arası fonksiyon diff'ini çıkar, değişen fonksiyonları
+decompile ederek yamanın etki alanını belirle.</p>
+<p><strong>Örnek çağrı:</strong></p>
+<pre><code class="language-json">{ &quot;name&quot;: &quot;binary-diff&quot;, &quot;arguments&quot;: { &quot;eski&quot;: &quot;v1.exe&quot;, &quot;yeni&quot;: &quot;v2.exe&quot;, &quot;focus&quot;: &quot;acik yamasi&quot; } }</code></pre>
+<p><strong>Beklenen çıktı:</strong> metin akışı: <code>rea_investigate</code> (iki sürüm) →
+<code>rea_bindiff_fonksiyonlar</code> (eski+yeni) → <code>rea_bindiff_karsilastir</code> (girdi
+JSON: <code>{&quot;eski&quot;: &quot;&lt;eski&gt;&quot;, &quot;yeni&quot;: &quot;&lt;yeni&gt;&quot;}</code>) → <code>rea_ghidra_vt</code> (Ghidra varsa) →
+<code>rea_ghidra_decompile</code> (değişen fonksiyon adresleri); sonuçta eklenen /
+çıkarılan / değişen fonksiyonlar + her biri için kanıt (hash/imza/adres) ve
+yamanın etki alanı.</p>
+<h3 id="14-evidence-report---topladığım-kanıtları-rapora-nasıl-dönüştürürüm">14) Evidence report - &quot;topladığım kanıtları rapora nasıl dönüştürürüm?&quot;</h3>
+<p><strong>Amaç:</strong> Kanıt paketini digest'leyip doğrula, obligation defteriyle her
+bulgunun kanıt zincirini kapat, hazırlık skoru + kapsam oranını raporla.</p>
+<p><strong>Örnek çağrı:</strong></p>
+<pre><code class="language-json">{ &quot;name&quot;: &quot;evidence-report&quot;, &quot;arguments&quot;: { &quot;path&quot;: &quot;ornek.bin&quot;, &quot;focus&quot;: &quot;rapor kapsami&quot; } }</code></pre>
+<p><strong>Beklenen çıktı:</strong> metin akışı: <code>rea_investigate</code> → <code>rea_evidence_bundle</code> →
+<code>rea_evidence_verify</code> → <code>rea_obligation_ledger</code> / <code>rea_obligation_advance</code> /
+<code>rea_obligation_verify</code> / <code>rea_obligation_close</code> → <code>rea_readiness</code> /
+<code>rea_coverage</code> → <code>rea_missing_reason</code> (eksik araç); sonuçta yönetici özeti,
+bulgu listesi (bulgu + kanıt + güven), kanıt digest'i, obligation zincir
+durumu, hazırlık skoru ve kapsam oranı.</p>
+</div></main>
+<footer class="altbilgi"><p>ReaPlus Docs — statik site. Üretim: <code>node scripts/site-uret.mjs</code> · Sayılar docs/TOOLS.md özetinden alınır (gerçek koşu).</p></footer>
+</div>
+<script>
+document.documentElement.classList.add("js");
+(function(){var k="reaplus-tema";var d=document.getElementById("tema-toggle");
+function uygula(t){document.documentElement.dataset.theme=t;try{localStorage.setItem(k,t);}catch(e){}if(d){d.setAttribute("aria-pressed",String(t==="dark"));d.textContent=t==="dark"?"Açık tema":"Koyu tema";}}
+if(d){d.addEventListener("click",function(){uygula(document.documentElement.dataset.theme==="dark"?"light":"dark");});
+if(document.documentElement.dataset.theme){d.setAttribute("aria-pressed",String(document.documentElement.dataset.theme==="dark"));d.textContent=document.documentElement.dataset.theme==="dark"?"Açık tema":"Koyu tema";}}
+var azalt=window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+var beliren=document.querySelectorAll(".reveal");
+if(azalt||!("IntersectionObserver" in window)){beliren.forEach(function(el){el.classList.add("gorunur");});}
+else{var gozcu=new IntersectionObserver(function(girdiler){girdiler.forEach(function(g){if(g.isIntersecting){g.target.classList.add("gorunur");gozcu.unobserve(g.target);}});},{threshold:.12,rootMargin:"0px 0px -8% 0px"});beliren.forEach(function(el){gozcu.observe(el);});}
+var sayilar=document.querySelectorAll(".sayi");
+function bitir(el){el.textContent=el.getAttribute("data-sayi");}
+if(azalt||!("IntersectionObserver" in window)){sayilar.forEach(bitir);}
+else{var sayac=new IntersectionObserver(function(girdiler){girdiler.forEach(function(g){if(!g.isIntersecting)return;var el=g.target;sayac.unobserve(el);var hedef=Number(el.getAttribute("data-sayi"));if(!isFinite(hedef))return;var baslangic=null;var sure=850;function kare(t){if(baslangic===null)baslangic=t;var oran=Math.min(1,(t-baslangic)/sure);var yumru=1-Math.pow(1-oran,3);el.textContent=String(Math.round(hedef*yumru));if(oran<1){requestAnimationFrame(kare);}else{bitir(el);}}requestAnimationFrame(kare);});},{threshold:.4});sayilar.forEach(function(el){sayac.observe(el);});}
+})();
+</script>
+</body>
+</html>

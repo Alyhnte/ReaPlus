@@ -1,6 +1,8 @@
 // Managed (.NET) denetçi: metadata + CIL okuma iskeleti (hedef ASLA çalıştırılmaz).
-import { execFileSync } from "node:child_process";
-import { existsSync, readFileSync } from "node:fs";
+import { execFileSync, spawnSync } from "node:child_process";
+import { closeSync, existsSync, openSync, readFileSync, readSync, statSync, mkdtempSync, readdirSync } from "node:fs";
+import { tmpdir } from "node:os";
+import { join } from "node:path";
 
 // Facade prefix kuralı: rea_ öneki zorunlu.
 export const DOTNET_TOOLS = ["rea_dotnet_metadata", "rea_dotnet_cil"] as const;
@@ -18,22 +20,53 @@ function okuyucuBul(): string | null {
 
 // Gerçek .NET tespiti: PE optional header'daki CLR dizini (DataDirectory[14]) dolu mu?
 // Yalnız MZ bakmak her native PE'yi .NET sanır; karar bu kontrole dayanır.
+// KRİTİK: dosyanın tamamı belleğe alınmaz; yalnız başlık pencereleri okunur
+// (GB'lık imajlarda OOM bitirir). Karar mantığı eski tam-okuma ile birebir.
 function clrDurumu(yol: string): "dotnet" | "native" | "pe-degil" {
+  let fd = -1;
   try {
-    const buf = readFileSync(yol);
-    if (buf.length < 0x40 || buf[0] !== 0x4d || buf[1] !== 0x5a) return "pe-degil"; // MZ yok
-    const peOff = buf.readUInt32LE(0x3c);
-    if (peOff + 24 > buf.length || buf.toString("latin1", peOff, peOff + 4) !== "PE\0\0") return "pe-degil";
-    const optBoyu = buf.readUInt16LE(peOff + 20);
+    const boy = statSync(yol).size;
+    fd = openSync(yol, "r");
+    // [off, off+len) aralığını oku; menzil dışıysa null.
+    const oku = (off: number, len: number): Buffer | null => {
+      if (off < 0 || off >= boy || len <= 0) return null;
+      const n = Math.min(len, boy - off);
+      const buf = Buffer.alloc(n);
+      let doldu = 0;
+      while (doldu < n) {
+        const k = readSync(fd, buf, doldu, n - doldu, off + doldu);
+        if (k <= 0) break;
+        doldu += k;
+      }
+      return doldu > 0 ? buf.subarray(0, doldu) : null;
+    };
+    const bas = oku(0, 0x40);
+    if (!bas || bas.length < 0x40 || bas[0] !== 0x4d || bas[1] !== 0x5a) return "pe-degil"; // MZ yok
+    const peOff = bas.readUInt32LE(0x3c);
+    // COFF(20) + optional sihri + DataDirectory[14] için tek pencere (280B yeter).
+    const pencere = oku(peOff, 280);
+    if (!pencere || pencere.length < 24 || pencere.subarray(0, 4).toString("latin1") !== "PE\0\0") return "pe-degil";
+    const optBoyu = pencere.readUInt16LE(20);
     const opt = peOff + 24;
-    if (optBoyu < 2 || opt + optBoyu > buf.length) return "native";
-    const magic = buf.readUInt16LE(opt);
+    if (optBoyu < 2 || opt + optBoyu > boy) return "native";
+    const magic = pencere.readUInt16LE(24);
     const dizinBas = magic === 0x20b ? opt + 112 : magic === 0x10b ? opt + 96 : -1; // PE32+ / PE32
     if (dizinBas < 0) return "native";
-    if (buf.readUInt32LE(dizinBas - 4) < 15) return "native"; // CLR girdisi (14) yok
-    return buf.readUInt32LE(dizinBas + 14 * 8) !== 0 ? "dotnet" : "native";
+    // dizinBas görece ofsetleri pencere içine çevir (pencere peOff'ta başlar).
+    const r32 = (mutlak: number): number | null => {
+      const g = mutlak - peOff;
+      return g >= 0 && g + 4 <= pencere.length ? pencere.readUInt32LE(g) : null;
+    };
+    const girdiSayisi = r32(dizinBas - 4);
+    if (girdiSayisi === null) return "pe-degil"; // eski kod menzil dışında fırlatırdı
+    if (girdiSayisi < 15) return "native"; // CLR girdisi (14) yok
+    const clrRva = r32(dizinBas + 14 * 8);
+    if (clrRva === null) return "pe-degil"; // eski kod menzil dışında fırlatırdı
+    return clrRva !== 0 ? "dotnet" : "native";
   } catch {
     return "pe-degil";
+  } finally {
+    if (fd >= 0) { try { closeSync(fd); } catch { /* kapanmış */ } }
   }
 }
 
@@ -73,4 +106,152 @@ export function rea_dotnet_cil(dllYolu: string, tipFiltre?: string) {
   } catch (e) {
     return { ok: false as const, code: "capability_unsupported", neden: `CIL okunamadı: ${(e as Error)?.message ?? e}` };
   }
+}
+
+// --- Unity IL2CPP derinliği: global-metadata.dat saf TS başlık okuma (yürütme yok) ---
+// Başlık düzeni (v16+ sabit ofsetler, LE u32): sürüm@4, methods sayı@52,
+// typeDefinitions sayı@164, images sayı@172, assemblies sayı@180.
+const IL2CPP_SIHIR = 0xfab11baf;
+const IL2CPP_BASLIK_ENAZ = 216;
+function il2cppKapi(neden: string) {
+  return { ok: false as const, code: "capability_unsupported" as const, neden };
+}
+// Dış araç kapısı: önce env yolu, yoksa PATH (where/which). Çalıştırma yok, yalnız konum.
+function disAracBul(envAd: string, adaylar: string[]): string | null {
+  const ozel = process.env[envAd];
+  if (ozel) return existsSync(ozel) ? ozel : null;
+  const prob = process.platform === "win32" ? "where" : "which";
+  for (const bin of adaylar) {
+    try {
+      const r = spawnSync(prob, [bin], { stdio: "ignore", timeout: 5000 });
+      if (r.status === 0) return bin;
+    } catch { /* sonraki aday */ }
+  }
+  return null;
+}
+// Metadata sayımı: sınıf (TypeDefinition) + metod (MethodDef) başlık sayıları.
+export function rea_il2cpp_metadata(datYolu: string) {
+  if (!existsSync(datYolu)) return il2cppKapi(`Dosya yok: ${datYolu}`);
+  // KRİTİK: yalnız başlık penceresi okunur (216B); ofset tutarlılığı stat boyuna göre.
+  let bas: Buffer;
+  let boy = 0;
+  let fd = -1;
+  try {
+    boy = statSync(datYolu).size;
+    if (boy < IL2CPP_BASLIK_ENAZ) return il2cppKapi("başlık çok kısa (global-metadata.dat değil?)");
+    fd = openSync(datYolu, "r");
+    bas = Buffer.alloc(IL2CPP_BASLIK_ENAZ);
+    let doldu = 0;
+    while (doldu < IL2CPP_BASLIK_ENAZ) {
+      const k = readSync(fd, bas, doldu, IL2CPP_BASLIK_ENAZ - doldu, doldu);
+      if (k <= 0) break;
+      doldu += k;
+    }
+    if (doldu < IL2CPP_BASLIK_ENAZ) return il2cppKapi("başlık çok kısa (global-metadata.dat değil?)");
+  } catch { return il2cppKapi(`Dosya okunamadı: ${datYolu}`); }
+  finally { if (fd >= 0) { try { closeSync(fd); } catch { /* kapanmış */ } } }
+  const buf = bas;
+  if (buf.readUInt32LE(0) !== IL2CPP_SIHIR) return il2cppKapi("global-metadata.dat sihri yok (FAB11BAF bulunamadı)");
+  const surum = buf.readUInt32LE(4);
+  const metodOfset = buf.readUInt32LE(48);
+  const metodSayisi = buf.readUInt32LE(52);
+  const sinifOfset = buf.readUInt32LE(160);
+  const sinifSayisi = buf.readUInt32LE(164);
+  const goruntuSayisi = buf.readUInt32LE(172);
+  const assemblySayisi = buf.readUInt32LE(180);
+  // Tutarlılık: ofsetler dosya içinde, sayılar makul aralıkta olmalı.
+  const sayilar = [metodSayisi, sinifSayisi, goruntuSayisi, assemblySayisi];
+  if (!sayilar.every((n) => n <= 50_000_000)) return il2cppKapi("sayılar tutarsız (aşırı büyük sayaç)");
+  if (metodOfset >= boy || sinifOfset >= boy) return il2cppKapi("ofsetler tutarsız (dosya dışında)");
+  return {
+    ok: true as const, arac: "rea_il2cpp_metadata", dosya: datYolu, surum,
+    sinifSayisi, metodSayisi, goruntuSayisi, assemblySayisi,
+    ozet: `v${surum} sinif=${sinifSayisi} metod=${metodSayisi}`,
+    not: "salt-okunur başlık sayımı, yürütme yok",
+  };
+}
+// Il2CppDumper: araç yoksa dürüst kapı + kurulum ipucu; varsa timeout'lu gerçek çağrı.
+export function rea_il2cpp_dump(metaYolu: string, assemblyYolu?: string) {
+  if (!existsSync(metaYolu)) return il2cppKapi(`Dosya yok: ${metaYolu}`);
+  const arac = disAracBul("REA_IL2CPPDUMPER_BIN", ["Il2CppDumper", "il2cppdumper"]);
+  if (!arac) return il2cppKapi("Il2CppDumper yok (kurulum: https://github.com/Perfare/Il2CppDumper ; bulunan exe yolunu REA_IL2CPPDUMPER_BIN ile ver)");
+  if (!assemblyYolu || !existsSync(assemblyYolu)) return il2cppKapi("GameAssembly gerekli (libil2cpp.so/GameAssembly.dll yolu ikinci argüman olmalı)");
+  const cikti = mkdtempSync(join(tmpdir(), "il2cpp-dump-"));
+  try {
+    const log = execFileSync(arac, [assemblyYolu, metaYolu, cikti], { encoding: "utf8", timeout: 60000, maxBuffer: 8 * 1024 * 1024 });
+    const dosyalar = readdirSync(cikti);
+    return { ok: true as const, arac: "rea_il2cpp_dump", dosya: metaYolu, cikti, dosyaSayisi: dosyalar.length, ozet: `${dosyalar.length} döküm dosyası`, log: String(log).slice(-2000) };
+  } catch (e) {
+    return il2cppKapi(`Il2CppDumper çalışmadı: ${(e as Error)?.message ?? e}`);
+  }
+}
+
+// --- IL2CPP method imzaları: string tablosu + method girdisi eşlemesi (saf TS) ---
+// Düzen (Perfare/Il2CppDumper MetadataClass.cs alan sırası): method girdisi
+// nameIndex, declaringType, returnType, parameterStart, genericContainerIndex,
+// token, flags, iflags, slot, parameterCount = 5*u32 + u32 + 4*u16 = 32 bayt;
+// bu sıra sürüm 25-30 aralığında sabittir (24.1 ve altında ek alanlar, 31+ da
+// returnParameterToken vardır). Başlıkta string tablosu @24/@28, methods @48/@52.
+// Ad, string tablosundaki nameIndex karşılığıdır; tam prototip (dönüş/parametre
+// tip adları) için Il2CppDumper gerekir — bu sınır `not` alanında belirtilir.
+const IL2CPP_IMZA_SURUM_ENAZ = 25;
+const IL2CPP_IMZA_SURUM_ENCOK = 30;
+const IL2CPP_METHOD_GIRDI = 32;
+
+export interface Il2cppImza { ad: string; nameIndex: number; declaringType: number; returnType: number }
+
+export function rea_il2cpp_methods(datYolu: string, limit = 200) {
+  const meta = rea_il2cpp_metadata(datYolu);
+  if (!meta.ok) return meta;
+  const surum = meta.surum;
+  const metodSayisi = meta.metodSayisi;
+  const bos = (imzalar: Il2cppImza[], sinirli: boolean, not: string) => ({
+    ok: true as const, arac: "rea_il2cpp_methods", dosya: datYolu, surum, metodSayisi,
+    imzalar, imzaSayisi: imzalar.length, sinirli, not,
+  });
+  if (surum < IL2CPP_IMZA_SURUM_ENAZ || surum > IL2CPP_IMZA_SURUM_ENCOK) {
+    return bos([], true,
+      `sürüm ${surum} imza düzeni desteklenmiyor (destek: ${IL2CPP_IMZA_SURUM_ENAZ}-${IL2CPP_IMZA_SURUM_ENCOK}; sınırlı: yalnız sayı; tam döküm için Il2CppDumper)`);
+  }
+  let buf: Buffer;
+  try { buf = readFileSync(datYolu); }
+  catch { return il2cppKapi(`Dosya okunamadı: ${datYolu}`); }
+  const dv = new DataView(buf.buffer, buf.byteOffset, buf.byteLength);
+  const u32 = (o: number): number | null =>
+    (o >= 0 && o + 4 <= buf.length ? dv.getUint32(o, true) : null);
+  const strOff = u32(24);
+  const strBoy = u32(28);
+  const metOff = u32(48);
+  if (strOff === null || strBoy === null || metOff === null) return il2cppKapi("başlık penceresi okunamadı");
+  if (strBoy > 200_000_000) return il2cppKapi("string tablosu tutarsız (aşırı büyük)");
+  if (strOff + strBoy > buf.length) {
+    return bos([], true, "string tablosu dosya dışında (sınırlı: yalnız sayı; tam döküm için Il2CppDumper)");
+  }
+  if (metOff + metodSayisi * IL2CPP_METHOD_GIRDI > buf.length) {
+    return bos([], true, "method tablosu dosya dışında (sınırlı: yalnız sayı; tam döküm için Il2CppDumper)");
+  }
+  const lim = Math.max(0, limit);
+  const imzalar: Il2cppImza[] = [];
+  let cozulemeyen = 0;
+  const n = Math.min(metodSayisi, lim);
+  for (let i = 0; i < n; i++) {
+    const o = metOff + i * IL2CPP_METHOD_GIRDI;
+    const adEndeksi = dv.getUint32(o, true);
+    if (adEndeksi >= strBoy) { cozulemeyen++; continue; }
+    const bas = strOff + adEndeksi;
+    let bit = bas;
+    const son = Math.min(bas + 512, strOff + strBoy);
+    while (bit < son && buf[bit] !== 0) bit++;
+    if (bit >= son || bit === bas) { cozulemeyen++; continue; }
+    imzalar.push({
+      ad: buf.subarray(bas, bit).toString("utf8"),
+      nameIndex: adEndeksi,
+      declaringType: dv.getInt32(o + 4, true),
+      returnType: dv.getInt32(o + 8, true),
+    });
+  }
+  const arac = disAracBul("REA_IL2CPPDUMPER_BIN", ["Il2CppDumper", "il2cppdumper"]);
+  const sonuc = bos(imzalar, false,
+    "string tablosu + method nameIndex eşlemesi (saf okuma); tam prototip (dönüş/parametre tip adları) için Il2CppDumper");
+  return { ...sonuc, cozulemeyen, il2cppdumper: arac === null ? "yok" : "var" };
 }

@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="ReaPlus technical documentation: install, tool reference, examples, roadmap.">
+<title>Prompt Library — ReaPlus Docs</title>
+<script>try{var t=localStorage.getItem("reaplus-tema");if(!t){t=window.matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light";}document.documentElement.dataset.theme=t;}catch(e){}</script>
+<style>:root{color-scheme:light;--zemin:#F6F6F3;--yuzey:#FCFCFA;--metin:#1D1F24;--silik:#5A6270;--sinir:#DFDFD6;--vurgu:#2E6B4E;--vurgu-arka:#E4EFE8;--kod-zemin:#EBEBE4;--golge:rgba(23,28,24,.08)}[data-theme="light"]{color-scheme:light;--zemin:#F6F6F3;--yuzey:#FCFCFA;--metin:#1D1F24;--silik:#5A6270;--sinir:#DFDFD6;--vurgu:#2E6B4E;--vurgu-arka:#E4EFE8;--kod-zemin:#EBEBE4;--golge:rgba(23,28,24,.08)}[data-theme="dark"]{color-scheme:dark;--zemin:#15181D;--yuzey:#1D2229;--metin:#E9E7E1;--silik:#A7B0BC;--sinir:#2F3742;--vurgu:#7BC9A2;--vurgu-arka:#1D3328;--kod-zemin:#232A33;--golge:rgba(8,10,12,.45)}@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){color-scheme:dark;--zemin:#15181D;--yuzey:#1D2229;--metin:#E9E7E1;--silik:#A7B0BC;--sinir:#2F3742;--vurgu:#7BC9A2;--vurgu-arka:#1D3328;--kod-zemin:#232A33;--golge:rgba(8,10,12,.45)}}*{box-sizing:border-box}html{-webkit-text-size-adjust:100%}body{margin:0;background:var(--zemin);color:var(--metin);font-family:system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;line-height:1.65}h1,h2,h3,.marka-ad{font-family:"Avenir Next","Segoe UI",system-ui,-apple-system,"Helvetica Neue",Arial,sans-serif;letter-spacing:-.01em;line-height:1.25}.sarmal{max-width:62rem;margin:0 auto;padding:0 1.25rem 3rem}.atla{position:absolute;left:-999px;top:0;background:var(--vurgu);color:var(--zemin);padding:.5rem 1rem;z-index:10}.atla:focus{left:0}.ust{display:flex;flex-wrap:wrap;align-items:center;gap:.6rem 1rem;padding:1rem 0;border-bottom:1px solid var(--sinir)}.marka-ad{font-weight:650;font-size:1.05rem}.marka-alt{color:var(--silik);font-size:.84rem;margin-left:.6rem}.gezinme{display:flex;flex-wrap:wrap;gap:.15rem .9rem;font-size:.92rem}.gezinme a{color:var(--silik);text-decoration:none;border-bottom:1px solid transparent}.gezinme a:hover{color:var(--metin);border-bottom-color:var(--vurgu)}.dil{display:flex;gap:.35rem;font-size:.8rem;color:var(--silik)}.dil a{color:var(--silik);text-decoration:none}.dil a:hover{color:var(--vurgu)}.dil strong{color:var(--metin)}#tema-toggle{margin-left:auto;font:inherit;font-size:.85rem;color:var(--metin);background:var(--yuzey);border:1px solid var(--sinir);border-radius:999px;padding:.32rem .85rem;cursor:pointer;transition:background-color .2s ease,border-color .2s ease}#tema-toggle:hover{border-color:var(--vurgu)}.ozet{margin:1.5rem 0 0;background:var(--yuzey);border:1px solid var(--sinir);border-radius:.6rem;padding:1rem 1.25rem}.ozet-metin{margin:0 0 .8rem;font-size:.92rem;color:var(--silik)}.istatistik{display:grid;grid-template-columns:repeat(auto-fit,minmax(8.5rem,1fr));gap:.6rem;margin:0}.istatistik div{border-top:2px solid var(--vurgu);padding-top:.45rem}.istatistik dt{font-size:.74rem;text-transform:uppercase;letter-spacing:.06em;color:var(--silik)}.istatistik dd{margin:.15rem 0 0;font-size:1.35rem;font-weight:650;font-variant-numeric:tabular-nums}#icerik{margin-top:1.5rem}#icerik a{color:var(--vurgu);text-decoration:underline;text-underline-offset:.15em}#icerik a:hover{text-decoration-thickness:2px}pre{background:var(--kod-zemin);border:1px solid var(--sinir);border-radius:.5rem;padding:1rem;overflow:auto;font-size:.86rem}code{font-family:ui-monospace,"Cascadia Code","SF Mono",Consolas,Menlo,monospace;font-size:.88em;background:var(--kod-zemin);border-radius:.3rem;padding:.1em .35em}pre code{background:none;padding:0;border-radius:0}table{border-collapse:collapse;width:100%;font-size:.9rem}th,td{border:1px solid var(--sinir);padding:.45rem .6rem;text-align:left;vertical-align:top}thead th{background:var(--yuzey)}blockquote{margin:1rem 0;padding:.6rem 1rem;border-left:3px solid var(--vurgu);background:var(--yuzey);color:var(--silik)}hr{border:none;border-top:1px solid var(--sinir);margin:1.75rem 0}img{max-width:100%}#arama{font:inherit;color:var(--metin);background:var(--yuzey);border:1px solid var(--sinir);border-radius:.5rem;padding:.5rem .8rem;width:min(22rem,100%)}#sonuclar{list-style:none;margin:.8rem 0 0;padding:0;display:grid;gap:.4rem}#sonuclar li{background:var(--yuzey);border:1px solid var(--sinir);border-radius:.5rem;padding:.5rem .8rem}.altbilgi{margin-top:2.5rem;padding-top:1rem;border-top:1px solid var(--sinir);color:var(--silik);font-size:.85rem}.js .reveal{opacity:0;transform:translateY(10px);transition:opacity .45s ease,transform .45s ease}.js .reveal.gorunur{opacity:1;transform:none}:focus-visible{outline:.16rem solid var(--vurgu);outline-offset:.18rem;border-radius:.25rem}::selection{background:var(--vurgu);color:var(--zemin)}@media (prefers-reduced-motion: reduce){.js .reveal{opacity:1;transform:none;transition:none}*{animation:none;transition:none}}@media (max-width:40rem){.sarmal{padding:0 1rem 2.5rem}#tema-toggle{margin-left:0}.istatistik{grid-template-columns:repeat(2,1fr)}table{font-size:.82rem}th,td{padding:.35rem .45rem}}@media (max-width:26rem){.istatistik{grid-template-columns:1fr}}</style>
+</head>
+<body>
+<div class="sarmal">
+<a class="atla" href="#icerik">Skip to content</a>
+<header class="ust">
+<div class="marka"><span class="marka-ad">ReaPlus Docs</span><span class="marka-alt">reverse engineering work surface</span></div>
+<nav class="gezinme" aria-label="Site"><a href="index.html">Home</a> · <a href="readme.html">README</a> · <a href="tools.html">Tool Reference</a> · <a href="examples.html">Examples</a> · <a href="roadmap.html">Roadmap</a> · <a href="changelog.html">Changelog</a> · <strong>Prompt Library</strong></nav>
+<nav id="dil" class="dil" aria-label="Language"><a href="../prompts.html" hreflang="tr">TR</a> · <strong aria-current="true">EN</strong> · <a href="../de/prompts.html" hreflang="de">DE</a> · <a href="../fr/prompts.html" hreflang="fr">FR</a> · <a href="../es/prompts.html" hreflang="es">ES</a></nav>
+<button id="tema-toggle" type="button" aria-pressed="false">Dark theme</button>
+</header>
+<section class="ozet reveal" aria-label="Surface summary">
+<p class="ozet-metin">Surface summary (real run, TOOLS.md): 191 tools · 187 outputSchema · 191 annotations · 2 resources · 7 prompts</p>
+<dl class="istatistik"><div><dt>tools</dt><dd><span class="sayi" data-sayi="191">191</span></dd></div><div><dt>outputSchema</dt><dd><span class="sayi" data-sayi="187">187</span></dd></div><div><dt>annotations</dt><dd><span class="sayi" data-sayi="191">191</span></dd></div><div><dt>resources</dt><dd><span class="sayi" data-sayi="2">2</span></dd></div><div><dt>prompts</dt><dd><span class="sayi" data-sayi="7">7</span></dd></div></dl>
+</section>
+<main id="icerik"><div class="reveal">
+<h1>Prompt Library</h1>
+<h1 id="reaplus-prompt-library-10-ready-made-prompts">ReaPlus Prompt Library (10 ready-made prompts)</h1>
+<p>10 ready-made question patterns for an agent to ask rea-plus. Each prompt:
+<strong>Goal</strong> + <strong>Sample call</strong> (real MCP/<code>rea-plus-cli</code> form; field names match
+the generated reference <a href="tools.html"><code>TOOLS.md</code></a>) + <strong>Expected output</strong> kind.
+Surface: <strong>191 tools</strong>, <strong>187 outputSchemas</strong>, <strong>191 annotations</strong>, 2
+resources, 7 prompts.</p>
+<blockquote>Note: live-debug calls requiring <code>confirm:true</code> are not in this list; all
+10 prompts here are read-only/static flows.</blockquote>
+<h2 id="1-triage--what-is-this-file-where-do-i-start">1) Triage — &quot;what is this file, where do I start?&quot;</h2>
+<p><strong>Goal:</strong> Classify an unknown file in one call and get the next-step plan.</p>
+<p><strong>Sample call:</strong></p>
+<pre><code class="language-json">{ &quot;name&quot;: &quot;rea_investigate&quot;, &quot;arguments&quot;: { &quot;path&quot;: &quot;sample.exe&quot; } }</code></pre>
+<p><strong>Expected output:</strong> object with <code>ok/plan/skor/tip/motor/yedekler</code> fields
+(<code>outputSchema</code> fields: <code>arac, motor, ok, plan, skor, tip, yedekler</code>); type
+(pe/elf/apk/…), confidence score, and suggested engine + fallback plan list.</p>
+<h2 id="2-manifest--what-are-this-apks-package-permissions-activities">2) Manifest — &quot;what are this APK's package, permissions, activities?&quot;</h2>
+<p><strong>Goal:</strong> Resolve the APK's <code>AndroidManifest.xml</code> identity with jadx.</p>
+<p><strong>Sample call:</strong></p>
+<pre><code class="language-bash">node -e &quot;import('./dist/rea-domains/android/JadxBridge.js').then(m=&gt;console.log(JSON.stringify(m.rea_jadx_manifest('tests/corpus/sahte.apk'))))&quot;</code></pre>
+<p><strong>Expected output:</strong> object with <code>ok/paket/izinler/aktiviteler</code> fields;
+without jadx, <code>capability_unsupported</code> + install hint instead of a fabricated
+manifest.</p>
+<h2 id="3-behavior--lay-events-on-a-timeline">3) Behavior — &quot;lay events on a timeline&quot;</h2>
+<p><strong>Goal:</strong> Produce a source-priority summary from API/syscall/net/file/process
+events (no execution, pure function).</p>
+<p><strong>Sample call:</strong></p>
+<pre><code class="language-bash">node -e &quot;import('./dist/rea-domains/behavior/BehaviorTimeline.js').then(m=&gt;console.log(m.rea_behavior_timeline([
+ {\&quot;kaynak\&quot;:\&quot;api\&quot;,\&quot;zaman\&quot;:3,\&quot;detay\&quot;:\&quot;CreateFileW\&quot;},
+ {\&quot;kaynak\&quot;:\&quot;net\&quot;,\&quot;zaman\&quot;:1,\&quot;detay\&quot;:\&quot;dns:ornek.test\&quot;},
+ {\&quot;kaynak\&quot;:\&quot;api\&quot;,\&quot;zaman\&quot;:2,\&quot;detay\&quot;:\&quot;CreateFileW\&quot;},
+ {\&quot;kaynak\&quot;:\&quot;process\&quot;,\&quot;zaman\&quot;:4,\&quot;detay\&quot;:\&quot;exit:0\&quot;}
+]).summary))&quot;</code></pre>
+<p><strong>Expected output:</strong> Text summary (in the
+<code>4 olay api@2 -&gt; process@4 top_api=CreateFileW</code> form) +
+<code>sıralı/sayılar/top_api/ilk/son</code> details; <code>capability_unsupported</code> on an
+empty list.</p>
+<h2 id="4-repo--what-kinds-of-files-are-in-this-directory">4) Repo — &quot;what kinds of files are in this directory?&quot;</h2>
+<p><strong>Goal:</strong> Detect PE/ELF/APK/JS/WASM files in a directory via magic bytes and
+get a per-file next-tool plan.</p>
+<p><strong>Sample call:</strong></p>
+<pre><code class="language-json">{ &quot;name&quot;: &quot;rea_scan_repo&quot;, &quot;arguments&quot;: { &quot;path&quot;: &quot;&lt;target-dir&gt;&quot; } }</code></pre>
+<p><strong>Expected output:</strong> <code>summary</code> text (in the <code>5 dosya, 5 tip …</code> form) +
+<code>details.tipler</code> counts + <code>details.planlar</code> (file → suggested engine); empty
+list for a targetless directory (<code>ok:true</code>).</p>
+<h2 id="5-pdb--go-from-debug-record-to-symbols">5) PDB — &quot;go from debug record to symbols&quot;</h2>
+<p><strong>Goal:</strong> Resolve the PDB identity from the PE's CodeView RSDS record,
+download in Microsoft symbol server layout (integrity-checked + cached).</p>
+<p><strong>Sample call:</strong></p>
+<pre><code class="language-bash">node -e &quot;import('./dist/rea-domains/typedef/PdbReader.js').then(m=&gt;console.log(JSON.stringify(m.rea_pdb_yolu('&lt;debug-info.exe&gt;'))))&quot;</code></pre>
+<p><strong>Expected output:</strong> in step 1, <code>pdb/guid/yas</code> (<code>rea_pdb_yolu</code> fields:
+<code>arac, dosya, guid, ok, pdb, yas</code>); in step 2, a
+<code>Ad/GUID-tiresiz+YAŞ/Ad</code>-layout URL with <code>yol/cache</code> info (<code>rea_pdb_indir</code>
+fields: <code>arac, cache, dosya, guid, ok, pdb, url, yas, yol</code>);
+<code>butunluk_hatasi</code> on corrupt content, <code>cache:true</code> on the second call.</p>
+<h2 id="6-diff--what-is-the-function-diff-between-two-versions">6) Diff — &quot;what is the function diff between two versions?&quot;</h2>
+<p><strong>Goal:</strong> Compare two binary versions' function lists and get the
+added/removed/changed/unchanged sets (N-day review input).</p>
+<p><strong>Sample call:</strong></p>
+<pre><code class="language-json">{ &quot;name&quot;: &quot;rea_bindiff_karsilastir&quot;, &quot;arguments&quot;: { &quot;text&quot;: &quot;&lt;rea_bindiff_fonksiyonlar output&gt;&quot; } }</code></pre>
+<p><strong>Expected output:</strong> object with
+<code>aynen/cikarilan/degisen/eklenen/eski/yeni/istatistik/ozet</code> fields; the input
+is <code>rea_bindiff_fonksiyonlar</code> (<code>path</code> required) output.</p>
+<h2 id="7-pcap--which-streams-are-in-this-capture-does-tls-decrypt">7) Pcap — &quot;which streams are in this capture, does TLS decrypt?&quot;</h2>
+<p><strong>Goal:</strong> Reassemble the streams in a PCAP file; decrypt TLS content if a
+keylog is present.</p>
+<p><strong>Sample call:</strong></p>
+<pre><code class="language-json">{ &quot;name&quot;: &quot;rea_pcap_oku&quot;, &quot;arguments&quot;: { &quot;path&quot;: &quot;ornek.pcap&quot; } }</code></pre>
+<p>With keylog:</p>
+<pre><code class="language-json">{ &quot;name&quot;: &quot;rea_pcap_oku&quot;, &quot;arguments&quot;: { &quot;path&quot;: &quot;ornek.pcap&quot;, &quot;keylog&quot;: &quot;sslkeylog.txt&quot; } }</code></pre>
+<p><strong>Expected output:</strong> reassembled stream list inside <code>details/summary</code>
+(<code>outputSchema</code> present); <code>keylog</code> is optional — without it, meta-streams are
+returned with encrypted content undecrypted.</p>
+<h2 id="8-recipe--generate-and-validate-a-dynamic-analysis-plan-for-this-apk">8) Recipe — &quot;generate and validate a dynamic analysis plan for this APK&quot;</h2>
+<p><strong>Goal:</strong> Generate a dry-validated dynamic analysis recipe from an APK path
+(no execution, plan + validation).</p>
+<p><strong>Sample call:</strong></p>
+<pre><code class="language-json">{ &quot;name&quot;: &quot;rea_android_dinamik_recete&quot;, &quot;arguments&quot;: { &quot;path&quot;: &quot;ornek.apk&quot; } }</code></pre>
+<p>Then, with the recipe text:</p>
+<pre><code class="language-json">{ &quot;name&quot;: &quot;rea_android_recete_dogrula&quot;, &quot;arguments&quot;: { &quot;text&quot;: &quot;&lt;recipe-text&gt;&quot; } }</code></pre>
+<p><strong>Expected output:</strong> the first returns an object with a <code>recete</code> field; the
+second a validation result with <code>adim_sayisi/ok</code> fields.</p>
+<h2 id="9-fuzz--do-parsers-survive-malformed-input">9) Fuzz — &quot;do parsers survive malformed input?&quot;</h2>
+<p><strong>Goal:</strong> Feed malformed input to PE/ELF/WASM/metadata parsers from corpus
+seeds and scan for crashes/exceptions (writes go to tmpdir only).</p>
+<p><strong>Sample call:</strong></p>
+<pre><code class="language-bash">node scripts/fuzz-parsers.mjs</code></pre>
+<p><strong>Expected output:</strong> console summary (seed count, crashed-input list; zero
+crashes on a clean run) + green <code>tests/parser-fuzz.test.mjs</code>; corpus
+(<code>tests/corpus/</code>) stays read-only.</p>
+<h2 id="10-perf--do-the-liststartup-budgets-hold">10) Perf — &quot;do the list/startup budgets hold?&quot;</h2>
+<p><strong>Goal:</strong> Measure <code>tools/list</code> response-time + server startup-time budgets,
+catch regressions via test.</p>
+<p><strong>Sample call:</strong></p>
+<pre><code class="language-bash">node tests/perf-budget.test.mjs</code></pre>
+<p><strong>Expected output:</strong> node:test output (budget thresholds defined in
+<code>tests/perf-budget.test.mjs</code>); a threshold breach turns the test red,
+durations are reported in milliseconds on the console.</p>
+</div></main>
+<footer class="altbilgi"><p>ReaPlus Docs — static site. Generate: <code>node scripts/site-uret.mjs</code> · Numbers from docs/TOOLS.md summary (real run).</p></footer>
+</div>
+<script>
+document.documentElement.classList.add("js");
+(function(){var k="reaplus-tema";var d=document.getElementById("tema-toggle");
+function uygula(t){document.documentElement.dataset.theme=t;try{localStorage.setItem(k,t);}catch(e){}if(d){d.setAttribute("aria-pressed",String(t==="dark"));d.textContent=t==="dark"?"Light theme":"Dark theme";}}
+if(d){d.addEventListener("click",function(){uygula(document.documentElement.dataset.theme==="dark"?"light":"dark");});
+if(document.documentElement.dataset.theme){d.setAttribute("aria-pressed",String(document.documentElement.dataset.theme==="dark"));d.textContent=document.documentElement.dataset.theme==="dark"?"Light theme":"Dark theme";}}
+var azalt=window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+var beliren=document.querySelectorAll(".reveal");
+if(azalt||!("IntersectionObserver" in window)){beliren.forEach(function(el){el.classList.add("gorunur");});}
+else{var gozcu=new IntersectionObserver(function(girdiler){girdiler.forEach(function(g){if(g.isIntersecting){g.target.classList.add("gorunur");gozcu.unobserve(g.target);}});},{threshold:.12,rootMargin:"0px 0px -8% 0px"});beliren.forEach(function(el){gozcu.observe(el);});}
+var sayilar=document.querySelectorAll(".sayi");
+function bitir(el){el.textContent=el.getAttribute("data-sayi");}
+if(azalt||!("IntersectionObserver" in window)){sayilar.forEach(bitir);}
+else{var sayac=new IntersectionObserver(function(girdiler){girdiler.forEach(function(g){if(!g.isIntersecting)return;var el=g.target;sayac.unobserve(el);var hedef=Number(el.getAttribute("data-sayi"));if(!isFinite(hedef))return;var baslangic=null;var sure=850;function kare(t){if(baslangic===null)baslangic=t;var oran=Math.min(1,(t-baslangic)/sure);var yumru=1-Math.pow(1-oran,3);el.textContent=String(Math.round(hedef*yumru));if(oran<1){requestAnimationFrame(kare);}else{bitir(el);}}requestAnimationFrame(kare);});},{threshold:.4});sayilar.forEach(function(el){sayac.observe(el);});}
+})();
+</script>
+</body>
+</html>

@@ -12,7 +12,7 @@
 //   node scripts/generate-tool-reference.mjs --stdout  -> Markdown'i stdout'a basar
 // On kosul: npm run build (dist/server.js yoksa acik hatayla cikilir).
 import { spawn, spawnSync } from "node:child_process";
-import { existsSync, readFileSync, writeFileSync } from "node:fs";
+import { existsSync, readFileSync, realpathSync, writeFileSync } from "node:fs";
 import { homedir } from "node:os";
 import { dirname, join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
@@ -322,8 +322,11 @@ async function main(argv) {
   return 0;
 }
 
-const anaDosya = process.argv[1] ? resolve(process.argv[1]) : "";
-if (anaDosya === fileURLToPath(import.meta.url)) {
+// argv ile import.meta.url ayni dosyayi farkli gecitten (junction/subst) gosterir;
+// realpath karsilastirmasi CLI girisini yol haritelerinden bagimsiz kil.
+const gercekYol = (p) => { try { return realpathSync(p); } catch { return p; } };
+const anaDosya = process.argv[1] ? gercekYol(resolve(process.argv[1])) : "";
+if (anaDosya && anaDosya === gercekYol(fileURLToPath(import.meta.url))) {
   main(process.argv.slice(2)).then(
     (code) => { process.exitCode = code; },
     (e) => { console.error(String(e?.message ?? e)); process.exitCode = 1; },

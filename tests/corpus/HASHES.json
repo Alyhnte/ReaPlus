@@ -26,6 +26,36 @@
       "sha256": "8cd8f7f06f06676e70cc60c3c8f578a6f7dab572d781a2d42487876e925cf487",
       "kaynak": "scripts/korpus-kur.mjs ile uretildi (deterministik)",
       "lisans": "bilinmiyor"
+    },
+    "mini.dex": {
+      "sha256": "57cfe8878be74cad8bbc5e409b0964d4b13c35e8783d931ef7366881f8d548c2",
+      "kaynak": "scripts/dex-fixture-uret.mjs ile uretildi (deterministik, sentetik minimal DEX)",
+      "lisans": "bilinmiyor"
+    },
+    "real_tiny.exe": {
+      "sha256": "7252eb460894ba325016b1241dee45eb1749a75cbecd122a923f1012f860da9b",
+      "kaynak": "tests/corpus/src/tiny_exit.c + scripts/corpus-gercek-derle.mjs ile yerel gcc ile derlendi (PE32+ x64, -Os -mwindows -s)",
+      "lisans": "MIT (bu depo)"
+    },
+    "real_tiny_console.exe": {
+      "sha256": "a621288f16f5843d33438440f1a35bd12bcc2ce4c9c84710440022a8baa9b277",
+      "kaynak": "tests/corpus/src/hello.c + scripts/corpus-gercek-derle.mjs ile yerel gcc ile derlendi (PE32+ x64, -O0)",
+      "lisans": "MIT (bu depo)"
+    },
+    "real_tiny_o2.exe": {
+      "sha256": "d09911cc6921b215407f8dd4d93b829c0674a136086e35bda5294f78fad9914c",
+      "kaynak": "tests/corpus/src/hello.c + scripts/corpus-gercek-derle.mjs ile yerel gcc ile derlendi (PE32+ x64, -O2)",
+      "lisans": "MIT (bu depo)"
+    },
+    "real_dll.dll": {
+      "sha256": "e011a2a592c28f31d128e90ad7c4427402c22a4c260f0366f59fd45b270bc79a",
+      "kaynak": "tests/corpus/src/dll_add.c + scripts/corpus-gercek-derle.mjs ile yerel gcc ile derlendi (PE32+ x64 DLL, -O2 -shared)",
+      "lisans": "MIT (bu depo)"
+    },
+    "real_tiny.obj": {
+      "sha256": "b8164b059b2727a4b363ccfa9d45966da01d05e50e318bcd4db9e5bb84ae1783",
+      "kaynak": "tests/corpus/src/tiny_exit.c + scripts/corpus-gercek-derle.mjs ile yerel gcc ile derlendi (COFF obj, -c -O2)",
+      "lisans": "MIT (bu depo)"
     }
   }
 }

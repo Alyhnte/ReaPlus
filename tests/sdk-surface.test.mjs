@@ -1,11 +1,11 @@
 // sdk-surface.test.mjs: derlenmis sunucu uzerinde gercek stdio JSON-RPC yuzeyi.
 // Kos: npm run build sonrasi `node --test tests/sdk-surface.test.mjs`.
-// Kapsam: initialize, tools/list (172), outputSchema dalga 1+2+3+4+D/2+E/1
-// (137 rea + 30 conduit = 167; semasiz yalniz 4 rea araci: string/dizi donen
+// Kapsam: initialize, tools/list (191), outputSchema dalga 1+2+3+4+D/2+E/1
+// (165 rea + 30 conduit = 191; semasiz yalniz 4 rea araci: string/dizi donen
 // best_motor + fallback ve hic ok:true uretmeyen process_compare +
 // pwn_elf_layout) + acik annotations kumeleri (rea: 81 readOnly, 24
 // destructive, 59 openWorld; conduit: 4 readOnly, 13 destructive, 26
-// openWorld; annotations tasiyan toplam 171/171), tools/call'da
+// openWorld; annotations tasiyan toplam 191/191), tools/call'da
 // structuredContent == text JSON. Yalniz deterministik/offline
 // araclar cagrilir; dosya gerektiren cagrilar tests/corpus fixture'larini
 // salt-okunur kullanir. Canli arac, ag, alt surec yoklamasi ve dosya yazma
@@ -97,7 +97,7 @@ describe("sdk yuzeyi (stdio JSON-RPC)", () => {
   before(async () => {
     const env = { ...process.env };
     delete env.REA_WORKSPACE_ROOT; // yol korumasi bu testin konusu degil
-    delete env.REA_TOOLSETS; // tam 172 arac yuzeyi bu testin konusu
+    delete env.REA_TOOLSETS; // tam 191 arac yuzeyi bu testin konusu
     cocuk = spawn(process.execPath, [join(kok, "dist", "server.js")], {
       cwd: kok,
       env,
@@ -135,9 +135,9 @@ describe("sdk yuzeyi (stdio JSON-RPC)", () => {
     }
   });
 
-  it("tools/list 172 arac dondurur", () => {
-    assert.equal(araclar.length, 172, `beklenen 172, gelen ${araclar.length}`);
-    assert.equal(new Set(araclar.map((a) => a.name)).size, 172, "arac adlari benzersiz olmali");
+  it("tools/list 191 arac dondurur", () => {
+    assert.equal(araclar.length, 191, `beklenen 191, gelen ${araclar.length}`);
+    assert.equal(new Set(araclar.map((a) => a.name)).size, 191, "arac adlari benzersiz olmali");
   });
 
   it("pilot araclar outputSchema ve readOnly annotations tasir", () => {
@@ -203,8 +203,8 @@ describe("sdk yuzeyi (stdio JSON-RPC)", () => {
       assert.equal(a.annotations?.openWorldHint, false, `${ad} openWorldHint false olmali`);
     }
     // Toplamlar dalga E/1 sonrasi degerlerdir; ayrinti dalga-4, dalga-D/2 ve dalga-E/1 testlerinde.
-    assert.equal(araclar.filter((a) => a.outputSchema).length, 168, "toplam outputSchema 168 olmali (138 rea + 30 conduit)");
-    assert.equal(araclar.filter((a) => a.annotations?.readOnlyHint === true).length, 85, "toplam readOnly 85 olmali (81 rea + 4 conduit)");
+    assert.equal(araclar.filter((a) => a.outputSchema).length, 187, "toplam outputSchema 187 olmali (161 rea + 30 conduit)");
+    assert.equal(araclar.filter((a) => a.annotations?.readOnlyHint === true).length, 104, "toplam readOnly 104 olmali (100 rea + 4 conduit)");
     assert.equal(araclar.filter((a) => a.annotations?.destructiveHint === true).length, 38, "toplam destructive 38 olmali (25 rea + 13 conduit)");
     assert.equal(araclar.filter((a) => a.annotations?.openWorldHint === true).length, 86, "toplam openWorld 86 olmali (60 rea + 26 conduit)");
   });
@@ -258,7 +258,7 @@ describe("sdk yuzeyi (stdio JSON-RPC)", () => {
     // annotations'siz arac kalmamistir (sema disi 4 rea araci da isaretlidir).
     const isaretsiz = araclar.filter((a) => a.name.startsWith("rea_") && !a.annotations).map((a) => a.name).sort();
     assert.deepEqual(isaretsiz, []);
-    assert.equal(araclar.filter((a) => a.annotations).length, 172, "annotations tasiyan toplam 172 olmali (142 rea + 30 conduit)");
+    assert.equal(araclar.filter((a) => a.annotations).length, 191, "annotations tasiyan toplam 191 olmali (161 rea + 30 conduit)");
     for (const ad of ["rea_process_compare", "rea_pwn_elf_layout"]) {
       const a = araclar.find((t) => t.name === ad);
       assert.equal(a.annotations?.readOnlyHint, true, `${ad} etkisiz kapi, readOnly olmali`);
@@ -292,8 +292,8 @@ describe("sdk yuzeyi (stdio JSON-RPC)", () => {
       assert.equal(a.annotations?.readOnlyHint, false, `${ad} harici arac/surec, readOnly olmamali`);
       assert.equal(a.annotations?.openWorldHint, true, `${ad} openWorld olmali`);
     }
-    assert.equal(araclar.filter((a) => a.outputSchema).length, 168, "toplam outputSchema 168 olmali (138 rea + 30 conduit)");
-    assert.equal(araclar.filter((a) => a.annotations).length, 172, "annotations toplami 172 olmali");
+    assert.equal(araclar.filter((a) => a.outputSchema).length, 187, "toplam outputSchema 187 olmali (161 rea + 30 conduit)");
+    assert.equal(araclar.filter((a) => a.annotations).length, 191, "annotations toplami 191 olmali");
   });
 
   it("dalga-D/2 kopru araclari outputSchema tasir; annotations kumeleri degismez", () => {
@@ -342,11 +342,11 @@ describe("sdk yuzeyi (stdio JSON-RPC)", () => {
     for (const ad of ["rea_best_motor", "rea_fallback", "rea_process_compare", "rea_pwn_elf_layout"]) {
       assert.equal(araclar.find((t) => t.name === ad)?.outputSchema, undefined, `${ad} outputSchema almamali`);
     }
-    assert.equal(araclar.filter((a) => a.outputSchema).length, 168, "toplam outputSchema 168 olmali (138 rea + 30 conduit)");
-    assert.equal(araclar.filter((a) => a.annotations).length, 172, "annotations toplami 172 olmali");
+    assert.equal(araclar.filter((a) => a.outputSchema).length, 187, "toplam outputSchema 187 olmali (161 rea + 30 conduit)");
+    assert.equal(araclar.filter((a) => a.annotations).length, 191, "annotations toplami 191 olmali");
   });
 
-  it("dalga-E/1 conduit motor araclari outputSchema tasir; toplam 167 olur", () => {
+  it("dalga-E/1 conduit motor araclari outputSchema tasir; toplam 187 olur", () => {
     // Onceki dalgalarda semasiz kalan 20 conduit araci: sekiller handler
     // govdesindeki ok:true literali + paylasilan motor arayuzlerinden
     // (x64dbg.ts ortak tipler, radare2.ts sonuc arayuzleri, dynamic_tools.ts
@@ -411,8 +411,8 @@ describe("sdk yuzeyi (stdio JSON-RPC)", () => {
     for (const ad of ["rea_best_motor", "rea_fallback", "rea_process_compare", "rea_pwn_elf_layout"]) {
       assert.equal(araclar.find((t) => t.name === ad)?.outputSchema, undefined, `${ad} outputSchema almamali`);
     }
-    assert.equal(araclar.filter((a) => a.outputSchema).length, 168, "toplam outputSchema 168 olmali (138 rea + 30 conduit)");
-    assert.equal(araclar.filter((a) => a.annotations).length, 172, "annotations toplami 172 olmali (142 rea + 30 conduit)");
+    assert.equal(araclar.filter((a) => a.outputSchema).length, 187, "toplam outputSchema 187 olmali (161 rea + 30 conduit)");
+    assert.equal(araclar.filter((a) => a.annotations).length, 191, "annotations toplami 191 olmali (161 rea + 30 conduit)");
   });
 
   it("yazanlar destructive, ag/cihaz/surec/harici araclar openWorld isaretli", () => {
@@ -591,11 +591,11 @@ describe("sdk yuzeyi (stdio JSON-RPC)", () => {
       ["rea_dos_com", { path: WASM }, (s) => assert.deepEqual(s.details, { boyut: 11, com: true })],
       ["rea_hopper_tara", { path: JS, desen: "selamla" }, (s) => { assert.equal(s.sayi, 3); assert.equal(s.eslesmeler[0].satir, 4); }],
       ["rea_ida_flirt", { path: JS }, (s) => { assert.equal(s.sayi, 0); assert.deepEqual(s.eslesmeler, []); }],
-      ["rea_fs_snapshot", { path: corpus }, (s) => assert.deepEqual(Object.keys(s["kayıt"].dosyalar).filter((f) => !["HASHES.json", "README.md"].includes(f)).sort(), ["mini_branch.elf", "mini_pe_x64.exe", "ornek.js", "ornek.wasm", "sahte.apk"])],
+      ["rea_fs_snapshot", { path: corpus }, (s) => assert.deepEqual(Object.keys(s["kayıt"].dosyalar).filter((f) => !["HASHES.json", "README.md"].includes(f)).sort(), ["mini.dex", "mini_branch.elf", "mini_pe_x64.exe", "ornek.js", "ornek.wasm", "real_dll.dll", "real_tiny.exe", "real_tiny.obj", "real_tiny_console.exe", "real_tiny_o2.exe", "sahte.apk", "src/dll_add.c", "src/hello.c", "src/tiny_exit.c"])],
       ["rea_js_require", { path: corpus }, (s) => assert.deepEqual(s.details.graf, { "ornek.js": ["node:path", "node:fs"] })],
       ["rea_js_export_shape", { path: JS }, (s) => { assert.deepEqual(s.details.fonksiyonlar, ["selamla"]); assert.equal(s.details.defaultVarMi, true); }],
       ["rea_investigate", { path: PE }, (s) => { assert.equal(s.tip, "pe"); assert.equal(s.motor, "cutter"); assert.equal(s.plan.length, 3); }],
-      ["rea_scan_repo", { path: corpus }, (s) => { const gercek = s.details.dosyalar.filter((d) => !["HASHES.json", "README.md"].includes((d.yol ?? "").split(/[\\/]/).pop())); assert.equal(gercek.length, 5); assert.deepEqual(s.details.tipler, { elf: 1, pe: 1, js: 1, wasm: 1, apk: 1 }); }],
+      ["rea_scan_repo", { path: corpus }, (s) => { const gercek = s.details.dosyalar.filter((d) => !["HASHES.json", "README.md"].includes((d.yol ?? "").split(/[\\/]/).pop())); assert.equal(gercek.length, 10); assert.deepEqual(s.details.tipler, { elf: 1, pe: 5, js: 1, wasm: 1, apk: 1, dex: 1 }); }],
     ];
     assert.equal(cagrilar.length, 28);
     let paket;

@@ -64,8 +64,10 @@ const OUTPUT_SCHEMAS: Readonly<Record<string, StandardSchemaWithJSON>> = {
     kalan: z.number(),
   }),
   // Dalga 2: facade saf hesaplar
-  // sniffBytes'in ok alani yoktur; tip/motor her kosulda dolu iki dizgidir.
-  rea_sniff: z.object({ tip: z.string(), motor: z.string() }),
+  // sniffBytes'in ok alani yoktur; tip/motor her kosulda dolu iki dizgidir;
+  // makine; >=20 baytlik ELF'te taninan e_machine veya PE'de ARMNT/ARM64 COFF
+  // machine icin dolar (opsiyonel; diger turlerde alan hic eklenmez).
+  rea_sniff: z.object({ tip: z.string(), motor: z.string(), makine: z.string().optional() }),
   // alternatif yalniz bazi araclarda doludur; bosken JSON'da alan hic yoktur.
   rea_missing_reason: z.object({
     eksik: z.string(),
@@ -475,6 +477,175 @@ const OUTPUT_SCHEMAS: Readonly<Record<string, StandardSchemaWithJSON>> = {
     summary: z.string(),
     izler: z.array(z.string()),
   }),
+  rea_flutter_snapshot: z.object({
+    ok: z.literal(true),
+    tool: z.string(),
+    summary: z.string(),
+    dartMi: z.literal(true),
+    tur: z.string(),
+    magic: z.array(z.string()),
+    izolasyon: z.object({ vm: z.boolean(), isolate: z.boolean(), talimat: z.boolean() }),
+    dartSurumu: z.string().nullable(),
+  }),
+  rea_flutter_blutter: z.object({
+    ok: z.literal(true),
+    tool: z.string(),
+    summary: z.string(),
+    izler: z.array(z.string()),
+  }),
+  rea_macho_info: z.object({
+    ok: z.literal(true),
+    tool: z.string(),
+    summary: z.string(),
+    details: z.object({
+      sihir: z.string().optional(),
+      cputype: z.number().optional(),
+      cpusubtype: z.number().optional(),
+      arch: z.string().optional(),
+      is64: z.boolean().optional(),
+      filetype: z.number().optional(),
+      filetype_ad: z.string().optional(),
+      ncmds: z.number().optional(),
+      sizeofcmds: z.number().optional(),
+      fat: z.boolean(),
+      nfat: z.number().optional(),
+      mimariler: z.array(z.unknown()).optional(),
+      sinirli: z.boolean(),
+      otool: z.unknown().optional(),
+    }),
+  }),
+  rea_macho_loads: z.object({
+    ok: z.literal(true),
+    tool: z.string(),
+    summary: z.string(),
+    details: z.object({
+      sihir: z.string(),
+      fat: z.boolean(),
+      arch: z.string().optional(),
+      mimariler: z.array(z.unknown()).optional(),
+      sayi: z.number(),
+      komutlar: z.array(z.unknown()),
+      sinirli: z.boolean(),
+    }),
+  }),
+  rea_macho_otool: z.object({
+    ok: z.literal(true),
+    tool: z.string(),
+    summary: z.string(),
+    details: z.object({ cikti: z.string(), satir: z.number() }),
+  }),
+  rea_macho_objc: z.object({
+    ok: z.literal(true),
+    tool: z.string(),
+    summary: z.string(),
+    details: z.object({
+      sihir: z.string().optional(),
+      arch: z.string().optional(),
+      objc: z.string(),
+      siniflar: z.array(z.string()),
+      sinifSayisi: z.number(),
+      kategoriler: z.array(z.string()),
+      kategoriSayisi: z.number(),
+      girisSayisi: z.number().optional(),
+      kategoriGirisSayisi: z.number().optional(),
+      cozulemeyen: z.number().optional(),
+      sinirli: z.boolean(),
+      classdump: z.unknown().optional(),
+      not: z.string(),
+    }),
+  }),
+  rea_macho_classdump: z.object({
+    ok: z.literal(true),
+    tool: z.string(),
+    summary: z.string(),
+    details: z.object({ cikti: z.string(), satir: z.number() }),
+  }),
+  rea_il2cpp_methods: z.object({
+    ok: z.literal(true),
+    arac: z.string(),
+    dosya: z.string(),
+    surum: z.number(),
+    metodSayisi: z.number(),
+    imzalar: z.array(z.unknown()),
+    imzaSayisi: z.number(),
+    sinirli: z.boolean(),
+    not: z.string(),
+  }),
+  rea_go_buildinfo: z.object({
+    ok: z.literal(true),
+    tool: z.string(),
+    summary: z.string(),
+    details: z.object({
+      buildid: z.string().nullable(),
+      goSurumu: z.string().nullable(),
+      modul: z.string().nullable(),
+      anaModul: z.unknown().nullable(),
+      moduller: z.array(z.unknown()),
+      modulSayisi: z.number(),
+      sinirli: z.boolean(),
+      not: z.string(),
+    }),
+  }),
+  rea_il2cpp_metadata: z.object({
+    ok: z.literal(true),
+    arac: z.string(),
+    dosya: z.string(),
+    surum: z.number(),
+    sinifSayisi: z.number(),
+    metodSayisi: z.number(),
+    goruntuSayisi: z.number(),
+    assemblySayisi: z.number(),
+    ozet: z.string(),
+    not: z.string(),
+  }),
+  rea_il2cpp_dump: z.object({
+    ok: z.literal(true),
+    arac: z.string(),
+    dosya: z.string(),
+    cikti: z.string(),
+    dosyaSayisi: z.number(),
+    ozet: z.string(),
+    log: z.string(),
+  }),
+  rea_go_funclines: z.object({
+    ok: z.literal(true),
+    tool: z.string(),
+    summary: z.string(),
+    details: z.object({
+      fonksiyonlar: z.array(z.string()),
+      dosyaSatir: z.array(z.string()),
+      esleme: z.array(z.object({ fonksiyon: z.string().nullable(), dosya: z.string(), satir: z.number() })),
+      eslemeNotu: z.string(),
+    }),
+  }),
+  rea_go_goresym: z.object({
+    ok: z.literal(true),
+    tool: z.string(),
+    summary: z.string(),
+    details: z.object({ cikti: z.string() }),
+  }),
+  rea_bindiff_fonksiyonlar: z.object({
+    ok: z.literal(true),
+    arac: z.string(),
+    dosya: z.string(),
+    bicim: z.enum(["pe", "elf"]),
+    sembollu: z.boolean(),
+    fonksiyonlar: z.array(z.unknown()),
+    sayi: z.number(),
+    istatistik: z.object({ okunanBayt: z.number(), azamiBellekBayt: z.number() }),
+  }),
+  rea_bindiff_karsilastir: z.object({
+    ok: z.literal(true),
+    arac: z.string(),
+    eski: z.string(),
+    yeni: z.string(),
+    eklenen: z.array(z.unknown()),
+    cikarilan: z.array(z.unknown()),
+    degisen: z.array(z.unknown()),
+    aynen: z.array(z.string()),
+    ozet: z.object({ eklenen: z.number(), cikarilan: z.number(), degisen: z.number(), aynen: z.number() }),
+    istatistik: z.object({ okunanBayt: z.number(), azamiBellekBayt: z.number() }),
+  }),
   rea_apple_macho: z.object({
     ok: z.literal(true),
     tool: z.string(),
@@ -486,6 +657,7 @@ const OUTPUT_SCHEMAS: Readonly<Record<string, StandardSchemaWithJSON>> = {
     }),
   }),
   // Iki anahtardan biri dolu olabilir; her biri tek basina null olabilir.
+  // anahtarTipleri katki alan: degerler ham metin (integer/real kayipsiz), opsiyoneldir.
   rea_apple_plist: z.object({
     ok: z.literal(true),
     tool: z.string(),
@@ -493,6 +665,9 @@ const OUTPUT_SCHEMAS: Readonly<Record<string, StandardSchemaWithJSON>> = {
     details: z.object({
       bundleId: z.string().nullable(),
       executable: z.string().nullable(),
+      anahtarTipleri: z
+        .record(z.string(), z.object({ tip: z.enum(["string", "integer", "real", "boolean"]), deger: z.string() }))
+        .optional(),
     }),
   }),
   rea_apple_bundle: z.object({
@@ -597,7 +772,20 @@ const OUTPUT_SCHEMAS: Readonly<Record<string, StandardSchemaWithJSON>> = {
     ok: z.literal(true),
     tool: z.string(),
     summary: z.string(),
-    details: z.object({ graf: z.record(z.string(), z.array(z.string())) }),
+    details: z.object({
+      graf: z.record(z.string(), z.array(z.string())),
+      cozumleme: z.record(
+        z.string(),
+        z.record(
+          z.string(),
+          z.object({
+            tur: z.enum(["relative", "builtin", "scoped", "bare", "url"]),
+            cozum: z.string().optional(),
+          }),
+        ),
+      ).optional(),
+      eksik: z.array(z.string()).optional(),
+    }),
   }),
   rea_js_export_shape: z.object({
     ok: z.literal(true),
@@ -607,6 +795,7 @@ const OUTPUT_SCHEMAS: Readonly<Record<string, StandardSchemaWithJSON>> = {
       fonksiyonlar: z.array(z.string()),
       siniflar: z.array(z.string()),
       defaultVarMi: z.boolean(),
+      cjsExportlar: z.array(z.string()).optional(),
     }),
   }),
   rea_investigate: z.object({
@@ -660,6 +849,51 @@ const OUTPUT_SCHEMAS: Readonly<Record<string, StandardSchemaWithJSON>> = {
         z.object({ dosya: z.string(), motor: z.string(), neden: z.string() }),
       ),
     }),
+  }),
+  rea_scan_repo_paralel: z.object({
+    ok: z.literal(true),
+    tool: z.string(),
+    summary: z.string(),
+    iptalEdildi: z.boolean(),
+    details: z.object({
+      dosyalar: z.array(
+        z.object({ yol: z.string(), tip: z.string(), motor: z.string() }),
+      ),
+      tipler: z.record(z.string(), z.number()),
+      planlar: z.array(
+        z.object({ dosya: z.string(), motor: z.string(), neden: z.string() }),
+      ),
+      hatalar: z.array(
+        z.object({ yol: z.string(), hata: z.string() }),
+      ),
+    }),
+  }),
+  rea_pcap_oku: z.object({
+    ok: z.literal(true),
+    tool: z.string(),
+    summary: z.string(),
+    details: z.object({
+      akisSayisi: z.number(),
+      paketSayisi: z.number(),
+      akislar: z.array(z.unknown()),
+      sinirli: z.boolean(),
+      tshark: z.boolean(),
+    }),
+  }),
+  rea_android_dinamik_recete: z.object({
+    ok: z.literal(true),
+    arac: z.string(),
+    recete: z.object({
+      surum: z.number(),
+      ad: z.string(),
+      calistirma: z.string(),
+      adimlar: z.array(z.unknown()),
+    }),
+  }),
+  rea_android_recete_dogrula: z.object({
+    ok: z.literal(true),
+    arac: z.string(),
+    adim_sayisi: z.number(),
   }),
   // Dalga 3: alt surec yoklayan ama basari sekli sabit kopruler (annotations'ta
   // openWorld; sema canli cagrida degil yalniz handler govdesinden dogrulandi)
@@ -717,10 +951,18 @@ const OUTPUT_SCHEMAS: Readonly<Record<string, StandardSchemaWithJSON>> = {
   rea_cutter_decompile: z.object({ ok: z.literal(true), arac: z.string(), hedef: z.string(), addr: z.string(), kaynak: z.enum(["pdc", "pdf"]), kod: z.string(), not: z.string().optional() }),
   rea_cutter_caps: z.object({ ok: z.literal(true), arac: z.string(), surum: z.string(), pdc: z.boolean() }),
   rea_apktool_decode: z.object({ ok: z.literal(true), arac: z.string(), apk: z.string(), ciktiDir: z.string() }),
-  rea_apktool_info: z.object({ ok: z.literal(true), arac: z.string(), surum: z.string() }),
+  // surumGozlem additive ve opsiyoneldir: metinsel gözlem (kanıt değil);
+  // satır parse edilemezse alan hiç üretilmez, eski şekil aynen geçerli kalır.
+  rea_apktool_info: z.object({
+    ok: z.literal(true), arac: z.string(), surum: z.string(),
+    surumGozlem: z.object({ ham: z.string(), sayisal: z.string().optional() }).optional(),
+  }),
   rea_apktool_build: z.object({ ok: z.literal(true), arac: z.string(), proje: z.string(), ciktiApk: z.string() }),
   rea_apktool_framework: z.object({ ok: z.literal(true), arac: z.string(), apk: z.string() }),
-  rea_apktool_caps: z.object({ ok: z.literal(true), arac: z.string(), apktool: z.string(), aapt2: z.string().nullable(), aapt2Tamam: z.boolean() }),
+  rea_apktool_caps: z.object({
+    ok: z.literal(true), arac: z.string(), apktool: z.string(), aapt2: z.string().nullable(), aapt2Tamam: z.boolean(),
+    surumGozlem: z.object({ ham: z.string(), sayisal: z.string().optional() }).optional(),
+  }),
   rea_adb_devices: z.object({ ok: z.literal(true), arac: z.string(), cihazlar: z.array(z.string()) }),
   rea_adb_packages: z.object({ ok: z.literal(true), arac: z.string(), paketler: z.array(z.string()) }),
   rea_adb_install: z.object({ ok: z.literal(true), arac: z.string(), apk: z.string(), sonuc: z.string() }),
@@ -938,9 +1180,24 @@ const FILE_READ_ONLY_TOOLS: ReadonlySet<string> = new Set([
   "rea_jadx_read",
   "rea_flutter_scan",
   "rea_flutter_payload",
+  "rea_flutter_snapshot",
+  "rea_flutter_blutter",
   "rea_apple_macho",
   "rea_apple_plist",
   "rea_apple_bundle",
+  "rea_macho_info",
+  "rea_macho_loads",
+  "rea_macho_otool",
+  "rea_macho_objc",
+  "rea_macho_classdump",
+  "rea_il2cpp_metadata",
+  "rea_il2cpp_dump",
+  "rea_il2cpp_methods",
+  "rea_go_funclines",
+  "rea_go_goresym",
+  "rea_go_buildinfo",
+  "rea_bindiff_fonksiyonlar",
+  "rea_bindiff_karsilastir",
   "rea_hap_liste",
   "rea_hap_manifest",
   "rea_pe_info",
@@ -958,6 +1215,10 @@ const FILE_READ_ONLY_TOOLS: ReadonlySet<string> = new Set([
   "rea_pdb_yolu",
   "rea_dwarf_ozet",
   "rea_scan_repo",
+  "rea_scan_repo_paralel",
+  "rea_pcap_oku",
+  "rea_android_dinamik_recete",
+  "rea_android_recete_dogrula",
 ]);
 
 // Yikici kume (salt-okunur degil): dosya/cikti yazan, cihaza kuran ya da hedef
@@ -1065,6 +1326,11 @@ const OPEN_WORLD_TOOLS: ReadonlySet<string> = new Set([
   "rea_browser_har_import",
   // PDB indirici: ağa çıkar (sembol sunucusu)
   "rea_pdb_indir",
+  // Dalga G: alt surec calistiran kopruler (otool/Il2CppDumper/GoReSym/blutter)
+  "rea_macho_otool",
+  "rea_il2cpp_dump",
+  "rea_go_goresym",
+  "rea_flutter_blutter",
 ]);
 
 const READ_ONLY_ANNOTATIONS: ToolAnnotations = {

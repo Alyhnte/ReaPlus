@@ -1,6 +1,7 @@
 # rea-plus .gitignore — derleme çıktıları ve yerel sırlar repoya girmez.
 node_modules/
 dist/
+dist-release/
 *.log
 .env
 coverage/
@@ -10,3 +11,6 @@ coverage/
 # Python artığı (Ghidra scriptleri yanında üretilir).
 __pycache__/
 *.pyc
+sbom.cdx.json
+# Portable bundle çıktısı (scripts/portable-paketle.mjs; release asset'i kaynağı).
+portable/

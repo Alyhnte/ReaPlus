@@ -9,7 +9,8 @@ import assert from "node:assert/strict";
 import { mkdtempSync, writeFileSync, readFileSync, rmSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
-import { ResultCache, WorkerPool, dosyaHashi } from "../dist/facade/workerCache.js";
+import { ResultCache, WorkerPool, dosyaHashi, runProbes } from "../dist/facade/workerCache.js";
+import { rea_scan_repo, reposcanSonucCache, reposcanIsciHavuzu } from "../dist/rea-domains/reposcan/RepoScan.js";
 
 // Kısa uyku: cache ıskalamadaki pahalı işi taklit eder.
 const bekle = (ms) => new Promise((r) => setTimeout(r, ms));
@@ -226,5 +227,236 @@ describe("WorkerPool kalıcılık", () => {
     } finally {
       await havuz.kapat();
     }
+  });
+});
+
+describe("RepoScan canli worker-cache bagi (Dalga I/2)", () => {
+  // Baglanan yol: rea_scan_repo dosya cozumunu paylasilan ResultCache +
+  // kalici WorkerPool uzerinden kosar. Sayac kaniti = cache/havuz delta'lari.
+  // (Turkce karaktersiz yazildi: dosya duzeni ASCII kilitli.)
+  const h = (hex) => Buffer.from(hex, "hex");
+  function besliSahne(one) {
+    const dir = taze(`bag-${one}`);
+    writeFileSync(join(dir, "uygulama.exe"), h("4d5a900003000000"));
+    writeFileSync(join(dir, "kitaplik.elf"), h("7f454c4602010100"));
+    writeFileSync(join(dir, "mobil.apk"), h("504b030414000000"));
+    writeFileSync(join(dir, "index.js"), `console.log('${one}');\n`);
+    writeFileSync(join(dir, "mod.wasm"), h("0061736d01000000"));
+    return dir;
+  }
+
+  it("(a) ikinci tarama cache'ten gelir: 5 iskalama, sonra 5 vurus; havuz yalniz ilk turda 5 is yapar", async () => {
+    const dir = besliSahne("a");
+    try {
+      const v0 = reposcanSonucCache.vurus;
+      const i0 = reposcanSonucCache.iskalama;
+      const h0 = reposcanIsciHavuzu.tamamlanan;
+      const ilk = await rea_scan_repo(dir);
+      assert.equal(ilk.ok, true);
+      assert.equal(ilk.details.dosyalar.length, 5);
+      assert.equal(reposcanSonucCache.iskalama - i0, 5);
+      assert.equal(reposcanSonucCache.vurus - v0, 0);
+      assert.equal(reposcanIsciHavuzu.tamamlanan - h0, 5);
+      const v1 = reposcanSonucCache.vurus;
+      const i1 = reposcanSonucCache.iskalama;
+      const h1 = reposcanIsciHavuzu.tamamlanan;
+      const ikinci = await rea_scan_repo(dir);
+      assert.equal(ikinci.ok, true);
+      assert.deepEqual(ikinci, ilk); // davranis birebir ayni
+      assert.equal(reposcanSonucCache.vurus - v1, 5); // sayac kaniti
+      assert.equal(reposcanSonucCache.iskalama - i1, 0);
+      assert.equal(reposcanIsciHavuzu.tamamlanan - h1, 0); // vurus havuza inmez
+    } finally {
+      rmSync(dir, { recursive: true, force: true });
+    }
+  });
+
+  it("(c) REA_CACHE=0 iken tarama baypaslanir: sayaclar kipirdamaz, sonuc aynidir", async () => {
+    const eski = process.env.REA_CACHE;
+    const dir = besliSahne("c");
+    try {
+      const acik = await rea_scan_repo(dir);
+      assert.equal(acik.ok, true);
+      process.env.REA_CACHE = "0";
+      const v0 = reposcanSonucCache.vurus;
+      const i0 = reposcanSonucCache.iskalama;
+      const b0 = reposcanSonucCache.boyut();
+      const r1 = await rea_scan_repo(dir);
+      const r2 = await rea_scan_repo(dir);
+      assert.deepEqual(r1, acik);
+      assert.deepEqual(r2, acik);
+      assert.equal(reposcanSonucCache.vurus - v0, 0);
+      assert.equal(reposcanSonucCache.iskalama - i0, 0);
+      assert.equal(reposcanSonucCache.boyut(), b0);
+    } finally {
+      if (eski === undefined) delete process.env.REA_CACHE;
+      else process.env.REA_CACHE = eski;
+      rmSync(dir, { recursive: true, force: true });
+    }
+  });
+});
+
+describe("WorkerPool hata izolasyonu (runProbes karsiligi, Dalga I/2)", () => {
+  // probe.test.mjs'deki "firlatan prob digerlerini durdurmaz" kapsami,
+  // olu parallelProbe silinmeden once yeni yola tasindi: kalici havuzda
+  // patlayan is reddedilir, saglamlar cozulur, havuz kullanilabilir kalir.
+  it("patlayan is digerlerini durdurmaz, havuz saglam kalir", async () => {
+    const havuz = new WorkerPool(2);
+    try {
+      const iyi1 = havuz.gonder(async () => "bir");
+      const kotu = havuz.gonder(async () => {
+        throw new Error("sahte patlama");
+      });
+      const iyi2 = havuz.gonder(async () => "iki");
+      assert.equal(await iyi1, "bir");
+      await assert.rejects(kotu, /sahte patlama/);
+      assert.equal(await iyi2, "iki");
+      assert.equal(havuz.tamamlanan, 3);
+      assert.equal(await havuz.gonder(async () => "uc"), "uc");
+      assert.equal(havuz.tamamlanan, 4);
+    } finally {
+      await havuz.kapat();
+    }
+  });
+});
+
+// ---- Dalga-1 tasima (KIRMIZI): probeCache davranisi ResultCache'te (TTL + invalidate/clear).
+// Kaynak: tests/probe.test.mjs (silik oncesi) — ayni sinir semantigi: now > olum bayat, esit an taze.
+// Karsilik: withCache <=> calistir (taze iken uretici kosmaz, bayatlayinca yeniden kosar).
+describe("ResultCache TTL (probeCache karsiligi, Dalga-1)", () => {
+  const saatli = (ttlMs, baslangic = 1000, kapasite = 100) => {
+    let simdi = baslangic;
+    const cache = new ResultCache(kapasite, ttlMs, () => simdi);
+    return { cache, ilerlet: (ms) => (simdi += ms) };
+  };
+  const girdi = (k) => ({ arac: "yoklama", argumanlar: { k } });
+
+  it("taze kayit has ile bulunur, calistir ureticiyi tekrar kosturmaz", async () => {
+    const { cache } = saatli(60_000);
+    let sayac = 0;
+    const uret = async () => ++sayac;
+    assert.equal(await cache.calistir(girdi("node"), uret), 1);
+    assert.equal(await cache.has(girdi("node")), true);
+    assert.equal(await cache.calistir(girdi("node"), uret), 1);
+    assert.equal(sayac, 1);
+  });
+  it("TTL dolunca has false doner, calistir yeniden hesaplar", async () => {
+    const { cache, ilerlet } = saatli(1000);
+    let sayac = 0;
+    const uret = async () => ++sayac;
+    assert.equal(await cache.calistir(girdi("r2"), uret), 1);
+    ilerlet(1001);
+    assert.equal(await cache.has(girdi("r2")), false);
+    assert.equal(await cache.calistir(girdi("r2"), uret), 2);
+    assert.equal(sayac, 2);
+  });
+  it("sinir aninda (TTL dolmadan) kayit tazedir", async () => {
+    const { cache, ilerlet } = saatli(1000);
+    await cache.calistir(girdi("dot"), async () => "v2");
+    ilerlet(999);
+    assert.equal(await cache.has(girdi("dot")), true);
+    assert.equal(await cache.calistir(girdi("dot"), async () => "asla"), "v2");
+  });
+  it("invalidate tek girdiyi siler, digerini korur", async () => {
+    const { cache } = saatli(60_000);
+    await cache.calistir(girdi("a"), async () => 1);
+    await cache.calistir(girdi("b"), async () => 2);
+    assert.equal(await cache.invalidate(girdi("a")), true);
+    assert.equal(await cache.has(girdi("a")), false);
+    assert.equal(await cache.calistir(girdi("b"), async () => 99), 2);
+  });
+  it("clear tum kayitlari siler", async () => {
+    const { cache } = saatli(60_000);
+    await cache.calistir(girdi("a"), async () => 1);
+    await cache.calistir(girdi("b"), async () => 2);
+    cache.clear();
+    assert.equal(await cache.has(girdi("a")), false);
+    assert.equal(await cache.has(girdi("b")), false);
+    assert.equal(cache.boyut(), 0);
+  });
+  it("withCache karsiligi: taze iken uretici tek kez kosar", async () => {
+    const { cache } = saatli(60_000);
+    let sayac = 0;
+    const probe = () => ++sayac;
+    assert.equal(await cache.calistir(girdi("java"), probe), 1);
+    assert.equal(await cache.calistir(girdi("java"), probe), 1);
+    assert.equal(sayac, 1);
+  });
+  it("withCache karsiligi: bayatlayinca uretici yeniden kosar", async () => {
+    const { cache, ilerlet } = saatli(1000);
+    let sayac = 0;
+    const probe = () => ++sayac;
+    assert.equal(await cache.calistir(girdi("adb"), probe), 1);
+    ilerlet(1500);
+    assert.equal(await cache.calistir(girdi("adb"), probe), 2);
+    assert.equal(sayac, 2);
+  });
+  it("withCache karsiligi: async uretici sonucunu saklar", async () => {
+    const { cache } = saatli(60_000);
+    const deger = await cache.calistir(girdi("wabt"), async () => {
+      await bekle(10);
+      return "2.0";
+    });
+    assert.equal(deger, "2.0");
+    assert.equal(await cache.calistir(girdi("wabt"), async () => "asla"), "2.0");
+  });
+});
+
+describe("runProbes (canli havuz ustu, Dalga-1)", () => {
+  // Kaynak: tests/probe.test.mjs — ayni limit/hiz/hata/sure/bos-kayit kapsami,
+  // artik olu parallelProbe yerine WorkerPool destekli workerCache.runProbes'tan.
+  it("8 is seri sureden hizli biter (limit 4)", async () => {
+    const isler = {};
+    for (let i = 0; i < 8; i++) isler[`p${i}`] = () => bekle(60).then(() => i);
+    const bas = Date.now();
+    const sonuc = await runProbes(isler, 4);
+    const gecen = Date.now() - bas;
+    assert.equal(Object.keys(sonuc).length, 8); // hepsi raporlanir
+    assert.ok(gecen < 400, `paralel ${gecen}ms < seri 480ms olmali`);
+    for (let i = 0; i < 8; i++) assert.equal(sonuc[`p${i}`].deger, i);
+  });
+  it("paralellik limitine saygi gosterir (en yuksek eszaman <= limit)", async () => {
+    let anlik = 0;
+    let enYuksek = 0;
+    const isler = {};
+    for (let i = 0; i < 5; i++) {
+      isler[`k${i}`] = async () => {
+        anlik++;
+        enYuksek = Math.max(enYuksek, anlik);
+        await bekle(30);
+        anlik--;
+        return i;
+      };
+    }
+    await runProbes(isler, 2);
+    assert.ok(enYuksek <= 2, `eszaman ${enYuksek} <= 2 olmali`);
+    assert.ok(enYuksek >= 2, `paralellik gercekten kullanilmali (${enYuksek})`);
+  });
+  it("firlatan isi ok:false + hata ile yakalar, digerleri surer", async () => {
+    const sonuc = await runProbes(
+      {
+        iyi: () => "tamam",
+        kotu: () => {
+          throw new Error("yok");
+        },
+        red: () => Promise.reject(new Error("erisim yok")),
+      },
+      4,
+    );
+    assert.equal(sonuc.iyi.ok, true);
+    assert.equal(sonuc.iyi.deger, "tamam");
+    assert.equal(sonuc.kotu.ok, false);
+    assert.equal(sonuc.kotu.hata, "yok");
+    assert.equal(sonuc.red.ok, false);
+    assert.ok(sonuc.red.hata.includes("erisim"));
+  });
+  it("her sonucu sure damgasiyla doner (sure_ms >= 0)", async () => {
+    const sonuc = await runProbes({ hizli: () => 42 }, 4);
+    assert.equal(sonuc.hizli.ok, true);
+    assert.equal(sonuc.hizli.deger, 42);
+    assert.ok(typeof sonuc.hizli.sure_ms === "number" && sonuc.hizli.sure_ms >= 0);
+  });
+  it("bos is kaydi bos sonuc doner", async () => {
+    assert.deepEqual(await runProbes({}, 4), {});
   });
 });

@@ -1,0 +1,630 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="ReaPlus technische Dokumentation: Installation, Werkzeugreferenz, Beispiele, Fahrplan.">
+<title>Werkzeugreferenz — ReaPlus Docs</title>
+<script>try{var t=localStorage.getItem("reaplus-tema");if(!t){t=window.matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light";}document.documentElement.dataset.theme=t;}catch(e){}</script>
+<style>:root{color-scheme:light;--zemin:#F6F6F3;--yuzey:#FCFCFA;--metin:#1D1F24;--silik:#5A6270;--sinir:#DFDFD6;--vurgu:#2E6B4E;--vurgu-arka:#E4EFE8;--kod-zemin:#EBEBE4;--golge:rgba(23,28,24,.08)}[data-theme="light"]{color-scheme:light;--zemin:#F6F6F3;--yuzey:#FCFCFA;--metin:#1D1F24;--silik:#5A6270;--sinir:#DFDFD6;--vurgu:#2E6B4E;--vurgu-arka:#E4EFE8;--kod-zemin:#EBEBE4;--golge:rgba(23,28,24,.08)}[data-theme="dark"]{color-scheme:dark;--zemin:#15181D;--yuzey:#1D2229;--metin:#E9E7E1;--silik:#A7B0BC;--sinir:#2F3742;--vurgu:#7BC9A2;--vurgu-arka:#1D3328;--kod-zemin:#232A33;--golge:rgba(8,10,12,.45)}@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){color-scheme:dark;--zemin:#15181D;--yuzey:#1D2229;--metin:#E9E7E1;--silik:#A7B0BC;--sinir:#2F3742;--vurgu:#7BC9A2;--vurgu-arka:#1D3328;--kod-zemin:#232A33;--golge:rgba(8,10,12,.45)}}*{box-sizing:border-box}html{-webkit-text-size-adjust:100%}body{margin:0;background:var(--zemin);color:var(--metin);font-family:system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;line-height:1.65}h1,h2,h3,.marka-ad{font-family:"Avenir Next","Segoe UI",system-ui,-apple-system,"Helvetica Neue",Arial,sans-serif;letter-spacing:-.01em;line-height:1.25}.sarmal{max-width:62rem;margin:0 auto;padding:0 1.25rem 3rem}.atla{position:absolute;left:-999px;top:0;background:var(--vurgu);color:var(--zemin);padding:.5rem 1rem;z-index:10}.atla:focus{left:0}.ust{display:flex;flex-wrap:wrap;align-items:center;gap:.6rem 1rem;padding:1rem 0;border-bottom:1px solid var(--sinir)}.marka-ad{font-weight:650;font-size:1.05rem}.marka-alt{color:var(--silik);font-size:.84rem;margin-left:.6rem}.gezinme{display:flex;flex-wrap:wrap;gap:.15rem .9rem;font-size:.92rem}.gezinme a{color:var(--silik);text-decoration:none;border-bottom:1px solid transparent}.gezinme a:hover{color:var(--metin);border-bottom-color:var(--vurgu)}.dil{display:flex;gap:.35rem;font-size:.8rem;color:var(--silik)}.dil a{color:var(--silik);text-decoration:none}.dil a:hover{color:var(--vurgu)}.dil strong{color:var(--metin)}#tema-toggle{margin-left:auto;font:inherit;font-size:.85rem;color:var(--metin);background:var(--yuzey);border:1px solid var(--sinir);border-radius:999px;padding:.32rem .85rem;cursor:pointer;transition:background-color .2s ease,border-color .2s ease}#tema-toggle:hover{border-color:var(--vurgu)}.ozet{margin:1.5rem 0 0;background:var(--yuzey);border:1px solid var(--sinir);border-radius:.6rem;padding:1rem 1.25rem}.ozet-metin{margin:0 0 .8rem;font-size:.92rem;color:var(--silik)}.istatistik{display:grid;grid-template-columns:repeat(auto-fit,minmax(8.5rem,1fr));gap:.6rem;margin:0}.istatistik div{border-top:2px solid var(--vurgu);padding-top:.45rem}.istatistik dt{font-size:.74rem;text-transform:uppercase;letter-spacing:.06em;color:var(--silik)}.istatistik dd{margin:.15rem 0 0;font-size:1.35rem;font-weight:650;font-variant-numeric:tabular-nums}#icerik{margin-top:1.5rem}#icerik a{color:var(--vurgu);text-decoration:underline;text-underline-offset:.15em}#icerik a:hover{text-decoration-thickness:2px}pre{background:var(--kod-zemin);border:1px solid var(--sinir);border-radius:.5rem;padding:1rem;overflow:auto;font-size:.86rem}code{font-family:ui-monospace,"Cascadia Code","SF Mono",Consolas,Menlo,monospace;font-size:.88em;background:var(--kod-zemin);border-radius:.3rem;padding:.1em .35em}pre code{background:none;padding:0;border-radius:0}table{border-collapse:collapse;width:100%;font-size:.9rem}th,td{border:1px solid var(--sinir);padding:.45rem .6rem;text-align:left;vertical-align:top}thead th{background:var(--yuzey)}blockquote{margin:1rem 0;padding:.6rem 1rem;border-left:3px solid var(--vurgu);background:var(--yuzey);color:var(--silik)}hr{border:none;border-top:1px solid var(--sinir);margin:1.75rem 0}img{max-width:100%}#arama{font:inherit;color:var(--metin);background:var(--yuzey);border:1px solid var(--sinir);border-radius:.5rem;padding:.5rem .8rem;width:min(22rem,100%)}#sonuclar{list-style:none;margin:.8rem 0 0;padding:0;display:grid;gap:.4rem}#sonuclar li{background:var(--yuzey);border:1px solid var(--sinir);border-radius:.5rem;padding:.5rem .8rem}.altbilgi{margin-top:2.5rem;padding-top:1rem;border-top:1px solid var(--sinir);color:var(--silik);font-size:.85rem}.js .reveal{opacity:0;transform:translateY(10px);transition:opacity .45s ease,transform .45s ease}.js .reveal.gorunur{opacity:1;transform:none}:focus-visible{outline:.16rem solid var(--vurgu);outline-offset:.18rem;border-radius:.25rem}::selection{background:var(--vurgu);color:var(--zemin)}@media (prefers-reduced-motion: reduce){.js .reveal{opacity:1;transform:none;transition:none}*{animation:none;transition:none}}@media (max-width:40rem){.sarmal{padding:0 1rem 2.5rem}#tema-toggle{margin-left:0}.istatistik{grid-template-columns:repeat(2,1fr)}table{font-size:.82rem}th,td{padding:.35rem .45rem}}@media (max-width:26rem){.istatistik{grid-template-columns:1fr}}</style>
+</head>
+<body>
+<div class="sarmal">
+<a class="atla" href="#icerik">Zum Inhalt springen</a>
+<header class="ust">
+<div class="marka"><span class="marka-ad">ReaPlus Docs</span><span class="marka-alt">Reverse-Engineering-Arbeitsfläche</span></div>
+<nav class="gezinme" aria-label="Site"><a href="index.html">Startseite</a> · <a href="readme.html">README</a> · <strong>Werkzeugreferenz</strong> · <a href="examples.html">Beispiele</a> · <a href="roadmap.html">Fahrplan</a> · <a href="changelog.html">Änderungen</a> · <a href="prompts.html">Promptbibliothek</a></nav>
+<nav id="dil" class="dil" aria-label="Sprache"><a href="../tools.html" hreflang="tr">TR</a> · <a href="../en/tools.html" hreflang="en">EN</a> · <strong aria-current="true">DE</strong> · <a href="../fr/tools.html" hreflang="fr">FR</a> · <a href="../es/tools.html" hreflang="es">ES</a></nav>
+<button id="tema-toggle" type="button" aria-pressed="false">Dunkles Design</button>
+</header>
+<section class="ozet reveal" aria-label="Oberflächenzusammenfassung">
+<p class="ozet-metin">Oberflächenzusammenfassung (echter Lauf, TOOLS.md): 191 Werkzeuge · 187 outputSchema · 191 annotations · 2 Ressourcen · 7 Prompts</p>
+<dl class="istatistik"><div><dt>Werkzeuge</dt><dd><span class="sayi" data-sayi="191">191</span></dd></div><div><dt>outputSchema</dt><dd><span class="sayi" data-sayi="187">187</span></dd></div><div><dt>annotations</dt><dd><span class="sayi" data-sayi="191">191</span></dd></div><div><dt>Ressourcen</dt><dd><span class="sayi" data-sayi="2">2</span></dd></div><div><dt>Prompts</dt><dd><span class="sayi" data-sayi="7">7</span></dd></div></dl>
+</section>
+<main id="icerik"><div class="reveal">
+<h1>Werkzeugreferenz</h1>
+<h1 id="reaplus-werkzeugreferenz">ReaPlus-Werkzeugreferenz</h1>
+<blockquote>Diese Datei wird automatisch erzeugt; nicht manuell bearbeiten. Quelle: die
+echte MCP-Oberfläche des kompilierten Servers (<code>dist/server.js</code>). Zur Neuerzeugung:
+<code>npm run build &amp;&amp; node scripts/generate-tool-reference.mjs</code></blockquote>
+<h2 id="zusammenfassung">Zusammenfassung</h2>
+<ul><li>Server: <code>rea-plus</code> 0.13.0</li><li>Werkzeuge gesamt: 191</li><li>Ressourcen gesamt: 2</li><li>Prompts gesamt: 3</li><li>Werkzeuge mit outputSchema: 187</li><li>Werkzeuge mit annotations: 191</li></ul>
+<h2 id="werkzeuge">Werkzeuge</h2>
+<h3 id="close_target"><code>close_target</code></h3>
+<p>Gibt das binäre Ziel (samt zugehörigem radare2-Prozess) frei, das von einer Sitzung gehalten wird.</p>
+<ul><li>Eingabefelder:</li><li><code>session_id</code> (string, erforderlich) — Application session id. Not an MCP protocol session.</li><li>outputSchema: vorhanden (Felder: closed, session_id)</li><li>annotations: vorhanden (destructiveHint=true, openWorldHint=true, readOnlyHint=false)</li></ul>
+<h3 id="debug_attach"><code>debug_attach</code></h3>
+<p>Verbindet sich per PID oder – in einer Frida-Sitzung – mit einem lauschenden Frida-Gadget (Gadget host:port) oder einem laufenden Mobilpaket über USB (usb + package). Das Ziel läuft nach debug_close weiter.</p>
+<ul><li>Eingabefelder:</li><li><code>auto_analyze</code> (boolean, optional) — Run x64dbg auto-analysis after attaching (slower).</li><li><code>break_on_entry</code> (boolean, optional) — Pause the debuggee right after attaching.</li><li><code>gadget</code> (string, optional) — Frida Gadget listen address host:port. For targets that cannot be attached by pid.</li><li><code>package</code> (string, optional) — Process or mobile package name. Defaults to Gadget. Required with usb.</li><li><code>pid</code> (integer, optional) — Live process id. Required unless gadget or usb is set.</li><li><code>session_id</code> (string, erforderlich) — Application session id. Not an MCP protocol session.</li><li><code>usb</code> (boolean, optional) — Use the USB Frida device (phone or tablet) instead of a host:port Gadget.</li><li>outputSchema: vorhanden (Felder: architecture, attached, engine, entry_point, mode, module_base, module_entry, path, pid, session_id)</li><li>annotations: vorhanden (destructiveHint=true, openWorldHint=true, readOnlyHint=false)</li></ul>
+<h3 id="debug_breakpoint"><code>debug_breakpoint</code></h3>
+<p>Setzt, entfernt oder listet Breakpoints auf. Adressen dürfen hex, Zahlen oder x64dbg-Ausdrücke sein.</p>
+<ul><li>Eingabefelder:</li><li><code>action</code> (enum, optional)</li><li><code>address</code> (string | number, optional) — Required for set/remove; ignored for list.</li><li><code>condition</code> (string, optional) — Break condition expression (set only).</li><li><code>log_text</code> (string, optional) — Log text on hit (set only).</li><li><code>name</code> (string, optional) — Breakpoint name (set only).</li><li><code>session_id</code> (string, erforderlich) — Application session id. Not an MCP protocol session.</li><li><code>type</code> (enum, optional)</li><li>outputSchema: vorhanden</li><li>annotations: vorhanden (destructiveHint=true, openWorldHint=true, readOnlyHint=false)</li></ul>
+<h3 id="debug_callstack"><code>debug_callstack</code></h3>
+<p>Liest den Callstack des aktuellen Threads (Adresse, Modul, Funktion pro Frame).</p>
+<ul><li>Eingabefelder:</li><li><code>max_frames</code> (integer, optional) — Max frames returned (default 50).</li><li><code>session_id</code> (string, erforderlich) — Application session id. Not an MCP protocol session.</li><li>outputSchema: vorhanden (Felder: frames, session_id, threadId)</li><li>annotations: vorhanden (openWorldHint=true, readOnlyHint=false)</li></ul>
+<h3 id="debug_close"><code>debug_close</code></h3>
+<p>Beendet den versteckten x64dbg-Prozess einer Sitzung. Gestartete Ziele werden gestoppt; verbundene Ziele werden getrennt und laufen weiter.</p>
+<ul><li>Eingabefelder:</li><li><code>session_id</code> (string, erforderlich) — Application session id. Not an MCP protocol session.</li><li>outputSchema: vorhanden (Felder: closed, session_id)</li><li>annotations: vorhanden (destructiveHint=true, openWorldHint=true, readOnlyHint=false)</li></ul>
+<h3 id="debug_code"><code>debug_code</code></h3>
+<p>Live-Code: Disassembliert an einer Adresse (Standard: der angehaltene Instruction Pointer), assembliert eine Instruktion oder führt bis zu einer Adresse aus. Erfordert confirm:true.</p>
+<ul><li>Eingabefelder:</li><li><code>action</code> (enum, erforderlich)</li><li><code>address</code> (string | number, optional) — Address as hex (&quot;0x140001000&quot;), decimal, or an engine expression (&quot;cip&quot;).</li><li><code>confirm</code> (boolean, optional) — Must be true or the tool returns confirmation_required and does not touch the debuggee.</li><li><code>count</code> (integer, optional) — Instruction count for disassemble (default 12).</li><li><code>instruction</code> (string, optional) — Single instruction for assemble.</li><li><code>session_id</code> (string, erforderlich) — Application session id. Not an MCP protocol session.</li><li>outputSchema: vorhanden</li><li>annotations: vorhanden (destructiveHint=true, openWorldHint=true, readOnlyHint=false)</li></ul>
+<h3 id="debug_continue"><code>debug_continue</code></h3>
+<p>Setzt den Debuggee bis zum nächsten Breakpoint, Einzelschritt oder Exit fort. Der Stopp meldet ein Ereignis (debug.breakpoint_hit / debug.exited / debug.paused), abrufbar via events_pull.</p>
+<ul><li>Eingabefelder:</li><li><code>session_id</code> (string, erforderlich) — Application session id. Not an MCP protocol session.</li><li>outputSchema: vorhanden (Felder: address, reason, session_id)</li><li>annotations: vorhanden (destructiveHint=true, openWorldHint=true, readOnlyHint=false)</li></ul>
+<h3 id="debug_memory"><code>debug_memory</code></h3>
+<p>Live-Prozessspeicher: lesen, suchen oder dumpen. Erfordert confirm:true. Ohne diese gibt der Aufruf confirmation_required zurück und berührt den Debuggee nicht.</p>
+<ul><li>Eingabefelder:</li><li><code>action</code> (enum, erforderlich)</li><li><code>address</code> (string | number, optional) — Read/dump address.</li><li><code>confirm</code> (boolean, optional) — Must be true or the tool returns confirmation_required and does not touch the debuggee.</li><li><code>length</code> (integer, optional) — Search length in bytes (default 4096, or the main module).</li><li><code>max_results</code> (integer, optional)</li><li><code>pattern</code> (string, optional) — Search pattern. Hex bytes, or ascii when search_type is ascii.</li><li><code>search_type</code> (enum, optional)</li><li><code>session_id</code> (string, erforderlich) — Application session id. Not an MCP protocol session.</li><li><code>size</code> (integer, optional) — Byte count for read (default 64) or dump (default 256).</li><li><code>start_address</code> (string | number, optional) — Address as hex (&quot;0x140001000&quot;), decimal, or an engine expression (&quot;cip&quot;).</li><li>outputSchema: vorhanden</li><li>annotations: vorhanden (openWorldHint=true, readOnlyHint=false)</li></ul>
+<h3 id="debug_open"><code>debug_open</code></h3>
+<p>Öffnet ein PE-Ziel zum Live-Debugging in der Debug-Engine dieser Sitzung. Erkennt x86/x64 automatisch und lässt den Debuggee angehalten. x64dbg hält am Entry an; cdb stoppt am initialen Loader-Breakpoint und meldet den PE-Entry.</p>
+<ul><li>Eingabefelder:</li><li><code>auto_analyze</code> (boolean, optional) — Run x64dbg auto-analysis after loading (slower).</li><li><code>break_on_entry</code> (boolean, optional) — Stop at the entry point after loading.</li><li><code>command_line_args</code> (string, optional) — Command line arguments for the debuggee.</li><li><code>path</code> (string, erforderlich) — Filesystem path of the PE binary to debug.</li><li><code>session_id</code> (string, erforderlich) — Application session id. Not an MCP protocol session.</li><li>outputSchema: vorhanden (Felder: architecture, attached, engine, entry_point, mode, module_base, module_entry, opened, path, pid, session_id)</li><li>annotations: vorhanden (destructiveHint=true, openWorldHint=true, readOnlyHint=false)</li></ul>
+<h3 id="debug_pause"><code>debug_pause</code></h3>
+<p>Hält einen laufenden Debuggee asynchron an. Idempotent, wenn bereits angehalten.</p>
+<ul><li>Eingabefelder:</li><li><code>session_id</code> (string, erforderlich) — Application session id. Not an MCP protocol session.</li><li>outputSchema: vorhanden (Felder: address, reason, session_id)</li><li>annotations: vorhanden (destructiveHint=true, openWorldHint=true, readOnlyHint=false)</li></ul>
+<h3 id="debug_plugin"><code>debug_plugin</code></h3>
+<p>x64dbg Scylla und ScyllaHide. status meldet Dateien auf der Platte. dump und hide öffnen kein Fenster: Ein fehlendes Headless-Plugin meldet engine_unavailable samt Plugin-Pfad. Erfordert confirm:true. cdb und frida melden capability_unsupported.</p>
+<ul><li>Eingabefelder:</li><li><code>action</code> (enum, erforderlich)</li><li><code>confirm</code> (boolean, optional) — Must be true or the tool returns confirmation_required and does not touch the debuggee.</li><li><code>session_id</code> (string, erforderlich) — Application session id. Not an MCP protocol session.</li><li>outputSchema: vorhanden</li><li>annotations: vorhanden (openWorldHint=true, readOnlyHint=false)</li></ul>
+<h3 id="debug_registers"><code>debug_registers</code></h3>
+<p>Liest Debuggee-Register (Allgemein + Flags; Segment/Debug optional).</p>
+<ul><li>Eingabefelder:</li><li><code>include_debug</code> (boolean, optional) — Include debug registers.</li><li><code>include_segment</code> (boolean, optional) — Include segment registers.</li><li><code>session_id</code> (string, erforderlich) — Application session id. Not an MCP protocol session.</li><li>outputSchema: vorhanden (Felder: debug, flags, general, segment, session_id)</li><li>annotations: vorhanden (openWorldHint=true, readOnlyHint=false)</li></ul>
+<h3 id="debug_state"><code>debug_state</code></h3>
+<p>Meldet den Live-Debug-Zustand (laufend/angehalten/beendet + Anhaltegrund) und das geöffnete Ziel, falls vorhanden.</p>
+<ul><li>Eingabefelder:</li><li><code>session_id</code> (string, erforderlich) — Application session id. Not an MCP protocol session.</li><li>outputSchema: vorhanden</li><li>annotations: vorhanden (openWorldHint=true, readOnlyHint=false)</li></ul>
+<h3 id="debug_step"><code>debug_step</code></h3>
+<p>Führt den Debuggee im Einzelschritt aus (into oder over Calls) und meldet die neue Position.</p>
+<ul><li>Eingabefelder:</li><li><code>count</code> (integer, optional) — Steps to take (default 1).</li><li><code>kind</code> (enum, optional)</li><li><code>session_id</code> (string, erforderlich) — Application session id. Not an MCP protocol session.</li><li>outputSchema: vorhanden (Felder: address, disassembly, function, kind, module, registers, session_id)</li><li>annotations: vorhanden (destructiveHint=true, openWorldHint=true, readOnlyHint=false)</li></ul>
+<h3 id="debug_thread"><code>debug_thread</code></h3>
+<p>Live-Threads: auflisten, auswählen, einfrieren, auftauen oder den Kontext eines Threads lesen. Die ID ist der von list zurückgegebene Wert (cdb-Index, x64dbg-/Frida-OS-Thread-ID). Erfordert confirm:true. Frida hat keine Suspend- oder Switch-API.</p>
+<ul><li>Eingabefelder:</li><li><code>action</code> (enum, erforderlich)</li><li><code>confirm</code> (boolean, optional) — Must be true or the tool returns confirmation_required and does not touch the debuggee.</li><li><code>session_id</code> (string, erforderlich) — Application session id. Not an MCP protocol session.</li><li><code>thread_id</code> (integer, optional)</li><li>outputSchema: vorhanden</li><li>annotations: vorhanden (destructiveHint=true, openWorldHint=true, readOnlyHint=false)</li></ul>
+<h3 id="debug_time"><code>debug_time</code></h3>
+<p>Checkpoint-Snapshot, Checkpoint-Timeline und Rewind eines Checkpoints. Ein Checkpoint besteht aus den Registern des aktiven Threads, der Thread-Liste und einem Speicherfenster. Erfordert confirm:true.</p>
+<ul><li>Eingabefelder:</li><li><code>action</code> (enum, erforderlich)</li><li><code>checkpoint_id</code> (string, optional)</li><li><code>confirm</code> (boolean, optional) — Must be true or the tool returns confirmation_required and does not touch the debuggee.</li><li><code>memory_size</code> (integer, optional) — Bytes captured at the instruction pointer (default 64).</li><li><code>session_id</code> (string, erforderlich) — Application session id. Not an MCP protocol session.</li><li>outputSchema: vorhanden</li><li>annotations: vorhanden (destructiveHint=true, openWorldHint=true, readOnlyHint=false)</li></ul>
+<h3 id="disassemble"><code>disassemble</code></h3>
+<p>Disassembliert Instruktionen an einer Adresse (linear, <code>count</code> Ops) oder eine ganze Funktion. Standard: die Entry-Funktion.</p>
+<ul><li>Eingabefelder:</li><li><code>address</code> (string | number, optional) — Target address as hex (&quot;0x400200&quot;), decimal, or flag name (&quot;entry0&quot;).</li><li><code>count</code> (integer, optional) — Ops for address mode (default 32).</li><li><code>function</code> (string, optional) — Function name or address, e.g. &quot;entry0&quot;.</li><li><code>session_id</code> (string, erforderlich) — Application session id. Not an MCP protocol session.</li><li>outputSchema: vorhanden (Felder: count, location, ops, session_id, text)</li><li>annotations: vorhanden (openWorldHint=true, readOnlyHint=false)</li></ul>
+<h3 id="dump"><code>dump</code></h3>
+<p>Liest Rohbytes an einer Adresse als Hexdump-Text oder JSON-Byte-Array.</p>
+<ul><li>Eingabefelder:</li><li><code>address</code> (string | number, erforderlich) — Target address as hex (&quot;0x400200&quot;), decimal, or flag name (&quot;entry0&quot;).</li><li><code>format</code> (enum, optional)</li><li><code>length</code> (integer, optional) — Bytes to read (default 128).</li><li><code>session_id</code> (string, erforderlich) — Application session id. Not an MCP protocol session.</li><li>outputSchema: vorhanden (Felder: address, bytes, format, length, session_id, text)</li><li>annotations: vorhanden (openWorldHint=true, readOnlyHint=false)</li></ul>
+<h3 id="events_pull"><code>events_pull</code></h3>
+<p>Holt Ereignisse, die seit einer Sequenznummer für eine Anwendungssitzung gespeichert sind. Abonniert keine Push-Benachrichtigungen.</p>
+<ul><li>Eingabefelder:</li><li><code>after</code> (integer, optional) — Return events with seq greater than this.</li><li><code>limit</code> (integer, optional)</li><li><code>session_id</code> (string, erforderlich) — Application session id. Not an MCP protocol session.</li><li>outputSchema: vorhanden (Felder: events, retainedFrom, session_id)</li><li>annotations: vorhanden (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
+<h3 id="explain"><code>explain</code></h3>
+<p>Kurze deutsche Erklärung eines Assembler-Fensters: was die Region tut, wohin sie springt und welche Aufrufe den Nutzer oder das System benachrichtigen. Übergibt bereits disassemblierte Instruktionen oder eine session_id. Eine Live-Debug-Sitzung wird nur gelesen, wenn confirm wahr ist. Aufrufen, wenn der Nutzer fragt, was das Assembly bedeutet.</p>
+<ul><li>Eingabefelder:</li><li><code>address</code> (string | number, optional) — Address to disassemble when instructions are omitted.</li><li><code>confirm</code> (boolean, optional) — Required only when explain itself disassembles a live debug session. Pasted instructions skip this.</li><li><code>count</code> (integer, optional) — How many instructions to read (default 16).</li><li><code>instructions</code> (object[], optional) — Already fetched ops. When set, the debugger is not called.</li><li><code>session_id</code> (string, optional) — Application session id. Not an MCP protocol session.</li><li>outputSchema: vorhanden (Felder: atlamalar, bildirimler, cagrilar, dil, gosterilen, kaynak, komut_sayisi, ozet, satirlar)</li><li>annotations: vorhanden (openWorldHint=true, readOnlyHint=false)</li></ul>
+<h3 id="get_cfg"><code>get_cfg</code></h3>
+<p>Kontrollflussgraph einer Funktion als JSON und/oder Graphviz DOT. Standard: die Entry-Funktion.</p>
+<ul><li>Eingabefelder:</li><li><code>address</code> (string | number, optional) — Target address as hex (&quot;0x400200&quot;), decimal, or flag name (&quot;entry0&quot;).</li><li><code>format</code> (enum, optional)</li><li><code>function</code> (string, optional) — Function name or address, e.g. &quot;entry0&quot;.</li><li><code>session_id</code> (string, erforderlich) — Application session id. Not an MCP protocol session.</li><li>outputSchema: vorhanden (Felder: dot, function, json, location, session_id)</li><li>annotations: vorhanden (openWorldHint=true, readOnlyHint=false)</li></ul>
+<h3 id="health"><code>health</code></h3>
+<p>Meldet die Bridge-Lebendigkeit. Berührt keine Debugger-Engine.</p>
+<ul><li>Eingabefelder: keine</li><li>outputSchema: vorhanden (Felder: name, protocol, sessions, status)</li><li>annotations: vorhanden (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
+<h3 id="open_target"><code>open_target</code></h3>
+<p>Öffnet ein Binärziel zur statischen Analyse in einer radare2-Sitzung. Nur Modus 'static' wird unterstützt; alles andere ist ein Capability-Fehler. Erfordert r2 im PATH.</p>
+<ul><li>Eingabefelder:</li><li><code>mode</code> (string, optional) — Analysis mode. Only &quot;static&quot; is supported.</li><li><code>path</code> (string, erforderlich) — Filesystem path of the binary to analyze.</li><li><code>session_id</code> (string, erforderlich) — Application session id. Not an MCP protocol session.</li><li>outputSchema: vorhanden (Felder: engine, mode, opened, path, session_id)</li><li>annotations: vorhanden (destructiveHint=true, openWorldHint=true, readOnlyHint=false)</li></ul>
+<h3 id="prerequisites"><code>prerequisites</code></h3>
+<p>Prüft die Programme, die Conduit nutzt (radare2, x64dbg, cdb, Python, Frida, Graphviz, ScyllaHide). Fehlende Einträge enthalten eine Download-URL und den Ablageort. Die Bridge lädt sie nicht herunter. Aufrufen, wenn ein Werkzeug fehlt oder vor der Engine-Wahl.</p>
+<ul><li>Eingabefelder: keine</li><li>outputSchema: vorhanden (Felder: araclar, ozet)</li><li>annotations: vorhanden (destructiveHint=false, idempotentHint=true, openWorldHint=true, readOnlyHint=true)</li></ul>
+<h3 id="rea_adb_devices"><code>rea_adb_devices</code></h3>
+<p>Liste verbundener Geräte.</p>
+<ul><li>Eingabefelder: keine</li><li>outputSchema: vorhanden (Felder: arac, cihazlar, ok)</li><li>annotations: vorhanden (openWorldHint=true, readOnlyHint=false)</li></ul>
+<h3 id="rea_adb_install"><code>rea_adb_install</code></h3>
+<p>APK-Installation auf dem Gerät.</p>
+<ul><li>Eingabefelder:</li><li><code>apk_path</code> (string, erforderlich)</li><li><code>seri</code> (string, optional)</li><li>outputSchema: vorhanden (Felder: apk, arac, ok, sonuc)</li><li>annotations: vorhanden (destructiveHint=true, openWorldHint=true, readOnlyHint=false)</li></ul>
+<h3 id="rea_adb_logcat"><code>rea_adb_logcat</code></h3>
+<p>Geräte-logcat-Dump.</p>
+<ul><li>Eingabefelder:</li><li><code>seri</code> (string, optional)</li><li>outputSchema: vorhanden (Felder: arac, ok, satirlar, toplam_satir)</li><li>annotations: vorhanden (openWorldHint=true, readOnlyHint=false)</li></ul>
+<h3 id="rea_adb_packages"><code>rea_adb_packages</code></h3>
+<p>Liste installierter Pakete.</p>
+<ul><li>Eingabefelder:</li><li><code>filtre</code> (string, optional)</li><li><code>seri</code> (string, optional)</li><li>outputSchema: vorhanden (Felder: arac, ok, paketler)</li><li>annotations: vorhanden (openWorldHint=true, readOnlyHint=false)</li></ul>
+<h3 id="rea_adb_screencap"><code>rea_adb_screencap</code></h3>
+<p>Geräte-Screenshot.</p>
+<ul><li>Eingabefelder:</li><li><code>out</code> (string, erforderlich)</li><li><code>seri</code> (string, optional)</li><li>outputSchema: vorhanden (Felder: arac, bayt, ok, yol)</li><li>annotations: vorhanden (destructiveHint=true, openWorldHint=true, readOnlyHint=false)</li></ul>
+<h3 id="rea_android_dinamik_recete"><code>rea_android_dinamik_recete</code></h3>
+<p>Erzeugung einer dynamischen Android-Analyse-Rezeptur.</p>
+<ul><li>Eingabefelder:</li><li><code>path</code> (string, erforderlich)</li><li>outputSchema: vorhanden (Felder: arac, ok, recete)</li><li>annotations: vorhanden (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
+<h3 id="rea_android_recete_dogrula"><code>rea_android_recete_dogrula</code></h3>
+<p>Trocken-Validierung einer Rezeptur.</p>
+<ul><li>Eingabefelder:</li><li><code>text</code> (string, erforderlich)</li><li>outputSchema: vorhanden (Felder: adim_sayisi, arac, ok)</li><li>annotations: vorhanden (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
+<h3 id="rea_aot_detect"><code>rea_aot_detect</code></h3>
+<p>NativeAOT-Signal.</p>
+<ul><li>Eingabefelder:</li><li><code>b64dosya</code> (string, erforderlich)</li><li><code>metin</code> (string, optional)</li><li>outputSchema: vorhanden (Felder: details, ok, summary, tool)</li><li>annotations: vorhanden (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
+<h3 id="rea_aot_objc"><code>rea_aot_objc</code></h3>
+<p>ObjC-Dispatch-Spuren.</p>
+<ul><li>Eingabefelder:</li><li><code>text</code> (string, erforderlich)</li><li>outputSchema: vorhanden (Felder: details, ok, summary, tool)</li><li>annotations: vorhanden (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
+<h3 id="rea_aot_profile"><code>rea_aot_profile</code></h3>
+<p>AOT-Profil.</p>
+<ul><li>Eingabefelder:</li><li><code>b64dosya</code> (string, erforderlich)</li><li><code>metin</code> (string, optional)</li><li>outputSchema: vorhanden (Felder: details, ok, summary, tool)</li><li>annotations: vorhanden (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
+<h3 id="rea_aot_swift"><code>rea_aot_swift</code></h3>
+<p>Swift-Dispatch-Spuren.</p>
+<ul><li>Eingabefelder:</li><li><code>text</code> (string, erforderlich)</li><li>outputSchema: vorhanden (Felder: details, ok, summary, tool)</li><li>annotations: vorhanden (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
+<h3 id="rea_apktool_build"><code>rea_apktool_build</code></h3>
+<p>APK-Rebuild aus dem Decode-Verzeichnis.</p>
+<ul><li>Eingabefelder:</li><li><code>dir</code> (string, erforderlich)</li><li><code>out</code> (string, erforderlich)</li><li>outputSchema: vorhanden (Felder: arac, ciktiApk, ok, proje)</li><li>annotations: vorhanden (destructiveHint=true, openWorldHint=true, readOnlyHint=false)</li></ul>
+<h3 id="rea_apktool_caps"><code>rea_apktool_caps</code></h3>
+<p>apktool-Verfügbarkeitsprüfung.</p>
+<ul><li>Eingabefelder: keine</li><li>outputSchema: vorhanden (Felder: aapt2, aapt2Tamam, apktool, arac, ok)</li><li>annotations: vorhanden (openWorldHint=true, readOnlyHint=false)</li></ul>
+<h3 id="rea_apktool_decode"><code>rea_apktool_decode</code></h3>
+<p>APK-Decode (Ressourcen).</p>
+<ul><li>Eingabefelder:</li><li><code>apk_path</code> (string, erforderlich)</li><li><code>out</code> (string, erforderlich)</li><li>outputSchema: vorhanden (Felder: apk, arac, ciktiDir, ok)</li><li>annotations: vorhanden (destructiveHint=true, openWorldHint=true, readOnlyHint=false)</li></ul>
+<h3 id="rea_apktool_framework"><code>rea_apktool_framework</code></h3>
+<p>Framework-APK-Installation.</p>
+<ul><li>Eingabefelder:</li><li><code>path</code> (string, erforderlich)</li><li>outputSchema: vorhanden (Felder: apk, arac, ok)</li><li>annotations: vorhanden (destructiveHint=true, openWorldHint=true, readOnlyHint=false)</li></ul>
+<h3 id="rea_apktool_info"><code>rea_apktool_info</code></h3>
+<p>apktool-+aapt2-Versionen.</p>
+<ul><li>Eingabefelder: keine</li><li>outputSchema: vorhanden (Felder: arac, ok, surum)</li><li>annotations: vorhanden (openWorldHint=true, readOnlyHint=false)</li></ul>
+<h3 id="rea_apple_bundle"><code>rea_apple_bundle</code></h3>
+<p>Bundle-Anatomie.</p>
+<ul><li>Eingabefelder:</li><li><code>path</code> (string, erforderlich)</li><li>outputSchema: vorhanden (Felder: details, ok, summary, tool)</li><li>annotations: vorhanden (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
+<h3 id="rea_apple_macho"><code>rea_apple_macho</code></h3>
+<p>Mach-O-Magie + dyld-Liste.</p>
+<ul><li>Eingabefelder:</li><li><code>path</code> (string, erforderlich)</li><li>outputSchema: vorhanden (Felder: details, ok, summary, tool)</li><li>annotations: vorhanden (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
+<h3 id="rea_apple_plist"><code>rea_apple_plist</code></h3>
+<p>Info.plist-Schlüssellesen.</p>
+<ul><li>Eingabefelder:</li><li><code>path</code> (string, erforderlich)</li><li>outputSchema: vorhanden (Felder: details, ok, summary, tool)</li><li>annotations: vorhanden (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
+<h3 id="rea_behavior_full"><code>rea_behavior_full</code></h3>
+<p>Verhaltensbericht in einem Aufruf.</p>
+<ul><li>Eingabefelder:</li><li><code>api</code> (string, erforderlich)</li><li><code>net</code> (string, optional)</li><li>outputSchema: vorhanden (Felder: bulgular, cizelge, ok, ozet, tool)</li><li>annotations: vorhanden (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
+<h3 id="rea_behavior_timeline"><code>rea_behavior_timeline</code></h3>
+<p>Ereignis-Timeline + Zusammenfassung.</p>
+<ul><li>Eingabefelder:</li><li><code>olaylar</code> (string, erforderlich)</li><li>outputSchema: vorhanden (Felder: details, ok, summary, tool)</li><li>annotations: vorhanden (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
+<h3 id="rea_best_motor"><code>rea_best_motor</code></h3>
+<p>Beste Engine (Score) für einen Zieltyp.</p>
+<ul><li>Eingabefelder:</li><li><code>adaylar</code> (string[], erforderlich)</li><li><code>tip</code> (string, erforderlich)</li><li>outputSchema: keine</li><li>annotations: vorhanden (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
+<h3 id="rea_bindiff_fonksiyonlar"><code>rea_bindiff_fonksiyonlar</code></h3>
+<p>Binär-Funktionsliste (Name/Adresse + Hash).</p>
+<ul><li>Eingabefelder:</li><li><code>path</code> (string, erforderlich)</li><li>outputSchema: vorhanden (Felder: arac, bicim, dosya, fonksiyonlar, istatistik, ok, sayi, sembollu)</li><li>annotations: vorhanden (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
+<h3 id="rea_bindiff_karsilastir"><code>rea_bindiff_karsilastir</code></h3>
+<p>Funktionsdifferenz zwischen zwei Versionen.</p>
+<ul><li>Eingabefelder:</li><li><code>text</code> (string, erforderlich)</li><li>outputSchema: vorhanden (Felder: arac, aynen, cikarilan, degisen, eklenen, eski, istatistik, ok, ozet, yeni)</li><li>annotations: vorhanden (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
+<h3 id="rea_browser_caps"><code>rea_browser_caps</code></h3>
+<p>Browser-Verfügbarkeitsprüfung.</p>
+<ul><li>Eingabefelder: keine</li><li>outputSchema: vorhanden (Felder: details, ok, summary, tool)</li><li>annotations: vorhanden (openWorldHint=true, readOnlyHint=false)</li></ul>
+<h3 id="rea_browser_click"><code>rea_browser_click</code></h3>
+<p>Klick + Folgezustand.</p>
+<ul><li>Eingabefelder:</li><li><code>selector</code> (string, erforderlich)</li><li><code>url</code> (string, erforderlich)</li><li>outputSchema: vorhanden (Felder: details, ok, summary, tool)</li><li>annotations: vorhanden (openWorldHint=true, readOnlyHint=false)</li></ul>
+<h3 id="rea_browser_har_import"><code>rea_browser_har_import</code></h3>
+<p>HAR-Import.</p>
+<ul><li>Eingabefelder:</li><li><code>path</code> (string, erforderlich)</li><li>outputSchema: vorhanden (Felder: details, ok, summary, tool)</li><li>annotations: vorhanden (openWorldHint=true, readOnlyHint=false)</li></ul>
+<h3 id="rea_browser_nav"><code>rea_browser_nav</code></h3>
+<p>Seitenöffnung + Titel.</p>
+<ul><li>Eingabefelder:</li><li><code>url</code> (string, erforderlich)</li><li>outputSchema: vorhanden (Felder: details, ok, summary, tool)</li><li>annotations: vorhanden (openWorldHint=true, readOnlyHint=false)</li></ul>
+<h3 id="rea_browser_scenario"><code>rea_browser_scenario</code></h3>
+<p>Szenario-Aufzeichnung.</p>
+<ul><li>Eingabefelder:</li><li><code>text</code> (string, erforderlich)</li><li>outputSchema: vorhanden (Felder: details, ok, summary, tool)</li><li>annotations: vorhanden (destructiveHint=true, openWorldHint=true, readOnlyHint=false)</li></ul>
+<h3 id="rea_browser_shot"><code>rea_browser_shot</code></h3>
+<p>Vollseiten-Screenshot.</p>
+<ul><li>Eingabefelder:</li><li><code>out</code> (string, erforderlich)</li><li><code>url</code> (string, erforderlich)</li><li>outputSchema: vorhanden (Felder: details, ok, summary, tool)</li><li>annotations: vorhanden (destructiveHint=true, openWorldHint=true, readOnlyHint=false)</li></ul>
+<h3 id="rea_config_suggest"><code>rea_config_suggest</code></h3>
+<p>MCP-Config-Snippet für gefundene Werkzeuge.</p>
+<ul><li>Eingabefelder:</li><li><code>bulunan</code> (string[], erforderlich)</li><li>outputSchema: vorhanden (Felder: snippet)</li><li>annotations: vorhanden (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
+<h3 id="rea_console_yakala"><code>rea_console_yakala</code></h3>
+<p>Konsolennachrichten.</p>
+<ul><li>Eingabefelder:</li><li><code>url</code> (string, erforderlich)</li><li>outputSchema: vorhanden (Felder: details, ok, summary, tool)</li><li>annotations: vorhanden (openWorldHint=true, readOnlyHint=false)</li></ul>
+<h3 id="rea_coverage"><code>rea_coverage</code></h3>
+<p>Abdeckungsquote.</p>
+<ul><li>Eingabefelder:</li><li><code>incelenen</code> (integer, erforderlich)</li><li><code>toplam</code> (integer, erforderlich)</li><li>outputSchema: vorhanden (Felder: arac, kalan, ok, oran)</li><li>annotations: vorhanden (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
+<h3 id="rea_crash_append"><code>rea_crash_append</code></h3>
+<p>Hinzufügen eines Crash-Ereignisses.</p>
+<ul><li>Eingabefelder:</li><li><code>olay</code> (string, erforderlich)</li><li><code>olaylar</code> (string, erforderlich)</li><li>outputSchema: vorhanden (Felder: details, ok, summary, tool)</li><li>annotations: vorhanden (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
+<h3 id="rea_crash_hint"><code>rea_crash_hint</code></h3>
+<p>Crash-Hinweis.</p>
+<ul><li>Eingabefelder:</li><li><code>olaylar</code> (string, erforderlich)</li><li>outputSchema: vorhanden (Felder: details, ok, summary, tool)</li><li>annotations: vorhanden (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
+<h3 id="rea_crash_kayit_parse"><code>rea_crash_kayit_parse</code></h3>
+<p>Crash-Notiz-Parsing.</p>
+<ul><li>Eingabefelder:</li><li><code>text</code> (string, erforderlich)</li><li>outputSchema: vorhanden (Felder: arac, ok, registerlar, sinyal, threadSayisi, threadler)</li><li>annotations: vorhanden (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
+<h3 id="rea_crash_ozet"><code>rea_crash_ozet</code></h3>
+<p>Crash-Zusammenfassung.</p>
+<ul><li>Eingabefelder:</li><li><code>text</code> (string, erforderlich)</li><li>outputSchema: vorhanden (Felder: arac, ilkFrame, ok, registerSayisi, sinyal, threadSayisi)</li><li>annotations: vorhanden (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
+<h3 id="rea_crash_timeline"><code>rea_crash_timeline</code></h3>
+<p>Crash-Timeline.</p>
+<ul><li>Eingabefelder:</li><li><code>olaylar</code> (string, erforderlich)</li><li>outputSchema: vorhanden (Felder: details, ok, summary, tool)</li><li>annotations: vorhanden (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
+<h3 id="rea_cutter_caps"><code>rea_cutter_caps</code></h3>
+<p>Cutter-/rizin-Verfügbarkeitsprüfung.</p>
+<ul><li>Eingabefelder: keine</li><li>outputSchema: vorhanden (Felder: arac, ok, pdc, surum)</li><li>annotations: vorhanden (openWorldHint=true, readOnlyHint=false)</li></ul>
+<h3 id="rea_cutter_decompile"><code>rea_cutter_decompile</code></h3>
+<p>Cutter-Pseudocode.</p>
+<ul><li>Eingabefelder:</li><li><code>addr</code> (string, erforderlich)</li><li><code>path</code> (string, erforderlich)</li><li>outputSchema: vorhanden (Felder: addr, arac, hedef, kaynak, kod, not, ok)</li><li>annotations: vorhanden (openWorldHint=true, readOnlyHint=false)</li></ul>
+<h3 id="rea_cutter_disasm"><code>rea_cutter_disasm</code></h3>
+<p>Cutter-/rizin-Disassembly.</p>
+<ul><li>Eingabefelder:</li><li><code>addr</code> (string, erforderlich)</li><li><code>path</code> (string, erforderlich)</li><li>outputSchema: vorhanden (Felder: addr, arac, hedef, ok, ops)</li><li>annotations: vorhanden (openWorldHint=true, readOnlyHint=false)</li></ul>
+<h3 id="rea_cutter_funcs"><code>rea_cutter_funcs</code></h3>
+<p>Cutter-/rizin-Funktionsliste.</p>
+<ul><li>Eingabefelder:</li><li><code>path</code> (string, erforderlich)</li><li>outputSchema: vorhanden (Felder: arac, fonksiyonlar, hedef, ok)</li><li>annotations: vorhanden (openWorldHint=true, readOnlyHint=false)</li></ul>
+<h3 id="rea_cutter_strings"><code>rea_cutter_strings</code></h3>
+<p>Cutter-/rizin-Stringliste.</p>
+<ul><li>Eingabefelder:</li><li><code>path</code> (string, erforderlich)</li><li>outputSchema: vorhanden (Felder: arac, hedef, ok, strings)</li><li>annotations: vorhanden (openWorldHint=true, readOnlyHint=false)</li></ul>
+<h3 id="rea_cutter_xrefs"><code>rea_cutter_xrefs</code></h3>
+<p>Cutter-/rizin-Xref-Liste.</p>
+<ul><li>Eingabefelder:</li><li><code>addr</code> (string, erforderlich)</li><li><code>path</code> (string, erforderlich)</li><li>outputSchema: vorhanden (Felder: addr, arac, hedef, ok, xrefs)</li><li>annotations: vorhanden (openWorldHint=true, readOnlyHint=false)</li></ul>
+<h3 id="rea_diff_match"><code>rea_diff_match</code></h3>
+<p>Funktions-Mapping (JSON-Arrays).</p>
+<ul><li>Eingabefelder:</li><li><code>a</code> (string, erforderlich)</li><li><code>b</code> (string, erforderlich)</li><li>outputSchema: vorhanden (Felder: details, ok, summary, tool)</li><li>annotations: vorhanden (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
+<h3 id="rea_diff_summary"><code>rea_diff_summary</code></h3>
+<p>Zusammenfassung hinzugefügt/entfernt.</p>
+<ul><li>Eingabefelder:</li><li><code>a</code> (string, erforderlich)</li><li><code>b</code> (string, erforderlich)</li><li>outputSchema: vorhanden (Felder: details, ok, summary, tool)</li><li>annotations: vorhanden (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
+<h3 id="rea_dos_com"><code>rea_dos_com</code></h3>
+<p>COM-Erkennung.</p>
+<ul><li>Eingabefelder:</li><li><code>path</code> (string, erforderlich)</li><li>outputSchema: vorhanden (Felder: details, ok, summary, tool)</li><li>annotations: vorhanden (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
+<h3 id="rea_dos_int21"><code>rea_dos_int21</code></h3>
+<p>INT21-Aufrufscan.</p>
+<ul><li>Eingabefelder:</li><li><code>b64</code> (string, erforderlich)</li><li>outputSchema: vorhanden (Felder: details, ok, summary, tool)</li><li>annotations: vorhanden (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
+<h3 id="rea_dos_mz"><code>rea_dos_mz</code></h3>
+<p>MZ-Header-Prüfung.</p>
+<ul><li>Eingabefelder:</li><li><code>b64</code> (string, erforderlich)</li><li>outputSchema: vorhanden (Felder: details, ok, summary, tool)</li><li>annotations: vorhanden (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
+<h3 id="rea_dos_psp"><code>rea_dos_psp</code></h3>
+<p>PSP-Struct-Parsing.</p>
+<ul><li>Eingabefelder:</li><li><code>b64</code> (string, erforderlich)</li><li>outputSchema: vorhanden (Felder: details, ok, summary, tool)</li><li>annotations: vorhanden (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
+<h3 id="rea_dosya_izi"><code>rea_dosya_izi</code></h3>
+<p>Datei-Schreib-/Lesezugriffe aus API-Ereignissen.</p>
+<ul><li>Eingabefelder:</li><li><code>text</code> (string, erforderlich)</li><li>outputSchema: vorhanden (Felder: details, ok, summary, tool)</li><li>annotations: vorhanden (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
+<h3 id="rea_dotnet_cil"><code>rea_dotnet_cil</code></h3>
+<p>CIL-Methodendump (dnfile).</p>
+<ul><li>Eingabefelder:</li><li><code>filtre</code> (string, optional)</li><li><code>path</code> (string, erforderlich)</li><li>outputSchema: vorhanden (Felder: arac, assembly, dosya, filtre, method_sayisi, methods, not, ok)</li><li>annotations: vorhanden (openWorldHint=true, readOnlyHint=false)</li></ul>
+<h3 id="rea_dotnet_metadata"><code>rea_dotnet_metadata</code></h3>
+<p>Lesen von Assembly-Metadaten.</p>
+<ul><li>Eingabefelder:</li><li><code>path</code> (string, erforderlich)</li><li>outputSchema: vorhanden (Felder: arac, clr, dosya, not, ok, okuyucu)</li><li>annotations: vorhanden (openWorldHint=true, readOnlyHint=false)</li></ul>
+<h3 id="rea_dwarf_ozet"><code>rea_dwarf_ozet</code></h3>
+<p>ELF-DWARF-Zusammenfassung.</p>
+<ul><li>Eingabefelder:</li><li><code>path</code> (string, erforderlich)</li><li>outputSchema: vorhanden (Felder: arac, dosya, fonksiyonAdlari, ok, subprogramSayisi, unitSayisi)</li><li>annotations: vorhanden (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
+<h3 id="rea_evidence_bundle"><code>rea_evidence_bundle</code></h3>
+<p>Zusammenstellen eines Evidenzpakets.</p>
+<ul><li>Eingabefelder:</li><li><code>ogeler</code> (string, erforderlich)</li><li><code>sakli</code> (string, erforderlich)</li><li>outputSchema: vorhanden (Felder: digest, items, retained, tools_sha256)</li><li>annotations: vorhanden (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
+<h3 id="rea_evidence_verify"><code>rea_evidence_verify</code></h3>
+<p>Validierung eines Evidenzpakets.</p>
+<ul><li>Eingabefelder:</li><li><code>text</code> (string, erforderlich)</li><li>outputSchema: vorhanden (Felder: ok)</li><li>annotations: vorhanden (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
+<h3 id="rea_evm_disasm"><code>rea_evm_disasm</code></h3>
+<p>EVM-Bytecode-Disassembly (offline).</p>
+<ul><li>Eingabefelder:</li><li><code>hex</code> (string, erforderlich)</li><li>outputSchema: vorhanden (Felder: arac, detay, ok, ozet)</li><li>annotations: vorhanden (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
+<h3 id="rea_evm_selector"><code>rea_evm_selector</code></h3>
+<p>EVM-4-Byte-Selektor (keccak, offline).</p>
+<ul><li>Eingabefelder:</li><li><code>sig</code> (string, erforderlich)</li><li>outputSchema: vorhanden (Felder: details, ok, summary, tool)</li><li>annotations: vorhanden (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
+<h3 id="rea_evm_selectors"><code>rea_evm_selectors</code></h3>
+<p>EVM-Selektorkandidaten.</p>
+<ul><li>Eingabefelder:</li><li><code>hex</code> (string, erforderlich)</li><li>outputSchema: vorhanden (Felder: details, ok, summary, tool)</li><li>annotations: vorhanden (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
+<h3 id="rea_evm_stats"><code>rea_evm_stats</code></h3>
+<p>EVM-Opcode-Statistik.</p>
+<ul><li>Eingabefelder:</li><li><code>hex</code> (string, erforderlich)</li><li>outputSchema: vorhanden (Felder: details, ok, summary, tool)</li><li>annotations: vorhanden (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
+<h3 id="rea_fallback"><code>rea_fallback</code></h3>
+<p>Fallback-Kette, falls das primäre fehlt.</p>
+<ul><li>Eingabefelder:</li><li><code>birincil</code> (string, erforderlich)</li><li><code>mevcut</code> (string[], erforderlich)</li><li>outputSchema: keine</li><li>annotations: vorhanden (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
+<h3 id="rea_firmware_caps"><code>rea_firmware_caps</code></h3>
+<p>Firmware-Verfügbarkeitsprüfung.</p>
+<ul><li>Eingabefelder: keine</li><li>outputSchema: vorhanden (Felder: ok, summary, tool)</li><li>annotations: vorhanden (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
+<h3 id="rea_firmware_extract"><code>rea_firmware_extract</code></h3>
+<p>Firmware-Extraktion.</p>
+<ul><li>Eingabefelder:</li><li><code>path</code> (string, erforderlich)</li><li>outputSchema: vorhanden (Felder: ok, summary, tool)</li><li>annotations: vorhanden (destructiveHint=true, openWorldHint=true, readOnlyHint=false)</li></ul>
+<h3 id="rea_firmware_handoff"><code>rea_firmware_handoff</code></h3>
+<p>Firmware-Handoff-Notiz.</p>
+<ul><li>Eingabefelder:</li><li><code>neden</code> (string, erforderlich)</li><li><code>path</code> (string, erforderlich)</li><li>outputSchema: vorhanden (Felder: handoff, ok, summary, tool)</li><li>annotations: vorhanden (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
+<h3 id="rea_flutter_blutter"><code>rea_flutter_blutter</code></h3>
+<p>Dart-Analyse mit Blutter (ehrlicher Fehler, falls nicht vorhanden).</p>
+<ul><li>Eingabefelder:</li><li><code>path</code> (string, erforderlich)</li><li>outputSchema: vorhanden (Felder: izler, ok, summary, tool)</li><li>annotations: vorhanden (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
+<h3 id="rea_flutter_payload"><code>rea_flutter_payload</code></h3>
+<p>Flutter-Payload-Spuren.</p>
+<ul><li>Eingabefelder:</li><li><code>path</code> (string, erforderlich)</li><li>outputSchema: vorhanden (Felder: izler, ok, summary, tool)</li><li>annotations: vorhanden (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
+<h3 id="rea_flutter_scan"><code>rea_flutter_scan</code></h3>
+<p>Flutter-/Dart-Spurenscan.</p>
+<ul><li>Eingabefelder:</li><li><code>path</code> (string, erforderlich)</li><li>outputSchema: vorhanden (Felder: buildId, dartMi, motor, ok, summary, tool, tur)</li><li>annotations: vorhanden (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
+<h3 id="rea_flutter_snapshot"><code>rea_flutter_snapshot</code></h3>
+<p>Flutter-AOT-Snapshot-Info (Dart-Magic + Version).</p>
+<ul><li>Eingabefelder:</li><li><code>path</code> (string, erforderlich)</li><li>outputSchema: vorhanden (Felder: dartMi, dartSurumu, izolasyon, magic, ok, summary, tool, tur)</li><li>annotations: vorhanden (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
+<h3 id="rea_frida_api"><code>rea_frida_api</code></h3>
+<p>API-Tracer (Name+Args+Retval).</p>
+<ul><li>Eingabefelder:</li><li><code>desen</code> (string, optional)</li><li><code>pid</code> (integer, erforderlich)</li><li>outputSchema: vorhanden (Felder: arac, cagrilar, ok, pid, sayi)</li><li>annotations: vorhanden (openWorldHint=true, readOnlyHint=false)</li></ul>
+<h3 id="rea_frida_cond"><code>rea_frida_cond</code></h3>
+<p>Bedingter Breakpoint.</p>
+<ul><li>Eingabefelder:</li><li><code>adres</code> (string, erforderlich)</li><li><code>kosul</code> (string, erforderlich)</li><li><code>pid</code> (integer, erforderlich)</li><li>outputSchema: vorhanden (Felder: adres, arac, hitSayisi, ok, pid, tuttu)</li><li>annotations: vorhanden (destructiveHint=true, openWorldHint=true, readOnlyHint=false)</li></ul>
+<h3 id="rea_frida_pause"><code>rea_frida_pause</code></h3>
+<p>Anhalten des Zielprozesses (NtSuspend).</p>
+<ul><li>Eingabefelder:</li><li><code>pid</code> (integer, erforderlich)</li><li>outputSchema: vorhanden (Felder: arac, durum, ok, pid)</li><li>annotations: vorhanden (destructiveHint=true, openWorldHint=true, readOnlyHint=false)</li></ul>
+<h3 id="rea_frida_resume"><code>rea_frida_resume</code></h3>
+<p>Fortsetzen eines angehaltenen Prozesses.</p>
+<ul><li>Eingabefelder:</li><li><code>pid</code> (integer, erforderlich)</li><li>outputSchema: vorhanden (Felder: arac, durum, ok, pid)</li><li>annotations: vorhanden (destructiveHint=true, openWorldHint=true, readOnlyHint=false)</li></ul>
+<h3 id="rea_frida_stalker"><code>rea_frida_stalker</code></h3>
+<p>Stalker-Call-Tracing.</p>
+<ul><li>Eingabefelder:</li><li><code>pid</code> (integer, erforderlich)</li><li><code>sure_ms</code> (integer, optional)</li><li>outputSchema: vorhanden (Felder: arac, cagrilar, ok, pid, sayi)</li><li>annotations: vorhanden (openWorldHint=true, readOnlyHint=false)</li></ul>
+<h3 id="rea_frida_step"><code>rea_frida_step</code></h3>
+<p>Next-Instruction-Emulation.</p>
+<ul><li>Eingabefelder:</li><li><code>adres</code> (string, optional)</li><li><code>pid</code> (integer, erforderlich)</li><li>outputSchema: vorhanden (Felder: adres, arac, ok, pid, sonraki, vurdu)</li><li>annotations: vorhanden (destructiveHint=true, openWorldHint=true, readOnlyHint=false)</li></ul>
+<h3 id="rea_fs_diff"><code>rea_fs_diff</code></h3>
+<p>Snapshot-Diff.</p>
+<ul><li>Eingabefelder:</li><li><code>once</code> (string, erforderlich)</li><li><code>sonra</code> (string, erforderlich)</li><li>outputSchema: vorhanden (Felder: kayıt, ok, summary, tool)</li><li>annotations: vorhanden (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
+<h3 id="rea_fs_snapshot"><code>rea_fs_snapshot</code></h3>
+<p>Verzeichnis-Snapshot.</p>
+<ul><li>Eingabefelder:</li><li><code>path</code> (string, erforderlich)</li><li>outputSchema: vorhanden (Felder: kayıt, ok, summary, tool)</li><li>annotations: vorhanden (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
+<h3 id="rea_ghidra_analyze"><code>rea_ghidra_analyze</code></h3>
+<p>Ghidra-Headless-Import+Analyse.</p>
+<ul><li>Eingabefelder:</li><li><code>path</code> (string, erforderlich)</li><li>outputSchema: vorhanden (Felder: arac, hedef, log, ok)</li><li>annotations: vorhanden (destructiveHint=true, openWorldHint=true, readOnlyHint=false)</li></ul>
+<h3 id="rea_ghidra_decompile"><code>rea_ghidra_decompile</code></h3>
+<p>Ghidra-Pseudocode.</p>
+<ul><li>Eingabefelder:</li><li><code>addr</code> (string, erforderlich)</li><li><code>path</code> (string, erforderlich)</li><li>outputSchema: vorhanden (Felder: addr, arac, hedef, kod, ok)</li><li>annotations: vorhanden (openWorldHint=true, readOnlyHint=false)</li></ul>
+<h3 id="rea_ghidra_disasm"><code>rea_ghidra_disasm</code></h3>
+<p>Ghidra-Disassembly.</p>
+<ul><li>Eingabefelder:</li><li><code>addr</code> (string, erforderlich)</li><li><code>path</code> (string, erforderlich)</li><li>outputSchema: vorhanden (Felder: addr, arac, hedef, kod, ok, sayi, talimatlar)</li><li>annotations: vorhanden (openWorldHint=true, readOnlyHint=false)</li></ul>
+<h3 id="rea_ghidra_funcs"><code>rea_ghidra_funcs</code></h3>
+<p>Ghidra-Funktionsliste.</p>
+<ul><li>Eingabefelder:</li><li><code>path</code> (string, erforderlich)</li><li>outputSchema: vorhanden (Felder: arac, fonksiyonlar, hedef, ok)</li><li>annotations: vorhanden (openWorldHint=true, readOnlyHint=false)</li></ul>
+<h3 id="rea_ghidra_strings"><code>rea_ghidra_strings</code></h3>
+<p>Ghidra-Stringliste.</p>
+<ul><li>Eingabefelder:</li><li><code>path</code> (string, erforderlich)</li><li>outputSchema: vorhanden (Felder: arac, hedef, ok, strings)</li><li>annotations: vorhanden (openWorldHint=true, readOnlyHint=false)</li></ul>
+<h3 id="rea_ghidra_trace"><code>rea_ghidra_trace</code></h3>
+<p>Snapshot-zu-Ghidra-Trace-Import.</p>
+<ul><li>Eingabefelder:</li><li><code>kayit</code> (string, erforderlich)</li><li><code>path</code> (string, erforderlich)</li><li>outputSchema: vorhanden (Felder: arac, hedef, ok, sonuc)</li><li>annotations: vorhanden (destructiveHint=true, openWorldHint=true, readOnlyHint=false)</li></ul>
+<h3 id="rea_ghidra_vt"><code>rea_ghidra_vt</code></h3>
+<p>Zwei-Binär-Funktionsdiff (Versionstracking).</p>
+<ul><li>Eingabefelder:</li><li><code>eski</code> (string, erforderlich)</li><li><code>yeni</code> (string, erforderlich)</li><li>outputSchema: vorhanden (Felder: arac, degisen, eklenen, eski, ok, ozet, silinen, yeni)</li><li>annotations: vorhanden (openWorldHint=true, readOnlyHint=false)</li></ul>
+<h3 id="rea_ghidra_xrefs"><code>rea_ghidra_xrefs</code></h3>
+<p>Ghidra-Xref-Liste.</p>
+<ul><li>Eingabefelder:</li><li><code>addr</code> (string, erforderlich)</li><li><code>path</code> (string, erforderlich)</li><li>outputSchema: vorhanden (Felder: addr, arac, hedef, ok, xrefs)</li><li>annotations: vorhanden (openWorldHint=true, readOnlyHint=false)</li></ul>
+<h3 id="rea_go_buildinfo"><code>rea_go_buildinfo</code></h3>
+<p>Go-Build-ID + Modulabhängigkeiten.</p>
+<ul><li>Eingabefelder:</li><li><code>path</code> (string, erforderlich)</li><li>outputSchema: vorhanden (Felder: details, ok, summary, tool)</li><li>annotations: vorhanden (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
+<h3 id="rea_go_funclines"><code>rea_go_funclines</code></h3>
+<p>Go-Funktions- + Datei:Zeile-Mapping.</p>
+<ul><li>Eingabefelder:</li><li><code>path</code> (string, erforderlich)</li><li>outputSchema: vorhanden (Felder: details, ok, summary, tool)</li><li>annotations: vorhanden (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
+<h3 id="rea_go_goresym"><code>rea_go_goresym</code></h3>
+<p>GoReSym-Analyse (ehrlicher Fehler, falls nicht vorhanden).</p>
+<ul><li>Eingabefelder:</li><li><code>path</code> (string, erforderlich)</li><li>outputSchema: vorhanden (Felder: details, ok, summary, tool)</li><li>annotations: vorhanden (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
+<h3 id="rea_go_module"><code>rea_go_module</code></h3>
+<p>Go-Modulinfo.</p>
+<ul><li>Eingabefelder:</li><li><code>text</code> (string, erforderlich)</li><li>outputSchema: vorhanden (Felder: details, ok, summary, tool)</li><li>annotations: vorhanden (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
+<h3 id="rea_go_version"><code>rea_go_version</code></h3>
+<p>Go-Versionsspur.</p>
+<ul><li>Eingabefelder:</li><li><code>text</code> (string, erforderlich)</li><li>outputSchema: vorhanden (Felder: details, ok, summary, tool)</li><li>annotations: vorhanden (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
+<h3 id="rea_hap_liste"><code>rea_hap_liste</code></h3>
+<p>HAP-Dateiliste.</p>
+<ul><li>Eingabefelder:</li><li><code>path</code> (string, erforderlich)</li><li>outputSchema: vorhanden (Felder: arac, dosya, dosyalar, ok, sayi)</li><li>annotations: vorhanden (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
+<h3 id="rea_hap_manifest"><code>rea_hap_manifest</code></h3>
+<p>HAP-Manifest (Bundle/Version).</p>
+<ul><li>Eingabefelder:</li><li><code>path</code> (string, erforderlich)</li><li>outputSchema: vorhanden (Felder: arac, bundleName, dosya, kaynak, ok, version)</li><li>annotations: vorhanden (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
+<h3 id="rea_hopper_istek"><code>rea_hopper_istek</code></h3>
+<p>Hopper-Requestdatei-Erzeugung.</p>
+<ul><li>Eingabefelder:</li><li><code>path</code> (string, erforderlich)</li><li>outputSchema: vorhanden (Felder: adresler, arac, hedef, hopper, istekDosyasi, ok)</li><li>annotations: vorhanden (destructiveHint=true, readOnlyHint=false)</li></ul>
+<h3 id="rea_hopper_tara"><code>rea_hopper_tara</code></h3>
+<p>String-/Regex-Suche in Dateien.</p>
+<ul><li>Eingabefelder:</li><li><code>desen</code> (string, erforderlich)</li><li><code>path</code> (string, erforderlich)</li><li>outputSchema: vorhanden (Felder: arac, desen, eslesmeler, hedef, ok, regex, sayi)</li><li>annotations: vorhanden (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
+<h3 id="rea_ida_flirt"><code>rea_ida_flirt</code></h3>
+<p>String-basierte Compiler-/Bibliotheksschätzung (keine echte FLIRT-Signatur; falls IDA installiert ist, rea_ida_idb-Ausgabe zur Verifikation in IDA mit angewandter Signatur nutzen).</p>
+<ul><li>Eingabefelder:</li><li><code>path</code> (string, erforderlich)</li><li>outputSchema: vorhanden (Felder: arac, eslesmeler, guven, hedef, idaMevcut, kutuphane, method, not, ok, sayi, surumler)</li><li>annotations: vorhanden (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
+<h3 id="rea_ida_idb"><code>rea_ida_idb</code></h3>
+<p>IDB-Batch-Erzeugung (idat).</p>
+<ul><li>Eingabefelder:</li><li><code>out</code> (string, erforderlich)</li><li><code>path</code> (string, erforderlich)</li><li>outputSchema: vorhanden (Felder: arac, hedef, idat, idb, ok)</li><li>annotations: vorhanden (destructiveHint=true, openWorldHint=true, readOnlyHint=false)</li></ul>
+<h3 id="rea_il2cpp_dump"><code>rea_il2cpp_dump</code></h3>
+<p>Dump mit Il2CppDumper (ehrlicher Fehler, falls nicht vorhanden).</p>
+<ul><li>Eingabefelder:</li><li><code>path</code> (string, erforderlich)</li><li>outputSchema: vorhanden (Felder: arac, cikti, dosya, dosyaSayisi, log, ok, ozet)</li><li>annotations: vorhanden (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
+<h3 id="rea_il2cpp_metadata"><code>rea_il2cpp_metadata</code></h3>
+<p>IL2CPP-global-metadata-Klassen-/Methodenzählung.</p>
+<ul><li>Eingabefelder:</li><li><code>path</code> (string, erforderlich)</li><li>outputSchema: vorhanden (Felder: arac, assemblySayisi, dosya, goruntuSayisi, metodSayisi, not, ok, ozet, sinifSayisi, surum)</li><li>annotations: vorhanden (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
+<h3 id="rea_il2cpp_methods"><code>rea_il2cpp_methods</code></h3>
+<p>IL2CPP-Methodensignaturen (ehrliches Flag, falls eingeschränkt).</p>
+<ul><li>Eingabefelder:</li><li><code>path</code> (string, erforderlich)</li><li>outputSchema: vorhanden (Felder: arac, dosya, imzaSayisi, imzalar, metodSayisi, not, ok, sinirli, surum)</li><li>annotations: vorhanden (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
+<h3 id="rea_ilspy_decompile"><code>rea_ilspy_decompile</code></h3>
+<p>.NET-C#-Dekompilierung.</p>
+<ul><li>Eingabefelder:</li><li><code>out</code> (string, erforderlich)</li><li><code>path</code> (string, erforderlich)</li><li>outputSchema: vorhanden (Felder: arac, ciktiDir, cs_sayisi, dosya, not, ok)</li><li>annotations: vorhanden (destructiveHint=true, openWorldHint=true, readOnlyHint=false)</li></ul>
+<h3 id="rea_investigate"><code>rea_investigate</code></h3>
+<p>Automatischer Untersuchungsplan (Sniff+Score+Fallback).</p>
+<ul><li>Eingabefelder:</li><li><code>path</code> (string, erforderlich)</li><li><code>soru</code> (string, optional)</li><li>outputSchema: vorhanden (Felder: arac, motor, ok, plan, skor, tip, yedekler)</li><li>annotations: vorhanden (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
+<h3 id="rea_jadx_classes"><code>rea_jadx_classes</code></h3>
+<p>APK-Klassenliste.</p>
+<ul><li>Eingabefelder:</li><li><code>apk_path</code> (string, erforderlich)</li><li>outputSchema: vorhanden (Felder: arac, ok, siniflar, toplam_sinif)</li><li>annotations: vorhanden (openWorldHint=true, readOnlyHint=false)</li></ul>
+<h3 id="rea_jadx_decompile"><code>rea_jadx_decompile</code></h3>
+<p>APK-Einzelklassen-Dekompilierung.</p>
+<ul><li>Eingabefelder:</li><li><code>apk_path</code> (string, erforderlich)</li><li><code>out</code> (string, erforderlich)</li><li><code>sinif</code> (string, erforderlich)</li><li>outputSchema: vorhanden (Felder: arac, bayt, ciktiDir, dosya, ok, sinif)</li><li>annotations: vorhanden (destructiveHint=true, openWorldHint=true, readOnlyHint=false)</li></ul>
+<h3 id="rea_jadx_full"><code>rea_jadx_full</code></h3>
+<p>APK-Volldekompilierung.</p>
+<ul><li>Eingabefelder:</li><li><code>apk_path</code> (string, erforderlich)</li><li><code>out</code> (string, erforderlich)</li><li>outputSchema: vorhanden (Felder: arac, ciktiDir, java_dosya_sayisi, ok)</li><li>annotations: vorhanden (destructiveHint=true, openWorldHint=true, readOnlyHint=false)</li></ul>
+<h3 id="rea_jadx_manifest"><code>rea_jadx_manifest</code></h3>
+<p>APK-Manifest-Zusammenfassung.</p>
+<ul><li>Eingabefelder:</li><li><code>apk_path</code> (string, erforderlich)</li><li>outputSchema: vorhanden (Felder: aktiviteler, apk, arac, izinler, ok, paket)</li><li>annotations: vorhanden (openWorldHint=true, readOnlyHint=false)</li></ul>
+<h3 id="rea_jadx_methods"><code>rea_jadx_methods</code></h3>
+<p>Methodenliste in Dekompilierungsausgabe.</p>
+<ul><li>Eingabefelder:</li><li><code>dir</code> (string, erforderlich)</li><li>outputSchema: vorhanden (Felder: arac, methodlar, ok)</li><li>annotations: vorhanden (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
+<h3 id="rea_jadx_read"><code>rea_jadx_read</code></h3>
+<p>Dekompilierungsklassen-Lesen (400 Zeilen).</p>
+<ul><li>Eingabefelder:</li><li><code>dir</code> (string, erforderlich)</li><li><code>sinif</code> (string, erforderlich)</li><li>outputSchema: vorhanden (Felder: arac, dosya, ok, satirlar, toplam_satir)</li><li>annotations: vorhanden (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
+<h3 id="rea_jadx_xrefs"><code>rea_jadx_xrefs</code></h3>
+<p>Begriffssuche in Dekompilierungsausgabe.</p>
+<ul><li>Eingabefelder:</li><li><code>dir</code> (string, erforderlich)</li><li><code>terim</code> (string, erforderlich)</li><li>outputSchema: vorhanden (Felder: arac, kayitlar, ok)</li><li>annotations: vorhanden (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
+<h3 id="rea_jeb_sorgu"><code>rea_jeb_sorgu</code></h3>
+<p>JEB-MCP-Abfrage.</p>
+<ul><li>Eingabefelder:</li><li><code>govde</code> (string, optional)</li><li><code>url</code> (string, erforderlich)</li><li><code>yontem</code> (string, erforderlich)</li><li>outputSchema: vorhanden (Felder: arac, durum, govde, ok, url, yontem)</li><li>annotations: vorhanden (openWorldHint=true, readOnlyHint=false)</li></ul>
+<h3 id="rea_js_bundle"><code>rea_js_bundle</code></h3>
+<p>Bundle-Zusammenfassung.</p>
+<ul><li>Eingabefelder:</li><li><code>text</code> (string, erforderlich)</li><li>outputSchema: vorhanden (Felder: ok, summary, tool)</li><li>annotations: vorhanden (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
+<h3 id="rea_js_export_shape"><code>rea_js_export_shape</code></h3>
+<p>Export-Form.</p>
+<ul><li>Eingabefelder:</li><li><code>path</code> (string, erforderlich)</li><li>outputSchema: vorhanden (Felder: details, ok, summary, tool)</li><li>annotations: vorhanden (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
+<h3 id="rea_js_require"><code>rea_js_require</code></h3>
+<p>Require-/Import-Graph.</p>
+<ul><li>Eingabefelder:</li><li><code>path</code> (string, erforderlich)</li><li>outputSchema: vorhanden (Felder: details, ok, summary, tool)</li><li>annotations: vorhanden (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
+<h3 id="rea_js_sourcemap"><code>rea_js_sourcemap</code></h3>
+<p>Source-Map-Auflösung.</p>
+<ul><li>Eingabefelder:</li><li><code>text</code> (string, erforderlich)</li><li>outputSchema: vorhanden (Felder: ok, summary, tool)</li><li>annotations: vorhanden (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
+<h3 id="rea_macho_classdump"><code>rea_macho_classdump</code></h3>
+<p>class-dump-Ausgabe (ehrlicher Fehler, falls nicht vorhanden).</p>
+<ul><li>Eingabefelder:</li><li><code>path</code> (string, erforderlich)</li><li>outputSchema: vorhanden (Felder: details, ok, summary, tool)</li><li>annotations: vorhanden (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
+<h3 id="rea_macho_info"><code>rea_macho_info</code></h3>
+<p>Mach-O-Header (Architektur + Dateityp).</p>
+<ul><li>Eingabefelder:</li><li><code>path</code> (string, erforderlich)</li><li>outputSchema: vorhanden (Felder: details, ok, summary, tool)</li><li>annotations: vorhanden (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
+<h3 id="rea_macho_loads"><code>rea_macho_loads</code></h3>
+<p>Mach-O-Load-Kommandos (Segment/Dylib).</p>
+<ul><li>Eingabefelder:</li><li><code>path</code> (string, erforderlich)</li><li>outputSchema: vorhanden (Felder: details, ok, summary, tool)</li><li>annotations: vorhanden (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
+<h3 id="rea_macho_objc"><code>rea_macho_objc</code></h3>
+<p>ObjC-Klassen-/Kategorieliste (reines Lesen).</p>
+<ul><li>Eingabefelder:</li><li><code>path</code> (string, erforderlich)</li><li>outputSchema: vorhanden (Felder: details, ok, summary, tool)</li><li>annotations: vorhanden (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
+<h3 id="rea_macho_otool"><code>rea_macho_otool</code></h3>
+<p>otool-Ausgabe (ehrlicher Fehler, falls nicht vorhanden).</p>
+<ul><li>Eingabefelder:</li><li><code>path</code> (string, erforderlich)</li><li>outputSchema: vorhanden (Felder: details, ok, summary, tool)</li><li>annotations: vorhanden (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
+<h3 id="rea_managed_compare"><code>rea_managed_compare</code></h3>
+<p>Managed-Member-Diff.</p>
+<ul><li>Eingabefelder:</li><li><code>a</code> (string, erforderlich)</li><li><code>b</code> (string, erforderlich)</li><li>outputSchema: vorhanden (Felder: arac, detay, ok, ozet)</li><li>annotations: vorhanden (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
+<h3 id="rea_managed_import"><code>rea_managed_import</code></h3>
+<p>Rekonstruktionsdatensatz.</p>
+<ul><li>Eingabefelder:</li><li><code>path</code> (string, erforderlich)</li><li>outputSchema: vorhanden (Felder: arac, detay, ok, ozet)</li><li>annotations: vorhanden (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
+<h3 id="rea_managed_verify"><code>rea_managed_verify</code></h3>
+<p>Native-Abhängigkeitsvalidierung.</p>
+<ul><li>Eingabefelder:</li><li><code>beklenen</code> (string, erforderlich)</li><li><code>path</code> (string, erforderlich)</li><li>outputSchema: vorhanden (Felder: arac, detay, ok, ozet)</li><li>annotations: vorhanden (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
+<h3 id="rea_mips_funcs"><code>rea_mips_funcs</code></h3>
+<p>MIPS-Funktions-Prescan.</p>
+<ul><li>Eingabefelder:</li><li><code>b64</code> (string, erforderlich)</li><li>outputSchema: vorhanden (Felder: details, ok, summary, tool)</li><li>annotations: vorhanden (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
+<h3 id="rea_mips_psp_profile"><code>rea_mips_psp_profile</code></h3>
+<p>MIPS-/PSP-Profil.</p>
+<ul><li>Eingabefelder:</li><li><code>b64</code> (string, erforderlich)</li><li>outputSchema: vorhanden (Felder: details, ok, summary, tool)</li><li>annotations: vorhanden (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
+<h3 id="rea_missing_reason"><code>rea_missing_reason</code></h3>
+<p>Fehlendes Werkzeug + Installationsbefehl.</p>
+<ul><li>Eingabefelder:</li><li><code>eksik</code> (string, erforderlich)</li><li><code>platform</code> (string, optional)</li><li>outputSchema: vorhanden (Felder: alternatif, eksik, kur, neden)</li><li>annotations: vorhanden (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
+<h3 id="rea_net_capture"><code>rea_net_capture</code></h3>
+<p>Lokale Netzwerkaufzeichnung (HAR).</p>
+<ul><li>Eingabefelder:</li><li><code>url</code> (string, erforderlich)</li><li>outputSchema: vorhanden (Felder: kayıt, ok, summary, tool)</li><li>annotations: vorhanden (destructiveHint=true, openWorldHint=true, readOnlyHint=false)</li></ul>
+<h3 id="rea_obligation_advance"><code>rea_obligation_advance</code></h3>
+<p>Ring-Weiterschaltung.</p>
+<ul><li>Eingabefelder:</li><li><code>bulgu</code> (string, erforderlich)</li><li><code>defter</code> (string, erforderlich)</li><li><code>kod</code> (string, erforderlich)</li><li>outputSchema: vorhanden (Felder: links)</li><li>annotations: vorhanden (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
+<h3 id="rea_obligation_close"><code>rea_obligation_close</code></h3>
+<p>Ledger-Versiegelung.</p>
+<ul><li>Eingabefelder:</li><li><code>text</code> (string, erforderlich)</li><li>outputSchema: vorhanden (Felder: kapatıldı, links)</li><li>annotations: vorhanden (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
+<h3 id="rea_obligation_ledger"><code>rea_obligation_ledger</code></h3>
+<p>Ledger-Einrichtung.</p>
+<ul><li>Eingabefelder:</li><li><code>bulgular</code> (string[], erforderlich)</li><li><code>evidence_digest</code> (string, erforderlich)</li><li><code>tools_sha256</code> (string, erforderlich)</li><li>outputSchema: vorhanden (Felder: evidence_digest, kapatıldı, ledger_id, links, tools_sha256)</li><li>annotations: vorhanden (destructiveHint=false, idempotentHint=false, openWorldHint=false, readOnlyHint=true)</li></ul>
+<h3 id="rea_obligation_verify"><code>rea_obligation_verify</code></h3>
+<p>Kettenvalidierung.</p>
+<ul><li>Eingabefelder:</li><li><code>text</code> (string, erforderlich)</li><li>outputSchema: vorhanden (Felder: eksik, ok)</li><li>annotations: vorhanden (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
+<h3 id="rea_pcap_oku"><code>rea_pcap_oku</code></h3>
+<p>PCAP-Stream-Reassemblierung + Keylog-TLS-Entschlüsselung.</p>
+<ul><li>Eingabefelder:</li><li><code>keylog</code> (string, optional)</li><li><code>path</code> (string, erforderlich)</li><li>outputSchema: vorhanden (Felder: details, ok, summary, tool)</li><li>annotations: vorhanden (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
+<h3 id="rea_pdb_indir"><code>rea_pdb_indir</code></h3>
+<p>PDB-Download vom Microsoft-Symbolserver aus dem CodeView-RSDS-Datensatz des PE-Debug-Verzeichnisses + Integrität + Cache.</p>
+<ul><li>Eingabefelder:</li><li><code>path</code> (string, erforderlich)</li><li>outputSchema: vorhanden (Felder: arac, cache, dosya, guid, ok, pdb, url, yas, yol)</li><li>annotations: vorhanden (destructiveHint=true, openWorldHint=true, readOnlyHint=false)</li></ul>
+<h3 id="rea_pdb_yolu"><code>rea_pdb_yolu</code></h3>
+<p>PDB-Pfad aus dem PE-Debug-Verzeichnis.</p>
+<ul><li>Eingabefelder:</li><li><code>path</code> (string, erforderlich)</li><li>outputSchema: vorhanden (Felder: arac, dosya, guid, ok, pdb, yas)</li><li>annotations: vorhanden (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
+<h3 id="rea_pe_imports"><code>rea_pe_imports</code></h3>
+<p>PE-Importliste.</p>
+<ul><li>Eingabefelder:</li><li><code>path</code> (string, erforderlich)</li><li>outputSchema: vorhanden (Felder: arac, dlls, dosya, fonksiyonlar, not, ok, sayi)</li><li>annotations: vorhanden (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
+<h3 id="rea_pe_info"><code>rea_pe_info</code></h3>
+<p>PE-Header-Info.</p>
+<ul><li>Eingabefelder:</li><li><code>path</code> (string, erforderlich)</li><li>outputSchema: vorhanden (Felder: arac, bit, dosya, entry, entry_hex, machine, machine_hex, ok, section_sayisi)</li><li>annotations: vorhanden (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
+<h3 id="rea_pe_sections"><code>rea_pe_sections</code></h3>
+<p>PE-Section-Tabelle.</p>
+<ul><li>Eingabefelder:</li><li><code>path</code> (string, erforderlich)</li><li>outputSchema: vorhanden (Felder: arac, bolumler, dosya, ok, sayi)</li><li>annotations: vorhanden (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
+<h3 id="rea_process_caps"><code>rea_process_caps</code></h3>
+<p>Prozess-Verfügbarkeitsprüfung.</p>
+<ul><li>Eingabefelder: keine</li><li>outputSchema: vorhanden (Felder: kayıt, ok, summary, tool)</li><li>annotations: vorhanden (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
+<h3 id="rea_process_compare"><code>rea_process_compare</code></h3>
+<p>Pipe-/PTY-Vergleich.</p>
+<ul><li>Eingabefelder:</li><li><code>cmd</code> (string, erforderlich)</li><li>outputSchema: keine</li><li>annotations: vorhanden (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
+<h3 id="rea_process_run"><code>rea_process_run</code></h3>
+<p>Prozesslauf-Aufzeichnung.</p>
+<ul><li>Eingabefelder:</li><li><code>cmd</code> (string, erforderlich)</li><li>outputSchema: vorhanden (Felder: kayıt, ok, summary, tool)</li><li>annotations: vorhanden (destructiveHint=true, openWorldHint=true, readOnlyHint=false)</li></ul>
+<h3 id="rea_pwn_elf_layout"><code>rea_pwn_elf_layout</code></h3>
+<p>ELF-Layout + Mitigations.</p>
+<ul><li>Eingabefelder:</li><li><code>path</code> (string, erforderlich)</li><li>outputSchema: keine</li><li>annotations: vorhanden (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
+<h3 id="rea_pwn_gadgets"><code>rea_pwn_gadgets</code></h3>
+<p>Gadget-Hinweis.</p>
+<ul><li>Eingabefelder:</li><li><code>text</code> (string, erforderlich)</li><li>outputSchema: vorhanden (Felder: details, ok, summary, tool)</li><li>annotations: vorhanden (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
+<h3 id="rea_r2_callgraph"><code>rea_r2_callgraph</code></h3>
+<p>r2-Funktions-Callgraph.</p>
+<ul><li>Eingabefelder:</li><li><code>path</code> (string, erforderlich)</li><li>outputSchema: vorhanden (Felder: arac, fonksiyonlar, hedef, ok)</li><li>annotations: vorhanden (openWorldHint=true, readOnlyHint=false)</li></ul>
+<h3 id="rea_r2_debug"><code>rea_r2_debug</code></h3>
+<p>r2-Batch-Debugging (bp+regs).</p>
+<ul><li>Eingabefelder:</li><li><code>addr</code> (string, erforderlich)</li><li><code>path</code> (string, erforderlich)</li><li>outputSchema: vorhanden (Felder: arac, bpAddr, cikti, hedef, not, ok)</li><li>annotations: vorhanden (destructiveHint=true, openWorldHint=true, readOnlyHint=false)</li></ul>
+<h3 id="rea_r2_esil"><code>rea_r2_esil</code></h3>
+<p>r2-ESIL-Emulations-Regs.</p>
+<ul><li>Eingabefelder:</li><li><code>addr</code> (string, erforderlich)</li><li><code>path</code> (string, erforderlich)</li><li>outputSchema: vorhanden (Felder: addr, adim, arac, hedef, ok, regs)</li><li>annotations: vorhanden (openWorldHint=true, readOnlyHint=false)</li></ul>
+<h3 id="rea_readiness"><code>rea_readiness</code></h3>
+<p>Rekonstruktionsvorbereitungs-Score.</p>
+<ul><li>Eingabefelder:</li><li><code>text</code> (string, erforderlich)</li><li>outputSchema: vorhanden (Felder: arac, eksik, ok, seviye, skor)</li><li>annotations: vorhanden (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
+<h3 id="rea_recon_funcs"><code>rea_recon_funcs</code></h3>
+<p>Pseudocode-Funktionsliste.</p>
+<ul><li>Eingabefelder:</li><li><code>text</code> (string, erforderlich)</li><li>outputSchema: vorhanden (Felder: details, ok, summary, tool)</li><li>annotations: vorhanden (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
+<h3 id="rea_recon_harness"><code>rea_recon_harness</code></h3>
+<p>C-Harness-Skelett.</p>
+<ul><li>Eingabefelder:</li><li><code>text</code> (string, erforderlich)</li><li>outputSchema: vorhanden (Felder: details, ok, summary, tool)</li><li>annotations: vorhanden (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
+<h3 id="rea_recon_tag"><code>rea_recon_tag</code></h3>
+<p>Fall-Label.</p>
+<ul><li>Eingabefelder: keine</li><li>outputSchema: vorhanden (Felder: details, ok, summary, tool)</li><li>annotations: vorhanden (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
+<h3 id="rea_registry_izi"><code>rea_registry_izi</code></h3>
+<p>Registry-Schreibzugriffe aus API-Ereignissen.</p>
+<ul><li>Eingabefelder:</li><li><code>text</code> (string, erforderlich)</li><li>outputSchema: vorhanden (Felder: details, ok, summary, tool)</li><li>annotations: vorhanden (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
+<h3 id="rea_scan_repo"><code>rea_scan_repo</code></h3>
+<p>Repo-Scan (Typ+Plan).</p>
+<ul><li>Eingabefelder:</li><li><code>path</code> (string, erforderlich)</li><li>outputSchema: vorhanden (Felder: details, ok, summary, tool)</li><li>annotations: vorhanden (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
+<h3 id="rea_scan_repo_paralel"><code>rea_scan_repo_paralel</code></h3>
+<p>Paralleler Repo-Scan (4er-Pool, abbrechbar).</p>
+<ul><li>Eingabefelder:</li><li><code>eszamanlilik</code> (integer, optional)</li><li><code>path</code> (string, erforderlich)</li><li>outputSchema: vorhanden (Felder: details, iptalEdildi, ok, summary, tool)</li><li>annotations: vorhanden (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
+<h3 id="rea_sniff"><code>rea_sniff</code></h3>
+<p>Dateityp- + Engine-Empfehlung (Magic-Byte).</p>
+<ul><li>Eingabefelder:</li><li><code>b64dosya</code> (string, erforderlich)</li><li>outputSchema: vorhanden (Felder: motor, tip)</li><li>annotations: vorhanden (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
+<h3 id="rea_storage_dump"><code>rea_storage_dump</code></h3>
+<p>Cookies + localStorage.</p>
+<ul><li>Eingabefelder:</li><li><code>url</code> (string, erforderlich)</li><li>outputSchema: vorhanden (Felder: details, ok, summary, tool)</li><li>annotations: vorhanden (openWorldHint=true, readOnlyHint=false)</li></ul>
+<h3 id="rea_typedef_oner"><code>rea_typedef_oner</code></h3>
+<p>Argumentnamenvorschlag + Propagation.</p>
+<ul><li>Eingabefelder:</li><li><code>text</code> (string, erforderlich)</li><li>outputSchema: vorhanden (Felder: arac, ok, oneriler, sayi)</li><li>annotations: vorhanden (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
+<h3 id="rea_unpack_hunt"><code>rea_unpack_hunt</code></h3>
+<p>Geführter Ablauf für unbekannte Packer.</p>
+<ul><li>Eingabefelder:</li><li><code>path</code> (string, erforderlich)</li><li>outputSchema: vorhanden (Felder: adimlar, arac, karar, ok)</li><li>annotations: vorhanden (openWorldHint=true, readOnlyHint=false)</li></ul>
+<h3 id="rea_unpack_try"><code>rea_unpack_try</code></h3>
+<p>Automatische Unpack-Weiterleitung.</p>
+<ul><li>Eingabefelder:</li><li><code>path</code> (string, erforderlich)</li><li>outputSchema: vorhanden (Felder: sonuc, yontem)</li><li>annotations: vorhanden (destructiveHint=true, openWorldHint=true, readOnlyHint=false)</li></ul>
+<h3 id="rea_upx_info"><code>rea_upx_info</code></h3>
+<p>UPX-gepackt-Info.</p>
+<ul><li>Eingabefelder:</li><li><code>path</code> (string, erforderlich)</li><li>outputSchema: vorhanden (Felder: arac, cikti, dosya, not, ok, sikisik)</li><li>annotations: vorhanden (openWorldHint=true, readOnlyHint=false)</li></ul>
+<h3 id="rea_upx_unpack"><code>rea_upx_unpack</code></h3>
+<p>UPX-Entpacken.</p>
+<ul><li>Eingabefelder:</li><li><code>out</code> (string, erforderlich)</li><li><code>path</code> (string, erforderlich)</li><li>outputSchema: vorhanden (Felder: arac, cikti, dosya, log, ok)</li><li>annotations: vorhanden (destructiveHint=true, openWorldHint=true, readOnlyHint=false)</li></ul>
+<h3 id="rea_wasm_decode"><code>rea_wasm_decode</code></h3>
+<p>WASM-/WAT-Auflösung (wabt).</p>
+<ul><li>Eingabefelder:</li><li><code>path</code> (string, erforderlich)</li><li>outputSchema: vorhanden (Felder: details, ok, summary, tool)</li><li>annotations: vorhanden (openWorldHint=true, readOnlyHint=false)</li></ul>
+<h3 id="rea_wasm_exports"><code>rea_wasm_exports</code></h3>
+<p>WAT-Exportliste (offline).</p>
+<ul><li>Eingabefelder:</li><li><code>wat</code> (string, erforderlich)</li><li>outputSchema: vorhanden (Felder: details, ok, summary, tool)</li><li>annotations: vorhanden (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
+<h3 id="rea_wasm_imports"><code>rea_wasm_imports</code></h3>
+<p>WASM-Importliste.</p>
+<ul><li>Eingabefelder:</li><li><code>b64</code> (string, erforderlich)</li><li>outputSchema: vorhanden (Felder: details, ok, summary, tool)</li><li>annotations: vorhanden (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
+<h3 id="rea_wasm_sections"><code>rea_wasm_sections</code></h3>
+<p>WASM-Section-Tabelle.</p>
+<ul><li>Eingabefelder:</li><li><code>b64</code> (string, erforderlich)</li><li>outputSchema: vorhanden (Felder: details, ok, summary, tool)</li><li>annotations: vorhanden (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
+<h3 id="rea_wasm_validate"><code>rea_wasm_validate</code></h3>
+<p>WASM-Validierung (wasm-validate).</p>
+<ul><li>Eingabefelder:</li><li><code>path</code> (string, erforderlich)</li><li>outputSchema: vorhanden (Felder: arac, detay, ok, ozet)</li><li>annotations: vorhanden (openWorldHint=true, readOnlyHint=false)</li></ul>
+<h3 id="session_close"><code>session_close</code></h3>
+<p>Verwirft eine Anwendungssitzung samt Ereignispuffer.</p>
+<ul><li>Eingabefelder:</li><li><code>session_id</code> (string, erforderlich) — Application session id. Not an MCP protocol session.</li><li>outputSchema: vorhanden (Felder: closed, session_id)</li><li>annotations: vorhanden (destructiveHint=true, openWorldHint=true, readOnlyHint=false)</li></ul>
+<h3 id="session_list"><code>session_list</code></h3>
+<p>Listet Anwendungssitzungen in diesem Prozess auf.</p>
+<ul><li>Eingabefelder: keine</li><li>outputSchema: vorhanden (Felder: sessions)</li><li>annotations: vorhanden (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
+<h3 id="session_open"><code>session_open</code></h3>
+<p>Öffnet eine Anwendungssitzung für eine Engine. Gibt session_id für spätere Werkzeugargumente zurück.</p>
+<ul><li>Eingabefelder:</li><li><code>engine</code> (enum, erforderlich)</li><li>outputSchema: vorhanden (Felder: createdAt, engine, session_id)</li><li>annotations: vorhanden (destructiveHint=false, idempotentHint=false, openWorldHint=false, readOnlyHint=false)</li></ul>
+<h3 id="static_info"><code>static_info</code></h3>
+<p>Meldet radare2-Static-Engine-Fähigkeiten, r2-Verfügbarkeit und das geöffnete Ziel, falls vorhanden.</p>
+<ul><li>Eingabefelder:</li><li><code>session_id</code> (string, erforderlich) — Application session id. Not an MCP protocol session.</li><li>outputSchema: vorhanden (Felder: capabilities, engine, r2, session_id, target)</li><li>annotations: vorhanden (openWorldHint=true, readOnlyHint=false)</li></ul>
+<h3 id="strings"><code>strings</code></h3>
+<p>Strings in der Binärdatei (Adresse, Section, Länge, Text).</p>
+<ul><li>Eingabefelder:</li><li><code>limit</code> (integer, optional) — Max strings returned (default 200).</li><li><code>min_length</code> (integer, optional) — Keep strings with length &gt;= this (default 0).</li><li><code>offset</code> (integer, optional) — Skip this many matches (default 0).</li><li><code>section</code> (string, optional) — Only strings from this section, e.g. &quot;.rodata&quot;.</li><li><code>session_id</code> (string, erforderlich) — Application session id. Not an MCP protocol session.</li><li>outputSchema: vorhanden (Felder: offset, session_id, strings, total)</li><li>annotations: vorhanden (openWorldHint=true, readOnlyHint=false)</li></ul>
+<h3 id="xrefs"><code>xrefs</code></h3>
+<p>Querverweise zu und von einer Adresse (Code und Daten).</p>
+<ul><li>Eingabefelder:</li><li><code>address</code> (string | number, erforderlich) — Target address as hex (&quot;0x400200&quot;), decimal, or flag name (&quot;entry0&quot;).</li><li><code>direction</code> (enum, optional)</li><li><code>session_id</code> (string, erforderlich) — Application session id. Not an MCP protocol session.</li><li>outputSchema: vorhanden (Felder: address, from, session_id, to)</li><li>annotations: vorhanden (openWorldHint=true, readOnlyHint=false)</li></ul>
+<h2 id="resources">Resources</h2>
+<ul><li><code>rea-plus://capabilities-safety</code> — Name: <code>capabilities-safety</code> — mimeType: <code>application/json</code> — Statische Zusammenfassung der Fähigkeiten und Sicherheitsregeln (schreibgeschützt).</li><li><code>rea-plus://server-info</code> — Name: <code>server-info</code> — mimeType: <code>application/json</code> — Statische Server-Identität und Oberflächenzusammenfassung (schreibgeschützt).</li></ul>
+<h2 id="prompts">Prompts</h2>
+<ul><li><code>android-triage</code> — Argumente: <code>focus</code> (optional), <code>path</code> (erforderlich) — Statischer jadx-basierter Triage-Ablauf für APKs (nebeneffektfreier Prompt).</li><li><code>dotnet-malware-triage</code> — Argumente: <code>focus</code> (optional), <code>path</code> (erforderlich) — Statischer Malware-Triage-Ablauf für .NET-Samples (nebeneffektfreier Prompt).</li><li><code>packer-triage</code> — Argumente: <code>focus</code> (optional), <code>path</code> (erforderlich) — Sequenzieller, statik-priorisierter rea-Ablauf zur Packer-/Schutzerkennung (nebeneffektfreier Prompt).</li></ul>
+</div></main>
+<footer class="altbilgi"><p>ReaPlus Docs — statische Site. Erzeugung: <code>node scripts/site-uret.mjs</code> · Zahlen aus der TOOLS.md-Zusammenfassung (echter Lauf).</p></footer>
+</div>
+<script>
+document.documentElement.classList.add("js");
+(function(){var k="reaplus-tema";var d=document.getElementById("tema-toggle");
+function uygula(t){document.documentElement.dataset.theme=t;try{localStorage.setItem(k,t);}catch(e){}if(d){d.setAttribute("aria-pressed",String(t==="dark"));d.textContent=t==="dark"?"Helles Design":"Dunkles Design";}}
+if(d){d.addEventListener("click",function(){uygula(document.documentElement.dataset.theme==="dark"?"light":"dark");});
+if(document.documentElement.dataset.theme){d.setAttribute("aria-pressed",String(document.documentElement.dataset.theme==="dark"));d.textContent=document.documentElement.dataset.theme==="dark"?"Helles Design":"Dunkles Design";}}
+var azalt=window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+var beliren=document.querySelectorAll(".reveal");
+if(azalt||!("IntersectionObserver" in window)){beliren.forEach(function(el){el.classList.add("gorunur");});}
+else{var gozcu=new IntersectionObserver(function(girdiler){girdiler.forEach(function(g){if(g.isIntersecting){g.target.classList.add("gorunur");gozcu.unobserve(g.target);}});},{threshold:.12,rootMargin:"0px 0px -8% 0px"});beliren.forEach(function(el){gozcu.observe(el);});}
+var sayilar=document.querySelectorAll(".sayi");
+function bitir(el){el.textContent=el.getAttribute("data-sayi");}
+if(azalt||!("IntersectionObserver" in window)){sayilar.forEach(bitir);}
+else{var sayac=new IntersectionObserver(function(girdiler){girdiler.forEach(function(g){if(!g.isIntersecting)return;var el=g.target;sayac.unobserve(el);var hedef=Number(el.getAttribute("data-sayi"));if(!isFinite(hedef))return;var baslangic=null;var sure=850;function kare(t){if(baslangic===null)baslangic=t;var oran=Math.min(1,(t-baslangic)/sure);var yumru=1-Math.pow(1-oran,3);el.textContent=String(Math.round(hedef*yumru));if(oran<1){requestAnimationFrame(kare);}else{bitir(el);}}requestAnimationFrame(kare);});},{threshold:.4});sayilar.forEach(function(el){sayac.observe(el);});}
+})();
+</script>
+</body>
+</html>

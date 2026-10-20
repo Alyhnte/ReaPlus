@@ -41,6 +41,29 @@ function plistKey(txt: string, anahtar: string): string | null {
   const m = txt.match(new RegExp(`<key>${anahtar}<\\/key>\\s*<string>([^<]*)<\\/string>`));
   return m?.[1] ?? null;
 }
+// Tip görünümü: değer daima ham metin tutulur; sayılar JS Number'a uğramaz.
+type PlistTip = "string" | "integer" | "real" | "boolean";
+type PlistDeger = { tip: PlistTip; deger: string };
+// XML varlık çözümü: tek geçişte &lt; &gt; &amp; &apos; &quot; (çift çözümleme yok).
+function xmlVarlikCoz(s: string): string {
+  const harita: Record<string, string> = { lt: "<", gt: ">", amp: "&", apos: "'", quot: '"' };
+  return s.replace(/&(lt|gt|amp|apos|quot);/g, (_, ad: string) => harita[ad] ?? `&${ad};`);
+}
+// Tip duyarlı değer okuma: tanınan düğüm yoksa null; integer/real ham metinle kayıpsız kalır.
+function plistTipDeger(txt: string, anahtar: string): PlistDeger | null {
+  const m = txt.match(new RegExp(
+    `<key>${anahtar}<\\/key>\\s*(?:<string>([\\s\\S]*?)<\\/string>|<integer>([^<]*)<\\/integer>|<real>([^<]*)<\\/real>|<(true|false)\\s*\\/>)`));
+  if (!m) return null;
+  if (m[1] !== undefined) return { tip: "string", deger: xmlVarlikCoz(m[1]) };
+  if (m[2] !== undefined) return { tip: "integer", deger: m[2].trim() };
+  if (m[3] !== undefined) return { tip: "real", deger: m[3].trim() };
+  return { tip: "boolean", deger: m[4] === "true" ? "true" : "false" };
+}
+// Tip görünümü kapsamı: aracın okuduğu kimlik/sürüm anahtarları.
+const PLIST_ANAHTARLARI = [
+  "CFBundleIdentifier", "CFBundleExecutable", "CFBundleName",
+  "CFBundleVersion", "CFBundleShortVersionString", "MinimumOSVersion",
+] as const;
 // Info.plist: CFBundleIdentifier + Executable çıkarır.
 export function rea_apple_plist(yol: string): ReaAppleResult {
   const buf = hamOku(yol);
@@ -53,7 +76,13 @@ export function rea_apple_plist(yol: string): ReaAppleResult {
   const exec = plistKey(txt, "CFBundleExecutable") ?? plistKey(txt, "CFBundleName");
   // İki kritik anahtar da yoksa bozuk sayılır.
   if (!bundleId && !exec) return { ok: false, code: "capability_unsupported", reason: "CFBundle anahtarı yok" };
-  return { ok: true, tool: "rea_apple_plist", summary: `bundle=${bundleId ?? "?"}`, details: { bundleId, executable: exec } };
+  // Katkı alan: tip görünümü. Eski alanlar (bundleId/executable) yukarıdaki gibi birebir kalır.
+  const anahtarTipleri: Record<string, PlistDeger> = {};
+  for (const anahtar of PLIST_ANAHTARLARI) {
+    const deger = plistTipDeger(txt, anahtar);
+    if (deger) anahtarTipleri[anahtar] = deger;
+  }
+  return { ok: true, tool: "rea_apple_plist", summary: `bundle=${bundleId ?? "?"}`, details: { bundleId, executable: exec, anahtarTipleri } };
 }
 // Bundle anatomisi: Contents/MacOS + Frameworks sayımı + Info.plist.
 export function rea_apple_bundle(dizin: string): ReaAppleResult {

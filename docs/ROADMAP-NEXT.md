@@ -1,47 +1,115 @@
-# ROADMAP-NEXT — her şey port edildikten sonra derin analiz
+# ROADMAP-NEXT — v0.11.0 sonrası derin işler
 
-Durum: rea'nın tüm kamusal yetenekleri ReaPlus'ta (162 araç, 42 test dosyası).
-Ticari lisanslılar kapılı (Hopper/IDA/JEB), Linux-özeller belgeli (binwalk).
+Durum: rea'nın tüm kamusal yetenekleri ReaPlus'ta (191 araç, 2 resource, 7 prompt,
+107 test dosyası). Ticari lisanslılar kapılı (Hopper/IDA/JEB), Linux-özeller belgeli
+(binwalk). v0.11.0'da kapananlar: 5 dilli site i18n + `--check`, örnek oturum (metin),
+npm OIDC provenance + SBOM release asset'i, Pages deploy, CONTRIBUTING + issue formları.
+v0.12.0'da kapananlar: golden korpus (5 gerçek gcc binary + 16 test), 4 görev şablonu
+prompt'u (toplam 7 prompt), portable node bundle (+ release asset), docs/site senkronu.
 
-## 1. Derinlikten akla: soruşturma orkestrasyonu (en yüksek değer)
+## Önceki revizyonun maddeleri — kanıtla kapandı (2026-10-18 sayımı)
 
-Araçlar var, dedektif yok. Sıradaki iş: hedef tipine göre otomatik plan kuran
-`rea_investigate(hedef, soru)` — sniff→confidence→uygun provider→evidence bundle→readiness.
-Bugün ajan bunu elle diziyor; orkestrasyon 5 çağrıyı 1'e indirir, kanıt formatı
-standartlaşır. Maliyet: saf TS planlayıcı + 10 test. Risk: yok (salt-okunur).
+- ~~NEXT-1 `rea_investigate` orkestrasyonu~~ → **KAPANDI**: `src/facade/investigate.ts`
+  (60 satır) + `sniff/confidence/evidenceBundle/readiness/missingReasons` facadeleri;
+  kayıt `src/server/registerReaTools.ts:480`; şema `toolMetadata.ts:781`;
+  `tests/investigate.test.mjs`, `evidence.test.mjs`, `sniff.test.mjs`,
+  `confidence.test.mjs`, `readiness.test.mjs` yeşil. Prompt'lar zaten
+  `rea_investigate(path)` çağırıyor. (v0.5.0 full port'ta girmiş, dosya bayat kalmış.)
+- ~~NEXT-2 `rea_typedef` tip yayılımı~~ → **KAPANDI**: `rea_typedef_oner` aracı
+  `src/rea-domains/typedef/TypeSpread.ts` altında kayıtlı; `tests/typedef.test.mjs` yeşil.
+- ~~NEXT-3 syscall + dosya/registry izi~~ → **KAPANDI** (v0.10.0, ROADMAP-F: ntdll numara
+  eşleme + CreateFileW/RegSet profilleri + tek-çağrı davranış koşusu).
+- ~~NEXT-4 `rea_scan_repo` repo-tarama~~ → **KAPANDI**: `rea_scan_repo` +
+  `rea_scan_repo_paralel` (4'lü havuz, iptal) `src/rea-domains/reposcan/RepoScan.ts`;
+  `tests/reposcan.test.mjs`, `parallel-scan.test.mjs` yeşil.
+- ~~NEXT-6 Android dinamik~~ → **KAPANDI** (v0.10.0: 5 adımlı üretim reçetesi + kuru-doğrulama).
 
-## 2. Decompile kalitesi: tip yayılımı
+## 1. Doğruluk: golden korpus → KAPANDI (v0.12.0)
 
-Ghidra pseudo-C + ilspycmd C# + rizin disasm var; ama tipler çağrılar arası
-yayılmıyor. `rea_typedef` (imza→struct önerisi, DWARF/PDB varsa okuma) eklensin.
-Windows'ta `symchk`/DIA ile PDB çekme mümkün. Değer: okunabilirlik 10x.
+5 gerçek gcc binary (`tests/corpus/real_tiny*.exe`, `real_dll.dll`,
+`real_tiny.obj`) + `HASHES.json` + deterministik derleme betiği + 16 yeni
+sdk-surface testi (fs 14, scan_repo 10/pe5); korpus regresyonu canlı.
+Genişletme isteği varsa ekleme olarak sürer.
 
-## 3. Davranış: syscall + dosya/registry izi
+## 2. MCP tam hizmet: görev şablonları → KAPANDI (v0.12.0)
 
-API tracer + net + timeline var. Eksik: syscall numara tablosu (ntdll sürüm
-matrisi) ve CreateFileW/RegSetValue özel profilleri. İkisi de FridaPlus'a
-20'şer satır. Sonrası: `rea_behavior_full` tek çağrıda hepsi.
+4 görev şablonu prompt'u girdi (`packer-triage`, `dotnet-malware-triage`,
+`android-triage`, `pe-crash-triage`); toplam **7 prompt** + `docs/PROMPTS.md`
+10 numaralı bölüm senkron (amaç + örnek çağrı + beklenen çıktı).
+Kanıt zarfı ayakta (`src/facade/evidenceBundle.ts` + `tests/evidence.test.mjs`).
 
-## 4. Ölçek: repo-tarama modu
-
-Tek dosya iyi; 10.000 dosyalı repo yavaş (her çağrı process spawn).
-Çözüm: kalıcı worker + sonuç cache (probeCache deseni) + paralel kuyruk (4'lü).
-`rea_scan_repo` toplu API. Maliyet: orta. Değer: CI entegrasyonu açılır.
-
-## 5. Doğruluk: golden korpus
-
-Her provider için 5 gerçek binary'lik korpus + beklenen çıktı hash'i.
-Şu an fixture'lar minimal (mini_branch, mini_pe). Korpus büyüdükçe regresyon
-yakalanır. Maliyet: düşük, sürekli.
-
-## 6. Uzun vade (ağır)
+## 3. Uzun vade (ağır — kod dalgası değil, araştırma/L)
 
 - angr/Triton sembolik yürütme (VMProtect sınıfı için tek gerçek yol; WSL+conda).
-- Android dinamik (emülatör + frida-server + unpin reçetesi).
 - Fuzzing harness (AFL++ WSL).
 - IDA/Hopper canlı köprü (lisans + headless API araştırması).
+- LLDB motoru (Linux/macOS), WinDbg TTD okuma (ROADMAP-D P3).
+- asciinema/GIF örnek oturum (ROADMAP-I P1; render aracı kurulu değil — README'de
+  metin transkriptleri var, görsel kayıt araç kurulumu bekliyor).
+
+## Açık dış kapılar (P0 — kod dalgası değil, kullanıcı/altyapı ayarı)
+
+- Frida canlı VM exception onayı.
+- Self-hosted Windows runner (Frida/debug testleri CI'da koşmuyor).
+- npm Trusted Publisher (OIDC) — provenance var, Trusted Publisher ayarı yok.
 
 ## Öncelik sırası
 
-orkestrasyon → typedef → syscall profilleri → repo-tarama → korpus → ağır işler.
-İlk üçü toplam ~2 hafta, MCP'yi kullanan ajanın hızını 3-5x artırır.
+araştırma/L (angr/fuzzing/IDA/LLDB) → dış kapılar (Frida VM, self-hosted runner,
+Trusted Publisher).
+
+---
+
+## Dalga planı (4'erli; her iş izole worktree + TDD; dalga bitince tam test, sonra sonraki 4)
+
+### dalga-11 — 3 iş → KAPANDI (v0.12.0, üçü de)
+
+1. Golden korpus ✓ — `tests/corpus/` + `HASHES.json` + 16 test (`63e775f`).
+2. Prompt görev şablonları ✓ — 4 şablon, toplam 7 prompt (`d5ef760`).
+3. Portable bundle ✓ — `scripts/portable-paketle.mjs` + 7 test +
+   publish.yml release asset (`a0ea39b`, merge `582b9b2`).
+
+### dalga-12 — release + doküman senkronu → KAPANDI (v0.12.0, `9fd2057`)
+
+4. ✓ Kapandı: README + ROADMAP senkron, CHANGELOG (5 dil), v0.12.0 bump, manifest
+   (winget/scoop/brew), SBOM, site regen → tag `v0.12.0` → CI/publish izleme.
+   Kanıt: CI publish/ci/pages 3/3 SUCCESS; npm `rea-plus@0.12.0`; release asset
+   `0.12.0.zip` + `sbom.cdx.json`; v0.11.0 + v0.12.0 release notları düzeltildi
+   (BOM/mojibake temizliği, 2026-10-19).
+
+### son iş → KAPANDI (2026-10-19; v0.12.0 dönemi)
+
+5. ✓ Kapandı: `github.com/morluto/rea` karşılaştırması (6.1.0→6.7.0, 26 merge PR, son
+   commit dalgası) → tam tablo `docs/morluto-rea-karsilastirma.md` (4 bug adayı B1-B4 +
+   10 port adayı).
+
+### dalga-13 — davranışsal B-listesi → KAPANDI (2026-10-19; v0.12.0 dönemi)
+
+6. ✓ B3 JS çözümleme — `rea_js_require` spek sınıflandırma + relative/node_modules
+   çözümü (güvenli yürüyüş), `rea_js_export_shape` CJS export şekli (`6c7d403`).
+7. ✓ B2 plist sadakat — tip duyarlı kayıpsız değer okuma + `details.anahtarTipleri`
+   (`6a21424`).
+8. ✓ B5 map-guard — `analyze-js` dizin-vs-dosya kapısı, net hata mesajı (`9805553`).
+9. ✓ B1 sniff makine kimliği — ELF `e_machine` → `makine` (LE/BE, ≥20B; Hexagon dahil)
+   (`dd3acf1`).
+
+Kanıt: 4/4 branch merge (`fa9fcbd`→`38f7dcf`); tam suite **104/104 PASS**; yüzey
+191 araç/187 şema sabit (yeni araç yok); şema bütçesi 176598B liste / 92353B şema
+(limitler 204800/112640). B4+ (version-sync genişletme) ve kalan adaylar dalga-14.
+
+### dalga-14 — sürüm taşıyıcıları + B4 → KAPANDI (v0.13.0)
+
+10. ✓ B4 version-sync genişletme — README/i18n/site/CHANGELOG/dist manifest
+    taşıyıcıları 9 kontrolle kilitlendi; bayat 0.8.2/0.9.0/0.10.1 değerleri
+    0.12.0'a çekildi (`a2f0c5d`).
+11. ✓ PE makine kimliği — `rea_sniff` ARMNT (`0x01c4`) / ARM64 (`0xaa64`);
+    x86/x64 ve legacy ARM/Thumb/ARM64EC bilinçli kapsam dışı (`79e44c9`).
+12. ✓ Ghidra admission — raw m68k dil profili (`GhidraRawProfil`), yüzey dışı
+    saf modül; upstream 6.6.0 paritesi (`79e44c9`).
+13. ✓ apktool sürüm gözlemi — `surumGozlem {ham, sayisal?}` (advisory; kanıt
+    değil), bozuk satırda alan üretilmez (`aca9fba`).
+14. ✓ JS cross-bundle — `iliskiler {paylasilanKaynaklar, yalnizA, yalnizB}`,
+    deterministik sıralama; yeni araç yok (`0de3ef7`).
+
+Kanıt: 4/4 branch merge (`081d6b3`→`55226c0`); tam suite **107/107 PASS**; yüzey
+191 araç/187 şema sabit (yeni araç yok); v0.13.0 release.

@@ -1,0 +1,687 @@
+// rea-domains/apple Mach-O köprüsü: saf TS başlık + load komut okuma, otool varsa ek.
+// Otool/class-dump yoksa sahte sonuç üretilmez; capability_unsupported + kurulum ipucu döner.
+// Kayıt dosyalarına dokunulmaz; bu modül yalnız export eder (entegrasyon ayrı dalgada).
+import { existsSync, readFileSync } from "node:fs";
+import { spawnSync } from "node:child_process";
+
+// Facade uyumu: rea_ prefix zorunlu.
+export const MACHO_TOOLS = ["rea_macho_info", "rea_macho_loads", "rea_macho_otool"] as const;
+
+type Engel = { ok: false; code: "capability_unsupported"; reason: string; neden: string };
+const engel = (neden: string): Engel => ({ ok: false, code: "capability_unsupported", reason: neden, neden });
+
+// Ortam kapısı: dosya yoksa ya da okunamazsa analiz yapılamaz.
+function hamOku(yol: string): Buffer | null {
+  try { if (!yol || !existsSync(yol)) return null; return readFileSync(yol); }
+  catch { return null; }
+}
+
+// İlk 4 baytı ham hex verir (Apple.ts ile aynı düzen: CF FA ED FE -> "cffaedfe").
+function sihirHex(buf: Buffer): string { return buf.subarray(0, 4).toString("hex"); }
+
+// Cpu adı: ARM64/x86_64 ayrımı burada yapılır.
+function archAdi(cputype: number): string {
+  if (cputype === 0x01000007) return "x86_64";
+  if (cputype === 0x0100000c) return "arm64";
+  if (cputype === 7) return "x86";
+  if (cputype === 12) return "arm";
+  if (cputype === 18) return "powerpc";
+  if (cputype === 0x01000012) return "powerpc64";
+  return "bilinmeyen";
+}
+
+// Filetype adı (loader.h MH_* karşılığı).
+function filetypeAdi(ft: number): string {
+  const m: Record<number, string> = {
+    1: "object", 2: "execute", 3: "fvmlib", 4: "core", 5: "preload",
+    6: "dylib", 7: "dylinker", 8: "bundle", 9: "dylib_stub", 10: "dsym", 11: "kext_bundle",
+  };
+  return m[ft] ?? "bilinmeyen";
+}
+
+// Load komut türü (segment/dylib/id ayrımı).
+function komutTuru(cmd: number): string {
+  if (cmd === 0x1) return "segment";
+  if (cmd === 0x19) return "segment_64";
+  if (cmd === 0x0c) return "load_dylib";
+  if (cmd === 0x0d) return "id_dylib";
+  if (cmd === 0x80000018) return "load_weak_dylib";
+  if (cmd === 0x8000001f) return "reexport_dylib";
+  if (cmd === 0x80000020) return "lazy_load_dylib";
+  if (cmd === 0x80000023) return "load_upward_dylib";
+  if (cmd === 0x0e) return "load_dylinker";
+  if (cmd === 0x0f) return "id_dylinker";
+  if (cmd === 0x1b) return "uuid";
+  if (cmd === 0x1c) return "rpath";
+  if (cmd === 0x80000028) return "main";
+  if (cmd === 0x02) return "symtab";
+  if (cmd === 0x0b) return "dysymtab";
+  if (cmd === 0x22) return "dyld_info";
+  if (cmd === 0x80000022) return "dyld_info_only";
+  if (cmd === 0x1d) return "code_signature";
+  return "other";
+}
+
+// NUL-sonlu dize: komut sınırını aşmaz.
+function cstr(buf: Buffer, bas: number, son: number): string {
+  let bit = bas;
+  while (bit < son && bit < buf.length && buf[bit] !== 0) bit++;
+  return buf.subarray(bas, Math.min(bit, son)).toString("utf8");
+}
+
+// Segment adı: 16 baytlık alan, NUL'da kesilir.
+function segAdi(buf: Buffer, off: number): string {
+  return buf.subarray(off, off + 16).toString("ascii").replace(/\0.*$/, "");
+}
+
+// UUID biçimi: 16 bayt -> 8-4-4-4-12.
+function uuidBicim(buf: Buffer, off: number): string {
+  const h = buf.subarray(off, off + 16).toString("hex");
+  return `${h.slice(0, 8)}-${h.slice(8, 12)}-${h.slice(12, 16)}-${h.slice(16, 20)}-${h.slice(20)}`.toUpperCase();
+}
+
+// ---------------------------------------------------------------- otool keşfi ----
+
+export interface OtoolCommand { komut: string; onEkArgs: string[]; kaynak: string }
+
+// Otool keşfi (sıra): REA_OTOOL_BIN → Windows where → POSIX PATH.
+// Env tanımlıysa otoritatiftir: yol içeren değerde dosya yoksa null döner.
+export function resolveOtoolCommand(
+  env: NodeJS.ProcessEnv = process.env,
+  platform: NodeJS.Platform = process.platform,
+): OtoolCommand | null {
+  const binEnv = (env.REA_OTOOL_BIN ?? "").trim();
+  if (binEnv) {
+    const yolIcerir = binEnv.includes("/") || binEnv.includes("\\");
+    if (yolIcerir && !existsSync(binEnv)) return null;
+    return { komut: binEnv, onEkArgs: [], kaynak: "REA_OTOOL_BIN" };
+  }
+  if (platform === "win32") {
+    try {
+      const r = spawnSync("where", ["otool"], { encoding: "utf8", timeout: 15000, stdio: ["ignore", "pipe", "ignore"], windowsHide: true });
+      if (r.error || (r.status ?? 1) !== 0) return null;
+      const ilk = String(r.stdout ?? "").split(/\r?\n/).map((s) => s.trim()).filter(Boolean)[0];
+      if (!ilk) return null;
+      return { komut: ilk, onEkArgs: [], kaynak: "where otool" };
+    } catch { return null; }
+  }
+  return { komut: "otool", onEkArgs: [], kaynak: "PATH" };
+}
+
+function otoolDurumu(): { yok: boolean; sinirli: boolean } {
+  const yok = resolveOtoolCommand() === null;
+  return { yok, sinirli: yok };
+}
+
+// ---------------------------------------------------------------- ince başlık ----
+
+type InceBaslik = {
+  le: boolean; is64: boolean; cputype: number; cpusubtype: number;
+  filetype: number; ncmds: number; sizeofcmds: number; baslikBoy: number;
+};
+
+// İnce başlığı ham tampondan okur (base: fat dilim ofseti, genelde 0).
+function inceBaslikOku(buf: Buffer, dv: DataView, base: number, le: boolean, is64: boolean): InceBaslik | null {
+  const baslikBoy = is64 ? 32 : 28;
+  if (base + baslikBoy > buf.length) return null;
+  const u32 = (off: number) => dv.getUint32(base + off, le);
+  const cputype = u32(4);
+  const cpusubtype = u32(8);
+  const filetype = u32(12);
+  const ncmds = u32(16);
+  const sizeofcmds = u32(20);
+  // Gerçekçi sınır: bozuk ncmds şişirmesini ele.
+  if (ncmds > 256) return null;
+  return { le, is64, cputype, cpusubtype, filetype, ncmds, sizeofcmds, baslikBoy };
+}
+
+export type MachoKomut = {
+  cmd: number; cmd_hex: string; cmdsize: number; tur: string;
+  segname?: string; yol?: string; uuid?: string; arch?: string;
+};
+
+// Load komutlarını listeler; kesik tabloda null döner (çağıran unsupported yapar).
+function yukleriOku(buf: Buffer, dv: DataView, base: number, h: InceBaslik): MachoKomut[] | null {
+  const out: MachoKomut[] = [];
+  let off = base + h.baslikBoy;
+  for (let i = 0; i < h.ncmds; i++) {
+    if (off + 8 > buf.length) return null;
+    const cmd = dv.getUint32(off, h.le);
+    const cmdsize = dv.getUint32(off + 4, h.le);
+    if (cmdsize < 8 || off + cmdsize > buf.length) return null;
+    const tur = komutTuru(cmd);
+    const kayit: MachoKomut = { cmd, cmd_hex: `0x${cmd.toString(16)}`, cmdsize, tur };
+    if (tur === "segment" || tur === "segment_64") {
+      if (off + 24 <= buf.length) kayit.segname = segAdi(buf, off + 8);
+    } else if (tur === "load_dylib" || tur === "id_dylib" || tur === "load_weak_dylib" || tur === "reexport_dylib" || tur === "lazy_load_dylib" || tur === "load_upward_dylib") {
+      const adOff = dv.getUint32(off + 8, h.le);
+      if (adOff < cmdsize) kayit.yol = cstr(buf, off + adOff, off + cmdsize);
+    } else if (tur === "load_dylinker" || tur === "id_dylinker" || tur === "rpath") {
+      const adOff = dv.getUint32(off + 8, h.le);
+      if (adOff < cmdsize) kayit.yol = cstr(buf, off + adOff, off + cmdsize);
+    } else if (tur === "uuid") {
+      if (off + 24 <= buf.length) kayit.uuid = uuidBicim(buf, off + 8);
+    }
+    out.push(kayit);
+    off += cmdsize;
+  }
+  return out;
+}
+
+// ---------------------------------------------------------------- yağlı başlık ----
+
+export type FatMimari = { cputype: number; cpusubtype: number; arch: string; offset: number; size: number };
+
+// Fat başlığını okur; kesik tabloda null döner.
+function fatOku(buf: Buffer, dv: DataView, sihir: string): { nfat: number; mimariler: FatMimari[]; fat64: boolean } | null {
+  const fat64 = sihir === "cafebabf" || sihir === "bfbafeca";
+  const be = sihir === "cafebabe" || sihir === "cafebabf";
+  const le = !be;
+  if (buf.length < 8) return null;
+  const nfat = dv.getUint32(4, le);
+  if (nfat === 0 || nfat > 32) return null;
+  const adim = fat64 ? 32 : 20;
+  if (8 + nfat * adim > buf.length) return null;
+  const mimariler: FatMimari[] = [];
+  for (let i = 0; i < nfat; i++) {
+    const o = 8 + i * adim;
+    const cputype = dv.getUint32(o, le);
+    const cpusubtype = dv.getUint32(o + 4, le);
+    let offset: number; let size: number;
+    if (fat64) {
+      offset = Number(dv.getBigUint64(o + 8, le));
+      size = Number(dv.getBigUint64(o + 16, le));
+    } else {
+      offset = dv.getUint32(o + 8, le);
+      size = dv.getUint32(o + 12, le);
+    }
+    mimariler.push({ cputype, cpusubtype, arch: archAdi(cputype), offset, size });
+  }
+  return { nfat, mimariler, fat64 };
+}
+
+// ---------------------------------------------------------------- araçlar ----
+
+// Başlık bilgisi: ince için magic/cputype/filetype, yağlı için mimari listesi.
+// Otool yoksa saf okuma yine döner ama sinirli=true işaretlenir.
+export function rea_macho_info(yol: string) {
+  const buf = hamOku(yol);
+  if (!buf) return engel(`dosya yok/okunamadı: ${yol}`);
+  if (buf.length < 4) return engel("dosya çok kısa");
+  const dv = new DataView(buf.buffer, buf.byteOffset, buf.byteLength);
+  const sihir = sihirHex(buf);
+  const { yok, sinirli } = otoolDurumu();
+  const otool = yok ? "yok" : "var";
+  const inceMi =
+    sihir === "cffaedfe" ? { le: true, is64: true }
+    : sihir === "feedfacf" ? { le: false, is64: true }
+    : sihir === "cefaedfe" ? { le: true, is64: false }
+    : sihir === "feedface" ? { le: false, is64: false }
+    : null;
+  if (inceMi) {
+    const h = inceBaslikOku(buf, dv, 0, inceMi.le, inceMi.is64);
+    if (!h) return engel("Mach-O başlığı kesik/bozuk (ncmds gerçekçi değil ya da dosya kısa)");
+    return {
+      ok: true as const, tool: "rea_macho_info",
+      summary: `arch=${archAdi(h.cputype)} filetype=${h.filetype} ncmds=${h.ncmds}${sinirli ? " sinirli" : ""}`,
+      details: {
+        sihir, cputype: h.cputype, cpusubtype: h.cpusubtype, arch: archAdi(h.cputype),
+        is64: h.is64, filetype: h.filetype, filetype_ad: filetypeAdi(h.filetype),
+        ncmds: h.ncmds, sizeofcmds: h.sizeofcmds, fat: false, sinirli, otool,
+      },
+    };
+  }
+  if (sihir === "cafebabe" || sihir === "bebafeca" || sihir === "cafebabf" || sihir === "bfbafeca") {
+    const f = fatOku(buf, dv, sihir);
+    if (!f) return engel("fat başlığı kesik/bozuk");
+    return {
+      ok: true as const, tool: "rea_macho_info",
+      summary: `fat mimari=${f.mimariler.map((m) => m.arch).join(",")}${sinirli ? " sinirli" : ""}`,
+      details: { sihir, fat: true, nfat: f.nfat, mimariler: f.mimariler, sinirli, otool },
+    };
+  }
+  return engel(`Mach-O/fat sihri yok: ${sihir}`);
+}
+
+// Load komut listesi: segment adları + dylib/id yolları. Yağlıda her dilim arch etiketiyle döner.
+export function rea_macho_loads(yol: string, limit = 100) {
+  const buf = hamOku(yol);
+  if (!buf) return engel(`dosya yok/okunamadı: ${yol}`);
+  if (buf.length < 4) return engel("dosya çok kısa");
+  const dv = new DataView(buf.buffer, buf.byteOffset, buf.byteLength);
+  const sihir = sihirHex(buf);
+  const { sinirli } = otoolDurumu();
+  const inceMi =
+    sihir === "cffaedfe" ? { le: true, is64: true }
+    : sihir === "feedfacf" ? { le: false, is64: true }
+    : sihir === "cefaedfe" ? { le: true, is64: false }
+    : sihir === "feedface" ? { le: false, is64: false }
+    : null;
+  if (inceMi) {
+    const h = inceBaslikOku(buf, dv, 0, inceMi.le, inceMi.is64);
+    if (!h) return engel("Mach-O başlığı kesik/bozuk (ncmds gerçekçi değil ya da dosya kısa)");
+    const komutlar = yukleriOku(buf, dv, 0, h);
+    if (!komutlar) return engel("load komutları kesik/bozuk (cmdsize taşması)");
+    const kes = komutlar.slice(0, Math.max(0, limit));
+    return {
+      ok: true as const, tool: "rea_macho_loads",
+      summary: `komut=${kes.length}${sinirli ? " sinirli" : ""}`,
+      details: { sihir, fat: false, arch: archAdi(h.cputype), sayi: kes.length, komutlar: kes, sinirli },
+    };
+  }
+  if (sihir === "cafebabe" || sihir === "bebafeca" || sihir === "cafebabf" || sihir === "bfbafeca") {
+    const f = fatOku(buf, dv, sihir);
+    if (!f) return engel("fat başlığı kesik/bozuk");
+    const hepsi: MachoKomut[] = [];
+    for (const m of f.mimariler) {
+      if (m.offset + 4 > buf.length || m.offset + m.size > buf.length || m.size < 4) continue;
+      const ds = buf.subarray(m.offset, m.offset + Math.min(m.size, buf.length - m.offset));
+      const dsihir = ds.subarray(0, 4).toString("hex");
+      const dim =
+        dsihir === "cffaedfe" ? { le: true, is64: true }
+        : dsihir === "feedfacf" ? { le: false, is64: true }
+        : dsihir === "cefaedfe" ? { le: true, is64: false }
+        : dsihir === "feedface" ? { le: false, is64: false }
+        : null;
+      if (!dim) continue;
+      const ddv = new DataView(ds.buffer, ds.byteOffset, ds.byteLength);
+      const h = inceBaslikOku(ds, ddv, 0, dim.le, dim.is64);
+      if (!h) continue;
+      const ks = yukleriOku(ds, ddv, 0, h);
+      if (!ks) continue;
+      for (const k of ks) hepsi.push({ ...k, arch: m.arch });
+    }
+    const kes = hepsi.slice(0, Math.max(0, limit));
+    return {
+      ok: true as const, tool: "rea_macho_loads",
+      summary: `fat komut=${kes.length} mimari=${f.mimariler.length}${sinirli ? " sinirli" : ""}`,
+      details: { sihir, fat: true, mimariler: f.mimariler, sayi: kes.length, komutlar: kes, sinirli },
+    };
+  }
+  return engel(`Mach-O/fat sihri yok: ${sihir}`);
+}
+
+// Otool köprüsü: yoksa dürüst unsupported; varsa `otool -L` çıktısını döndürür (koşmazsa unsupported).
+export function rea_macho_otool(yol: string, ekstraArgs: string[] = []) {
+  if (!yol || !existsSync(yol)) return engel(`dosya yok: ${yol}`);
+  const cmd = resolveOtoolCommand();
+  if (!cmd) {
+    return engel(
+      "otool bulunamadı (Xcode Command Line Tools kurun: xcode-select --install; ya da REA_OTOOL_BIN ile otool yolunu verin; " +
+      "macOS dışında saf okuma (rea_macho_info/loads) kullanın — sınırlı kip)",
+    );
+  }
+  const args = [...cmd.onEkArgs, ...ekstraArgs, "-L", yol];
+  let r;
+  try {
+    r = spawnSync(cmd.komut, args, { encoding: "utf8", timeout: 30000, maxBuffer: 4 * 1024 * 1024, stdio: ["ignore", "pipe", "pipe"], windowsHide: true });
+  } catch (e) {
+    return engel(`otool başlatılamadı: ${e instanceof Error ? e.message : String(e)}`);
+  }
+  const stdout = typeof r.stdout === "string" ? r.stdout : "";
+  const stderr = typeof r.stderr === "string" ? r.stderr : "";
+  const kuyruk = (stderr.trim() || stdout.trim()).slice(-500);
+  const err = r.error as NodeJS.ErrnoException | undefined;
+  if (err) {
+    if (err.code === "ETIMEDOUT") return engel(`otool zaman aşımı (30000ms)${kuyruk ? `: ${kuyruk}` : ""}`);
+    if (err.code === "ENOENT") {
+      return engel(
+        `otool bulunamadı (ENOENT, kaynak: ${cmd.kaynak}) — Xcode Command Line Tools kurun: xcode-select --install; ` +
+        "macOS dışında saf okuma (rea_macho_info/loads) kullanın — sınırlı kip",
+      );
+    }
+    return engel(`otool çalıştırma hatası: ${err.message}${kuyruk ? ` — ${kuyruk}` : ""}`);
+  }
+  if ((r.status ?? 1) !== 0) return engel(`otool başarısız (kod=${r.status ?? "?"})${kuyruk ? `: ${kuyruk}` : ""}`);
+  return { ok: true as const, tool: "rea_macho_otool", summary: `otool satir=${stdout.split("\n").length}`, details: { cikti: stdout.slice(0, 4000), satir: stdout.split("\n").length } };
+}
+
+// ---------------------------------------------------------------- class-dump keşfi ----
+
+// Class-dump keşfi (otool ile aynı sıra): REA_CLASSDUMP_BIN → Windows where → POSIX PATH.
+// Env tanımlıysa otoritatiftir: yol içeren değerde dosya yoksa null döner.
+export function resolveClassdumpCommand(
+  env: NodeJS.ProcessEnv = process.env,
+  platform: NodeJS.Platform = process.platform,
+): OtoolCommand | null {
+  const binEnv = (env.REA_CLASSDUMP_BIN ?? "").trim();
+  if (binEnv) {
+    const yolIcerir = binEnv.includes("/") || binEnv.includes("\\");
+    if (yolIcerir && !existsSync(binEnv)) return null;
+    return { komut: binEnv, onEkArgs: [], kaynak: "REA_CLASSDUMP_BIN" };
+  }
+  if (platform === "win32") {
+    try {
+      const r = spawnSync("where", ["class-dump"], { encoding: "utf8", timeout: 15000, stdio: ["ignore", "pipe", "ignore"], windowsHide: true });
+      if (r.error || (r.status ?? 1) !== 0) return null;
+      const ilk = String(r.stdout ?? "").split(/\r?\n/).map((s) => s.trim()).filter(Boolean)[0];
+      if (!ilk) return null;
+      return { komut: ilk, onEkArgs: [], kaynak: "where class-dump" };
+    } catch { return null; }
+  }
+  return { komut: "class-dump", onEkArgs: [], kaynak: "PATH" };
+}
+
+// Class-dump köprüsü: yoksa dürüst unsupported + kurulum ipucu; varsa gerçek çağrı.
+export function rea_macho_classdump(yol: string, ekstraArgs: string[] = []) {
+  if (!yol || !existsSync(yol)) return engel(`dosya yok: ${yol}`);
+  const cmd = resolveClassdumpCommand();
+  if (!cmd) {
+    return engel(
+      "class-dump bulunamadı (kurulum: https://github.com/nygard/class-dump ; bulunan yolu REA_CLASSDUMP_BIN ile verin; " +
+      "saf okuma için rea_macho_objc kullanın — sınırlı kip)",
+    );
+  }
+  const args = [...cmd.onEkArgs, ...ekstraArgs, yol];
+  let r;
+  try {
+    r = spawnSync(cmd.komut, args, { encoding: "utf8", timeout: 30000, maxBuffer: 4 * 1024 * 1024, stdio: ["ignore", "pipe", "pipe"], windowsHide: true });
+  } catch (e) {
+    return engel(`class-dump başlatılamadı: ${e instanceof Error ? e.message : String(e)}`);
+  }
+  const stdout = typeof r.stdout === "string" ? r.stdout : "";
+  const stderr = typeof r.stderr === "string" ? r.stderr : "";
+  const kuyruk = (stderr.trim() || stdout.trim()).slice(-500);
+  const err = r.error as NodeJS.ErrnoException | undefined;
+  if (err) {
+    if (err.code === "ETIMEDOUT") return engel(`class-dump zaman aşımı (30000ms)${kuyruk ? `: ${kuyruk}` : ""}`);
+    if (err.code === "ENOENT") {
+      return engel(
+        `class-dump bulunamadı (ENOENT, kaynak: ${cmd.kaynak}) — kurulum: https://github.com/nygard/class-dump ; ` +
+        "saf okuma için rea_macho_objc kullanın — sınırlı kip",
+      );
+    }
+    return engel(`class-dump çalıştırma hatası: ${err.message}${kuyruk ? ` — ${kuyruk}` : ""}`);
+  }
+  if ((r.status ?? 1) !== 0) return engel(`class-dump başarısız (kod=${r.status ?? "?"})${kuyruk ? `: ${kuyruk}` : ""}`);
+  return { ok: true as const, tool: "rea_macho_classdump", summary: `class-dump satir=${stdout.split("\n").length}`, details: { cikti: stdout.slice(0, 4000), satir: stdout.split("\n").length } };
+}
+
+// ---------------------------------------------------------------- ObjC derinliği ----
+// Saf TS __objc_classlist/__objc_catlist okuma (yürütme yok, dış araç şart değil).
+// Düzen (modern 64-bit ObjC runtime, objc-runtime-new.h):
+//   class_t: isa(8) + superclass(8) + cache(16) + bits(8) -> bits@32,
+//     data = bits & FAST_DATA_MASK (0x00007ffffffffff8);
+//   class_ro_t: flags(4) + instanceStart(4) + instanceSize(4) + reserved(4)
+//     + ivarLayout(8) + name(8) -> name@24;
+//   category_t: name(8) başta -> name@0.
+// Sanal adres -> dosya ofseti bölüm tablosundan (addr/size/offset) çözülür.
+
+type Bolum = { seg: string; ad: string; addr: bigint; size: bigint; offset: number };
+
+// LC_SEGMENT_64 komutlarındaki section_64 girdilerini toplar; kesik tabloda null döner.
+function bolumleriOku(buf: Buffer, dv: DataView, base: number, h: InceBaslik): Bolum[] | null {
+  const out: Bolum[] = [];
+  let off = base + h.baslikBoy;
+  for (let i = 0; i < h.ncmds; i++) {
+    if (off + 8 > buf.length) return null;
+    const cmd = dv.getUint32(off, h.le);
+    const cmdsize = dv.getUint32(off + 4, h.le);
+    if (cmdsize < 8 || off + cmdsize > buf.length) return null;
+    if (cmd === 0x19) {
+      if (off + 72 > buf.length) return null;
+      const nsects = dv.getUint32(off + 64, h.le);
+      if (nsects > 256) return null;
+      if (off + 72 + nsects * 80 > buf.length) return null;
+      for (let s = 0; s < nsects; s++) {
+        const so = off + 72 + s * 80;
+        const ad = buf.subarray(so, so + 16).toString("ascii").replace(/\0.*$/, "");
+        const seg = buf.subarray(so + 16, so + 32).toString("ascii").replace(/\0.*$/, "");
+        out.push({
+          seg, ad,
+          addr: dv.getBigUint64(so + 32, h.le),
+          size: dv.getBigUint64(so + 40, h.le),
+          offset: dv.getUint32(so + 48, h.le),
+        });
+      }
+    }
+    off += cmdsize;
+  }
+  return out;
+}
+
+// Sanal adresi dosya ofsetine çevirir (uzunluk dahil aralık kontrolü); çözülemezse null.
+function vaCoz(bolumler: Bolum[], va: bigint, uzunluk: number, bufUzunluk: number): number | null {
+  if (va === 0n) return null;
+  for (const b of bolumler) {
+    if (va >= b.addr && va + BigInt(uzunluk) <= b.addr + b.size) {
+      const fo = b.offset + Number(va - b.addr);
+      if (fo >= 0 && fo + uzunluk <= bufUzunluk) return fo;
+    }
+  }
+  return null;
+}
+
+// Dosya ofsetindeki NUL-sonlu dizeyi okur; NUL yoksa/boşsa null (sahte ad üretilmez).
+function adOku(buf: Buffer, fo: number, azami = 256): string | null {
+  let bit = fo;
+  const son = Math.min(fo + azami, buf.length);
+  while (bit < son && buf[bit] !== 0) bit++;
+  if (bit >= son || bit === fo) return null;
+  return buf.subarray(fo, bit).toString("utf8");
+}
+
+const SINIF_VERI_MASKESI = 0x7fffffffffff8n;
+
+// Sınıf işaretçisinden ad çözer: class -> bits&mask -> class_ro -> name -> cstring.
+function sinifAdiniCoz(buf: Buffer, dv: DataView, bolumler: Bolum[], le: boolean, sinifPtr: bigint): string | null {
+  const sinifOff = vaCoz(bolumler, sinifPtr, 40, buf.length);
+  if (sinifOff === null) return null;
+  const roPtr = dv.getBigUint64(sinifOff + 32, le) & SINIF_VERI_MASKESI;
+  const roOff = vaCoz(bolumler, roPtr, 32, buf.length);
+  if (roOff === null) return null;
+  const adPtr = dv.getBigUint64(roOff + 24, le);
+  const adOff = vaCoz(bolumler, adPtr, 1, buf.length);
+  if (adOff === null) return null;
+  return adOku(buf, adOff);
+}
+
+// Kategori işaretçisinden ad çözer: category_t.name@0 -> cstring.
+function kategoriAdiniCoz(buf: Buffer, dv: DataView, bolumler: Bolum[], le: boolean, katPtr: bigint): string | null {
+  const katOff = vaCoz(bolumler, katPtr, 8, buf.length);
+  if (katOff === null) return null;
+  const adPtr = dv.getBigUint64(katOff, le);
+  const adOff = vaCoz(bolumler, adPtr, 1, buf.length);
+  if (adOff === null) return null;
+  return adOku(buf, adOff);
+}
+
+type ObjcCozum = {
+  objcVar: boolean;
+  siniflar: string[]; kategoriler: string[];
+  girisSayisi: number; kategoriGirisSayisi: number; cozulemeyen: number;
+};
+
+// Bölüm listesinden sınıf/kategori adlarını çözer (saf okuma; throw yok).
+// İnce yol ve yağlı dilim yolu bu tek gövdeyi paylaşır (çözüm mantığı birebir).
+function objcCozumle(buf: Buffer, dv: DataView, bolumler: Bolum[], le: boolean, lim: number): ObjcCozum {
+  const sinifBolumu = bolumler.find((b) => b.ad === "__objc_classlist") ?? null;
+  const katBolumu = bolumler.find((b) => b.ad === "__objc_catlist") ?? null;
+  const siniflar: string[] = [];
+  const kategoriler: string[] = [];
+  let girisSayisi = 0;
+  let kategoriGirisSayisi = 0;
+  let cozulemeyen = 0;
+  if (sinifBolumu) {
+    const girisler = Number(sinifBolumu.size / 8n);
+    girisSayisi = girisler;
+    const n = Math.min(girisler, lim);
+    for (let i = 0; i < n; i++) {
+      const fo = sinifBolumu.offset + i * 8;
+      if (fo + 8 > buf.length) { cozulemeyen++; continue; }
+      const ad = sinifAdiniCoz(buf, dv, bolumler, le, dv.getBigUint64(fo, le));
+      if (ad === null) cozulemeyen++;
+      else siniflar.push(ad);
+    }
+  }
+  if (katBolumu) {
+    const girisler = Number(katBolumu.size / 8n);
+    kategoriGirisSayisi = girisler;
+    const n = Math.min(girisler, lim);
+    for (let i = 0; i < n; i++) {
+      const fo = katBolumu.offset + i * 8;
+      if (fo + 8 > buf.length) { cozulemeyen++; continue; }
+      const ad = kategoriAdiniCoz(buf, dv, bolumler, le, dv.getBigUint64(fo, le));
+      if (ad === null) cozulemeyen++;
+      else kategoriler.push(ad);
+    }
+  }
+  return {
+    objcVar: !!(sinifBolumu || katBolumu),
+    siniflar, kategoriler, girisSayisi, kategoriGirisSayisi, cozulemeyen,
+  };
+}
+
+// ObjC sınıf + kategori listesi: saf okuma her zaman çalışır; class-dump yoksa sinirli=true.
+// ObjC bölümü yoksa boş liste + objc:"yok" döner (desteklenmiyor değil: dosya Mach-O ama ObjC'siz).
+// Yağlı (fat) girdide her 64-bit dilim bağımsız çözülür (arch kırılımlı toplama);
+// 32-bit/bozuk dilimler dürüstçe atlanır (nedeniyle), hiçbiri çözülemezse unsupported.
+export function rea_macho_objc(yol: string, limit = 200, arch?: string) {
+  const buf = hamOku(yol);
+  if (!buf) return engel(`dosya yok/okunamadı: ${yol}`);
+  if (buf.length < 4) return engel("dosya çok kısa");
+  const dv = new DataView(buf.buffer, buf.byteOffset, buf.byteLength);
+  const sihir = sihirHex(buf);
+  const classdump = resolveClassdumpCommand() === null ? "yok" : "var";
+  const sinirli = classdump === "yok";
+  const inceMi =
+    sihir === "cffaedfe" ? { le: true, is64: true }
+    : sihir === "feedfacf" ? { le: false, is64: true }
+    : sihir === "cefaedfe" ? { le: true, is64: false }
+    : sihir === "feedface" ? { le: false, is64: false }
+    : null;
+  if (!inceMi) {
+    if (sihir === "cafebabe" || sihir === "bebafeca" || sihir === "cafebabf" || sihir === "bfbafeca") {
+      return rea_macho_objc_fat(buf, dv, sihir, limit, arch, classdump, sinirli);
+    }
+    return engel(`Mach-O sihri yok: ${sihir}`);
+  }
+  if (!inceMi.is64) return engel("32-bit ObjC çözümü desteklenmiyor (yalnız 64-bit)");
+  const h = inceBaslikOku(buf, dv, 0, inceMi.le, true);
+  if (!h) return engel("Mach-O başlığı kesik/bozuk (ncmds gerçekçi değil ya da dosya kısa)");
+  const bolumler = bolumleriOku(buf, dv, 0, h);
+  if (!bolumler) return engel("bölüm tablosu kesik/bozuk");
+  const not =
+    "saf TS __objc_classlist/__objc_catlist okuma (modern 64-bit düzeni: bits@32 mask 0x7fffffffffff8, ro->name@24, category name@0); " +
+    "tam hiyerarşi/protokol için class-dump";
+  const lim = Math.max(0, limit);
+  const cozum = objcCozumle(buf, dv, bolumler, inceMi.le, lim);
+  if (!cozum.objcVar) {
+    return {
+      ok: true as const, tool: "rea_macho_objc",
+      summary: `objc yok${sinirli ? " sinirli" : ""}`,
+      details: {
+        sihir, arch: archAdi(h.cputype), objc: "yok",
+        siniflar: [] as string[], sinifSayisi: 0,
+        kategoriler: [] as string[], kategoriSayisi: 0,
+        sinirli, classdump,
+        not: "__objc_classlist/__objc_catlist bölümü yok (saf okuma; class-dump da yoksa isim çözümlemesi sınırlı)",
+      },
+    };
+  }
+  const { siniflar, kategoriler, girisSayisi, kategoriGirisSayisi, cozulemeyen } = cozum;
+  return {
+    ok: true as const, tool: "rea_macho_objc",
+    summary: `objc sinif=${siniflar.length} kategori=${kategoriler.length}${sinirli ? " sinirli" : ""}`,
+    details: {
+      sihir, arch: archAdi(h.cputype), objc: "var",
+      siniflar, sinifSayisi: siniflar.length,
+      kategoriler, kategoriSayisi: kategoriler.length,
+      girisSayisi, kategoriGirisSayisi, cozulemeyen,
+      sinirli, classdump, not,
+    },
+  };
+}
+
+// ---------------------------------------------------------------- yağlı ObjC ----
+
+export type MachoObjcDilim = {
+  arch: string; offset: number; size: number; objc: "var" | "yok";
+  siniflar: string[]; kategoriler: string[];
+  girisSayisi: number; kategoriGirisSayisi: number; cozulemeyen: number;
+};
+
+export type MachoObjcAtlanan = { arch: string; offset: number; size: number; neden: string };
+
+// Tek dilim tamponunu çözer (ince düzen; dilim kendi sihrini taşır).
+// Çözülemezse hata dizesi döner (throw yok; çağıran dürüstçe atlar).
+function objcDilimCoz(ds: Buffer, lim: number): { cozum: ObjcCozum } | { hata: string } {
+  if (ds.length < 4) return { hata: "dilim çok kısa" };
+  const dsihir = ds.subarray(0, 4).toString("hex");
+  const dim =
+    dsihir === "cffaedfe" ? { le: true, is64: true }
+    : dsihir === "feedfacf" ? { le: false, is64: true }
+    : dsihir === "cefaedfe" ? { le: true, is64: false }
+    : dsihir === "feedface" ? { le: false, is64: false }
+    : null;
+  if (!dim) return { hata: `dilim Mach-O sihri yok: ${dsihir}` };
+  if (!dim.is64) return { hata: "32-bit dilimde ObjC çözümü desteklenmiyor (yalnız 64-bit)" };
+  const ddv = new DataView(ds.buffer, ds.byteOffset, ds.byteLength);
+  const h = inceBaslikOku(ds, ddv, 0, dim.le, true);
+  if (!h) return { hata: "dilim başlığı kesik/bozuk" };
+  const bolumler = bolumleriOku(ds, ddv, 0, h);
+  if (!bolumler) return { hata: "dilim bölüm tablosu kesik/bozuk" };
+  return { cozum: objcCozumle(ds, ddv, bolumler, dim.le, lim) };
+}
+
+// Yağlı kip: her 64-bit dilim bağımsız saf okuma, arch kırılımlı toplama.
+// arch verilirse yalnız o mimari çözülür (yoksa mevcutlar listelenerek unsupported).
+function rea_macho_objc_fat(
+  buf: Buffer, dv: DataView, sihir: string, limit: number, arch: string | undefined,
+  classdump: string, sinirli: boolean,
+) {
+  const f = fatOku(buf, dv, sihir);
+  if (!f) return engel("fat başlığı kesik/bozuk");
+  const secili = arch ? f.mimariler.filter((m) => m.arch === arch) : f.mimariler;
+  if (secili.length === 0) {
+    return engel(`istenen mimari fat içinde yok: ${arch} (var: ${f.mimariler.map((m) => m.arch).join(",") || "hiçbiri"})`);
+  }
+  const lim = Math.max(0, limit);
+  const dilimler: MachoObjcDilim[] = [];
+  const atlananDilimler: MachoObjcAtlanan[] = [];
+  for (const m of secili) {
+    if (m.offset + 4 > buf.length || m.offset + m.size > buf.length || m.size < 4) {
+      atlananDilimler.push({ arch: m.arch, offset: m.offset, size: m.size, neden: "dilim dosya dışında/kesik" });
+      continue;
+    }
+    const ds = buf.subarray(m.offset, m.offset + m.size);
+    const r = objcDilimCoz(ds, lim);
+    if ("hata" in r) {
+      atlananDilimler.push({ arch: m.arch, offset: m.offset, size: m.size, neden: r.hata });
+      continue;
+    }
+    dilimler.push({
+      arch: m.arch, offset: m.offset, size: m.size,
+      objc: r.cozum.objcVar ? "var" : "yok",
+      siniflar: r.cozum.siniflar, kategoriler: r.cozum.kategoriler,
+      girisSayisi: r.cozum.girisSayisi, kategoriGirisSayisi: r.cozum.kategoriGirisSayisi,
+      cozulemeyen: r.cozum.cozulemeyen,
+    });
+  }
+  if (dilimler.length === 0) {
+    return engel(
+      `hiçbir fat dilimi çözülemedi (atlanan=${atlananDilimler.length}: ` +
+      `${atlananDilimler.map((a) => `${a.arch}: ${a.neden}`).join("; ").slice(0, 300)})`,
+    );
+  }
+  const siniflar = dilimler.flatMap((d) => d.siniflar);
+  const kategoriler = dilimler.flatMap((d) => d.kategoriler);
+  const girisSayisi = dilimler.reduce((t, d) => t + d.girisSayisi, 0);
+  const kategoriGirisSayisi = dilimler.reduce((t, d) => t + d.kategoriGirisSayisi, 0);
+  const cozulemeyen = dilimler.reduce((t, d) => t + d.cozulemeyen, 0);
+  const objc = dilimler.some((d) => d.objc === "var") ? "var" : "yok";
+  return {
+    ok: true as const, tool: "rea_macho_objc",
+    summary: `fat objc sinif=${siniflar.length} kategori=${kategoriler.length} dilim=${dilimler.length}/${secili.length}${sinirli ? " sinirli" : ""}`,
+    details: {
+      sihir, fat: true, mimariler: f.mimariler, seciliArch: arch ?? null,
+      objc, siniflar, sinifSayisi: siniflar.length,
+      kategoriler, kategoriSayisi: kategoriler.length,
+      girisSayisi, kategoriGirisSayisi, cozulemeyen,
+      dilimler, atlananDilimler,
+      sinirli, classdump,
+      not: "yağlı kip: her 64-bit dilim bağımsız saf okuma (modern 64-bit düzeni; limit dilim başına uygulanır); " +
+        "32-bit/bozuk dilimler atlanır (atlananDilimler); tam hiyerarşi/protokol için class-dump",
+    },
+  };
+}

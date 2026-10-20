@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="ReaPlus technische Dokumentation: Installation, Werkzeugreferenz, Beispiele, Fahrplan.">
+<title>Beispiele — ReaPlus Docs</title>
+<script>try{var t=localStorage.getItem("reaplus-tema");if(!t){t=window.matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light";}document.documentElement.dataset.theme=t;}catch(e){}</script>
+<style>:root{color-scheme:light;--zemin:#F6F6F3;--yuzey:#FCFCFA;--metin:#1D1F24;--silik:#5A6270;--sinir:#DFDFD6;--vurgu:#2E6B4E;--vurgu-arka:#E4EFE8;--kod-zemin:#EBEBE4;--golge:rgba(23,28,24,.08)}[data-theme="light"]{color-scheme:light;--zemin:#F6F6F3;--yuzey:#FCFCFA;--metin:#1D1F24;--silik:#5A6270;--sinir:#DFDFD6;--vurgu:#2E6B4E;--vurgu-arka:#E4EFE8;--kod-zemin:#EBEBE4;--golge:rgba(23,28,24,.08)}[data-theme="dark"]{color-scheme:dark;--zemin:#15181D;--yuzey:#1D2229;--metin:#E9E7E1;--silik:#A7B0BC;--sinir:#2F3742;--vurgu:#7BC9A2;--vurgu-arka:#1D3328;--kod-zemin:#232A33;--golge:rgba(8,10,12,.45)}@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){color-scheme:dark;--zemin:#15181D;--yuzey:#1D2229;--metin:#E9E7E1;--silik:#A7B0BC;--sinir:#2F3742;--vurgu:#7BC9A2;--vurgu-arka:#1D3328;--kod-zemin:#232A33;--golge:rgba(8,10,12,.45)}}*{box-sizing:border-box}html{-webkit-text-size-adjust:100%}body{margin:0;background:var(--zemin);color:var(--metin);font-family:system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;line-height:1.65}h1,h2,h3,.marka-ad{font-family:"Avenir Next","Segoe UI",system-ui,-apple-system,"Helvetica Neue",Arial,sans-serif;letter-spacing:-.01em;line-height:1.25}.sarmal{max-width:62rem;margin:0 auto;padding:0 1.25rem 3rem}.atla{position:absolute;left:-999px;top:0;background:var(--vurgu);color:var(--zemin);padding:.5rem 1rem;z-index:10}.atla:focus{left:0}.ust{display:flex;flex-wrap:wrap;align-items:center;gap:.6rem 1rem;padding:1rem 0;border-bottom:1px solid var(--sinir)}.marka-ad{font-weight:650;font-size:1.05rem}.marka-alt{color:var(--silik);font-size:.84rem;margin-left:.6rem}.gezinme{display:flex;flex-wrap:wrap;gap:.15rem .9rem;font-size:.92rem}.gezinme a{color:var(--silik);text-decoration:none;border-bottom:1px solid transparent}.gezinme a:hover{color:var(--metin);border-bottom-color:var(--vurgu)}.dil{display:flex;gap:.35rem;font-size:.8rem;color:var(--silik)}.dil a{color:var(--silik);text-decoration:none}.dil a:hover{color:var(--vurgu)}.dil strong{color:var(--metin)}#tema-toggle{margin-left:auto;font:inherit;font-size:.85rem;color:var(--metin);background:var(--yuzey);border:1px solid var(--sinir);border-radius:999px;padding:.32rem .85rem;cursor:pointer;transition:background-color .2s ease,border-color .2s ease}#tema-toggle:hover{border-color:var(--vurgu)}.ozet{margin:1.5rem 0 0;background:var(--yuzey);border:1px solid var(--sinir);border-radius:.6rem;padding:1rem 1.25rem}.ozet-metin{margin:0 0 .8rem;font-size:.92rem;color:var(--silik)}.istatistik{display:grid;grid-template-columns:repeat(auto-fit,minmax(8.5rem,1fr));gap:.6rem;margin:0}.istatistik div{border-top:2px solid var(--vurgu);padding-top:.45rem}.istatistik dt{font-size:.74rem;text-transform:uppercase;letter-spacing:.06em;color:var(--silik)}.istatistik dd{margin:.15rem 0 0;font-size:1.35rem;font-weight:650;font-variant-numeric:tabular-nums}#icerik{margin-top:1.5rem}#icerik a{color:var(--vurgu);text-decoration:underline;text-underline-offset:.15em}#icerik a:hover{text-decoration-thickness:2px}pre{background:var(--kod-zemin);border:1px solid var(--sinir);border-radius:.5rem;padding:1rem;overflow:auto;font-size:.86rem}code{font-family:ui-monospace,"Cascadia Code","SF Mono",Consolas,Menlo,monospace;font-size:.88em;background:var(--kod-zemin);border-radius:.3rem;padding:.1em .35em}pre code{background:none;padding:0;border-radius:0}table{border-collapse:collapse;width:100%;font-size:.9rem}th,td{border:1px solid var(--sinir);padding:.45rem .6rem;text-align:left;vertical-align:top}thead th{background:var(--yuzey)}blockquote{margin:1rem 0;padding:.6rem 1rem;border-left:3px solid var(--vurgu);background:var(--yuzey);color:var(--silik)}hr{border:none;border-top:1px solid var(--sinir);margin:1.75rem 0}img{max-width:100%}#arama{font:inherit;color:var(--metin);background:var(--yuzey);border:1px solid var(--sinir);border-radius:.5rem;padding:.5rem .8rem;width:min(22rem,100%)}#sonuclar{list-style:none;margin:.8rem 0 0;padding:0;display:grid;gap:.4rem}#sonuclar li{background:var(--yuzey);border:1px solid var(--sinir);border-radius:.5rem;padding:.5rem .8rem}.altbilgi{margin-top:2.5rem;padding-top:1rem;border-top:1px solid var(--sinir);color:var(--silik);font-size:.85rem}.js .reveal{opacity:0;transform:translateY(10px);transition:opacity .45s ease,transform .45s ease}.js .reveal.gorunur{opacity:1;transform:none}:focus-visible{outline:.16rem solid var(--vurgu);outline-offset:.18rem;border-radius:.25rem}::selection{background:var(--vurgu);color:var(--zemin)}@media (prefers-reduced-motion: reduce){.js .reveal{opacity:1;transform:none;transition:none}*{animation:none;transition:none}}@media (max-width:40rem){.sarmal{padding:0 1rem 2.5rem}#tema-toggle{margin-left:0}.istatistik{grid-template-columns:repeat(2,1fr)}table{font-size:.82rem}th,td{padding:.35rem .45rem}}@media (max-width:26rem){.istatistik{grid-template-columns:1fr}}</style>
+</head>
+<body>
+<div class="sarmal">
+<a class="atla" href="#icerik">Zum Inhalt springen</a>
+<header class="ust">
+<div class="marka"><span class="marka-ad">ReaPlus Docs</span><span class="marka-alt">Reverse-Engineering-Arbeitsfläche</span></div>
+<nav class="gezinme" aria-label="Site"><a href="index.html">Startseite</a> · <a href="readme.html">README</a> · <a href="tools.html">Werkzeugreferenz</a> · <strong>Beispiele</strong> · <a href="roadmap.html">Fahrplan</a> · <a href="changelog.html">Änderungen</a> · <a href="prompts.html">Promptbibliothek</a></nav>
+<nav id="dil" class="dil" aria-label="Sprache"><a href="../examples.html" hreflang="tr">TR</a> · <a href="../en/examples.html" hreflang="en">EN</a> · <strong aria-current="true">DE</strong> · <a href="../fr/examples.html" hreflang="fr">FR</a> · <a href="../es/examples.html" hreflang="es">ES</a></nav>
+<button id="tema-toggle" type="button" aria-pressed="false">Dunkles Design</button>
+</header>
+<section class="ozet reveal" aria-label="Oberflächenzusammenfassung">
+<p class="ozet-metin">Oberflächenzusammenfassung (echter Lauf, TOOLS.md): 191 Werkzeuge · 187 outputSchema · 191 annotations · 2 Ressourcen · 7 Prompts</p>
+<dl class="istatistik"><div><dt>Werkzeuge</dt><dd><span class="sayi" data-sayi="191">191</span></dd></div><div><dt>outputSchema</dt><dd><span class="sayi" data-sayi="187">187</span></dd></div><div><dt>annotations</dt><dd><span class="sayi" data-sayi="191">191</span></dd></div><div><dt>Ressourcen</dt><dd><span class="sayi" data-sayi="2">2</span></dd></div><div><dt>Prompts</dt><dd><span class="sayi" data-sayi="7">7</span></dd></div></dl>
+</section>
+<main id="icerik"><div class="reveal">
+<h1>Beispiele</h1>
+<h1 id="reaplus-beispiel-promptbibliothek">ReaPlus-Beispiel-Promptbibliothek</h1>
+<p>5 fertige Szenarien: Befehl + erwartete Ausgabe + was sie bedeutet. Jeder
+<strong>Befehl und jede Zahl hier stammt aus einem echten Lauf</strong> (keine erfundene Ausgabe);
+<code>tests/docs-examples.test.mjs</code> führt sie alle aus und verifiziert sie.</p>
+<p>Oberfläche (Zusammenfassung der erzeugten Referenz <a href="tools.html"><code>TOOLS.md</code></a>): <strong>191 Werkzeuge</strong>,
+<strong>187 outputSchema</strong>, <strong>191 annotations</strong>, 2 Ressourcen, 7 Prompts.</p>
+<p>Voraussetzung: <code>npm run build</code> (Beispiele laufen über <code>dist/</code>). Korpus-
+dateien sind schreibgeschützt (<code>tests/corpus/</code>); kein Beispiel verändert sie.</p>
+<h2 id="1-pe-triage--was-ist-diese-exe-was-ruft-sie-auf">1) PE-Triage — „Was ist diese Exe, was ruft sie auf?“</h2>
+<pre><code class="language-bash">node dist/cli/index.js analyze-pe tests/corpus/mini_pe_x64.exe</code></pre>
+<p>Erwartete Ausgabe (echter Lauf):</p>
+<pre><code class="language-text">dosya: tests/corpus/mini_pe_x64.exe
+machine: 0x8664 bit: 64 sections: 1 entry: 0x1000
+dll (1): kernel32.dll
+fonksiyon (1): kernel32.dll!ExitProcess</code></pre>
+<p>Was es bedeutet: <code>0x8664</code> = x64-COFF, eine einzige <code>.text</code>-Sektion, Entry <code>0x1000</code>;
+ein einziger Import <code>kernel32.dll!ExitProcess</code> — Profil einer minimalen Testbinärdatei.
+Maschinenlesbare Form:</p>
+<pre><code class="language-bash">node dist/cli/index.js analyze-pe tests/corpus/mini_pe_x64.exe --json</code></pre>
+<pre><code class="language-json">{&quot;ok&quot;:true,&quot;path&quot;:&quot;tests/corpus/mini_pe_x64.exe&quot;,&quot;machine&quot;:34404,
+ &quot;machine_hex&quot;:&quot;0x8664&quot;,&quot;bit&quot;:&quot;64&quot;,&quot;section_sayisi&quot;:1,&quot;entry&quot;:4096,
+ &quot;entry_hex&quot;:&quot;0x1000&quot;,&quot;dlls&quot;:[&quot;kernel32.dll&quot;],
+ &quot;fonksiyonlar&quot;:[&quot;kernel32.dll!ExitProcess&quot;],
+ &quot;bolumler&quot;:[{&quot;ad&quot;:&quot;.text&quot;,&quot;vsize&quot;:4096,&quot;vaddr&quot;:4096}]}</code></pre>
+<h2 id="2-apk-manifest--wie-heißen-paket-berechtigungen-aktivitäten">2) APK-Manifest — „Wie heißen Paket, Berechtigungen, Aktivitäten?“</h2>
+<p>Falls <code>jadx</code> installiert ist (sonst kommt <code>capability_unsupported</code> + Installationshinweis zurück,
+kein erfundenes Manifest wird erzeugt):</p>
+<pre><code class="language-bash">node -e &quot;import('./dist/rea-domains/android/JadxBridge.js').then(m=&gt;console.log(JSON.stringify(m.rea_jadx_manifest('tests/corpus/sahte.apk'))))&quot;</code></pre>
+<p>Erwartete Ausgabe (echter Lauf, jadx 1.x):</p>
+<pre><code class="language-json">{&quot;ok&quot;:true,&quot;arac&quot;:&quot;rea_jadx_manifest&quot;,&quot;apk&quot;:&quot;tests/corpus/sahte.apk&quot;,
+ &quot;paket&quot;:&quot;com.ornek.sahte&quot;,&quot;izinler&quot;:[],&quot;aktiviteler&quot;:[]}</code></pre>
+<p>Was es bedeutet: jadx öffnet mit <code>--no-src</code> die Quellen und parst <code>AndroidManifest.xml</code>;
+in der gefälschten Korpus-APK gibt es einen Paketnamen, aber keine Berechtigungen/Aktivitäten —
+in einer echten App stünden hier Berechtigungen wie <code>INTERNET</code> und Aktivitäten wie <code>.MainActivity</code>.
+Mit <code>rea_jadx_classes</code> geht es hinunter zur Klassenliste,
+mit <code>rea_jadx_decompile</code> zur Quelle einer einzelnen Klasse.</p>
+<h2 id="3-verhaltensprofil--ereignisse-auf-eine-timeline-legen">3) Verhaltensprofil — „Ereignisse auf eine Timeline legen“</h2>
+<p>Reine Funktion, keine Ausführung — reiht API-/Syscall-/Netz-/Datei-/Prozess-Ereignisse
+nach Quellenpriorität, erzeugt Erst-/Letzt- + Top-5-API-Zusammenfassung:</p>
+<pre><code class="language-bash">node -e &quot;import('./dist/rea-domains/behavior/BehaviorTimeline.js').then(m=&gt;console.log(m.rea_behavior_timeline([
+ {\&quot;kaynak\&quot;:\&quot;api\&quot;,\&quot;zaman\&quot;:3,\&quot;detay\&quot;:\&quot;CreateFileW\&quot;},
+ {\&quot;kaynak\&quot;:\&quot;net\&quot;,\&quot;zaman\&quot;:1,\&quot;detay\&quot;:\&quot;dns:ornek.test\&quot;},
+ {\&quot;kaynak\&quot;:\&quot;api\&quot;,\&quot;zaman\&quot;:2,\&quot;detay\&quot;:\&quot;CreateFileW\&quot;},
+ {\&quot;kaynak\&quot;:\&quot;process\&quot;,\&quot;zaman\&quot;:4,\&quot;detay\&quot;:\&quot;exit:0\&quot;}
+]).summary))&quot;</code></pre>
+<p>Erwartete Ausgabe (echter Lauf):</p>
+<pre><code class="language-text">4 olay api@2 -&gt; process@4 top_api=CreateFileW</code></pre>
+<p>Was es bedeutet: 4 Ereignisse werden nicht chronologisch, sondern nach <strong>Quellenpriorität</strong>
+(api &gt; syscall &gt; net &gt; Datei &gt; Prozess) gereiht; <code>sayılar</code>
+<code>{api:2, net:1, process:1}</code>, <code>top_api</code> gibt die häufigste API. Bei leerer/unvollständiger
+Liste kommt <code>capability_unsupported</code> zurück — keine leere Timeline wird erfunden.</p>
+<h2 id="4-repo-scan--welche-dateitypen-liegen-in-diesem-verzeichnis">4) Repo-Scan — „Welche Dateitypen liegen in diesem Verzeichnis?“</h2>
+<p>PE-/ELF-/APK-/JS-/WASM-Erkennung per Magie-Byte + Erweiterungshinweis, Engine-Empfehlung und
+5-Dateien-Plan (vollständig offline, <code>.git</code>/<code>node_modules</code>/<code>dist</code> werden übersprungen):</p>
+<pre><code class="language-bash">node -e &quot;import('node:fs').then(async fs=&gt;{const {rea_scan_repo}=await import('./dist/rea-domains/reposcan/RepoScan.js');
+const r=await rea_scan_repo('&lt;hedef-dizin&gt;');console.log(r.summary,JSON.stringify(r.details.tipler));})&quot;</code></pre>
+<p>Echter Lauf in einem Verzeichnis mit 5 magischen Dateien:</p>
+<pre><code class="language-text">5 dosya, 5 tip {&quot;pe&quot;:1,&quot;elf&quot;:1,&quot;apk&quot;:1,&quot;js&quot;:1,&quot;wasm&quot;:1}</code></pre>
+<p>Was es bedeutet: Jede Datei wird als <code>Pfad/Typ/Engine</code>-Tripel gelistet
+(z. B. <code>.exe</code> → <code>pe</code>/<code>cutter</code>, <code>.apk</code> → <code>apk</code>/<code>jadx</code>, <code>.elf</code> →
+<code>elf</code>/<code>radare2</code>); <code>planlar</code> gibt pro Datei das empfohlene nächste Werkzeug.
+In einem ziellosen/leeren Verzeichnis leere Liste (<code>ok:true</code>), in einem
+nicht vorhandenen Verzeichnis <code>capability_unsupported</code>.</p>
+<h2 id="5-pdb-download--vom-debug-datensatz-zum-symbol">5) PDB-Download — „Vom Debug-Datensatz zum Symbol“</h2>
+<p>Schritt 1 — PDB-Identität aus dem CodeView-RSDS-Datensatz auflösen (schreibgeschützt):</p>
+<pre><code class="language-bash">node -e &quot;import('./dist/rea-domains/typedef/PdbReader.js').then(m=&gt;console.log(JSON.stringify(m.rea_pdb_yolu('&lt;debug-bilgili.exe&gt;'))))&quot;</code></pre>
+<p>Echter Lauf auf einer PE mit Debug-Info (lokal erzeugtes Beispiel):</p>
+<pre><code class="language-json">{&quot;ok&quot;:true,&quot;arac&quot;:&quot;rea_pdb_yolu&quot;,&quot;pdb&quot;:&quot;ornek_test.pdb&quot;,
+ &quot;guid&quot;:&quot;ABCDEF01-2345-6789-ABCD-EF0123456789&quot;,&quot;yas&quot;:1}</code></pre>
+<p>Ohne Debug-Datensatz kommt <code>bulunamadi</code> zurück (<code>PDB debug kaydı yok</code>) — keine erfundene
+GUID wird erzeugt.</p>
+<p>Schritt 2 — Im Microsoft-Symbolserver-Layout herunterladen + Integrität + Cache:</p>
+<pre><code class="language-text">&lt;server&gt;/ornek_test.pdb/ABCDEF0123456789ABCDEF01234567891/ornek_test.pdb</code></pre>
+<p>Was es bedeutet: Die URL folgt dem Layout <code>Name/GUID-ohne-Bindestriche+ALTER/Name</code>; die heruntergeladene Datei
+wird per MSF-Signatur + GUID+Alter-Muster verifiziert, unter <code>&lt;Cache&gt;/Name/SIG/Name</code>
+geschrieben; der zweite Aufruf kommt ohne Netz mit <code>cache:true</code> zurück. Kaputter
+Inhalt wird mit <code>butunluk_hatasi</code> abgewiesen, keine halbe Datei wird geschrieben; ohne Netz
+<code>ag_hatasi</code> — eine gefälschte PDB wird niemals geschrieben. Das Cache-Verzeichnis
+wird mit <code>REAPLUS_SYMBOL_CACHE</code> verlegt.</p>
+<h2 id="nächste-schritte">Nächste Schritte</h2>
+<ul><li>Vollständige Werkzeugliste: <a href="tools.html"><code>TOOLS.md</code></a> (erzeugt, 187 Werkzeuge).</li><li>Verifikationsablauf: <a href="https://github.com/Alyhnte/ReaPlus/blob/main/VERIFY.md"><code>VERIFY.md</code></a>; Mitwirkungsablauf: <code>CONTRIBUTING.md</code>.</li></ul>
+</div></main>
+<footer class="altbilgi"><p>ReaPlus Docs — statische Site. Erzeugung: <code>node scripts/site-uret.mjs</code> · Zahlen aus der TOOLS.md-Zusammenfassung (echter Lauf).</p></footer>
+</div>
+<script>
+document.documentElement.classList.add("js");
+(function(){var k="reaplus-tema";var d=document.getElementById("tema-toggle");
+function uygula(t){document.documentElement.dataset.theme=t;try{localStorage.setItem(k,t);}catch(e){}if(d){d.setAttribute("aria-pressed",String(t==="dark"));d.textContent=t==="dark"?"Helles Design":"Dunkles Design";}}
+if(d){d.addEventListener("click",function(){uygula(document.documentElement.dataset.theme==="dark"?"light":"dark");});
+if(document.documentElement.dataset.theme){d.setAttribute("aria-pressed",String(document.documentElement.dataset.theme==="dark"));d.textContent=document.documentElement.dataset.theme==="dark"?"Helles Design":"Dunkles Design";}}
+var azalt=window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+var beliren=document.querySelectorAll(".reveal");
+if(azalt||!("IntersectionObserver" in window)){beliren.forEach(function(el){el.classList.add("gorunur");});}
+else{var gozcu=new IntersectionObserver(function(girdiler){girdiler.forEach(function(g){if(g.isIntersecting){g.target.classList.add("gorunur");gozcu.unobserve(g.target);}});},{threshold:.12,rootMargin:"0px 0px -8% 0px"});beliren.forEach(function(el){gozcu.observe(el);});}
+var sayilar=document.querySelectorAll(".sayi");
+function bitir(el){el.textContent=el.getAttribute("data-sayi");}
+if(azalt||!("IntersectionObserver" in window)){sayilar.forEach(bitir);}
+else{var sayac=new IntersectionObserver(function(girdiler){girdiler.forEach(function(g){if(!g.isIntersecting)return;var el=g.target;sayac.unobserve(el);var hedef=Number(el.getAttribute("data-sayi"));if(!isFinite(hedef))return;var baslangic=null;var sure=850;function kare(t){if(baslangic===null)baslangic=t;var oran=Math.min(1,(t-baslangic)/sure);var yumru=1-Math.pow(1-oran,3);el.textContent=String(Math.round(hedef*yumru));if(oran<1){requestAnimationFrame(kare);}else{bitir(el);}}requestAnimationFrame(kare);});},{threshold:.4});sayilar.forEach(function(el){sayac.observe(el);});}
+})();
+</script>
+</body>
+</html>

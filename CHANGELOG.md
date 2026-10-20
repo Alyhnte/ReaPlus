@@ -3,6 +3,201 @@
 Tüm önemli değişiklikler bu dosyada tutulur. Format: Keep a Changelog + SemVer.
 All notable changes are documented here (Türkçe özet + English detail).
 
+## [0.13.0] — 2026-10-20
+
+Sürüm 0.13.0: dalga-13 + dalga-14 — sniff makine kimliği (PE ARMNT/ARM64,
+ELF e_machine + Hexagon), plist tip-duyarlı kayıpsız değerler, JS CJS/require
+çözümleme + cross-bundle ilişkiler, apktool sürüm gözlemi (advisory), raw m68k
+Ghidra profili ve sürüm taşıyıcı senkronu (9 kontrol). Araç yüzeyi değişmedi
+(191 araç · 187 outputSchema · 2 resource · 7 prompt, 6 dil). 107/107 test yeşil.
+
+### Eklendi / Added
+
+- `rea_sniff`: PE `makine` alanı ARMNT (`0x01c4`) ve ARM64 (`0xaa64`) için
+  dolar; x86/x64 ve legacy ARM/Thumb/ARM64EC bilinçli kapsam dışı. ELF
+  `e_machine` (LE/BE, ≥20B) 14 adla eşlenir; Hexagon (164) dahil.
+- `rea_apple_plist`: tip duyarlı kayıpsız değer okuma (integer/real ham
+  string korunur, XML entity çözülür) + `details.anahtarTipleri`.
+- `rea_js_require` / `rea_js_export_shape`: relative + node_modules çözümü,
+  CJS export şekli; `rea_js_bundle_diff` opsiyonel `mapA`/`mapB` ile
+  `details.iliskiler {paylasilanKaynaklar, yalnizA, yalnizB}` (deterministik).
+- `rea_apktool_info` / `rea_apktool_caps`: opsiyonel `surumGozlem {ham,
+  sayisal?}` — yalnız gözlem, kanıt değil; ayrıştırılamayan satırda alan yok.
+- Ghidra raw m68k dil profili (`GhidraRawProfil`, yüzey dışı saf modül).
+
+### Düzeltildi / Fixed
+
+- `analyze-js` CLI dizin-vs-dosya kapısı: dizin `index.js` sanılıp sessiz
+  yürümüyor; net hata + exit kodu.
+- Sürüm taşıyıcıları: README, i18n, site, CHANGELOG ve dist manifestleri
+  version-sync testine bağlandı (9 kontrol); bayat 0.8.2/0.9.0/0.10.1
+  değerleri temizlendi.
+- README/TOOLS/ROADMAP durum satırları 6 dilde v0.13.0'a çekildi; tarihsel
+  kayıtlar bilinçli olarak korundu.
+
+### Altyapı / Internal
+
+- Dalga 13–14 izole worktree + TDD; 4/4 branch merge; tam suite 107/107.
+
+## [0.12.0] — 2026-10-18
+
+Sürüm 0.12.0: dalga-11 — 4 görev şablonu prompt'u (3 → 7) + golden korpus
+(5 gerçek gcc binary) + portable node bundle + CLI guard realpath fix +
+docs/site/tool-reference senkronu (191 araç · 187 outputSchema ·
+191 annotations · 2 resource · 7 prompt, 6 dil). 103/103 test yeşil.
+
+### Eklendi / Added
+
+- 4 görev şablonu prompt'u: `packer-triage`, `dotnet-malware-triage`,
+  `android-triage`, `pe-crash-triage` (toplam 7 prompt; `docs/PROMPTS.md`
+  10 numaralı bölüm, her birinde amaç + örnek çağrı + beklenen çıktı).
+- Golden korpus: 5 gerçek gcc binary (PE32+/DLL/COFF obj) +
+  `tests/corpus/HASHES.json` + deterministik derleme betiği + 16 yeni
+  sdk-surface testi (fs 14, scan_repo 10/pe5).
+- Portable node bundle: `scripts/portable-paketle.mjs` (Node'suz dağıtım;
+  prod bağımlı kapanır kume, frida binding dosya olarak, MANIFEST +
+  duman) + 7 test; `publish.yml` release-artifacts adımı `--zip` ile
+  portable'i GitHub Release asset'i yapar (linux bundle; CI ubuntu).
+- `docs/generate-tool-reference` CLI guard realpath fix: junction/gerçek
+  yol ayrımı sessiz no-op değil (exit 0 + çıktı yoktu) +
+  `tests/generate-tool-reference-cli.test.mjs` (gerçek yol + junction).
+
+### Düzeltildi / Fixed
+
+- Güncel özet satırları 6 dilde (TR/EN/DE/FR/ES + kök) 3 → 7 prompt:
+  README, EXAMPLES, PROMPTS, ROADMAP; tarihsel v0.10.0/CERRADO
+  satırları bilinçli olarak değişmedi (o dönemde doğruydu).
+- TOOLS.md gerçek yüzeyle yeniden eşleşti (191/2/7) + site regen
+  (5 dil × 7 sayfa).
+
+## [0.11.0] — 2026-10-18
+
+Sürüm 0.11.0: 5 dil i18n site + premium tema + örnek oturumlar + release
+güveni. Araç yüzeyi değişmedi (191 araç + 2 resource + 3 prompt).
+101/101 varsayılan test yeşil.
+
+### Eklendi / Added
+
+- 5 dil site (TR/EN/DE/FR/ES): `scripts/site-uret.mjs` i18n chrome +
+  dil seçici; 5 dil × 7 sayfa = 35 HTML.
+- Premium site teması (scroll-reveal + light/dark toggle).
+- Örnek oturumlar (README "🎬 Örnek Oturumlar" + `docs/ornek-oturumlar/`:
+  ghidra / ida / r2 — gerçek çıktı kanıtı, uydurma yok).
+- npm publish provenance (OIDC `--provenance`) + `release-artifacts`
+  job'u: CycloneDX SBOM otomatik GitHub Release asset'i olur.
+- CONTRIBUTING 6 H2 bölüm + `bug-raporu` / `ozellik-istegi` issue
+  formları (GitHub issue-form şeması).
+- `site-uret.mjs --check` modu: 35 sayfa varlık/boyut/dil doğrulaması,
+  bozuk dosyada `exit(1)`.
+
+### Altyapı / Internal
+
+- Dalga 6–10 izole worktree + TDD ile üretildi; tam küme kapıda yeşil.
+
+## [0.10.2] — 2026-10-16
+
+Sürüm 0.10.2: P2 dağıtım/kalite dalgaları + Mach-O derinliği + P3
+araştırma notları. Araç yüzeyi değişmedi (191 araç + 2 resource +
+3 prompt). 96/96 varsayılan test yeşil.
+
+### Eklendi / Added
+
+- Pages deploy workflow'u (`pages.yml`: main push → site-uret → deploy).
+- Şema bütçesi CI adımı (200KB liste / 110KB şema / 600B ort).
+- Hedefli fuzz harness (`scripts/fuzz-harness.mjs`: sınıflandırma + rapor
+  + `docs/FUZZ.md`; ilk koşu 0 crash).
+- Portable node bundle (`scripts/sea-portable.mjs` + `docs/SEA-DAGITIM.md`;
+  SEA tek-exe 3 engel nedeniyle yok).
+- P3 fizibilite notları (`docs/ARASTIRMA-*`: LLDB/TTD/angr BEKLE, ticari YAPMA).
+- Katkı hunisi (CONTRIBUTING genişletme + good-first-issue formu).
+
+### Düzeltildi / Fixed
+
+- `rea_macho_objc` fat binary dilim çözümü (`arch` parametresi + dürüstlük
+  merdiveni); IL2CPP v31+ çevrimdışı doğrulanamadığı için sınırlı-kip korundu.
+- ROADMAP v0.10.1 senkronu (P1 kapanışlar işlendi).
+
+## [0.10.1] — 2026-10-16
+
+Sürüm 0.10.1: P1 kod maddeleri kapandı — ölü facade temizliği +
+golden DEX fixture. Araç yüzeyi değişmedi (191 araç + 2 resource +
+3 prompt). 92/92 varsayılan test yeşil.
+
+### Düzeltildi / Fixed
+
+- Ölü facade silindi: `probeCache`/`parallelProbe` davranışı
+  `workerCache`'e taşındı (`ResultCache` TTL + `runProbes`);
+  `tests/probe.test.mjs` `worker-cache.test.mjs` altına taşındı.
+- Golden DEX fixture: `tests/corpus/mini.dex` (sentetik minimal DEX
+  v035, deterministik üretim `scripts/dex-fixture-uret.mjs`) +
+  `dex-golden` 7 test + HASHES girdisi.
+- `RepoScan` `.dex → dex/jadx` eşlemesi eklendi.
+
+## [0.10.0] — 2026-10-16
+
+Sürüm 0.10.0: 4 yeni araç (187→191), serileştirme kuyruğu, worker-cache
+bağlama, dağıtım hazırlığı (SEA fizibilite, manifestler, SBOM, sandbox),
+kalıcı kalite (şema bütçesi, docs sitesi, prompt kütüphanesi, ObjC/IL2CPP/Go
+derinliği). 187 `outputSchema`, 191 annotations. 91/91 varsayılan test yeşil.
+
+### Eklendi / Added
+
+- `rea_macho_objc/classdump`, `rea_il2cpp_methods`, `rea_go_buildinfo`.
+- Tam serileştirme (`REA_SESSION_SERIALIZE=1`, zaman-damga kanıtlı).
+- Worker-cache canlı bağlama (reposcan yolu, sayaç kanıtlı).
+- SEA fizibilite raporu + pilot script; winget/scoop/homebrew manifestleri.
+- SBOM (CycloneDX) + `docs/SANDBOX.md` (Hyper-V/VirtualBox).
+- Şema bütçesi (ölçülü eşikler), docs sitesi (7 sayfa), `docs/PROMPTS.md`.
+
+### Düzeltildi / Fixed
+
+- POSIX jadx keşfi (PATH taraması + X_OK).
+- Hopper POSIX benzerlik kapısı.
+- cdb-async CI-Linux uyumu; korpus normalize.
+
+### Henüz yapılmadı / Not yet done
+
+- Frida canlı VM onayı; self-hosted Windows runner.
+- Ölü facade silme (probe testi bağlılığı); P3 araştırma.
+
+## [0.9.0] — 2026-10-15
+
+Sürüm 0.9.0: 15 yeni araçla varsayılan yüzey 172→187 (30 conduit + 157 rea),
+183 `outputSchema` + 187 annotations korunur, kurulum kolaylığı (`setup`
+sihirbazı, `doctor --fix`) ve kalite platformu (parser fuzz smoke, HTTP e2e
+varsayılanı, performans bütçeleri, örnek oturumlar + CONTRIBUTING) geldi.
+86/86 varsayılan test yeşil.
+
+### Eklendi / Added
+
+- 15 yeni araç (172→187): `rea_go_funclines`, `rea_go_goresym`,
+  `rea_il2cpp_metadata`, `rea_il2cpp_dump`, `rea_bindiff_fonksiyonlar`,
+  `rea_bindiff_karsilastir`, `rea_flutter_snapshot`, `rea_flutter_blutter`,
+  `rea_macho_info`, `rea_macho_loads`, `rea_macho_otool`, `rea_pcap_oku`,
+  `rea_scan_repo_paralel`, `rea_android_dinamik_recete`,
+  `rea_android_recete_dogrula`.
+- `rea-plus-cli setup` sihirbazı (istemci algılama + config yazma) ve
+  `doctor --fix` (onaylı kurulum önerisi/çalıştırması).
+- Parser fuzz smoke (`scripts/fuzz-parsers.mjs` + `parser-fuzz.test.mjs`;
+  tohumlar salt-okunur korpustan, yazma yalnız tmpdir'e).
+- HTTP e2e varsayılan kulvara alındı (`tests/e2e.http.mjs`).
+- Performans bütçeleri (`perf-budget.test.mjs`: tools/list + açılış).
+- Örnek oturumlar (`docs/EXAMPLES.md` + `docs-examples.test.mjs`) ve
+  `CONTRIBUTING.md` (korpus kuralları dahil).
+
+### Düzeltildi / Fixed
+
+- Hopper POSIX benzerlik kapısı: çalıştırılabilir bite/boyuta benzemeyen
+  sahte dosya Hopper sayılmaz, dürüst `capability_unsupported` döner.
+- cdb async CI-Linux dalı ve korpus satır-sonu normalizesi (0.8.2'den gelen
+  düzeltmeler) 187-araç yüzeyinde regresyon testleriyle kilitlendi.
+
+### Henüz yapılmadı / Not yet done
+
+- Frida canlı VM onayı; self-hosted Windows runner.
+- Tek dosya Windows exe (Node SEA); winget/scoop/homebrew manifesti; SBOM.
+- P3 araştırma: LLDB motoru, WinDbg TTD, sembolik yürütme (angr/Triton).
+
 ## [0.8.2] — 2026-10-15
 
 Sürüm 0.8.2: kalan şema kapsaması kapandı (168 `outputSchema`, 172 annotations,

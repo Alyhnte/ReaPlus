@@ -1,13 +1,28 @@
 // cli/js: bundle + source-map dosya okuma (offline, gerçek)
 // JsAnalyzer köprüsü kullanılır, dosya IO burada yapılır.
-import { readFileSync } from "node:fs";
+import { readFileSync, statSync } from "node:fs";
 import { rea_js_bundle } from "../rea-domains/javascript/JsAnalyzer.js";
 
-// Dosyayı UTF-8 oku, yoksa anlaşılır hata fırlat.
+// Yol var olan bir dizin mi: stat başarısızsa false (okuma kendi hatasını verir).
+function dizinMi(path: string): boolean {
+  try {
+    return statSync(path).isDirectory();
+  } catch {
+    return false;
+  }
+}
+
+// Dosyayı UTF-8 oku; dizin yolu için net mesaj, diğer hatalarda genel mesaj.
 export function dosyaOku(path: string): string {
+  // Dizin yolu (ör. x.map) dosya yerine geçmişse okumayı denemeden yakala.
+  if (dizinMi(path)) throw new Error(`dizin (dosya bekleniyordu): ${path}`);
   try {
     return readFileSync(path, "utf8");
-  } catch {
+  } catch (err) {
+    // Stat sonrası yarış (ya da junction): EISDIR yine dizin mesajına çevrilir.
+    if ((err as NodeJS.ErrnoException)?.code === "EISDIR") {
+      throw new Error(`dizin (dosya bekleniyordu): ${path}`);
+    }
     throw new Error(`dosya okunamadı: ${path}`);
   }
 }
