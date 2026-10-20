@@ -19,6 +19,17 @@ const elfBaslik = (makine, { sinif = 2, veri = 1 } = {}) => {
   return buf;
 };
 
+// PE başlığı kurar: MZ + e_lfanew (0x3C) + "PE\0\0" imzası + COFF machine (imza+4).
+// eLfanew/imza bozularak kapı davranışı da denenebilir.
+const peBaslik = (machine, { eLfanew = 0x80, imza = [0x50, 0x45, 0x00, 0x00] } = {}) => {
+  const buf = Buffer.alloc(eLfanew + 6 + 8, 0);
+  buf.set([0x4d, 0x5a], 0);
+  buf.writeUInt32LE(eLfanew, 0x3c);
+  buf.set(imza, eLfanew);
+  buf.writeUInt16LE(machine, eLfanew + 4);
+  return buf;
+};
+
 describe("sniffBytes", () => {
   // ELF sihri radare2 önerisiyle dönmeli.
   it("ELF imzasını tanır", () => {
@@ -90,6 +101,61 @@ describe("sniffBytes: ELF e_machine (makine)", () => {
 
   it("ELF dışı türlerde makine alanı hiç görünmez", () => {
     assert.deepEqual(sniffBytes(b("504b030414000000")), { tip: "apk", motor: "jadx" });
+  });
+});
+
+// PE COFF machine kimliği: yalnız ARMNT/ARM64'ta dolar (upstream #3965 deltası);
+// legacy ARM/Thumb/ARM64EC ve x86 ailelerinde alan hiç eklenmez.
+describe("sniffBytes: PE COFF machine (makine)", () => {
+  it("ARMNT machine 0x01c4 -> armnt", () => {
+    assert.deepEqual(sniffBytes(peBaslik(0x01c4)), { tip: "pe", motor: "x64dbg", makine: "armnt" });
+  });
+
+  it("ARM64 machine 0xaa64 -> arm64", () => {
+    assert.deepEqual(sniffBytes(peBaslik(0xaa64)), { tip: "pe", motor: "x64dbg", makine: "arm64" });
+  });
+
+  it("legacy ARM (0x01c0) makine alanı üretmez", () => {
+    assert.deepEqual(sniffBytes(peBaslik(0x01c0)), { tip: "pe", motor: "x64dbg" });
+  });
+
+  it("Thumb (0x01c2) makine alanı üretmez", () => {
+    assert.deepEqual(sniffBytes(peBaslik(0x01c2)), { tip: "pe", motor: "x64dbg" });
+  });
+
+  it("ARM64EC (0xa641) makine alanı üretmez", () => {
+    assert.deepEqual(sniffBytes(peBaslik(0xa641)), { tip: "pe", motor: "x64dbg" });
+  });
+
+  it("x86-64 (0x8664) mevcut kayıt gibi kalır: makine alanı YOK", () => {
+    assert.deepEqual(sniffBytes(peBaslik(0x8664)), { tip: "pe", motor: "x64dbg" });
+  });
+
+  it("bozuk PE imzasında makine alanı üretmez", () => {
+    assert.deepEqual(sniffBytes(peBaslik(0x01c4, { imza: [0x50, 0x58, 0x00, 0x00] })), { tip: "pe", motor: "x64dbg" });
+  });
+
+  it("e_lfanew tampon dışındaysa makine alanı üretmez", () => {
+    const disari = Buffer.alloc(0x40, 0);
+    disari.set([0x4d, 0x5a], 0);
+    disari.writeUInt32LE(0x1000, 0x3c); // tampon 64 bayt; imza erişilemez
+    assert.deepEqual(sniffBytes(disari), { tip: "pe", motor: "x64dbg" });
+    const cokKucuk = Buffer.alloc(0x40, 0);
+    cokKucuk.set([0x4d, 0x5a], 0);
+    cokKucuk.writeUInt32LE(0x10, 0x3c); // e < 0x40: DOS başlığı içine taşar
+    assert.deepEqual(sniffBytes(cokKucuk), { tip: "pe", motor: "x64dbg" });
+  });
+
+  it("machine baytları tampon dışındaysa (kesik başlık) makine alanı üretmez", () => {
+    const kesik = Buffer.alloc(0x80 + 5, 0);
+    kesik.set([0x4d, 0x5a], 0);
+    kesik.writeUInt32LE(0x80, 0x3c);
+    kesik.set([0x50, 0x45, 0x00, 0x00], 0x80); // machine için yer yok
+    assert.deepEqual(sniffBytes(kesik), { tip: "pe", motor: "x64dbg" });
+  });
+
+  it("8 baytlık MZ önekinde makine alanı YOK (derin eşitlik aynen)", () => {
+    assert.deepEqual(sniffBytes(b("4d5a900003000000")), { tip: "pe", motor: "x64dbg" });
   });
 });
 
