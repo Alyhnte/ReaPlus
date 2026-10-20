@@ -22,7 +22,7 @@ export const SERVER_PATH = join(ROOT, "dist", "server.js");
 export const OUTPUT_PATH = join(ROOT, "docs", "TOOLS.md");
 export const REQUEST_TIMEOUT_MS = 15_000;
 export const BUILD_REQUIRED_MESSAGE =
-  "dist/server.js bulunamadi: arac referansi derlenmis sunucudan uretilir; once `npm run build` calistirin.";
+  "dist/server.js not found: the tool reference is generated from the compiled server; run `npm run build` first.";
 
 const sirala = (a, b) => (a < b ? -1 : a > b ? 1 : 0);
 
@@ -146,7 +146,7 @@ export async function collectSurface({ serverPath = SERVER_PATH, timeoutMs = REQ
 }
 
 export function typeSummary(schema) {
-  if (!schema || typeof schema !== "object") return "bilinmiyor";
+  if (!schema || typeof schema !== "object") return "unknown";
   if (typeof schema.$ref === "string") return schema.$ref.split("/").at(-1) || "$ref";
   if (Array.isArray(schema.enum)) return "enum";
   if (Array.isArray(schema.anyOf)) return schema.anyOf.map(typeSummary).join(" | ");
@@ -154,7 +154,7 @@ export function typeSummary(schema) {
   if (Array.isArray(schema.type)) return schema.type.join(" | ");
   if (schema.type === "array") return `${typeSummary(schema.items)}[]`;
   if (typeof schema.type === "string") return schema.type;
-  return "bilinmiyor";
+  return "unknown";
 }
 
 export function inputFields(tool) {
@@ -180,54 +180,54 @@ export function renderReference(surface) {
   const outputSayisi = tools.filter((t) => t.outputSchema && typeof t.outputSchema === "object").length;
   const annotationSayisi = tools.filter((t) => t.annotations && typeof t.annotations === "object" && Object.keys(t.annotations).length).length;
   const L = [];
-  L.push("# ReaPlus Araç Referansı");
+  L.push("# ReaPlus Tool Reference");
   L.push("");
-  L.push("> Bu dosya otomatik üretilir; elle düzenlemeyin. Kaynak: derlenmiş sunucunun");
-  L.push("> (`dist/server.js`) gerçek MCP yüzeyi. Yeniden üretmek için:");
+  L.push("> This file is auto-generated; do not edit by hand. Source: the real MCP");
+  L.push("> surface of the compiled server (`dist/server.js`). To regenerate:");
   L.push("> `npm run build && node scripts/generate-tool-reference.mjs`");
   L.push("");
-  L.push("## Özet");
+  L.push("## Summary");
   L.push("");
-  L.push(`- Sunucu: \`${scrub(surface.serverInfo.name)}\` ${scrub(surface.serverInfo.version)}`);
-  L.push(`- Toplam araç: ${tools.length}`);
-  L.push(`- Toplam resource: ${resources.length}`);
-  L.push(`- Toplam prompt: ${prompts.length}`);
-  L.push(`- outputSchema taşıyan araç: ${outputSayisi}`);
-  L.push(`- annotations taşıyan araç: ${annotationSayisi}`);
+  L.push(`- Server: \`${scrub(surface.serverInfo.name)}\` ${scrub(surface.serverInfo.version)}`);
+  L.push(`- Total tools: ${tools.length}`);
+  L.push(`- Total resources: ${resources.length}`);
+  L.push(`- Total prompts: ${prompts.length}`);
+  L.push(`- Tools with outputSchema: ${outputSayisi}`);
+  L.push(`- Tools with annotations: ${annotationSayisi}`);
   L.push("");
-  L.push("## Araçlar");
+  L.push("## Tools");
   for (const t of tools) {
     L.push("");
     L.push(`### \`${t.name}\``);
     L.push("");
-    L.push(scrub(t.description ?? "").trim() || "_Açıklama yok._");
+    L.push(scrub(t.description ?? "").trim() || "_No description._");
     L.push("");
     const alanlar = inputFields(t);
     if (!alanlar.length) {
-      L.push("- Girdi alanları: yok");
+      L.push("- Input fields: none");
     } else {
-      L.push("- Girdi alanları:");
+      L.push("- Input fields:");
       for (const a of alanlar) {
         const desc = a.description ? ` — ${a.description}` : "";
-        L.push(`  - \`${a.name}\` (${a.type}, ${a.required ? "zorunlu" : "opsiyonel"})${desc}`);
+        L.push(`  - \`${a.name}\` (${a.type}, ${a.required ? "required" : "optional"})${desc}`);
       }
     }
     if (t.outputSchema && typeof t.outputSchema === "object") {
       const outProps = t.outputSchema.properties ? Object.keys(t.outputSchema.properties).sort(sirala) : [];
-      L.push(`- outputSchema: var${outProps.length ? ` (alanlar: ${outProps.join(", ")})` : ""}`);
-    } else L.push("- outputSchema: yok");
+      L.push(`- outputSchema: present${outProps.length ? ` (fields: ${outProps.join(", ")})` : ""}`);
+    } else L.push("- outputSchema: absent");
     if (t.annotations && typeof t.annotations === "object" && Object.keys(t.annotations).length) {
       const parcalar = Object.keys(t.annotations).sort(sirala).map((k) => `${k}=${JSON.stringify(t.annotations[k])}`);
-      L.push(`- annotations: var (${parcalar.join(", ")})`);
-    } else L.push("- annotations: yok");
+      L.push(`- annotations: present (${parcalar.join(", ")})`);
+    } else L.push("- annotations: absent");
   }
   L.push("");
   L.push("## Resources");
   L.push("");
-  if (!resources.length) L.push("_Resource yok._");
+  if (!resources.length) L.push("_No resources._");
   for (const r of resources) {
     const parc = [`- \`${r.uri}\``];
-    if (r.name) parc.push(`ad: \`${scrub(r.name)}\``);
+    if (r.name) parc.push(`name: \`${scrub(r.name)}\``);
     if (r.mimeType) parc.push(`mimeType: \`${r.mimeType}\``);
     const desc = scrub(r.description ?? "").replace(/\s*\n\s*/g, " ").trim();
     L.push(parc.join(" — ") + (desc ? ` — ${desc}` : ""));
@@ -235,12 +235,12 @@ export function renderReference(surface) {
   L.push("");
   L.push("## Prompts");
   L.push("");
-  if (!prompts.length) L.push("_Prompt yok._");
+  if (!prompts.length) L.push("_No prompts._");
   for (const p of prompts) {
     const args = Array.isArray(p.arguments) ? [...p.arguments].sort((a, b) => sirala(a.name, b.name)) : [];
     const argMetni = args.length
-      ? `argümanlar: ${args.map((a) => `\`${a.name}\` (${a.required ? "zorunlu" : "opsiyonel"})`).join(", ")}`
-      : "argümanlar: yok";
+      ? `arguments: ${args.map((a) => `\`${a.name}\` (${a.required ? "required" : "optional"})`).join(", ")}`
+      : "arguments: none";
     const desc = scrub(p.description ?? "").replace(/\s*\n\s*/g, " ").trim();
     L.push(`- \`${p.name}\` — ${argMetni}${desc ? ` — ${desc}` : ""}`);
   }
@@ -262,16 +262,16 @@ export function parseReference(markdown) {
     const j = bit ? metin.indexOf(bit, i + bas.length) : -1;
     return metin.slice(i, j >= 0 ? j : undefined);
   };
-  const aracBolumu = bolum("## Araçlar", "## Resources");
+  const aracBolumu = bolum("## Tools", "## Resources");
   const tools = [...aracBolumu.matchAll(/^### `([^`]+)`$/gm)].map((m) => m[1]);
   const resources = [...bolum("## Resources", "## Prompts").matchAll(/^- `([^`]+)`/gm)].map((m) => m[1]);
   const prompts = [...bolum("## Prompts", null).matchAll(/^- `([^`]+)`/gm)].map((m) => m[1]);
   return {
     tools, resources, prompts,
     totals: {
-      tools: toplam("Toplam araç"),
-      resources: toplam("Toplam resource"),
-      prompts: toplam("Toplam prompt"),
+      tools: toplam("Total tools"),
+      resources: toplam("Total resources"),
+      prompts: toplam("Total prompts"),
     },
   };
 }
@@ -303,22 +303,22 @@ async function main(argv) {
   const counts = `arac=${surface.tools.length} resource=${surface.resources.length} prompt=${surface.prompts.length}`;
   if (check) {
     if (!existsSync(OUTPUT_PATH)) {
-      console.error("docs/TOOLS.md bulunamadi: once `node scripts/generate-tool-reference.mjs` calistirin.");
+      console.error("docs/TOOLS.md not found: run `node scripts/generate-tool-reference.mjs` first.");
       return 1;
     }
     const { ok, problemler } = checkReference(readFileSync(OUTPUT_PATH, "utf8"), surface);
     if (!ok) {
-      console.error(`TOOLS.md gercek yuzeyden sapiyor (${counts}):`);
+      console.error(`TOOLS.md deviates from the real surface (${counts}):`);
       for (const p of problemler) console.error(`- ${p}`);
       return 1;
     }
-    console.log(`TOOLS.md guncel: ad kumeleri ve toplamlar gercek yuzeyle eslesiyor (${counts}).`);
+    console.log(`TOOLS.md current: name sets and totals match the real surface (${counts}).`);
     return 0;
   }
   const markdown = renderReference(surface);
   if (stdout) { process.stdout.write(markdown); return 0; }
   writeFileSync(OUTPUT_PATH, markdown, "utf8");
-  console.log(`docs/TOOLS.md uretildi (${counts}; ${(markdown.match(/\n/g) ?? []).length} satir).`);
+  console.log(`docs/TOOLS.md generated (${counts}; ${(markdown.match(/\n/g) ?? []).length} lines).`);
   return 0;
 }
 

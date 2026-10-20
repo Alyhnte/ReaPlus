@@ -24,9 +24,11 @@
 <main id="icerik"><div class="reveal">
 <h1>Araç Referansı</h1>
 <h1 id="reaplus-araç-referansı">ReaPlus Araç Referansı</h1>
-<blockquote>Bu dosya otomatik üretilir; elle düzenlemeyin. Kaynak: derlenmiş sunucunun
-(<code>dist/server.js</code>) gerçek MCP yüzeyi. Yeniden üretmek için:
-<code>npm run build &amp;&amp; node scripts/generate-tool-reference.mjs</code></blockquote>
+<blockquote>Bu dosya Türkçe site için elle tutulan çeviridir; kaynak
+<code>docs/TOOLS.md</code> (üretilmiş İngilizce referans) ve <code>docs/i18n/en/TOOLS.md</code>.
+Yüzey değişince bu kopya elle güncellenir; üretici İngilizce <code>docs/TOOLS.md</code>
+yazar. Sayılar gerçek koşudan gelir:
+<code>npm run build &amp;&amp; node scripts/generate-tool-reference.mjs --check</code></blockquote>
 <h2 id="özet">Özet</h2>
 <ul><li>Sunucu: <code>rea-plus</code> 0.13.0</li><li>Toplam araç: 191</li><li>Toplam resource: 2</li><li>Toplam prompt: 7</li><li>outputSchema taşıyan araç: 187</li><li>annotations taşıyan araç: 191</li></ul>
 <h2 id="araçlar">Araçlar</h2>
@@ -608,7 +610,7 @@
 <h2 id="prompts">Prompts</h2>
 <ul><li><code>android-triage</code> — argümanlar: <code>focus</code> (opsiyonel), <code>path</code> (zorunlu) — APK icin jadx tabanli statik triage akisi (yan etkisiz prompt).</li><li><code>binary-diff</code> — argümanlar: <code>eski</code> (zorunlu), <code>focus</code> (opsiyonel), <code>yeni</code> (zorunlu) — Iki surum arasi fonksiyon diff ve yama incelemesi akisi (yan etkisiz prompt).</li><li><code>dotnet-malware-triage</code> — argümanlar: <code>focus</code> (opsiyonel), <code>path</code> (zorunlu) — .NET ornegi icin statik zararli-yazilim triage akisi (yan etkisiz prompt).</li><li><code>elf-linux-triage</code> — argümanlar: <code>focus</code> (opsiyonel), <code>path</code> (zorunlu) — ELF hedefte layout -&gt; sembol -&gt; gadget statik triage akisi (yan etkisiz prompt).</li><li><code>evidence-report</code> — argümanlar: <code>focus</code> (opsiyonel), <code>path</code> (zorunlu) — Kanit paketini dogrulanmis rapora donduren akis (yan etkisiz prompt).</li><li><code>packer-triage</code> — argümanlar: <code>focus</code> (opsiyonel), <code>path</code> (zorunlu) — Packer/koruma tespiti icin sirali, statik-oncelikli rea akisi (yan etkisiz prompt).</li><li><code>pe-crash-triage</code> — argümanlar: <code>focus</code> (opsiyonel), <code>path</code> (zorunlu) — PE hedefte triage -&gt; statik -&gt; crash -&gt; davranis akisi (yan etkisiz prompt).</li></ul>
 </div></main>
-<footer class="altbilgi"><p>ReaPlus Docs — statik site. Üretim: <code>node scripts/site-uret.mjs</code> · Sayılar docs/TOOLS.md özetinden alınır (gerçek koşu).</p></footer>
+<footer class="altbilgi"><p>ReaPlus Docs — statik site. Üretim: <code>node scripts/site-uret.mjs</code> · Sayılar docs/i18n/tr/TOOLS.md özetinden alınır (gerçek koşu).</p></footer>
 </div>
 <script>
 document.documentElement.classList.add("js");

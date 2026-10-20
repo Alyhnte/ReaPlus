@@ -126,7 +126,7 @@ export async function rea_pdb_indir(peYolu: string, sec: PdbIndirSecenek = {}) {
 // dondurur. tests/pdb-register-ready.test.mjs sahte sunucuya kaydedip doğrular.
 export const REA_PDB_INDIR_ARAC = "rea_pdb_indir" as const;
 export const REA_PDB_INDIR_ACIKLAMA =
-  "PE debug dizinindeki CodeView RSDS kaydından Microsoft symbol server'dan PDB indirme + bütünlük + önbellek.";
+  "Download a PDB from the Microsoft symbol server using the CodeView RSDS record in the PE debug directory + integrity + cache.";
 // Girdi, mevcut rea kayıt desenidir (P): yalnız path; handler (a) => rea_pdb_indir(a.path).
 export const reaPdbIndirInputSchema = z.object({ path: z.string().min(1) });
 // Başarı (ok:true) şekli: handler gövdesindeki ok:true dönüşleriyle birebir;

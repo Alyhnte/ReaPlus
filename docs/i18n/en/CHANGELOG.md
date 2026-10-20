@@ -85,8 +85,9 @@ release provenance. Tool surface unchanged (191 tools + 2 resources +
 - 5-language site (TR/EN/DE/FR/ES): `scripts/site-uret.mjs` with i18n
   chrome + language switcher; 5 languages × 7 pages = 35 HTML.
 - Premium site theme (scroll-reveal + light/dark toggle).
-- Sample sessions (README "🎬 Örnek Oturumlar" + `docs/ornek-oturumlar/`:
-  ghidra / ida / r2 — real output evidence, nothing fabricated).
+- Example sessions (README "🎬 Real-world example sessions" +
+  `docs/example-sessions/`: ghidra / ida / r2 — real output evidence, nothing
+  fabricated).
 - npm publish provenance (OIDC `--provenance`) + `release-artifacts`
   job: the CycloneDX SBOM becomes an automatic GitHub Release asset.
 - CONTRIBUTING split into 6 H2 sections + `bug-raporu` / `ozellik-istegi`

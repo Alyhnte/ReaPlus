@@ -1,13 +1,14 @@
-# ReaPlus Prompt Library (10 ready-made prompts)
+# ReaPlus Prompt Library (10 ready-made prompts + 4 task templates)
 
-10 ready-made question patterns for an agent to ask rea-plus. Each prompt:
-**Goal** + **Sample call** (real MCP/`rea-plus-cli` form; field names match
-the generated reference [`TOOLS.md`](TOOLS.md)) + **Expected output** kind.
+10 ready-made question patterns for an agent to ask rea-plus, plus 4 registered
+MCP task-template flows. Each prompt: **Goal** + **Sample call** (real
+MCP/`rea-plus-cli` form; field names match the generated reference
+[`TOOLS.md`](TOOLS.md)) + **Expected output** kind.
 Surface: **191 tools**, **187 outputSchemas**, **191 annotations**, 2
 resources, 7 prompts.
 
 > Note: live-debug calls requiring `confirm:true` are not in this list; all
-> 10 prompts here are read-only/static flows.
+> 14 prompts here are read-only/static flows.
 
 ## 1) Triage — "what is this file, where do I start?"
 
@@ -175,3 +176,86 @@ node tests/perf-budget.test.mjs
 **Expected output:** node:test output (budget thresholds defined in
 `tests/perf-budget.test.mjs`); a threshold breach turns the test red,
 durations are reported in milliseconds on the console.
+
+## Task-template prompts (registered in MCP, 4 flows)
+
+The following 4 prompts are registered via `prompts/list`; each returns only
+an **ordered flow text** (`promptSonuc`) and never calls a tool. `path` (or
+`eski`/`yeni`) is required, `focus` is optional. Every tool name is verified
+against [`TOOLS.md`](TOOLS.md). All flows skip live-debug steps that require
+`confirm:true` on VM/CI and never execute the sample.
+
+### 11) PE/crash triage - "how do I inspect a crashing PE from static to behavior?"
+
+**Goal:** Move a PE target through triage → static → crash evidence → behavior
+in order; when there is no crash record, state the gap without inventing
+behavior.
+
+**Sample call:**
+
+```json
+{ "name": "pe-crash-triage", "arguments": { "path": "sample.exe", "focus": "high entropy" } }
+```
+
+**Expected output:** text flow: `rea_investigate` → `rea_pe_info` /
+`rea_pe_sections` / `rea_pe_imports` → `rea_crash_kayit_parse` /
+`rea_crash_ozet` / `rea_crash_timeline` / `rea_crash_hint` →
+`rea_behavior_full` / `rea_behavior_timeline` → `rea_pdb_yolu` (if present);
+the result includes the triage item, static findings, the strength of the
+crash evidence, and the behavior summary + a confidence level per finding.
+
+### 12) ELF/Linux triage - "how do I scan an ELF target for symbols and gadgets?"
+
+**Goal:** Collect segment/section layout, DWARF symbols, Go build info, and
+gadget candidates for an ELF/Linux target in order.
+
+**Sample call:**
+
+```json
+{ "name": "elf-linux-triage", "arguments": { "path": "target.elf" } }
+```
+
+**Expected output:** text flow: `rea_investigate` → `rea_pwn_elf_layout` →
+`rea_dwarf_ozet` → `rea_go_buildinfo` / `rea_go_funclines` (if Go) →
+`rea_cutter_funcs` / `rea_cutter_strings` (or Ghidra: `rea_ghidra_analyze` →
+`rea_ghidra_funcs` / `rea_ghidra_strings`) → `rea_pwn_gadgets`; the result
+includes the ELF type + mitigation state (NX/PIE/RELRO/canary), symbol/gadget
+evidence, and a confidence level.
+
+### 13) Binary diff - "what changed between two versions, and what is the patch impact?"
+
+**Goal:** Produce a function diff between two versions and decompile the
+changed functions to determine the patch's impact area.
+
+**Sample call:**
+
+```json
+{ "name": "binary-diff", "arguments": { "eski": "v1.exe", "yeni": "v2.exe", "focus": "patch diff" } }
+```
+
+**Expected output:** text flow: `rea_investigate` (both versions) →
+`rea_bindiff_fonksiyonlar` (old + new) → `rea_bindiff_karsilastir` (input
+JSON: `{"eski": "<old>", "yeni": "<new>"}`) → `rea_ghidra_vt` (if Ghidra is
+available) → `rea_ghidra_decompile` (changed function addresses); the result
+includes added / removed / changed functions + evidence per function
+(hash/signature/address) and the patch impact area.
+
+### 14) Evidence report - "how do I turn collected evidence into a report?"
+
+**Goal:** Digest and verify the evidence bundle, close each finding's evidence
+chain with the obligation ledger, and report the readiness score + coverage
+ratio.
+
+**Sample call:**
+
+```json
+{ "name": "evidence-report", "arguments": { "path": "sample.bin", "focus": "report coverage" } }
+```
+
+**Expected output:** text flow: `rea_investigate` → `rea_evidence_bundle` →
+`rea_evidence_verify` → `rea_obligation_ledger` / `rea_obligation_advance` /
+`rea_obligation_verify` / `rea_obligation_close` → `rea_readiness` /
+`rea_coverage` → `rea_missing_reason` (missing tool); the result includes an
+executive summary, a finding list (finding + evidence + confidence), the
+evidence digest, obligation-chain state, the readiness score, and the coverage
+ratio.

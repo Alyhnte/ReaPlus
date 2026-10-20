@@ -29,11 +29,11 @@ function ozetOku(md) {
     return Number(m[1]);
   };
   return {
-    arac: al(/^- Toplam araç: (\d+)$/m),
-    sema: al(/^- outputSchema taşıyan araç: (\d+)$/m),
-    ann: al(/^- annotations taşıyan araç: (\d+)$/m),
-    res: al(/^- Toplam resource: (\d+)$/m),
-    prompt: al(/^- Toplam prompt: (\d+)$/m),
+    arac: al(/^- Total tools: (\d+)$/m),
+    sema: al(/^- Tools with outputSchema: (\d+)$/m),
+    ann: al(/^- Tools with annotations: (\d+)$/m),
+    res: al(/^- Total resources: (\d+)$/m),
+    prompt: al(/^- Total prompts: (\d+)$/m),
   };
 }
 

@@ -28,8 +28,11 @@ before(async () => {
 
 describe("flirt dürüstlüğü", () => {
   it("(a) açıklama FLIRT iddiası taşımaz, yöntemi söyler", () => {
-    // "gerçek FLIRT ... değil" türü feragat cümlesine izin ver, kalanında FLIRT geçmemeli.
-    const kalan = aciklama.replace(/gerçek FLIRT[^.]*değil/i, "");
+    // "gerçek FLIRT ... değil" / "not a real FLIRT signature" türü feragat cümlesine
+    // izin ver, kalanında FLIRT geçmemeli.
+    const kalan = aciklama
+      .replace(/gerçek FLIRT[^.]*değil/i, "")
+      .replace(/not a real FLIRT signature/gi, "");
     assert.ok(!/FLIRT/i.test(kalan), `açıklama FLIRT iddiası taşıyor: ${aciklama}`);
     assert.match(aciklama, /string/i, "açıklama string-tabanlı yöntemi söylemeli");
   });

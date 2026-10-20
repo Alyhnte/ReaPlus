@@ -9,7 +9,7 @@
 - Server: `rea-plus` 0.13.0
 - Total tools: 191
 - Total resources: 2
-- Total prompts: 3
+- Total prompts: 7
 - Tools with outputSchema: 187
 - Tools with annotations: 191
 
@@ -408,7 +408,7 @@ Decode dizinden APK rebuild.
 apktool capability probe.
 
 - Input fields: none
-- outputSchema: present (fields: aapt2, aapt2Tamam, apktool, arac, ok)
+- outputSchema: present (fields: aapt2, aapt2Tamam, apktool, arac, ok, surumGozlem)
 - annotations: present (openWorldHint=true, readOnlyHint=false)
 
 ### `rea_apktool_decode`
@@ -435,7 +435,7 @@ Framework APK kurulumu.
 apktool+aapt2 versions.
 
 - Input fields: none
-- outputSchema: present (fields: arac, ok, surum)
+- outputSchema: present (fields: arac, ok, surum, surumGozlem)
 - annotations: present (openWorldHint=true, readOnlyHint=false)
 
 ### `rea_apple_bundle`
@@ -491,7 +491,7 @@ Best engine for a target type (scored).
 - Input fields:
   - `adaylar` (string[], required)
   - `tip` (string, required)
-- outputSchema: none
+- outputSchema: absent
 - annotations: present (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)
 
 ### `rea_bindiff_fonksiyonlar`
@@ -852,7 +852,7 @@ Birincil yoksa yedek zincir.
 - Input fields:
   - `birincil` (string, required)
   - `mevcut` (string[], required)
-- outputSchema: none
+- outputSchema: absent
 - annotations: present (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)
 
 ### `rea_firmware_caps`
@@ -1556,7 +1556,7 @@ Pipe/PTY comparison.
 
 - Input fields:
   - `cmd` (string, required)
-- outputSchema: none
+- outputSchema: absent
 - annotations: present (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)
 
 ### `rea_process_run`
@@ -1574,7 +1574,7 @@ ELF layout + mitigation.
 
 - Input fields:
   - `path` (string, required)
-- outputSchema: none
+- outputSchema: absent
 - annotations: present (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)
 
 ### `rea_pwn_gadgets`
@@ -1684,7 +1684,7 @@ File type + engine suggestion (magic-byte).
 
 - Input fields:
   - `b64dosya` (string, required)
-- outputSchema: present (fields: motor, tip)
+- outputSchema: present (fields: makine, motor, tip)
 - annotations: present (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)
 
 ### `rea_storage_dump`
@@ -1848,11 +1848,15 @@ Cross-references to and/or from an address (code and data).
 
 ## Resources
 
-- `rea-plus://capabilities-safety` — name: `capabilities-safety` — mimeType: `application/json` — Static capability and security-rules summary (read-only).
-- `rea-plus://server-info` — name: `server-info` — mimeType: `application/json` — Static server identity and surface summary (read-only).
+- `rea-plus://capabilities-safety` — name: `capabilities-safety` — mimeType: `application/json` — Statik yetenek ve guvenlik kurallari ozeti (salt-okunur).
+- `rea-plus://server-info` — name: `server-info` — mimeType: `application/json` — Statik sunucu kimligi ve yuzey ozeti (salt-okunur).
 
 ## Prompts
 
 - `android-triage` — arguments: `focus` (optional), `path` (required) — jadx-based static triage flow for an APK (side-effect-free prompt).
+- `binary-diff` — arguments: `eski` (required), `focus` (optional), `yeni` (required) — Function diff and patch-review flow between two versions (side-effect-free prompt).
 - `dotnet-malware-triage` — arguments: `focus` (optional), `path` (required) — Static malware-triage flow for a .NET sample (side-effect-free prompt).
-- `packer-triage` — arguments: `focus` (optional), `path` (required) — Ordered, static-first rea flow for packer/protection detection (side-effect-free prompt).
+- `elf-linux-triage` — arguments: `focus` (optional), `path` (required) — Static layout -> symbol -> gadget triage flow for an ELF target (side-effect-free prompt).
+- `evidence-report` — arguments: `focus` (optional), `path` (required) — Flow that turns an evidence bundle into a verified report (side-effect-free prompt).
+- `packer-triage` — arguments: `focus` (optional), `path` (required) — Sequential, static-first rea flow for packer/protection detection (side-effect-free prompt).
+- `pe-crash-triage` — arguments: `focus` (optional), `path` (required) — Triage -> static -> crash -> behavior flow for a PE target (side-effect-free prompt).

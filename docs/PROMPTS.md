@@ -1,47 +1,49 @@
-# ReaPlus Prompt Kütüphanesi (10 hazır prompt + 4 görev şablonu)
+# ReaPlus Prompt Library (10 ready-made prompts + 4 task templates)
 
-Ajanın rea-plus'a soracağı 10 hazır soru kalıbı + 4 MCP görev şablonu akışı.
-Her prompt: **Amaç** +
-**Örnek çağrı** (gerçek MCP/`rea-plus-cli` formu, alan adları üretilmiş
-referans [`TOOLS.md`](TOOLS.md) ile aynı) + **Beklenen çıktı** türü.
-Yüzey: **191 araç**, **187 outputSchema**, **191 annotations**, 2 resource, 7 prompt.
+10 ready-made question patterns for an agent to ask rea-plus, plus 4 registered
+MCP task-template flows. Each prompt: **Goal** + **Sample call** (real
+MCP/`rea-plus-cli` form; field names match the generated reference
+[`TOOLS.md`](TOOLS.md)) + **Expected output** kind.
+Surface: **191 tools**, **187 outputSchemas**, **191 annotations**, 2
+resources, 7 prompts.
 
-> Not: `confirm:true` isteyen canlı-debug çağrıları listede yok; buradaki
-> 14 promptun tamamı salt-okunur/statik akışlardır.
+> Note: live-debug calls requiring `confirm:true` are not in this list; all
+> 14 prompts here are read-only/static flows.
 
-## 1) Triage — "bu dosya nedir, nereden başlarım?"
+## 1) Triage — "what is this file, where do I start?"
 
-**Amaç:** Bilinmeyen bir dosyayı tek çağrıda sınıfla ve sonraki adım planını al.
+**Goal:** Classify an unknown file in one call and get the next-step plan.
 
-**Örnek çağrı:**
+**Sample call:**
 
 ```json
 { "name": "rea_investigate", "arguments": { "path": "sample.exe" } }
 ```
 
-**Beklenen çıktı:** `ok/plan/skor/tip/motor/yedekler` alanlı nesne (`outputSchema`
-alanları: `arac, motor, ok, plan, skor, tip, yedekler`); tip (pe/elf/apk/…),
-güven skoru ve önerilen motor + yedek plan listesi.
+**Expected output:** object with `ok/plan/skor/tip/motor/yedekler` fields
+(`outputSchema` fields: `arac, motor, ok, plan, skor, tip, yedekler`); type
+(pe/elf/apk/…), confidence score, and suggested engine + fallback plan list.
 
-## 2) Manifest — "bu APK'nın paketi, izinleri, aktiviteleri?"
+## 2) Manifest — "what are this APK's package, permissions, activities?"
 
-**Amaç:** APK'nın `AndroidManifest.xml` kimliğini jadx ile çöz.
+**Goal:** Resolve the APK's `AndroidManifest.xml` identity with jadx.
 
-**Örnek çağrı:**
+**Sample call:**
 
 ```bash
 node -e "import('./dist/rea-domains/android/JadxBridge.js').then(m=>console.log(JSON.stringify(m.rea_jadx_manifest('tests/corpus/sahte.apk'))))"
 ```
 
-**Beklenen çıktı:** `ok/paket/izinler/aktiviteler` alanlı nesne; jadx yoksa
-uydurma manifest yerine `capability_unsupported` + kurulum ipucu.
+**Expected output:** object with `ok/paket/izinler/aktiviteler` fields;
+without jadx, `capability_unsupported` + install hint instead of a fabricated
+manifest.
 
-## 3) Davranış — "olayları zaman çizgisine diz"
+## 3) Behavior — "lay events on a timeline"
 
-**Amaç:** API/syscall/net/dosya/process olaylarından kaynak-öncelikli özet üret
-(yürütme yok, saf fonksiyon).
+**Goal:** Produce a source-priority summary from API/syscall/net/file/process
+events (no execution, pure function).
 
-**Örnek çağrı:**
+**Sample call:**
 
 ```bash
 node -e "import('./dist/rea-domains/behavior/BehaviorTimeline.js').then(m=>console.log(m.rea_behavior_timeline([
@@ -52,202 +54,208 @@ node -e "import('./dist/rea-domains/behavior/BehaviorTimeline.js').then(m=>conso
 ]).summary))"
 ```
 
-**Beklenen çıktı:** Metin özet (`4 olay api@2 -> process@4 top_api=CreateFileW`
-biçimi) + `sıralı/sayılar/top_api/ilk/son` detayları; boş listede
-`capability_unsupported`.
+**Expected output:** Text summary (in the
+`4 olay api@2 -> process@4 top_api=CreateFileW` form) +
+`sıralı/sayılar/top_api/ilk/son` details; `capability_unsupported` on an
+empty list.
 
-## 4) Repo — "bu dizinde ne tür dosyalar var?"
+## 4) Repo — "what kinds of files are in this directory?"
 
-**Amaç:** Bir dizindeki PE/ELF/APK/JS/WASM dosyalarını sihir baytla tespit edip
-dosya başına sonraki-araç planı al.
+**Goal:** Detect PE/ELF/APK/JS/WASM files in a directory via magic bytes and
+get a per-file next-tool plan.
 
-**Örnek çağrı:**
+**Sample call:**
 
 ```json
-{ "name": "rea_scan_repo", "arguments": { "path": "<hedef-dizin>" } }
+{ "name": "rea_scan_repo", "arguments": { "path": "<target-dir>" } }
 ```
 
-**Beklenen çıktı:** `summary` metni (`5 dosya, 5 tip …` biçimi) +
-`details.tipler` sayımı + `details.planlar` (dosya → önerilen motor);
-hedefsiz dizinde boş liste (`ok:true`).
+**Expected output:** `summary` text (in the `5 dosya, 5 tip …` form) +
+`details.tipler` counts + `details.planlar` (file → suggested engine); empty
+list for a targetless directory (`ok:true`).
 
-## 5) PDB — "debug kaydından sembole git"
+## 5) PDB — "go from debug record to symbols"
 
-**Amaç:** PE'nin CodeView RSDS kaydından PDB kimliğini çöz, Microsoft symbol
-server düzeninde indir (bütünlüklü + önbellekli).
+**Goal:** Resolve the PDB identity from the PE's CodeView RSDS record,
+download in Microsoft symbol server layout (integrity-checked + cached).
 
-**Örnek çağrı:**
+**Sample call:**
 
 ```bash
-node -e "import('./dist/rea-domains/typedef/PdbReader.js').then(m=>console.log(JSON.stringify(m.rea_pdb_yolu('<debug-bilgili.exe>'))))"
+node -e "import('./dist/rea-domains/typedef/PdbReader.js').then(m=>console.log(JSON.stringify(m.rea_pdb_yolu('<debug-info.exe>'))))"
 ```
 
-**Beklenen çıktı:** Adım 1'de `pdb/guid/yas` (`rea_pdb_yolu` alanları:
-`arac, dosya, guid, ok, pdb, yas`); adım 2'de `Ad/GUID-tiresiz+YAŞ/Ad`
-düzenli URL, `yol/cache` bilgisi (`rea_pdb_indir` alanları:
-`arac, cache, dosya, guid, ok, pdb, url, yas, yol`); bozuk içerikte
-`butunluk_hatasi`, ikinci çağrıda `cache:true`.
+**Expected output:** in step 1, `pdb/guid/yas` (`rea_pdb_yolu` fields:
+`arac, dosya, guid, ok, pdb, yas`); in step 2, a
+`Ad/GUID-tiresiz+YAŞ/Ad`-layout URL with `yol/cache` info (`rea_pdb_indir`
+fields: `arac, cache, dosya, guid, ok, pdb, url, yas, yol`);
+`butunluk_hatasi` on corrupt content, `cache:true` on the second call.
 
-## 6) Diff — "iki sürüm arasında fonksiyon farkı ne?"
+## 6) Diff — "what is the function diff between two versions?"
 
-**Amaç:** İki ikili sürümün fonksiyon listelerini karşılaştırıp
-eklenen/çıkarılan/değişen/aynen kalan kümeleri al (N-day incelemesi girişi).
+**Goal:** Compare two binary versions' function lists and get the
+added/removed/changed/unchanged sets (N-day review input).
 
-**Örnek çağrı:**
+**Sample call:**
 
 ```json
-{ "name": "rea_bindiff_karsilastir", "arguments": { "text": "<rea_bindiff_fonksiyonlar çıktısı>" } }
+{ "name": "rea_bindiff_karsilastir", "arguments": { "text": "<rea_bindiff_fonksiyonlar output>" } }
 ```
 
-**Beklenen çıktı:** `aynen/cikarilan/degisen/eklenen/eski/yeni/istatistik/ozet`
-alanlı nesne; girdi `rea_bindiff_fonksiyonlar` (`path` zorunlu) çıktısıdır.
+**Expected output:** object with
+`aynen/cikarilan/degisen/eklenen/eski/yeni/istatistik/ozet` fields; the input
+is `rea_bindiff_fonksiyonlar` (`path` required) output.
 
-## 7) Pcap — "bu yakalamada hangi akışlar var, TLS çözülür mü?"
+## 7) Pcap — "which streams are in this capture, does TLS decrypt?"
 
-**Amaç:** PCAP dosyasındaki akışları birleştir; keylog varsa TLS içeriğini çöz.
+**Goal:** Reassemble the streams in a PCAP file; decrypt TLS content if a
+keylog is present.
 
-**Örnek çağrı:**
+**Sample call:**
 
 ```json
 { "name": "rea_pcap_oku", "arguments": { "path": "ornek.pcap" } }
 ```
 
-Keylog ile:
+With keylog:
 
 ```json
 { "name": "rea_pcap_oku", "arguments": { "path": "ornek.pcap", "keylog": "sslkeylog.txt" } }
 ```
 
-**Beklenen çıktı:** `details/summary` içinde birleştirilmiş akış listesi
-(`outputSchema` var); `keylog` opsiyoneldir, verilmezse şifreli içerik
-çözülmeden meta-akışlar döner.
+**Expected output:** reassembled stream list inside `details/summary`
+(`outputSchema` present); `keylog` is optional — without it, meta-streams are
+returned with encrypted content undecrypted.
 
-## 8) Reçete — "bu APK için dinamik analiz planı üret ve doğrula"
+## 8) Recipe — "generate and validate a dynamic analysis plan for this APK"
 
-**Amaç:** APK yolundan kuru-doğrulamalı dinamik analiz reçetesi üret
-(çalıştırma yok, plan + doğrulama).
+**Goal:** Generate a dry-validated dynamic analysis recipe from an APK path
+(no execution, plan + validation).
 
-**Örnek çağrı:**
+**Sample call:**
 
 ```json
 { "name": "rea_android_dinamik_recete", "arguments": { "path": "ornek.apk" } }
 ```
 
-Ardından reçete metniyle:
+Then, with the recipe text:
 
 ```json
-{ "name": "rea_android_recete_dogrula", "arguments": { "text": "<recete-metni>" } }
+{ "name": "rea_android_recete_dogrula", "arguments": { "text": "<recipe-text>" } }
 ```
 
-**Beklenen çıktı:** İlki `recete` alanlı nesne; ikincisi `adim_sayisi/ok`
-alanlı doğrulama sonucu.
+**Expected output:** the first returns an object with a `recete` field; the
+second a validation result with `adim_sayisi/ok` fields.
 
-## 9) Fuzz — "ayrıştırıcılar bozuk girdide çökmüyor mu?"
+## 9) Fuzz — "do parsers survive malformed input?"
 
-**Amaç:** PE/ELF/WASM/metadata ayrıştırıcılarına korpus tohumlarıyla bozuk
-girdi verip çökme/istisna taraması yap (yazma yalnız tmpdir'e).
+**Goal:** Feed malformed input to PE/ELF/WASM/metadata parsers from corpus
+seeds and scan for crashes/exceptions (writes go to tmpdir only).
 
-**Örnek çağrı:**
+**Sample call:**
 
 ```bash
 node scripts/fuzz-parsers.mjs
 ```
 
-**Beklenen çıktı:** Konsol özeti (tohum sayısı, çöken girdi listesi; temiz
-koşuda sıfır çökme) + `tests/parser-fuzz.test.mjs` yeşili; korpus
-(`tests/corpus/`) salt okunur kalır.
+**Expected output:** console summary (seed count, crashed-input list; zero
+crashes on a clean run) + green `tests/parser-fuzz.test.mjs`; corpus
+(`tests/corpus/`) stays read-only.
 
-## 10) Perf — "liste/açılış bütçeleri tutuyor mu?"
+## 10) Perf — "do the list/startup budgets hold?"
 
-**Amaç:** `tools/list` yanıt süresi + sunucu açılış süresi bütçelerini ölç,
-regresyonu testle yakala.
+**Goal:** Measure `tools/list` response-time + server startup-time budgets,
+catch regressions via test.
 
-**Örnek çağrı:**
+**Sample call:**
 
 ```bash
 node tests/perf-budget.test.mjs
 ```
 
-**Beklenen çıktı:** node:test çıktısı (bütçe eşikleri `tests/perf-budget.test.mjs`
-içinde tanımlı); eşik aşımı testi kırmızıya düşürür, süreler konsolda
-milisaniye olarak raporlanır.
+**Expected output:** node:test output (budget thresholds defined in
+`tests/perf-budget.test.mjs`); a threshold breach turns the test red,
+durations are reported in milliseconds on the console.
 
-## Görev şablonu prompt'ları (MCP kayıtlı, 4 akış)
+## Task-template prompts (registered in MCP, 4 flows)
 
-Aşağıdaki 4 prompt `prompts/list` üzerinden kayıtlıdır: her biri yalnızca
-**sıralı akış metni** döndürür (`promptSonuc`), araç çağırmaz. `path` (veya
-`eski`/`yeni`) zorunlu, `focus` opsiyoneldir. Kullanılan araç adları
-[`TOOLS.md`](TOOLS.md) ile doğrulanmıştır. Tüm akışlar VM/CI'da `confirm:true`
-isteyen canlı-debug adımlarını atlar ve örneği asla çalıştırmaz.
+The following 4 prompts are registered via `prompts/list`; each returns only
+an **ordered flow text** (`promptSonuc`) and never calls a tool. `path` (or
+`eski`/`yeni`) is required, `focus` is optional. Every tool name is verified
+against [`TOOLS.md`](TOOLS.md). All flows skip live-debug steps that require
+`confirm:true` on VM/CI and never execute the sample.
 
-### 11) PE/crash triage - "çöken PE'yi statikten davranışa nasıl inceleyeyim?"
+### 11) PE/crash triage - "how do I inspect a crashing PE from static to behavior?"
 
-**Amaç:** PE hedefte triage → statik → crash kanıtı → davranış sırasıyla
-ilerlet; crash kaydı yoksa davranışı uydurmadan eksikliği yaz.
+**Goal:** Move a PE target through triage → static → crash evidence → behavior
+in order; when there is no crash record, state the gap without inventing
+behavior.
 
-**Örnek çağrı:**
+**Sample call:**
 
 ```json
-{ "name": "pe-crash-triage", "arguments": { "path": "ornek.exe", "focus": "yuksek entropi" } }
+{ "name": "pe-crash-triage", "arguments": { "path": "sample.exe", "focus": "high entropy" } }
 ```
 
-**Beklenen çıktı:** metin akışı: `rea_investigate` → `rea_pe_info` /
+**Expected output:** text flow: `rea_investigate` → `rea_pe_info` /
 `rea_pe_sections` / `rea_pe_imports` → `rea_crash_kayit_parse` /
 `rea_crash_ozet` / `rea_crash_timeline` / `rea_crash_hint` →
-`rea_behavior_full` / `rea_behavior_timeline` → `rea_pdb_yolu` (varsa);
-sonuçta triage öğesi, statik bulgular, crash kanıtının derecesi ve
-davranış özeti + her bulgu için güven düzeyi.
+`rea_behavior_full` / `rea_behavior_timeline` → `rea_pdb_yolu` (if present);
+the result includes the triage item, static findings, the strength of the
+crash evidence, and the behavior summary + a confidence level per finding.
 
-### 12) ELF/Linux triage - "ELF hedefi sembol/ekipman açısından nasıl taranır?"
+### 12) ELF/Linux triage - "how do I scan an ELF target for symbols and gadgets?"
 
-**Amaç:** ELF/Linux hedefte segment/kesit düzeni, DWARF sembolleri, Go
-derleme bilgisi ve gadget adaylarını sırayla topla.
+**Goal:** Collect segment/section layout, DWARF symbols, Go build info, and
+gadget candidates for an ELF/Linux target in order.
 
-**Örnek çağrı:**
-
-```json
-{ "name": "elf-linux-triage", "arguments": { "path": "hedef.elf" } }
-```
-
-**Beklenen çıktı:** metin akışı: `rea_investigate` → `rea_pwn_elf_layout` →
-`rea_dwarf_ozet` → `rea_go_buildinfo` / `rea_go_funclines` (Go ise) →
-`rea_cutter_funcs` / `rea_cutter_strings` (veya Ghidra: `rea_ghidra_analyze` →
-`rea_ghidra_funcs` / `rea_ghidra_strings`) → `rea_pwn_gadgets`; sonuçta ELF
-tipi + mitigation (NX/PIE/RELRO/canary) durumu, sembol/gadget kanıtları ve
-güven düzeyi.
-
-### 13) Binary diff - "iki sürüm arasında ne değişmiş, yamanın etkisi ne?"
-
-**Amaç:** İki sürüm arası fonksiyon diff'ini çıkar, değişen fonksiyonları
-decompile ederek yamanın etki alanını belirle.
-
-**Örnek çağrı:**
+**Sample call:**
 
 ```json
-{ "name": "binary-diff", "arguments": { "eski": "v1.exe", "yeni": "v2.exe", "focus": "acik yamasi" } }
+{ "name": "elf-linux-triage", "arguments": { "path": "target.elf" } }
 ```
 
-**Beklenen çıktı:** metin akışı: `rea_investigate` (iki sürüm) →
-`rea_bindiff_fonksiyonlar` (eski+yeni) → `rea_bindiff_karsilastir` (girdi
-JSON: `{"eski": "<eski>", "yeni": "<yeni>"}`) → `rea_ghidra_vt` (Ghidra varsa) →
-`rea_ghidra_decompile` (değişen fonksiyon adresleri); sonuçta eklenen /
-çıkarılan / değişen fonksiyonlar + her biri için kanıt (hash/imza/adres) ve
-yamanın etki alanı.
+**Expected output:** text flow: `rea_investigate` → `rea_pwn_elf_layout` →
+`rea_dwarf_ozet` → `rea_go_buildinfo` / `rea_go_funclines` (if Go) →
+`rea_cutter_funcs` / `rea_cutter_strings` (or Ghidra: `rea_ghidra_analyze` →
+`rea_ghidra_funcs` / `rea_ghidra_strings`) → `rea_pwn_gadgets`; the result
+includes the ELF type + mitigation state (NX/PIE/RELRO/canary), symbol/gadget
+evidence, and a confidence level.
 
-### 14) Evidence report - "topladığım kanıtları rapora nasıl dönüştürürüm?"
+### 13) Binary diff - "what changed between two versions, and what is the patch impact?"
 
-**Amaç:** Kanıt paketini digest'leyip doğrula, obligation defteriyle her
-bulgunun kanıt zincirini kapat, hazırlık skoru + kapsam oranını raporla.
+**Goal:** Produce a function diff between two versions and decompile the
+changed functions to determine the patch's impact area.
 
-**Örnek çağrı:**
+**Sample call:**
 
 ```json
-{ "name": "evidence-report", "arguments": { "path": "ornek.bin", "focus": "rapor kapsami" } }
+{ "name": "binary-diff", "arguments": { "eski": "v1.exe", "yeni": "v2.exe", "focus": "patch diff" } }
 ```
 
-**Beklenen çıktı:** metin akışı: `rea_investigate` → `rea_evidence_bundle` →
+**Expected output:** text flow: `rea_investigate` (both versions) →
+`rea_bindiff_fonksiyonlar` (old + new) → `rea_bindiff_karsilastir` (input
+JSON: `{"eski": "<old>", "yeni": "<new>"}`) → `rea_ghidra_vt` (if Ghidra is
+available) → `rea_ghidra_decompile` (changed function addresses); the result
+includes added / removed / changed functions + evidence per function
+(hash/signature/address) and the patch impact area.
+
+### 14) Evidence report - "how do I turn collected evidence into a report?"
+
+**Goal:** Digest and verify the evidence bundle, close each finding's evidence
+chain with the obligation ledger, and report the readiness score + coverage
+ratio.
+
+**Sample call:**
+
+```json
+{ "name": "evidence-report", "arguments": { "path": "sample.bin", "focus": "report coverage" } }
+```
+
+**Expected output:** text flow: `rea_investigate` → `rea_evidence_bundle` →
 `rea_evidence_verify` → `rea_obligation_ledger` / `rea_obligation_advance` /
 `rea_obligation_verify` / `rea_obligation_close` → `rea_readiness` /
-`rea_coverage` → `rea_missing_reason` (eksik araç); sonuçta yönetici özeti,
-bulgu listesi (bulgu + kanıt + güven), kanıt digest'i, obligation zincir
-durumu, hazırlık skoru ve kapsam oranı.
+`rea_coverage` → `rea_missing_reason` (missing tool); the result includes an
+executive summary, a finding list (finding + evidence + confidence), the
+evidence digest, obligation-chain state, the readiness score, and the coverage
+ratio.

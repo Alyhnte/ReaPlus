@@ -1,482 +1,526 @@
 # Changelog — rea-plus
 
-Tüm önemli değişiklikler bu dosyada tutulur. Format: Keep a Changelog + SemVer.
-All notable changes are documented here (Türkçe özet + English detail).
+All notable changes are kept in this file. Format: Keep a Changelog + SemVer.
 
 ## [0.13.0] — 2026-10-20
 
-Sürüm 0.13.0: dalga-13 + dalga-14 — sniff makine kimliği (PE ARMNT/ARM64,
-ELF e_machine + Hexagon), plist tip-duyarlı kayıpsız değerler, JS CJS/require
-çözümleme + cross-bundle ilişkiler, apktool sürüm gözlemi (advisory), raw m68k
-Ghidra profili ve sürüm taşıyıcı senkronu (9 kontrol). Araç yüzeyi değişmedi
-(191 araç · 187 outputSchema · 2 resource · 7 prompt, 6 dil). 107/107 test yeşil.
+Release 0.13.0: dalga-13 + dalga-14 — sniff machine identity (PE ARMNT/ARM64,
+ELF e_machine + Hexagon), type-aware lossless plist values, JS CJS/require
+resolution + cross-bundle relations, apktool version observation (advisory), a
+raw m68k Ghidra profile, and version-carrier sync (9 checks). Tool surface
+unchanged (191 tools · 187 outputSchema · 2 resources · 7 prompts, 6 languages).
+107/107 tests green.
 
-### Eklendi / Added
+### Added
 
-- `rea_sniff`: PE `makine` alanı ARMNT (`0x01c4`) ve ARM64 (`0xaa64`) için
-  dolar; x86/x64 ve legacy ARM/Thumb/ARM64EC bilinçli kapsam dışı. ELF
-  `e_machine` (LE/BE, ≥20B) 14 adla eşlenir; Hexagon (164) dahil.
-- `rea_apple_plist`: tip duyarlı kayıpsız değer okuma (integer/real ham
-  string korunur, XML entity çözülür) + `details.anahtarTipleri`.
-- `rea_js_require` / `rea_js_export_shape`: relative + node_modules çözümü,
-  CJS export şekli; `rea_js_bundle_diff` opsiyonel `mapA`/`mapB` ile
-  `details.iliskiler {paylasilanKaynaklar, yalnizA, yalnizB}` (deterministik).
-- `rea_apktool_info` / `rea_apktool_caps`: opsiyonel `surumGozlem {ham,
-  sayisal?}` — yalnız gözlem, kanıt değil; ayrıştırılamayan satırda alan yok.
-- Ghidra raw m68k dil profili (`GhidraRawProfil`, yüzey dışı saf modül).
+- `rea_sniff`: PE `makine` now reports ARMNT (`0x01c4`) and ARM64 (`0xaa64`);
+  x86/x64 and legacy ARM/Thumb/ARM64EC are deliberately out of scope. ELF
+  `e_machine` (LE/BE, ≥20B) maps to 14 names, including Hexagon (164).
+- `rea_apple_plist`: type-aware lossless value reading (integer/real raw
+  strings preserved, XML entities decoded) + `details.anahtarTipleri`.
+- `rea_js_require` / `rea_js_export_shape`: relative + node_modules
+  resolution, CJS export shape; `rea_js_bundle_diff` optional `mapA`/`mapB`
+  adds `details.iliskiler {paylasilanKaynaklar, yalnizA, yalnizB}`
+  (deterministic).
+- `rea_apktool_info` / `rea_apktool_caps`: optional `surumGozlem {ham,
+  sayisal?}` — observation only, not evidence; absent on unparseable lines.
+- Ghidra raw m68k language profile (`GhidraRawProfil`, pure surface-external
+  module).
 
-### Düzeltildi / Fixed
+### Fixed
 
-- `analyze-js` CLI dizin-vs-dosya kapısı: dizin `index.js` sanılıp sessiz
-  yürümüyor; net hata + exit kodu.
-- Sürüm taşıyıcıları: README, i18n, site, CHANGELOG ve dist manifestleri
-  version-sync testine bağlandı (9 kontrol); bayat 0.8.2/0.9.0/0.10.1
-  değerleri temizlendi.
-- README/TOOLS/ROADMAP durum satırları 6 dilde v0.13.0'a çekildi; tarihsel
-  kayıtlar bilinçli olarak korundu.
+- `analyze-js` CLI directory-vs-file guard: a directory is no longer treated
+  as `index.js` and silently walked; clear error + exit code.
+- Version carriers: README, i18n, site, CHANGELOG and dist manifests are now
+  covered by version-sync (9 checks); stale 0.8.2/0.9.0/0.10.1 values removed.
+- Status lines in README/TOOLS/ROADMAP updated to v0.13.0 in 6 languages;
+  historical records intentionally untouched.
 
-### Altyapı / Internal
+### Internal
 
-- Dalga 13–14 izole worktree + TDD; 4/4 branch merge; tam suite 107/107.
+- Waves 13–14 in isolated worktrees + TDD; 4/4 branches merged; full suite
+  107/107.
 
 ## [0.12.0] — 2026-10-18
 
-Sürüm 0.12.0: dalga-11 — 4 görev şablonu prompt'u (3 → 7) + golden korpus
-(5 gerçek gcc binary) + portable node bundle + CLI guard realpath fix +
-docs/site/tool-reference senkronu (191 araç · 187 outputSchema ·
-191 annotations · 2 resource · 7 prompt, 6 dil). 103/103 test yeşil.
+Release 0.12.0: dalga-11 — 4 task-template prompts (3 → 7) + golden
+corpus (5 real gcc binaries) + portable node bundle + CLI guard realpath
+fix + docs/site/tool-reference sync (191 tools · 187 outputSchema ·
+191 annotations · 2 resources · 7 prompts, 6 languages). 103/103 tests green.
 
-### Eklendi / Added
+### Added
 
-- 4 görev şablonu prompt'u: `packer-triage`, `dotnet-malware-triage`,
-  `android-triage`, `pe-crash-triage` (toplam 7 prompt; `docs/PROMPTS.md`
-  10 numaralı bölüm, her birinde amaç + örnek çağrı + beklenen çıktı).
-- Golden korpus: 5 gerçek gcc binary (PE32+/DLL/COFF obj) +
-  `tests/corpus/HASHES.json` + deterministik derleme betiği + 16 yeni
-  sdk-surface testi (fs 14, scan_repo 10/pe5).
-- Portable node bundle: `scripts/portable-paketle.mjs` (Node'suz dağıtım;
-  prod bağımlı kapanır kume, frida binding dosya olarak, MANIFEST +
-  duman) + 7 test; `publish.yml` release-artifacts adımı `--zip` ile
-  portable'i GitHub Release asset'i yapar (linux bundle; CI ubuntu).
-- `docs/generate-tool-reference` CLI guard realpath fix: junction/gerçek
-  yol ayrımı sessiz no-op değil (exit 0 + çıktı yoktu) +
-  `tests/generate-tool-reference-cli.test.mjs` (gerçek yol + junction).
+- 4 task-template prompts: `packer-triage`, `dotnet-malware-triage`,
+  `android-triage`, `pe-crash-triage` (7 prompts total; `docs/PROMPTS.md`
+  has 10 numbered sections, each with purpose + example call + expected
+  output).
+- Golden corpus: 5 real gcc binaries (PE32+/DLL/COFF obj) +
+  `tests/corpus/HASHES.json` + deterministic rebuild script + 16 new
+  sdk-surface tests (fs 14, scan_repo 10/pe5).
+- Portable node bundle: `scripts/portable-paketle.mjs` (node-less
+  distribution; prod-dependency closure, frida binding carried as a file,
+  MANIFEST + smoke) + 7 tests; `publish.yml` release-artifacts step
+  uploads the portable zip as a GitHub Release asset (linux bundle; CI
+  runs ubuntu).
+- `generate-tool-reference.mjs` CLI guard realpath fix: junction vs
+  real path no longer a silent no-op (exit 0, no output) +
+  `tests/generate-tool-reference-cli.test.mjs`.
 
-### Düzeltildi / Fixed
+### Fixed
 
-- Güncel özet satırları 6 dilde (TR/EN/DE/FR/ES + kök) 3 → 7 prompt:
-  README, EXAMPLES, PROMPTS, ROADMAP; tarihsel v0.10.0/CERRADO
-  satırları bilinçli olarak değişmedi (o dönemde doğruydu).
-- TOOLS.md gerçek yüzeyle yeniden eşleşti (191/2/7) + site regen
-  (5 dil × 7 sayfa).
+- Current summary lines now say 7 prompts across 6 languages
+  (TR/EN/DE/FR/ES + root): README, EXAMPLES, PROMPTS, ROADMAP;
+  historical v0.10.0/CERRADO lines intentionally untouched (true then).
+- TOOLS.md re-matched to the real surface (191/2/7) + site regen
+  (5 languages × 7 pages).
 
 ## [0.11.0] — 2026-10-18
 
-Sürüm 0.11.0: 5 dil i18n site + premium tema + örnek oturumlar + release
-güveni. Araç yüzeyi değişmedi (191 araç + 2 resource + 3 prompt).
-101/101 varsayılan test yeşil.
+Release 0.11.0: 5-language i18n site + premium theme + sample sessions +
+release provenance. Tool surface unchanged (191 tools + 2 resources +
+3 prompts). 101/101 default tests green.
 
-### Eklendi / Added
+### Added
 
-- 5 dil site (TR/EN/DE/FR/ES): `scripts/site-uret.mjs` i18n chrome +
-  dil seçici; 5 dil × 7 sayfa = 35 HTML.
-- Premium site teması (scroll-reveal + light/dark toggle).
-- Örnek oturumlar (README "🎬 Örnek Oturumlar" + `docs/ornek-oturumlar/`:
-  ghidra / ida / r2 — gerçek çıktı kanıtı, uydurma yok).
+- 5-language site (TR/EN/DE/FR/ES): `scripts/site-uret.mjs` with i18n
+  chrome + language switcher; 5 languages × 7 pages = 35 HTML.
+- Premium site theme (scroll-reveal + light/dark toggle).
+- Example sessions (README "🎬 Real-world example sessions" +
+  `docs/example-sessions/`: ghidra / ida / r2 — real output evidence, nothing
+  fabricated).
 - npm publish provenance (OIDC `--provenance`) + `release-artifacts`
-  job'u: CycloneDX SBOM otomatik GitHub Release asset'i olur.
-- CONTRIBUTING 6 H2 bölüm + `bug-raporu` / `ozellik-istegi` issue
-  formları (GitHub issue-form şeması).
-- `site-uret.mjs --check` modu: 35 sayfa varlık/boyut/dil doğrulaması,
-  bozuk dosyada `exit(1)`.
+  job: the CycloneDX SBOM becomes an automatic GitHub Release asset.
+- CONTRIBUTING split into 6 H2 sections + `bug-raporu` / `ozellik-istegi`
+  issue forms (GitHub issue-form schema).
+- `site-uret.mjs --check` mode: 35-page asset/size/language validation,
+  `exit(1)` on a broken file.
 
-### Altyapı / Internal
+### Internal
 
-- Dalga 6–10 izole worktree + TDD ile üretildi; tam küme kapıda yeşil.
+- Waves 6–10 built in isolated worktrees with TDD; the full suite is
+  green at the gate.
 
 ## [0.10.2] — 2026-10-16
 
-Sürüm 0.10.2: P2 dağıtım/kalite dalgaları + Mach-O derinliği + P3
-araştırma notları. Araç yüzeyi değişmedi (191 araç + 2 resource +
-3 prompt). 96/96 varsayılan test yeşil.
+Release 0.10.2: P2 distribution/quality waves + Mach-O depth + P3
+research notes. Tool surface unchanged (191 tools + 2 resources +
+3 prompts). 96/96 default tests green.
 
-### Eklendi / Added
+### Added
 
-- Pages deploy workflow'u (`pages.yml`: main push → site-uret → deploy).
-- Şema bütçesi CI adımı (200KB liste / 110KB şema / 600B ort).
-- Hedefli fuzz harness (`scripts/fuzz-harness.mjs`: sınıflandırma + rapor
-  + `docs/FUZZ.md`; ilk koşu 0 crash).
+- Pages deploy workflow (`pages.yml`: main push → site-uret → deploy).
+- Schema-budget CI step (200KB list / 110KB schema / 600B avg).
+- Targeted fuzz harness (`scripts/fuzz-harness.mjs`: classification + report
+  + `docs/FUZZ.md`; first run 0 crashes).
 - Portable node bundle (`scripts/sea-portable.mjs` + `docs/SEA-DAGITIM.md`;
-  SEA tek-exe 3 engel nedeniyle yok).
-- P3 fizibilite notları (`docs/ARASTIRMA-*`: LLDB/TTD/angr BEKLE, ticari YAPMA).
-- Katkı hunisi (CONTRIBUTING genişletme + good-first-issue formu).
+  no single-exe SEA due to 3 blockers).
+- P3 feasibility notes (`docs/ARASTIRMA-*`: LLDB/TTD/angr WAIT, commercial DON'T).
+- Contribution funnel (CONTRIBUTING expansion + good-first-issue form).
 
-### Düzeltildi / Fixed
+### Fixed
 
-- `rea_macho_objc` fat binary dilim çözümü (`arch` parametresi + dürüstlük
-  merdiveni); IL2CPP v31+ çevrimdışı doğrulanamadığı için sınırlı-kip korundu.
-- ROADMAP v0.10.1 senkronu (P1 kapanışlar işlendi).
+- `rea_macho_objc` fat-binary slice resolution (`arch` parameter + honesty
+  ladder); IL2CPP v31+ keeps limited mode since it can't be verified offline.
+- ROADMAP v0.10.1 sync (P1 closures processed).
 
 ## [0.10.1] — 2026-10-16
 
-Sürüm 0.10.1: P1 kod maddeleri kapandı — ölü facade temizliği +
-golden DEX fixture. Araç yüzeyi değişmedi (191 araç + 2 resource +
-3 prompt). 92/92 varsayılan test yeşil.
+Release 0.10.1: P1 code items closed — dead-facade cleanup +
+golden DEX fixture. Tool surface unchanged (191 tools + 2 resources +
+3 prompts). 92/92 default tests green.
 
-### Düzeltildi / Fixed
+### Fixed
 
-- Ölü facade silindi: `probeCache`/`parallelProbe` davranışı
-  `workerCache`'e taşındı (`ResultCache` TTL + `runProbes`);
-  `tests/probe.test.mjs` `worker-cache.test.mjs` altına taşındı.
-- Golden DEX fixture: `tests/corpus/mini.dex` (sentetik minimal DEX
-  v035, deterministik üretim `scripts/dex-fixture-uret.mjs`) +
-  `dex-golden` 7 test + HASHES girdisi.
-- `RepoScan` `.dex → dex/jadx` eşlemesi eklendi.
+- Dead facade removed: `probeCache`/`parallelProbe` behavior moved
+  into `workerCache` (`ResultCache` TTL + `runProbes`);
+  `tests/probe.test.mjs` moved under `worker-cache.test.mjs`.
+- Golden DEX fixture: `tests/corpus/mini.dex` (synthetic minimal DEX
+  v035, deterministic generation via `scripts/dex-fixture-uret.mjs`) +
+  `dex-golden` 7 tests + HASHES entry.
+- Added `RepoScan` `.dex → dex/jadx` mapping.
 
 ## [0.10.0] — 2026-10-16
 
-Sürüm 0.10.0: 4 yeni araç (187→191), serileştirme kuyruğu, worker-cache
-bağlama, dağıtım hazırlığı (SEA fizibilite, manifestler, SBOM, sandbox),
-kalıcı kalite (şema bütçesi, docs sitesi, prompt kütüphanesi, ObjC/IL2CPP/Go
-derinliği). 187 `outputSchema`, 191 annotations. 91/91 varsayılan test yeşil.
+Release 0.10.0: 4 new tools (187→191), serialization queue, worker-cache
+wiring, distribution readiness (SEA feasibility, manifests, SBOM, sandbox),
+lasting quality (schema budget, docs site, prompt library, ObjC/IL2CPP/Go
+depth). 187 `outputSchema`, 191 annotations. 91/91 default tests green.
 
-### Eklendi / Added
+### Added
 
 - `rea_macho_objc/classdump`, `rea_il2cpp_methods`, `rea_go_buildinfo`.
-- Tam serileştirme (`REA_SESSION_SERIALIZE=1`, zaman-damga kanıtlı).
-- Worker-cache canlı bağlama (reposcan yolu, sayaç kanıtlı).
-- SEA fizibilite raporu + pilot script; winget/scoop/homebrew manifestleri.
+- Full serialization (`REA_SESSION_SERIALIZE=1`, timestamp-evidenced).
+- Live worker-cache wiring (reposcan path, counter-evidenced).
+- SEA feasibility report + pilot script; winget/scoop/homebrew manifests.
 - SBOM (CycloneDX) + `docs/SANDBOX.md` (Hyper-V/VirtualBox).
-- Şema bütçesi (ölçülü eşikler), docs sitesi (7 sayfa), `docs/PROMPTS.md`.
+- Schema budget (measured thresholds), docs site (7 pages), `docs/PROMPTS.md`.
 
-### Düzeltildi / Fixed
+### Fixed
 
-- POSIX jadx keşfi (PATH taraması + X_OK).
-- Hopper POSIX benzerlik kapısı.
-- cdb-async CI-Linux uyumu; korpus normalize.
+- POSIX jadx discovery (PATH scan + X_OK).
+- Hopper POSIX similarity gate.
+- cdb-async CI-Linux compatibility; corpus normalized.
 
-### Henüz yapılmadı / Not yet done
+### Not yet done
 
-- Frida canlı VM onayı; self-hosted Windows runner.
-- Ölü facade silme (probe testi bağlılığı); P3 araştırma.
+- Live Frida VM approval; self-hosted Windows runner.
+- Dead-facade removal (probe-test dependency); P3 research.
 
 ## [0.9.0] — 2026-10-15
 
-Sürüm 0.9.0: 15 yeni araçla varsayılan yüzey 172→187 (30 conduit + 157 rea),
-183 `outputSchema` + 187 annotations korunur, kurulum kolaylığı (`setup`
-sihirbazı, `doctor --fix`) ve kalite platformu (parser fuzz smoke, HTTP e2e
-varsayılanı, performans bütçeleri, örnek oturumlar + CONTRIBUTING) geldi.
-86/86 varsayılan test yeşil.
+Release 0.9.0: 15 new tools take the default surface 172→187 (30 conduit + 157 rea),
+keeping 183 `outputSchema` + 187 annotations; install ease (`setup`
+wizard, `doctor --fix`) and a quality platform (parser fuzz smoke, HTTP e2e
+by default, performance budgets, sample sessions + CONTRIBUTING) landed.
+86/86 default tests green.
 
-### Eklendi / Added
+### Added
 
-- 15 yeni araç (172→187): `rea_go_funclines`, `rea_go_goresym`,
+- 15 new tools (172→187): `rea_go_funclines`, `rea_go_goresym`,
   `rea_il2cpp_metadata`, `rea_il2cpp_dump`, `rea_bindiff_fonksiyonlar`,
   `rea_bindiff_karsilastir`, `rea_flutter_snapshot`, `rea_flutter_blutter`,
   `rea_macho_info`, `rea_macho_loads`, `rea_macho_otool`, `rea_pcap_oku`,
   `rea_scan_repo_paralel`, `rea_android_dinamik_recete`,
   `rea_android_recete_dogrula`.
-- `rea-plus-cli setup` sihirbazı (istemci algılama + config yazma) ve
-  `doctor --fix` (onaylı kurulum önerisi/çalıştırması).
+- The `rea-plus-cli setup` wizard (client detection + config writing) and
+  `doctor --fix` (approved install suggestion/execution).
 - Parser fuzz smoke (`scripts/fuzz-parsers.mjs` + `parser-fuzz.test.mjs`;
-  tohumlar salt-okunur korpustan, yazma yalnız tmpdir'e).
-- HTTP e2e varsayılan kulvara alındı (`tests/e2e.http.mjs`).
-- Performans bütçeleri (`perf-budget.test.mjs`: tools/list + açılış).
-- Örnek oturumlar (`docs/EXAMPLES.md` + `docs-examples.test.mjs`) ve
-  `CONTRIBUTING.md` (korpus kuralları dahil).
+  seeds from the read-only corpus, writes to tmpdir only).
+- HTTP e2e moved into the default lane (`tests/e2e.http.mjs`).
+- Performance budgets (`perf-budget.test.mjs`: tools/list + startup).
+- Sample sessions (`docs/EXAMPLES.md` + `docs-examples.test.mjs`) and
+  `CONTRIBUTING.md` (including corpus rules).
 
-### Düzeltildi / Fixed
+### Fixed
 
-- Hopper POSIX benzerlik kapısı: çalıştırılabilir bite/boyuta benzemeyen
-  sahte dosya Hopper sayılmaz, dürüst `capability_unsupported` döner.
-- cdb async CI-Linux dalı ve korpus satır-sonu normalizesi (0.8.2'den gelen
-  düzeltmeler) 187-araç yüzeyinde regresyon testleriyle kilitlendi.
+- Hopper POSIX similarity gate: a fake file that doesn't look like an
+  executable bit/size doesn't count as Hopper, honestly returns
+  `capability_unsupported`.
+- The cdb async CI-Linux branch and corpus line-ending normalization (fixes
+  carried over from 0.8.2) are locked in with regression tests on the
+  187-tool surface.
 
-### Henüz yapılmadı / Not yet done
+### Not yet done
 
-- Frida canlı VM onayı; self-hosted Windows runner.
-- Tek dosya Windows exe (Node SEA); winget/scoop/homebrew manifesti; SBOM.
-- P3 araştırma: LLDB motoru, WinDbg TTD, sembolik yürütme (angr/Triton).
+- Live Frida VM approval; self-hosted Windows runner.
+- Single-file Windows exe (Node SEA); winget/scoop/homebrew manifests; SBOM.
+- P3 research: LLDB engine, WinDbg TTD, symbolic execution (angr/Triton).
 
 ## [0.8.2] — 2026-10-15
 
-Sürüm 0.8.2: kalan şema kapsaması kapandı (168 `outputSchema`, 172 annotations,
-sıfır işaretsiz), PDB indirici 172. araç olarak kaydedildi, oturum TTL ve
-modern Roots MRTR geldi, progress genelleme + async whitelist 3'lüye çıktı.
-Varsayılan yüzey 172 araç; opt-in: async +5 (177), kuyruk +1 (173). 72/72
-varsayılan test yeşil (CI dahil).
+Release 0.8.2: remaining schema coverage closed (168 `outputSchema`,
+172 annotations, zero unannotated), the PDB downloader registered as the
+172nd tool, session TTL and modern Roots MRTR landed, progress generalization
++ async whitelist grew to 3. Default surface 172 tools; opt-in: async +5
+(177), queue +1 (173). 72/72 default tests green (including CI).
 
-### Eklendi / Added
+### Added
 
-- 20 conduit + `rea_pdb_indir` `outputSchema` (toplam 168); annotations 172/172.
-- `rea_pdb_indir` kaydı (Microsoft symbol server, bütünlüklü, önbellekli, yalnız `all` profilinde).
-- Oturum TTL (`REA_SESSION_TTL_MS`, varsayılan 30dk, 0=kapalı).
-- Roots modern MRTR (`inputRequired`/`inputResponses`); `list_changed` legacy'de.
-- Progress stage yardımcıları 2 ek araçta; async whitelist 3'lü.
+- 20 conduit + `rea_pdb_indir` `outputSchema` (168 total); annotations 172/172.
+- `rea_pdb_indir` registration (Microsoft symbol server, integrity-checked,
+  cached, `all` profile only).
+- Session TTL (`REA_SESSION_TTL_MS`, default 30min, 0=off).
+- Modern Roots MRTR (`inputRequired`/`inputResponses`); `list_changed` stays legacy.
+- Progress stage helpers in 2 more tools; async whitelist at 3.
 
-### Düzeltildi / Fixed
+### Fixed
 
-- cdb-async testi CI-Linux uyumu (`engine_unavailable` dalı kabul edilir).
-- Korpus hash satır-sonu normalizesi; `ornek.js` HASHES düzeltmesi.
+- cdb-async test CI-Linux compatibility (the `engine_unavailable` branch is accepted).
+- Corpus hash line-ending normalization; `ornek.js` HASHES fix.
 
-### Henüz yapılmadı / Not yet done
+### Not yet done
 
-- Frida canlı VM onayı; self-hosted Windows runner; kalıcı DEX korpusu.
-- P2 dağıtım kolaylığı; analiz derinliği; P3 araştırma.
+- Live Frida VM approval; self-hosted Windows runner; permanent DEX corpus.
+- P2 distribution ease; analysis depth; P3 research.
 
 ## [0.8.1] — 2026-10-14
 
-Sürüm 0.8.1: motor sağlamlığı (oturum kuyruğu, Frida timeout, cdb async, x64dbg
-provizyon), statik dürüstlük (browser scenario, FLIRT, Wasm/DWARF, PE/PDB),
-davranış ve ölçek (syscall matrisi, tek-çağrı koşu, worker cache), kalıcı test
-platformu (golden korpus, 147 outputSchema, progress genelleme). Varsayılan
-yüzey 171 araç olarak korunur; tüm yenilikler opt-in veya dürüst-hata
-iyileştirmesidir. 70/70 varsayılan test yeşil.
+Release 0.8.1: engine hardening (session queue, Frida timeouts, cdb async,
+x64dbg provisioning), static honesty (browser scenario, FLIRT, Wasm/DWARF,
+PE/PDB), behavior and scale (syscall matrix, single-call run, worker cache),
+lasting test platform (golden corpus, 147 outputSchemas, progress
+generalization). Default surface held at 171 tools; every addition is opt-in
+or an honest-error improvement. 70/70 default tests green.
 
-### Eklendi / Added
+### Added
 
-- Oturum FIFO kuyruğu (`REA_SESSION_QUEUE=1` opt-in, 32 derinlik, `session_queue_status` aracı; varsayılan 171 yüzey değişmez).
-- Frida kurulum timeout'ları (attach 15sn/script 10sn/load 15sn, env override'lı, timeout'ta unload/detach temizlikli `engine_timeout`).
-- cdb async pause + push olayları (event loop bloklanmaz, `pauseAsync` opt-in).
-- x64dbg provizyonu (`reaX64dbgDoctor` + `reaX64dbgSetup`, idempotent, hash doğrulamalı).
-- Browser scenario gerçek çalıştırma (adım kanıtlı, dry-run modlu, backendsizde `capability_unsupported`).
-- Syscall numara matrisi + CreateFileW/RegSet profilleri.
-- Tek-çağrı davranış koşusu (`BehaviorRun`: spawn+trace+capture, zorunlu timeout, crash dürüstlüğü).
-- Worker cache (LRU-100, hash-anahtarlı, `REA_CACHE=0` baypas).
-- Golden korpus manifesti (`tests/corpus/HASHES.json` + `verify-corpus.mjs`).
-- Progress genelleme yardımcıları (`createStageProgress`, `onAbort`).
-- 27 yeni `outputSchema` (toplam 147: 137 rea + 10 conduit).
+- Session FIFO queue (`REA_SESSION_QUEUE=1` opt-in, depth 32,
+  `session_queue_status` tool; default 171 surface unchanged).
+- Frida setup timeouts (attach 15s/script 10s/load 15s, env-overridable,
+  `engine_timeout` with unload/detach cleanup on timeout).
+- cdb async pause + push events (event loop never blocked, `pauseAsync` opt-in).
+- x64dbg provisioning (`reaX64dbgDoctor` + `reaX64dbgSetup`, idempotent, hash-verified).
+- Real browser-scenario runs (step-evidenced, dry-run mode,
+  `capability_unsupported` without a backend).
+- Syscall number matrix + CreateFileW/RegSet profiles.
+- Single-call behavior run (`BehaviorRun`: spawn+trace+capture, mandatory
+  timeout, crash honesty).
+- Worker cache (LRU-100, hash-keyed, `REA_CACHE=0` bypass).
+- Golden corpus manifest (`tests/corpus/HASHES.json` + `verify-corpus.mjs`).
+- Progress generalization helpers (`createStageProgress`, `onAbort`).
+- 27 new `outputSchema` (147 total: 137 rea + 10 conduit).
 
-### Düzeltildi / Fixed
+### Fixed
 
-- jadx `-jar` asılması: `-cp jadx.cli.JadxCLI` biçimine çevrildi; canlı APK kabulü geçti (`com.zb.test`, 7 izin, 5 sınıf, 2.2sn).
-- FLIRT yanlış isimlendirmesi: açıklama ve sonuç `string-heuristic` + güven skoru taşır.
-- WasmInfo çok-bayt LEB + DWARF v5/abbrev_offset/çoklu FORM (negatif boyut ve sahte boş özet bitti).
-- PE `SizeOfOptionalHeader` + PeReader/PdbReader kopya kodu birleşti; PDB indirme (önbellekli, bütünlüklü).
+- jadx `-jar` hang: switched to the `-cp jadx.cli.JadxCLI` form; live APK
+  acceptance passed (`com.zb.test`, 7 permissions, 5 classes, 2.2s).
+- FLIRT misnomer: description and result carry `string-heuristic` + confidence score.
+- WasmInfo multi-byte LEB + DWARF v5/abbrev_offset/multiple FORMs (negative
+  sizes and fake empty summaries gone).
+- PE `SizeOfOptionalHeader` + PeReader/PdbReader duplicated code merged; PDB
+  download (cached, integrity-checked).
 
-### Henüz yapılmadı / Not yet done
+### Not yet done
 
-- Frida canlı VM onayı; DEX kalıcı korpus (repo içi fixture); self-hosted Windows runner.
-- Kalan 24 şemasız araç; progress genelleme (senkron handler'lar); trusted publisher OIDC + provenance.
+- Live Frida VM approval; permanent DEX corpus (in-repo fixture); self-hosted Windows runner.
+- Remaining 24 schema-less tools; progress generalization (sync handlers);
+  trusted-publisher OIDC + provenance.
 
 ## [0.8.0] — 2026-10-14
 
-Sürüm 0.8.0: MCP protokol yüzeyi büyüdü (resources/prompts, toolsets, typed
-outputs), güvenlik sınırları eklendi (workspace kökü, tokensiz HTTP, audit),
-uzun işler için async job + progress pilotları geldi. Aşağıdakiler bu sürümün
-durumunu anlatır; "Henüz yapılmadı" bölümündeki dış kapılar açıktır.
-Release 0.8.0: bigger MCP surface, new security boundaries, async job and
-progress pilots. External gates in "Not yet done" remain open.
+Release 0.8.0: bigger MCP surface (resources/prompts, toolsets, typed
+outputs), new security boundaries (workspace root, tokenless HTTP, audit),
+async job + progress pilots for long jobs. The entries below describe this
+release; external gates in "Not yet done" remain open.
 
-### Eklendi / Added
+### Added
 
-- Araç referansı: derlenmiş sunucunun gerçek MCP yüzeyinden üretilen `docs/TOOLS.md`
-  (171 araç + 2 resource + 3 prompt). README ve ROADMAP bu referansa bağlandı.
-- MCP resources: statik, salt-okunur `rea-plus://server-info` ve
-  `rea-plus://capabilities-safety` (env değeri, kişisel yol veya dosya içeriği açmaz).
-- MCP prompts: yan etkisiz, yalnız metin üreten `packer-triage`,
-  `dotnet-malware-triage` ve `android-triage` akışları.
-- `REA_TOOLSETS` profilleri: tanımsız/boş/`all` = 171 araç; `minimal` = 8,
+- Tool reference: `docs/TOOLS.md` generated from the compiled server's real
+  MCP surface (171 tools + 2 resources + 3 prompts). README and ROADMAP link
+  to this reference.
+- MCP resources: static, read-only `rea-plus://server-info` and
+  `rea-plus://capabilities-safety` (expose no env values, personal paths,
+  or file contents).
+- MCP prompts: side-effect-free, text-only `packer-triage`,
+  `dotnet-malware-triage`, and `android-triage` flows.
+- `REA_TOOLSETS` profiles: unset/empty/`all` = 171 tools; `minimal` = 8,
   `static` = 98, `android` = 27, `dotnet` = 20, `web` = 26, `debug` = 50.
-  Virgüllü yazım birleşimdir; bilinmeyen/boş profil sessizce `all`'a düşmez,
-  açılışta açık hata verir. Resources/prompts filtrelenmez.
-- `REA_WORKSPACE_ROOT` çalışma kökü sınırı: tanımlıyken `rea_*` yol argümanları,
-  conduit `open_target`/`debug_open` yolları ve kullanıcıya görünür türev yazmalar
-  (`.unpacked`, `.extracted`, HAR çıktısı) kök içinde, realpath kanıtıyla doğrulanır;
-  tanımsızken davranış değişmez. Operatör temp/cache yüzeyleri bilinçli istisnadır:
-  browser artifacts dizini, Ghidra tmp proje/girdi dizinleri, hopper tmp istek
-  dosyası ve apktool framework cache'i kök içine zorlanmaz.
-- Tokensiz HTTP salt-okunur kipi: `DBG_BRIDGE_TOKEN` tanımsızken HTTP, uyarının
-  yanında yalnız 44 araçlık, yol parametresi almayan salt-okunur allowlist'i
-  kaydeder (sonuç `REA_TOOLSETS` ile kesişimdir). Token'lı HTTP ve stdio tam
-  (veya toolset) yüzeyi korur. Yeni/listede olmayan araç tokensiz HTTP'de görünmez.
-- `REA_AUDIT_LOG` (JSONL, iki transportta da): satır başına yalnız `ts`,
-  `transport`, `tool`, `durationMs`, `isError`. Argüman, token, yol veya hedef
-  içeriği asla yazılmaz; yazma hatası tek uyarıyla audit'i kapatır, sunucuyu çökertmez.
-- HTTP sınırları: IP başına `REA_HTTP_RATE_LIMIT_PER_MIN` (varsayılan 120/dk) ve
-  aktif istek tavanı `REA_HTTP_MAX_CONCURRENT` (varsayılan 16); aşımda `429`.
-  Pozitif tam sayı olmayan değer sessiz varsayılana düşmez, açılış hatası verir.
-- Tip güvenli çıktılar (kısmi taban): 147 araç `outputSchema` taşıyor, 169 araçta
-  annotations var; metin JSON'u düz nesne olan sonuçlarda `structuredContent` aynı
-  değeri taşır. Şema kümesi dışındaki araçlar şemasız metin JSON'u döner; araç
-  başına durum `docs/TOOLS.md`'dedir. Şema kapsamı tüm 171 araca genişlemiş değildir.
-- Async job pilotu: `REA_ASYNC_JOBS=1` açılınca 5 job aracı
-  (`rea_job_start/status/result/cancel/list`) kaydolur; varsayılan yüzey 171
-  araç olarak kalır, opt-in yüzey 176 araçtır. Kuyruk en fazla 2 eşzamanlı iş
-  koşar, kayıtlar süreç-içidir ve whitelist bugün yalnız AbortSignal alan
-  `rea_process_run` aracını içerir; çalışan işin iptali süreç ağacını öldürür.
-- Roots pilotu: `REA_ROOTS=1` ve legacy stdio yolunda istemci kökleri çekilir;
-  kökler `REA_WORKSPACE_ROOT` sınırını yalnız daraltabilir. Modern protokolün
-  MRTR akışı ayrı iştir ve desteklenmiş gibi gösterilmez.
-- Progress/iptal pilotu: `rea_process_run` ilk bildirimi beklemeden, sonrakileri
-  en fazla yaklaşık 20/sn hızla gönderir; `notifications/cancelled` çocuk süreç
-  ağacını öldürür. Diğer senkron handler'lar bu pilotun dışındadır.
-- Yayın hazırlığı: Registry adı `io.github.Alyhnte/rea-plus` ve paket `mcpName`'i
-  hazır; publish workflow'u yalnız elle tetiklenen, varsayılanı dry-run olan bir
-  hazırlık olarak eklendi (gerçek yayın açık `PUBLISH` onayı ister).
-- jadx köprüsü dürüstlüğü (kod tabanı): manifest paket/izin/aktivite ve sınıf FQCN
-  çıkarımı gerçek ayrıştırmaya dayanıyor; canlı jadx koşusu bu girdinin kanıtı değildir.
-- Frida ajanı exception davranışı (kod tabanı): kurulu slotun adresiyle eşleşmeyen
-  exception artık breakpoint sanılıp yutulmuyor, `false` ile gerçek akışa bırakılıyor.
+  Comma-separated spelling is a union; an unknown/empty profile does not
+  silently fall back to `all`, it fails loudly at startup. Resources/prompts
+  are not filtered.
+- `REA_WORKSPACE_ROOT` working-root boundary: when set, `rea_*` path
+  arguments, conduit `open_target`/`debug_open` paths, and user-visible
+  derivative writes (`.unpacked`, `.extracted`, HAR output) are confined to
+  the root, verified with realpath evidence; when unset, behavior is
+  unchanged. Operator temp/cache surfaces are deliberate exceptions: the
+  browser artifacts directory, Ghidra tmp project/input directories, the
+  Hopper tmp request file, and the apktool framework cache are not forced
+  inside the root.
+- Tokenless HTTP read-only mode: when `DBG_BRIDGE_TOKEN` is unset, HTTP
+  registers only a 44-tool, path-parameter-free read-only allowlist alongside
+  the warning (the result is intersected with `REA_TOOLSETS`). Tokened HTTP
+  and stdio keep the full (or toolset) surface. New/unlisted tools never
+  appear on tokenless HTTP.
+- `REA_AUDIT_LOG` (JSONL, on both transports): only `ts`, `transport`,
+  `tool`, `durationMs`, `isError` per line. Arguments, tokens, paths, or
+  target contents are never written; a write error disables auditing with a
+  single warning and never crashes the server.
+- HTTP limits: per-IP `REA_HTTP_RATE_LIMIT_PER_MIN` (default 120/min) and an
+  active-request cap `REA_HTTP_MAX_CONCURRENT` (default 16); `429` when
+  exceeded. A non-positive-integer value does not silently fall back to the
+  default, it errors at startup.
+- Type-safe outputs (partial base): 147 tools carry `outputSchema`, 169 tools
+  have annotations; for results whose text JSON is a plain object,
+  `structuredContent` carries the same value. Tools outside the schema set
+  return schema-less text JSON; per-tool status is in `docs/TOOLS.md`. Schema
+  coverage has not been extended to all 171 tools.
+- Async job pilot: when `REA_ASYNC_JOBS=1`, 5 job tools
+  (`rea_job_start/status/result/cancel/list`) register; the default surface
+  stays at 171 tools, the opt-in surface is 176. The queue runs at most 2
+  concurrent jobs, records are in-process, and today the whitelist contains
+  only `rea_process_run`, which takes an AbortSignal; cancelling a running
+  job kills the process tree.
+- Roots pilot: with `REA_ROOTS=1` and on the legacy stdio path, client roots
+  are pulled; roots can only narrow the `REA_WORKSPACE_ROOT` boundary. The
+  modern protocol's MRTR flow is separate work and is not presented as
+  supported.
+- Progress/cancel pilot: `rea_process_run` sends the first notification
+  without waiting and later ones at most ~20/sec;
+  `notifications/cancelled` kills the child process tree. Other sync handlers
+  are outside this pilot.
+- Release readiness: registry name `io.github.Alyhnte/rea-plus` and the
+  package `mcpName` are ready; the publish workflow was added only as a
+  manually triggered, dry-run-by-default preparation (a real release requires
+  an explicit `PUBLISH` approval).
+- jadx bridge honesty (codebase): manifest package/permission/activity and
+  class FQCN extraction rest on real parsing; a live jadx run is not evidence
+  for this entry.
+- Frida agent exception behavior (codebase): an exception that doesn't match
+  the installed slot's address is no longer swallowed as a breakpoint — it is
+  yielded back to the real flow with `false`.
 
-### Henüz yapılmadı / Not yet done
+### Not yet done
 
-- npm yayını yapıldı: `rea-plus@0.8.0` registry'de, tüketici kurulumu
-  (`npm install` + stdio `initialize`/`tools/list` = 171) doğrulandı. MCP Registry
-  kaydı yapıldı: `io.github.Alyhnte/rea-plus` yayında (GHA + OIDC). Desteklenen
-  kurulum `npx -y rea-plus` ve GHCR'dır.
-- Frida canlı VM onayı tamamlanmış değildir; yukarıdaki Frida maddesi canlı kabul
-  kanıtı sayılmaz.
-- DEX golden APK kabul testi (canlı jadx + gerçek APK) tamamlanmış değildir;
-  golden korpus kapısı açık durur.
+- npm release done: `rea-plus@0.8.0` on the registry, consumer install
+  (`npm install` + stdio `initialize`/`tools/list` = 171) verified. MCP
+  Registry listing done: `io.github.Alyhnte/rea-plus` is live (GHA + OIDC).
+  Supported installs are `npx -y rea-plus` and GHCR.
+- Live Frida VM approval is not complete; the Frida entry above does not
+  count as live acceptance evidence.
+- DEX golden APK acceptance test (live jadx + real APK) is not complete; the
+  golden corpus gate stays open.
 
 ## [0.7.4] — 2026-10-13
 
-Dağıtım yaması: başkalarının kurulumu kolaylaştı; tüketiciyi kilitleyen bir paket
-hatası düzeltildi. README baştan yazıldı (tek-tık kurulumlar, mimari diyagramı,
-istemci matrisi), tam yol haritası `docs/ROADMAP.md`'de.
+Distribution patch: installing got easier for everyone else; a packaging bug
+that locked consumers out is fixed. README rewritten from scratch (one-click
+installs, architecture diagram, client matrix); the full roadmap is in
+`docs/ROADMAP.md`.
 
-### Düzeltildi / Fixed
+### Fixed
 
-- Playwright artık opsiyonel ve tembel yükleniyor. Önceden `devDependencies`'teyken
-  ürün kodu onu statik import ediyordu: paketi kuran herkes açılışta
-  `ERR_MODULE_NOT_FOUND` alıyordu. Sunucu Playwright'sız açılır, tarayıcı araçları
-  `capability_unsupported` döner. Tarayıcı için: `npm i playwright && npx playwright install chromium`.
+- Playwright is now optional and lazily loaded. Previously, while it sat in
+  `devDependencies`, product code statically imported it: everyone installing
+  the package got `ERR_MODULE_NOT_FOUND` at startup. The server starts without
+  Playwright; browser tools return `capability_unsupported`. For browsers:
+  `npm i playwright && npx playwright install chromium`.
 
-### Eklendi / Added
+### Added
 
-- `prepare` scripti: git kurulumları (`npx -y github:Alyhnte/ReaPlus`) dist'i otomatik derler.
-- Tek-tık kurulum bağlantıları (Cursor, VS Code) + istemci config örnekleri:
-  Claude Desktop/Code, Cursor, VS Code, Windsurf, Codex, opencode (`configs/`).
-- `Dockerfile` + GHCR workflow'u: release'lerde `ghcr.io/alyhnte/reaplus` imajı basılır.
-- `smithery.yaml` registry metadata'sı; config örneklerindeki kişisel yollar temizlendi.
-- Görsel README (rozetler, Mermaid mimari, env tablosu, güvenlik modeli) ve
-  `docs/ROADMAP.md` (9 temalı, önceliklendirilmiş tam tablo).
+- The `prepare` script: git installs (`npx -y github:Alyhnte/ReaPlus`) build
+  dist automatically.
+- One-click install links (Cursor, VS Code) + client config samples: Claude
+  Desktop/Code, Cursor, VS Code, Windsurf, Codex, opencode (`configs/`).
+- `Dockerfile` + GHCR workflow: releases push the `ghcr.io/alyhnte/reaplus` image.
+- `smithery.yaml` registry metadata; personal paths scrubbed from config samples.
+- Visual README (badges, Mermaid architecture, env table, security model) and
+  `docs/ROADMAP.md` (9 themes, prioritized full table).
 
 ## [0.7.3] — 2026-10-12
 
-CI/taşınabilirlik yaması: varsayılan test kümesi artık yazar makinesi dışında da
-(temiz Ubuntu CI, Node 20+22) yeşil. Aynı genelleme ürün koduna da uygulandı:
-araç keşfi yalnız env + PATH, makineye özel sabit yol kalmadı.
+CI/portability patch: the default test set is now green outside the author's
+machine too (clean Ubuntu CI, Node 20+22). The same generalization was applied
+to product code: tool discovery uses only env + PATH, no machine-specific
+hardcoded path remains.
 
-### Düzeltildi / Fixed
+### Fixed
 
-- Test fixture'ları kişisel Temp yolları yerine repoda izlenen korpusu
-  (`tests/corpus`, `import.meta.url` göreli) okuyor; `korpus-kur` yenilemeyi yalnız
-  `REA_KORPUS_ELF`/`REA_KORPUS_PE` env'iyle yapıyor.
-- Varlık yoklamaları `spawnSync`'in throw etmediğini hesaba katıyor (`r.error`/status):
-  mitmdump olmayan makinede ürün ve test artık kapıyı doğru görüyor (13 sn'lik
-  sahte proxy bekleyişi de kalktı).
-- Araç yokluğunda testler ilkesel davranıyor: wabt/upx/ilspy/dnfile/Chromium yoksa
-  `capability_unsupported` assert'i veya dürüst skip; UPX sürümü artık 5.2.1'e sabitli değil.
-- Ürün araç keşfi genelleşti: `REA_UPX_BIN`, `REA_WABT_BIN`, `REA_AAPT2_BIN` + PATH;
-  kişisel WinGet/`C:\tools` yolları kaldırıldı. .NET CIL python araması
-  `python`/`python3`/`py` sırasını deniyor (Linux'ta genelde yalnız python3 olur).
-- Ghidra proje dizini kişisel yol yerine `os.tmpdir()` altında; Ghidra testleri
-  varsayılan kurulum yolu varsaymıyor (`REA_GHIDRA_DIR` zorunlu, canlı kulvar).
-- CLI testleri node'u PATH'ten değil `process.execPath` ile çağırıyor.
-- Test koşucusu CI tanısı için hata kuyruğunu daha uzun basıyor.
+- Test fixtures read the tracked in-repo corpus (`tests/corpus`, relative to
+  `import.meta.url`) instead of personal Temp paths; `korpus-kur` refreshes
+  only via the `REA_KORPUS_ELF`/`REA_KORPUS_PE` env.
+- Presence probes account for `spawnSync` not throwing (`r.error`/status): on
+  machines without mitmdump, product and tests now see the gate correctly (the
+  13s fake proxy wait is gone too).
+- Without tools, tests behave principledly: no wabt/upx/ilspy/dnfile/Chromium
+  means a `capability_unsupported` assert or an honest skip; the UPX version is
+  no longer pinned to 5.2.1.
+- Product tool discovery generalized: `REA_UPX_BIN`, `REA_WABT_BIN`,
+  `REA_AAPT2_BIN` + PATH; personal WinGet/`C:\tools` paths removed. .NET CIL
+  python lookup tries `python`/`python3`/`py` in order (on Linux usually only
+  python3 exists).
+- Ghidra project dir under `os.tmpdir()` instead of a personal path; Ghidra
+  tests assume no default install path (`REA_GHIDRA_DIR` required, live lane).
+- CLI tests invoke node via `process.execPath`, not from PATH.
+- The test runner prints a longer error tail for CI diagnosis.
 
-### Doğrulama / Verification
+### Verification
 
-- Yerel: tam PATH ve araçsız (dar PATH) ortamda 43/43; farklı çalışma dizininden koşu da yeşil.
-- CI: Ubuntu Node 20 + 22 yeşil (`fix/inceleme-duzeltmeleri` dalı ve main).
+- Local: 43/43 in full-PATH and tool-less (narrow PATH) environments; runs from
+  a different working directory are green too.
+- CI: Ubuntu Node 20 + 22 green (the `fix/inceleme-duzeltmeleri` branch and main).
 
 ## [0.7.2] — 2026-10-12
 
-Kapsamlı inceleme düzeltmeleri: kırık giriş/yayın yolları, hata zarfı, enjeksiyon
-yüzeyleri, sahte `ok` sonuçları ve motor sağlamlığı. Ara sürümler (0.2.0–0.7.1)
-için `docs/release-v*.md` dosyalarına bakın.
+Comprehensive review fixes: broken entry/publish paths, error envelope,
+injection surfaces, fake `ok` results, and engine hardening. For interim
+releases (0.2.0–0.7.1) see the `docs/release-v*.md` files.
 
-### Düzeltildi / Fixed
+### Fixed
 
-- `npm start` artık gerçek girişi (`dist/server.js`) çalıştırıyor; önceki hedef
-  (`dist/facade/createReaPlusServer.js`) transport'suz bir fabrikaydı, sunucu hiç açılmazdı.
-- `npm test` repo dışına işaret eden eski script yerine `scripts/run-tests.mjs` koşuyor;
-  CI artık gerçekten varsayılan kümeyi çalıştırıyor (43 dosya).
-- Hata zarfı: rea araçlarında `ok:false` sonuçları ve fırlayan hatalar artık MCP'ye
-  `isError: true` ile gidiyor; başarı gibi raporlanma bitti.
-- Build, çalışma zamanı dosyalarını da kopyalıyor (`frida-agent.js`, Ghidra `.py` scriptleri);
-  yayın paketinde Frida motoru artık `engine_unavailable` vermiyor. `prepublishOnly` eklendi.
-- Sürüm tek gerçeğe indi: `package.json`, `server.json`, `server.ts` hepsi 0.7.2.
-- Cutter `decompile` yedeği analizsiz `pdf` koşup boş `ok` dönüyordu; artık `aaa;pdf`
-  koşuyor, boş çıktı `capability_unsupported`.
-- `korpus-kur` kişisel Temp kaynakları yoksa izlenen korpusu koruyor (CI'da çökmez);
-  idempotentlik testi ölçümü ikinci koşuda yapıyor.
+- `npm start` now runs the real entry (`dist/server.js`); the previous target
+  (`dist/facade/createReaPlusServer.js`) was a transport-less factory — the
+  server never started.
+- `npm test` runs `scripts/run-tests.mjs` instead of the old script pointing
+  outside the repo; CI now really runs the default set (43 files).
+- Error envelope: `ok:false` results and thrown errors from rea tools now reach
+  MCP with `isError: true`; no more reporting as success.
+- Build also copies runtime files (`frida-agent.js`, Ghidra `.py` scripts); the
+  Frida engine no longer returns `engine_unavailable` in the published package.
+  `prepublishOnly` added.
+- Version collapsed to a single truth: `package.json`, `server.json`, `server.ts`
+  all read 0.7.2.
+- The Cutter `decompile` fallback ran analysis-free `pdf` and returned an empty
+  `ok`; now it runs `aaa;pdf`, and empty output means `capability_unsupported`.
+- `korpus-kur` preserves the tracked corpus when personal Temp sources are absent
+  (won't crash CI); the idempotency test measures on the second run.
 
-### Güvenlik / Security
+### Security
 
-- Adres girdileri şemada ve köprülerde doğrulanıyor (hex/sayı/sembol); r2/rizin
-  komut enjeksiyonu (`;`, `!` kaçışı) kapatıldı.
-- radare2 cmd.exe yolu meta karakterleri reddediyor; kapatma süreç ağacını öldürüyor
-  (r2 torunu yetim kalmıyor).
-- `rea_jeb_sorgu` varsayılanla yalnız loopback'e POST atabiliyor; uzak hedef
-  `REA_JEB_ALLOW_REMOTE=1` ister, link-local/metadata hostları her durumda engelli.
-- HTTP token'ı tanımsızsa sunucu açılışta yüksek sesle uyarıyor (auth devre dışı).
+- Address inputs are validated in schemas and bridges (hex/number/symbol); r2/rizin
+  command injection (`;`, `!` escaping) is closed.
+- The radare2 cmd.exe path rejects meta characters; shutdown kills the process
+  tree (no orphaned r2 grandchildren).
+- `rea_jeb_sorgu` POSTs to loopback only by default; remote targets require
+  `REA_JEB_ALLOW_REMOTE=1`, and link-local/metadata hosts are blocked in all cases.
+- When the HTTP token is unset, the server warns loudly at startup (auth disabled).
 
-### Dürüstlük / Honesty
+### Honesty
 
-- `rea_dotnet_metadata` yalnız MZ'ye bakıp her PE'yi .NET sayıyordu; artık gerçek
-  CLR dizini (DataDirectory[14]) kontrol ediliyor, dış okuyucu şart değil.
-- `rea_pwn_elf_layout` sahte "kuyrukta" `ok`'su yerine `capability_unsupported` dönüyor.
-- `stdout_sha256_kısa` artık gerçekten SHA-256 (önce FNV-1a'ydı); sahte PTY kanalı ve
-  pipe/PTY karşılaştırması kaldırıldı — kanal dürüstçe `pipe`, compare kapıdan döner.
-- `rea_net_capture` verilen localhost URL'i gerçekten hedefliyor; yem sunucu yalnız
-  `data:` girdisinde kurulup özette belirtiliyor.
+- `rea_dotnet_metadata` used to call every PE .NET by looking at MZ alone; now
+  the real CLR directory (DataDirectory[14]) is checked, no external reader
+  required.
+- `rea_pwn_elf_layout` returns `capability_unsupported` instead of a fake
+  queued `ok`.
+- `stdout_sha256_kısa` is now really SHA-256 (it was FNV-1a before); the fake PTY
+  channel and pipe/PTY comparison are removed — the channel is honestly `pipe`,
+  compare returns from the gate.
+- `rea_net_capture` really targets the given localhost URL; the decoy server is
+  set up only for `data:` input and is noted in the summary.
 
-### Sağlamlık / Robustness
+### Robustness
 
-- Frida ajan RPC'leri (`callAgent`, `describe`) timeout'lu; başarısız inject yarım
-  oturum bırakmıyor (detach + map temizliği).
-- Re-open/re-attach eski hedefin checkpoint'larını temizliyor; rewind yanlış sürece
-  geri yazamıyor.
-- Eşzamanlı re-open yarışında üzerine yazılan oturumun debugger'ı yetim kalmıyor
+- Frida agent RPCs (`callAgent`, `describe`) have timeouts; a failed inject leaves
+  no half-session (detach + map cleanup).
+- Re-open/re-attach clears the old target's checkpoints; rewind can't write back
+  to the wrong process.
+- In a concurrent re-open race, the overwritten session's debugger is not orphaned
   (x64dbg/cdb/frida).
 
-### Testler / Tests
+### Tests
 
-- Yeni: `tests/fixes-regression.test.mjs` (12 test) bu düzeltmeleri kilitliyor.
-- Varsayılan küme: 43 dosya / 321 it yeşil. Canlı enjeksiyon/debug ve yerel Ghidra
-  testleri `npm run test:live` altında (VM/CI), ana makinede toplu koşulmaz.
+- New: `tests/fixes-regression.test.mjs` (12 tests) locks these fixes in.
+- Default set: 43 files / 321 its green. Live injection/debug and local Ghidra
+  tests live under `npm run test:live` (VM/CI), not bulk-run on the main machine.
 
 ## [0.1.0] — 2026-10-12
 
-İlk çalışır paket: conduit donduruldu, rea üzerine eklendi.
+First working package: conduit frozen, rea added on top.
 
-### Eklenen / Added
+### Added
 
-- `src/conduit-core`: conduit birebir, salt-okunur. Frozen 30 tool ismi
+- `src/conduit-core`: conduit verbatim, read-only. Frozen 30 tool names
   (`health`, `session_open/close/list`, `events_pull`, `static_info`,
   `open/close_target`, `disassemble`, `get_cfg`, `xrefs`, `strings`, `dump`,
   `debug_open/attach/close/state/breakpoint/continue/step/pause/registers/
   callstack/memory/code/thread/plugin/time`, `explain`, `prerequisites`).
-  Yeniden adlandırma yok; kural `toolNamespace.ts` ile kilitli.
-- `src/facade`: 7 modül — `sessionRouter`, `toolNamespace`, `catalogMerge`,
+  No renaming; the rule is locked by `toolNamespace.ts`.
+- `src/facade`: 7 modules — `sessionRouter`, `toolNamespace`, `catalogMerge`,
   `createReaPlusServer`, `compactSchema`, `evidenceBundle`, `obligationLedger`.
-  Prefix kuralı: rea kökenli her tool `rea_*` / `hopper_*` / `ghidra_*` /
+  Prefix rule: every rea-origin tool is `rea_*` / `hopper_*` / `ghidra_*` /
   `jeb_*` / `evm_*` / `firmware_*` / `browser_*` / `adb_*`.
-- `src/rea-domains`: 19 domain dosyası (9 klasör) — hopper, ghidra, ida, jeb,
+- `src/rea-domains`: 19 domain files (9 folders) — hopper, ghidra, ida, jeb,
   javascript (JsAnalyzer/ReconHarness/BinaryDiff), android (Jadx/Adb/Apktool),
   dotnet (ManagedInspector), wasm-evm (WasmEvmBridge/CrashTimeline/GoPwn/
   DosMips/NativeAot), firmware-browser (Firmware/Browser/ProcessCapture).
-- `keccak`: `js-sha3` ile offline EVM selector — `transfer(address,uint256)`
+- `keccak`: offline EVM selector via `js-sha3` — `transfer(address,uint256)`
   → `0xa9059cbb`, `approve(address,uint256)` → `0x095ea7b3`.
-  WAT export taraması da offline, `wabt` yoksa `capability_unsupported`.
-- Tool sayısı: 8 rea aracı → 33+ toplam hedef; bu sürümde runnable server
-  30 conduit + 8 rea = 38 live tool sunar (8 -> 33 tool yol haritası kilitli).
-  Birleşik katalog: 8 conduit + 9 rea = 17 girdi (`mergedCatalog()`, Cutter eklendi).
+  WAT export scanning is offline too; `capability_unsupported` without `wabt`.
+- Tool count: 8 rea tools → 33+ total target; in this release the runnable
+  server offers 30 conduit + 8 rea = 38 live tools (the 8 → 33 tool roadmap is
+  locked). Unified catalog: 8 conduit + 9 rea = 17 entries (`mergedCatalog()`,
+  Cutter added).
 - Runnable server: `src/server.ts` → `dist/server.js` (bin: `rea-plus`).
-  Transport: stdio (varsayılan) + `POST /mcp` ve `GET /health` (stateless,
-  `DBG_BRIDGE_TOKEN` Bearer kapısı conduit ile aynı).
-- Configs: `configs/claude-desktop`, `configs/cursor`, `configs/opencode`
-  altında stdio + http JSON'ları (yer tutucu `<REA_PLUS_DIR>` açıklamalı).
-- Tests: `tests/namespace.test.mjs` (prefix + collision kilidi) ve
-  `tests/reaplus.smoke.mjs` (keccak seçiciler + frozen=30 + katalog=17).
-  Çalıştırma: `node tests/namespace.test.mjs`, `node tests/reaplus.smoke.mjs`.
-- Paket hijyeni: `server.json` (io.github.rea-plus), `LICENSE` (MIT 2026),
+  Transports: stdio (default) + `POST /mcp` and `GET /health` (stateless,
+  `DBG_BRIDGE_TOKEN` bearer gate same as conduit).
+- Configs: stdio + http JSONs under `configs/claude-desktop`, `configs/cursor`,
+  `configs/opencode` (with the `<REA_PLUS_DIR>` placeholder explained).
+- Tests: `tests/namespace.test.mjs` (prefix + collision lock) and
+  `tests/reaplus.smoke.mjs` (keccak selectors + frozen=30 + catalog=17).
+  Run: `node tests/namespace.test.mjs`, `node tests/reaplus.smoke.mjs`.
+- Package hygiene: `server.json` (io.github.rea-plus), `LICENSE` (MIT 2026),
   `.gitignore`, `.npmrc`, CI workflow.
 
-### Kurallar / Policy
+### Policy
 
-- Eksik yetenek = stub yok, `capability_unsupported` + indirme önerisi.
-- Canlı işler `confirm:true` ister. HTTP localhost doğrulaması açık.
+- Missing capability = no stub, `capability_unsupported` + download suggestion.
+- Live operations require `confirm:true`. HTTP localhost validation on.

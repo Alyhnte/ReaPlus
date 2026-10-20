@@ -147,5 +147,5 @@ with `REAPLUS_SYMBOL_CACHE`.
 
 ## Next steps
 
-- Full tool list: [`TOOLS.md`](TOOLS.md) (generated, 187 tools).
+- Full tool list: [`TOOLS.md`](TOOLS.md) (generated, 191 tools).
 - Verification flow: [`VERIFY.md`](VERIFY.md); contribution flow: `CONTRIBUTING.md`.

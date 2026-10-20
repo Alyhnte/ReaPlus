@@ -290,87 +290,87 @@ const PILOT_CTX = new Set(["rea_process_run", "rea_scan_repo", "rea_jadx_full"])
 const R: Array<[string, string, any, H]> = [
   ["rea_evm_selector", "EVM 4-byte selector (keccak, offline).", z.object({ sig: z.string().min(1) }), (a) => rea_evm_selector(a.sig)],
   ["rea_wasm_exports", "WAT export listesi (offline).", z.object({ wat: z.string().min(1) }), (a) => rea_wasm_exports(a.wat)],
-  ["rea_wasm_decode", "WASM/WAT çözümleme (wabt).", P, (a) => rea_wasm_decode(a.path)],
-  ["rea_wasm_validate", "WASM doğrulama (wasm-validate).", P, (a) => rea_wasm_validate(a.path)],
+  ["rea_wasm_decode", "WASM/WAT decode (wabt).", P, (a) => rea_wasm_decode(a.path)],
+  ["rea_wasm_validate", "WASM validation (wasm-validate).", P, (a) => rea_wasm_validate(a.path)],
   ["rea_evm_disasm", "EVM bytecode disassembly (offline).", z.object({ hex: z.string().min(1) }), (a) => rea_evm_disasm(a.hex)],
-  ["rea_sniff", "Dosya tip + motor önerisi (magic-byte).", z.object({ b64dosya: z.string().min(1) }), (a) => sniffBytes(b64(a.b64dosya))],
-  ["rea_best_motor", "Hedef tip için en iyi motor (skor).", z.object({ tip: z.string().min(1), adaylar: z.array(z.string()).min(1) }), (a) => bestMotor(a.tip, a.adaylar)],
+  ["rea_sniff", "File type + engine suggestion (magic-byte).", z.object({ b64dosya: z.string().min(1) }), (a) => sniffBytes(b64(a.b64dosya))],
+  ["rea_best_motor", "Best engine for a target type (scored).", z.object({ tip: z.string().min(1), adaylar: z.array(z.string()).min(1) }), (a) => bestMotor(a.tip, a.adaylar)],
   ["rea_fallback", "Birincil yoksa yedek zincir.", z.object({ birincil: z.string().min(1), mevcut: z.array(z.string()) }), (a) => resolveChain(a.birincil, new Set(a.mevcut))],
-  ["rea_missing_reason", "Eksik araç + kur komutu.", z.object({ eksik: z.string().min(1), platform: z.string().optional() }), (a) => missingReason(a.eksik, (a.platform ?? process.platform))],
-  ["rea_config_suggest", "Bulunan araçlara MCP config snippet.", z.object({ bulunan: z.array(z.string()) }), (a) => ({ snippet: suggestConfig(a.bulunan) })],
+  ["rea_missing_reason", "Missing tool + install command.", z.object({ eksik: z.string().min(1), platform: z.string().optional() }), (a) => missingReason(a.eksik, (a.platform ?? process.platform))],
+  ["rea_config_suggest", "MCP config snippet for the engines found.", z.object({ bulunan: z.array(z.string()) }), (a) => ({ snippet: suggestConfig(a.bulunan) })],
   ["rea_ghidra_analyze", "Ghidra headless import+analiz.", P, (a) => rea_ghidra_analyze(a.path)],
   ["rea_ghidra_funcs", "Ghidra fonksiyon listesi.", P, (a) => rea_ghidra_funcs(a.path)],
-  ["rea_ghidra_decompile", "Ghidra sözde-kod.", ADDR, (a) => rea_ghidra_decompile(a.path, a.addr)],
+  ["rea_ghidra_decompile", "Ghidra pseudo-code.", ADDR, (a) => rea_ghidra_decompile(a.path, a.addr)],
   ["rea_ghidra_xrefs", "Ghidra xref listesi.", ADDR, (a) => rea_ghidra_xrefs(a.path, a.addr)],
   ["rea_ghidra_strings", "Ghidra string listesi.", P, (a) => rea_ghidra_strings(a.path)],
   ["rea_ghidra_disasm", "Ghidra disassembly.", ADDR, (a) => rea_ghidra_disasm(a.path, a.addr)],
-  ["rea_ghidra_vt", "İki binary fonksiyon diff (version tracking).", z.object({ eski: z.string().min(1), yeni: z.string().min(1) }), (a) => rea_ghidra_vt(a.eski, a.yeni)],
+  ["rea_ghidra_vt", "Function diff of two binaries (version tracking).", z.object({ eski: z.string().min(1), yeni: z.string().min(1) }), (a) => rea_ghidra_vt(a.eski, a.yeni)],
   ["rea_ghidra_trace", "Snapshot -> Ghidra Trace import.", z.object({ path: z.string().min(1), kayit: z.string().min(1) }), (a) => rea_ghidra_trace(a.path, a.kayit)],
   ["rea_cutter_funcs", "Cutter/rizin fonksiyon listesi.", P, (a) => rea_cutter_funcs(a.path)],
   ["rea_cutter_disasm", "Cutter/rizin disassembly.", ADDR, (a) => rea_cutter_disasm(a.path, a.addr)],
   ["rea_cutter_xrefs", "Cutter/rizin xref listesi.", ADDR, (a) => rea_cutter_xrefs(a.path, a.addr)],
   ["rea_cutter_strings", "Cutter/rizin string listesi.", P, (a) => rea_cutter_strings(a.path)],
-  ["rea_cutter_decompile", "Cutter sözde-derleme.", ADDR, (a) => rea_cutter_decompile(a.path, a.addr)],
-  ["rea_cutter_caps", "Cutter/rizin yetenek yoklaması.", O, () => rea_cutter_caps()],
-  ["rea_jadx_manifest", "APK manifest özeti.", z.object({ apk_path: z.string().min(1) }), (a) => rea_jadx_manifest(a.apk_path)],
-  ["rea_jadx_classes", "APK sınıf listesi.", z.object({ apk_path: z.string().min(1) }), (a) => rea_jadx_classes(a.apk_path)],
-  ["rea_jadx_decompile", "APK tek sınıf decompile.", z.object({ apk_path: z.string().min(1), sinif: z.string().min(1), out: z.string().min(1) }), (a) => rea_jadx_decompile(a.apk_path, a.sinif, a.out)],
+  ["rea_cutter_decompile", "Cutter pseudo-decompilation.", ADDR, (a) => rea_cutter_decompile(a.path, a.addr)],
+  ["rea_cutter_caps", "Cutter/rizin capability probe.", O, () => rea_cutter_caps()],
+  ["rea_jadx_manifest", "APK manifest summary.", z.object({ apk_path: z.string().min(1) }), (a) => rea_jadx_manifest(a.apk_path)],
+  ["rea_jadx_classes", "APK class list.", z.object({ apk_path: z.string().min(1) }), (a) => rea_jadx_classes(a.apk_path)],
+  ["rea_jadx_decompile", "Decompile a single APK class.", z.object({ apk_path: z.string().min(1), sinif: z.string().min(1), out: z.string().min(1) }), (a) => rea_jadx_decompile(a.apk_path, a.sinif, a.out)],
   ["rea_jadx_full", "APK tam decompile.", z.object({ apk_path: z.string().min(1), out: z.string().min(1) }), (a, ctx) => reaJadxFullStaged(a, ctx)],
-  ["rea_jadx_methods", "Decompile çıktıda method listesi.", z.object({ dir: z.string().min(1) }), (a) => rea_jadx_methods(a.dir)],
-  ["rea_jadx_xrefs", "Decompile çıktıda terim arama.", z.object({ dir: z.string().min(1), terim: z.string().min(1) }), (a) => rea_jadx_xrefs(a.dir, a.terim)],
-  ["rea_jadx_read", "Decompile sınıf okuma (400 satır).", z.object({ dir: z.string().min(1), sinif: z.string().min(1) }), (a) => rea_jadx_read(a.dir, a.sinif)],
+  ["rea_jadx_methods", "Method list from decompile output.", z.object({ dir: z.string().min(1) }), (a) => rea_jadx_methods(a.dir)],
+  ["rea_jadx_xrefs", "Term search across decompile output.", z.object({ dir: z.string().min(1), terim: z.string().min(1) }), (a) => rea_jadx_xrefs(a.dir, a.terim)],
+  ["rea_jadx_read", "Read a decompiled class (400 lines).", z.object({ dir: z.string().min(1), sinif: z.string().min(1) }), (a) => rea_jadx_read(a.dir, a.sinif)],
   ["rea_apktool_decode", "APK decode (resource).", z.object({ apk_path: z.string().min(1), out: z.string().min(1) }), (a) => rea_apktool_decode(a.apk_path, a.out)],
-  ["rea_apktool_info", "apktool+aapt2 sürümleri.", O, () => rea_apktool_info()],
+  ["rea_apktool_info", "apktool+aapt2 versions.", O, () => rea_apktool_info()],
   ["rea_apktool_build", "Decode dizinden APK rebuild.", z.object({ dir: z.string().min(1), out: z.string().min(1) }), (a) => rea_apktool_build(a.dir, a.out)],
   ["rea_apktool_framework", "Framework APK kurulumu.", P, (a) => rea_apktool_framework(a.path)],
-  ["rea_apktool_caps", "apktool yetenek yoklaması.", O, () => rea_apktool_caps()],
-  ["rea_adb_devices", "Bağlı cihaz listesi.", O, () => rea_adb_devices()],
-  ["rea_adb_packages", "Yüklü paket listesi.", z.object({ seri: z.string().optional(), filtre: z.string().optional() }), (a) => rea_adb_packages(a.seri, a.filtre)],
+  ["rea_apktool_caps", "apktool capability probe.", O, () => rea_apktool_caps()],
+  ["rea_adb_devices", "List of connected devices.", O, () => rea_adb_devices()],
+  ["rea_adb_packages", "List of installed packages.", z.object({ seri: z.string().optional(), filtre: z.string().optional() }), (a) => rea_adb_packages(a.seri, a.filtre)],
   ["rea_adb_install", "APK cihaza kurulum.", z.object({ apk_path: z.string().min(1), seri: z.string().optional() }), (a) => rea_adb_install(a.apk_path, a.seri)],
-  ["rea_adb_logcat", "Cihaz logcat dökümü.", z.object({ seri: z.string().optional() }), (a) => rea_adb_logcat(a.seri)],
-  ["rea_adb_screencap", "Cihaz ekran görüntüsü.", z.object({ seri: z.string().optional(), out: z.string().min(1) }), (a) => rea_adb_screencap(a.seri, a.out)],
+  ["rea_adb_logcat", "Device logcat dump.", z.object({ seri: z.string().optional() }), (a) => rea_adb_logcat(a.seri)],
+  ["rea_adb_screencap", "Device screenshot.", z.object({ seri: z.string().optional(), out: z.string().min(1) }), (a) => rea_adb_screencap(a.seri, a.out)],
   ["rea_dotnet_metadata", "Assembly metadata okuma.", P, (a) => rea_dotnet_metadata(a.path)],
-  ["rea_dotnet_cil", "CIL method dökümü (dnfile).", z.object({ path: z.string().min(1), filtre: z.string().optional() }), (a) => rea_dotnet_cil(a.path, a.filtre)],
-  ["rea_r2_callgraph", "r2 fonksiyon çağrı grafı.", P, (a) => rea_r2_callgraph(a.path)],
-  ["rea_r2_esil", "r2 ESIL emülasyon regs.", ADDR, (a) => rea_r2_esil(a.path, a.addr)],
+  ["rea_dotnet_cil", "CIL method dump (dnfile).", z.object({ path: z.string().min(1), filtre: z.string().optional() }), (a) => rea_dotnet_cil(a.path, a.filtre)],
+  ["rea_r2_callgraph", "r2 function call graph.", P, (a) => rea_r2_callgraph(a.path)],
+  ["rea_r2_esil", "r2 ESIL emulation regs.", ADDR, (a) => rea_r2_esil(a.path, a.addr)],
   ["rea_r2_debug", "r2 toplu debug (bp+regs).", ADDR, (a) => rea_r2_debug(a.path, a.addr)],
-  ["rea_frida_pause", "Hedef süreç duraklatma (NtSuspend).", z.object({ pid: z.number().int().positive() }), (a) => rea_frida_pause(a.pid)],
-  ["rea_frida_resume", "Duraklatılmış süreci devam ettirme.", z.object({ pid: z.number().int().positive() }), (a) => rea_frida_resume(a.pid)],
-  ["rea_frida_step", "Sonraki-komut emülasyonu.", z.object({ pid: z.number().int().positive(), adres: ADRES.optional() }), (a) => rea_frida_step(a.pid, a.adres)],
-  ["rea_frida_cond", "Koşullu breakpoint.", z.object({ pid: z.number().int().positive(), adres: ADRES, kosul: z.string().min(1) }), (a) => rea_frida_cond(a.pid, a.adres, a.kosul)],
-  ["rea_frida_stalker", "Stalker çağrı izleme.", z.object({ pid: z.number().int().positive(), sure_ms: z.number().int().positive().optional() }), (a) => rea_frida_stalker(a.pid, undefined, a.sure_ms)],
+  ["rea_frida_pause", "Suspend the target process (NtSuspend).", z.object({ pid: z.number().int().positive() }), (a) => rea_frida_pause(a.pid)],
+  ["rea_frida_resume", "Resume a suspended process.", z.object({ pid: z.number().int().positive() }), (a) => rea_frida_resume(a.pid)],
+  ["rea_frida_step", "Next-instruction emulation.", z.object({ pid: z.number().int().positive(), adres: ADRES.optional() }), (a) => rea_frida_step(a.pid, a.adres)],
+  ["rea_frida_cond", "Conditional breakpoint.", z.object({ pid: z.number().int().positive(), adres: ADRES, kosul: z.string().min(1) }), (a) => rea_frida_cond(a.pid, a.adres, a.kosul)],
+  ["rea_frida_stalker", "Stalker call tracing.", z.object({ pid: z.number().int().positive(), sure_ms: z.number().int().positive().optional() }), (a) => rea_frida_stalker(a.pid, undefined, a.sure_ms)],
   ["rea_frida_api", "API tracer (isim+args+retval).", z.object({ pid: z.number().int().positive(), desen: z.string().optional() }), (a) => rea_frida_api(a.pid, a.desen)],
-  ["rea_upx_info", "UPX sıkışık mı bilgisi.", P, (a) => rea_upx_info(a.path)],
-  ["rea_upx_unpack", "UPX açma.", z.object({ path: z.string().min(1), out: z.string().min(1) }), (a) => rea_upx_unpack(a.path, a.out)],
+  ["rea_upx_info", "Whether the file is UPX-packed.", P, (a) => rea_upx_info(a.path)],
+  ["rea_upx_unpack", "UPX unpack.", z.object({ path: z.string().min(1), out: z.string().min(1) }), (a) => rea_upx_unpack(a.path, a.out)],
   ["rea_ilspy_decompile", ".NET C# decompile.", z.object({ path: z.string().min(1), out: z.string().min(1) }), (a) => rea_ilspy_decompile(a.path, a.out)],
-  ["rea_unpack_try", "Otomatik unpack yönlendirme.", P, (a) => rea_unpack_try(a.path)],
-  ["rea_unpack_hunt", "Bilinmeyen packer rehberli akışı.", P, (a) => rea_unpack_hunt(a.path)],
-  ["rea_net_capture", "Yerel ağ yakalama (HAR).", z.object({ url: z.string().min(1) }), (a) => rea_net_capture(a.url)],
-  ["rea_pcap_oku", "PCAP akış birleştirme + keylog TLS çözme.", z.object({ path: z.string().min(1), keylog: z.string().optional() }), (a) => pcapAkislar(a.path, a.keylog ? { keylogYol: a.keylog } : undefined)],
-  ["rea_behavior_timeline", "Olay çizelgesi + özet.", z.object({ olaylar: z.string().min(1) }), (a) => {
+  ["rea_unpack_try", "Automatic unpack routing.", P, (a) => rea_unpack_try(a.path)],
+  ["rea_unpack_hunt", "Guided flow for an unknown packer.", P, (a) => rea_unpack_hunt(a.path)],
+  ["rea_net_capture", "Local network capture (HAR).", z.object({ url: z.string().min(1) }), (a) => rea_net_capture(a.url)],
+  ["rea_pcap_oku", "PCAP stream reassembly + TLS keylog decrypt.", z.object({ path: z.string().min(1), keylog: z.string().optional() }), (a) => pcapAkislar(a.path, a.keylog ? { keylogYol: a.keylog } : undefined)],
+  ["rea_behavior_timeline", "Event timeline + summary.", z.object({ olaylar: z.string().min(1) }), (a) => {
     const p = jsonParse<any[]>("rea_behavior_timeline", a.olaylar); if ("err" in p) return p.err;
     return rea_behavior_timeline(p.v);
   }],
-  ["rea_browser_nav", "Sayfa açma + başlık.", z.object({ url: z.string().min(1) }), (a) => rea_browser_nav(a.url)],
-  ["rea_browser_click", "Tıklama + sonrası durum.", z.object({ url: z.string().min(1), selector: z.string().min(1) }), (a) => rea_browser_click(a.url, a.selector)],
-  ["rea_browser_shot", "Tam sayfa ekran görüntüsü.", z.object({ url: z.string().min(1), out: z.string().min(1) }), (a) => rea_browser_shot(a.url, a.out)],
-  ["rea_browser_har_import", "HAR içe aktarma.", P, (a) => rea_browser_har_import(a.path)],
-  ["rea_browser_scenario", "Senaryo kaydı.", J, (a) => rea_browser_scenario(JSON.parse(a.text))],
-  ["rea_browser_caps", "Browser yetenek yoklaması.", O, () => rea_browser_caps()],
-  ["rea_process_run", "Süreç koşusu kaydı.", z.object({ cmd: z.string().min(1) }), (a, ctx) => {
+  ["rea_browser_nav", "Open a page + title.", z.object({ url: z.string().min(1) }), (a) => rea_browser_nav(a.url)],
+  ["rea_browser_click", "Click + post-click state.", z.object({ url: z.string().min(1), selector: z.string().min(1) }), (a) => rea_browser_click(a.url, a.selector)],
+  ["rea_browser_shot", "Full-page screenshot.", z.object({ url: z.string().min(1), out: z.string().min(1) }), (a) => rea_browser_shot(a.url, a.out)],
+  ["rea_browser_har_import", "HAR import.", P, (a) => rea_browser_har_import(a.path)],
+  ["rea_browser_scenario", "Scenario recording.", J, (a) => rea_browser_scenario(JSON.parse(a.text))],
+  ["rea_browser_caps", "Browser capability probe.", O, () => rea_browser_caps()],
+  ["rea_process_run", "Process-run recording.", z.object({ cmd: z.string().min(1) }), (a, ctx) => {
     const pilot = pilotContextFromCtx(ctx);
     return rea_process_run_async(a.cmd, { signal: pilot.signal, onProgress: pilot.onProgress });
   }],
-  ["rea_process_compare", "Pipe/PTY karşılaştırma.", z.object({ cmd: z.string().min(1) }), (a) => rea_process_compare(a.cmd)],
-  ["rea_process_caps", "Süreç yetenek yoklaması.", O, () => rea_process_caps()],
-  ["rea_js_sourcemap", "Source-map çözümleme.", J, (a) => rea_js_sourcemap(a.text)],
-  ["rea_js_bundle", "Bundle özeti.", J, (a) => rea_js_bundle(a.text)],
-  ["rea_diff_match", "Fonksiyon eşleme (JSON diziler).", z.object({ a: z.string().min(1), b: z.string().min(1) }), (a) => {
+  ["rea_process_compare", "Pipe/PTY comparison.", z.object({ cmd: z.string().min(1) }), (a) => rea_process_compare(a.cmd)],
+  ["rea_process_caps", "Process capability probe.", O, () => rea_process_caps()],
+  ["rea_js_sourcemap", "Source-map resolution.", J, (a) => rea_js_sourcemap(a.text)],
+  ["rea_js_bundle", "Bundle summary.", J, (a) => rea_js_bundle(a.text)],
+  ["rea_diff_match", "Function matching (JSON arrays).", z.object({ a: z.string().min(1), b: z.string().min(1) }), (a) => {
     const pa = jsonParse<any[]>("rea_diff_match", a.a); if ("err" in pa) return pa.err;
     const pb = jsonParse<any[]>("rea_diff_match", a.b); if ("err" in pb) return pb.err;
     return rea_diff_match(pa.v, pb.v);
   }],
-  ["rea_diff_summary", "Eklenen/silinen özeti.", z.object({ a: z.string().min(1), b: z.string().min(1) }), (a) => {
+  ["rea_diff_summary", "Added/removed summary.", z.object({ a: z.string().min(1), b: z.string().min(1) }), (a) => {
     const pa = jsonParse<any[]>("rea_diff_summary", a.a); if ("err" in pa) return pa.err;
     const pb = jsonParse<any[]>("rea_diff_summary", a.b); if ("err" in pb) return pb.err;
     return rea_diff_summary(pa.v, pb.v);
@@ -378,7 +378,7 @@ const R: Array<[string, string, any, H]> = [
   ["rea_recon_funcs", "Pseudo-code fonksiyon listesi.", J, (a) => rea_recon_funcs(a.text)],
   ["rea_recon_harness", "C harness iskeleti.", J, (a) => rea_recon_harness(a.text)],
   ["rea_recon_tag", "Vaka etiketi.", O, () => rea_recon_tag()],
-  ["rea_crash_append", "Crash olayı ekleme.", z.object({ olaylar: z.string().min(1), olay: z.string().min(1) }), (a) => {
+  ["rea_crash_append", "Append a crash event.", z.object({ olaylar: z.string().min(1), olay: z.string().min(1) }), (a) => {
     const pa = jsonParse<any[]>("rea_crash_append", a.olaylar); if ("err" in pa) return pa.err;
     const pb = jsonParse<any>("rea_crash_append", a.olay); if ("err" in pb) return pb.err;
     return rea_crash_append(pa.v, pb.v);
@@ -391,35 +391,35 @@ const R: Array<[string, string, any, H]> = [
     const p = jsonParse<any[]>("rea_crash_hint", a.olaylar); if ("err" in p) return p.err;
     return rea_crash_hint(p.v);
   }],
-  ["rea_dos_mz", "MZ başlık kontrolü.", B64, (a) => rea_dos_mz(b64(a.b64))],
-  ["rea_dos_int21", "INT21 çağrı taraması.", B64, (a) => rea_dos_int21(b64(a.b64))],
-  ["rea_mips_funcs", "MIPS fonksiyon ön-tarama.", B64, (a) => rea_mips_funcs(b64(a.b64))],
+  ["rea_dos_mz", "MZ header check.", B64, (a) => rea_dos_mz(b64(a.b64))],
+  ["rea_dos_int21", "INT21 call scan.", B64, (a) => rea_dos_int21(b64(a.b64))],
+  ["rea_mips_funcs", "MIPS function pre-scan.", B64, (a) => rea_mips_funcs(b64(a.b64))],
   ["rea_mips_psp_profile", "MIPS/PSP profili.", B64, (a) => rea_mips_psp_profile(b64(a.b64))],
   ["rea_aot_detect", "NativeAOT sinyali.", z.object({ b64dosya: z.string().min(1), metin: z.string().optional() }), (a) => rea_aot_detect(b64(a.b64dosya), a.metin ?? "")],
   ["rea_aot_objc", "ObjC dispatch izleri.", J, (a) => rea_aot_objc(a.text)],
   ["rea_aot_swift", "Swift dispatch izleri.", J, (a) => rea_aot_swift(a.text)],
   ["rea_aot_profile", "AOT profili.", z.object({ b64dosya: z.string().min(1), metin: z.string().optional() }), (a) => rea_aot_profile(b64(a.b64dosya), a.metin ?? "")],
-  ["rea_go_module", "Go modül bilgisi.", J, (a) => rea_go_module(a.text)],
-  ["rea_go_version", "Go sürüm izi.", J, (a) => rea_go_version(a.text)],
-  ["rea_go_funclines", "Go fonksiyon + dosya:satır eşlemesi.", P, (a) => rea_go_funclines(a.path)],
-  ["rea_go_goresym", "GoReSym analizi (yoksa dürüst hata).", P, (a) => rea_go_goresym(a.path)],
-  ["rea_il2cpp_metadata", "IL2CPP global-metadata sınıf/metod sayımı.", P, (a) => rea_il2cpp_metadata(a.path)],
-  ["rea_il2cpp_dump", "Il2CppDumper ile döküm (yoksa dürüst hata).", P, (a) => rea_il2cpp_dump(a.path)],
-  ["rea_il2cpp_methods", "IL2CPP method imzaları (sınırlıysa dürüst işaret).", P, (a) => rea_il2cpp_methods(a.path)],
-  ["rea_go_buildinfo", "Go build-id + modül bağımlılıkları.", P, (a) => rea_go_buildinfo(a.path)],
+  ["rea_go_module", "Go module info.", J, (a) => rea_go_module(a.text)],
+  ["rea_go_version", "Go version fingerprint.", J, (a) => rea_go_version(a.text)],
+  ["rea_go_funclines", "Go function + file:line map.", P, (a) => rea_go_funclines(a.path)],
+  ["rea_go_goresym", "GoReSym analysis (honest error if missing).", P, (a) => rea_go_goresym(a.path)],
+  ["rea_il2cpp_metadata", "IL2CPP global-metadata class/method counts.", P, (a) => rea_il2cpp_metadata(a.path)],
+  ["rea_il2cpp_dump", "Dump via Il2CppDumper (honest error if missing).", P, (a) => rea_il2cpp_dump(a.path)],
+  ["rea_il2cpp_methods", "IL2CPP method signatures (honest flag when truncated).", P, (a) => rea_il2cpp_methods(a.path)],
+  ["rea_go_buildinfo", "Go build-id + module dependencies.", P, (a) => rea_go_buildinfo(a.path)],
   ["rea_bindiff_fonksiyonlar", "Binary fonksiyon listesi (ad/adres + hash).", P, (a) => rea_bindiff_fonksiyonlar(a.path)],
-  ["rea_bindiff_karsilastir", "İki sürüm arası fonksiyon farkı.", J, (a) => { const p = JSON.parse(a.text); return rea_bindiff_karsilastir(p.eski, p.yeni); }],
+  ["rea_bindiff_karsilastir", "Function-level diff between two versions.", J, (a) => { const p = JSON.parse(a.text); return rea_bindiff_karsilastir(p.eski, p.yeni); }],
   ["rea_pwn_elf_layout", "ELF layout + mitigation.", P, (a) => rea_pwn_elf_layout(a.path)],
   ["rea_pwn_gadgets", "Gadget ipucu.", J, (a) => rea_pwn_gadgets(a.text)],
-  ["rea_firmware_extract", "Firmware çıkarma.", P, (a) => rea_firmware_extract(a.path)],
+  ["rea_firmware_extract", "Firmware extraction.", P, (a) => rea_firmware_extract(a.path)],
   ["rea_firmware_handoff", "Firmware handoff notu.", z.object({ path: z.string().min(1), neden: z.string().min(1) }), (a) => rea_firmware_handoff(a.path, a.neden)],
-  ["rea_firmware_caps", "Firmware yetenek yoklaması.", O, () => rea_firmware_caps()],
-  ["rea_evidence_bundle", "Kanıt paketi derleme.", z.object({ ogeler: z.string().min(1), sakli: z.string().min(1) }), (a) => {
+  ["rea_firmware_caps", "Firmware capability probe.", O, () => rea_firmware_caps()],
+  ["rea_evidence_bundle", "Assemble an evidence bundle.", z.object({ ogeler: z.string().min(1), sakli: z.string().min(1) }), (a) => {
     const pa = jsonParse<any[]>("rea_evidence_bundle", a.ogeler); if ("err" in pa) return pa.err;
     const pb = jsonParse<any[]>("rea_evidence_bundle", a.sakli); if ("err" in pb) return pb.err;
     return buildEvidenceBundle(pa.v, pb.v);
   }],
-  ["rea_evidence_verify", "Kanıt paketi doğrulama.", J, (a) => {
+  ["rea_evidence_verify", "Verify an evidence bundle.", J, (a) => {
     const p = jsonParse<any>("rea_evidence_verify", a.text); if ("err" in p) return p.err;
     return { ok: verifyEvidenceBundle(p.v) };
   }],
@@ -428,65 +428,65 @@ const R: Array<[string, string, any, H]> = [
     const p = jsonParse<any>("rea_obligation_advance", a.defter); if ("err" in p) return p.err;
     return advanceObligation(p.v, a.bulgu, a.kod);
   }],
-  ["rea_obligation_verify", "Zincir doğrulama.", J, (a) => {
+  ["rea_obligation_verify", "Chain verification.", J, (a) => {
     const p = jsonParse<any>("rea_obligation_verify", a.text); if ("err" in p) return p.err;
     return verifyObligationChain(p.v);
   }],
-  ["rea_obligation_close", "Defter mühürleme.", J, (a) => {
+  ["rea_obligation_close", "Seal the ledger.", J, (a) => {
     const p = jsonParse<any>("rea_obligation_close", a.text); if ("err" in p) return p.err;
     return closeObligationLedger(p.v);
   }],
   ["rea_flutter_scan", "Flutter/Dart izi tarama.", P, (a) => rea_flutter_scan(a.path)],
   ["rea_flutter_payload", "Flutter payload izleri.", P, (a) => rea_flutter_payload(a.path)],
-  ["rea_flutter_snapshot", "Flutter AOT snapshot bilgisi (Dart magic + sürüm).", P, (a) => rea_flutter_snapshot(a.path)],
-  ["rea_flutter_blutter", "Blutter ile Dart analizi (yoksa dürüst hata).", P, (a) => rea_flutter_blutter(a.path)],
+  ["rea_flutter_snapshot", "Flutter AOT snapshot info (Dart magic + version).", P, (a) => rea_flutter_snapshot(a.path)],
+  ["rea_flutter_blutter", "Dart analysis via Blutter (honest error if missing).", P, (a) => rea_flutter_blutter(a.path)],
   ["rea_apple_macho", "Mach-O sihir + dyld listesi.", P, (a) => rea_apple_macho(a.path)],
   ["rea_apple_plist", "Info.plist anahtar okuma.", P, (a) => rea_apple_plist(a.path)],
   ["rea_apple_bundle", "Bundle anatomisi.", P, (a) => rea_apple_bundle(a.path)],
-  ["rea_macho_info", "Mach-O başlık (mimari + dosya tipi).", P, (a) => rea_macho_info(a.path)],
-  ["rea_macho_loads", "Mach-O load komutları (segment/dylib).", P, (a) => rea_macho_loads(a.path)],
-  ["rea_macho_otool", "otool çıktısı (yoksa dürüst hata).", P, (a) => rea_macho_otool(a.path)],
-  ["rea_macho_objc", "ObjC sınıf/kategori listesi (saf okuma).", P, (a) => rea_macho_objc(a.path)],
-  ["rea_macho_classdump", "class-dump çıktısı (yoksa dürüst hata).", P, (a) => rea_macho_classdump(a.path)],
+  ["rea_macho_info", "Mach-O header (architecture + file type).", P, (a) => rea_macho_info(a.path)],
+  ["rea_macho_loads", "Mach-O load commands (segment/dylib).", P, (a) => rea_macho_loads(a.path)],
+  ["rea_macho_otool", "otool output (honest error if missing).", P, (a) => rea_macho_otool(a.path)],
+  ["rea_macho_objc", "ObjC class/category list (read-only).", P, (a) => rea_macho_objc(a.path)],
+  ["rea_macho_classdump", "class-dump output (honest error if missing).", P, (a) => rea_macho_classdump(a.path)],
   ["rea_hap_liste", "HAP dosya listesi.", P, (a) => rea_hap_liste(a.path)],
   ["rea_hap_manifest", "HAP manifest (bundle/version).", P, (a) => rea_hap_manifest(a.path)],
-  ["rea_pe_info", "PE başlık bilgisi.", P, (a) => rea_pe_info(a.path)],
+  ["rea_pe_info", "PE header info.", P, (a) => rea_pe_info(a.path)],
   ["rea_pe_imports", "PE import listesi.", P, (a) => rea_pe_imports(a.path)],
   ["rea_pe_sections", "PE section tablosu.", P, (a) => rea_pe_sections(a.path)],
   ["rea_wasm_sections", "WASM section tablosu.", B64, (a) => rea_wasm_sections(a.b64)],
   ["rea_wasm_imports", "WASM import listesi.", B64, (a) => rea_wasm_imports(a.b64)],
-  ["rea_evm_stats", "EVM opcode istatistiği.", z.object({ hex: z.string().min(1) }), (a) => rea_evm_stats(a.hex)],
-  ["rea_evm_selectors", "EVM seçici adayları.", z.object({ hex: z.string().min(1) }), (a) => rea_evm_selectors(a.hex)],
+  ["rea_evm_stats", "EVM opcode statistics.", z.object({ hex: z.string().min(1) }), (a) => rea_evm_stats(a.hex)],
+  ["rea_evm_selectors", "EVM selector candidates.", z.object({ hex: z.string().min(1) }), (a) => rea_evm_selectors(a.hex)],
   ["rea_dos_com", "COM tespiti.", P, (a) => rea_dos_com(a.path)],
   ["rea_dos_psp", "PSP struct parse.", B64, (a) => rea_dos_psp(a.b64)],
-  ["rea_managed_compare", "Managed üye diff.", z.object({ a: z.string().min(1), b: z.string().min(1) }), (a) => rea_managed_compare(a.a, a.b)],
-  ["rea_managed_verify", "Native bağımlılık doğrulama.", z.object({ path: z.string().min(1), beklenen: z.string().min(1) }), (a) => rea_managed_verify(a.path, a.beklenen)],
-  ["rea_managed_import", "Reconstruction kaydı.", P, (a) => rea_managed_import(a.path)],
-  ["rea_readiness", "Reconstruction hazırlık skoru.", J, (a) => rea_readiness(a.text)],
-  ["rea_coverage", "Kapsama oranı.", z.object({ incelenen: z.number().int().min(0), toplam: z.number().int().min(0) }), (a) => rea_coverage(a.incelenen, a.toplam)],
-  ["rea_hopper_istek", "Hopper istek dosyası üretimi.", z.object({ path: z.string().min(1) }), (a) => rea_hopper_istek(a.path)],
+  ["rea_managed_compare", "Managed member diff.", z.object({ a: z.string().min(1), b: z.string().min(1) }), (a) => rea_managed_compare(a.a, a.b)],
+  ["rea_managed_verify", "Native dependency verification.", z.object({ path: z.string().min(1), beklenen: z.string().min(1) }), (a) => rea_managed_verify(a.path, a.beklenen)],
+  ["rea_managed_import", "Reconstruction import.", P, (a) => rea_managed_import(a.path)],
+  ["rea_readiness", "Reconstruction readiness score.", J, (a) => rea_readiness(a.text)],
+  ["rea_coverage", "Coverage ratio.", z.object({ incelenen: z.number().int().min(0), toplam: z.number().int().min(0) }), (a) => rea_coverage(a.incelenen, a.toplam)],
+  ["rea_hopper_istek", "Hopper request-file generation.", z.object({ path: z.string().min(1) }), (a) => rea_hopper_istek(a.path)],
   ["rea_hopper_tara", "Dosyada string/regex tarama.", z.object({ path: z.string().min(1), desen: z.string().min(1) }), (a) => rea_hopper_tara(a.path, a.desen)],
-  ["rea_ida_idb", "IDB batch üretimi (idat).", z.object({ path: z.string().min(1), out: z.string().min(1) }), (a) => rea_ida_idb(a.path, a.out)],
-  ["rea_ida_flirt", "String-tabanlı derleyici/kütüphane tahmini (gerçek FLIRT imzası değil; IDA kuruluysa doğrulama için rea_ida_idb çıktısını IDA'da imza uygulayarak kullanın).", P, (a) => rea_ida_flirt(a.path)],
+  ["rea_ida_idb", "IDB batch generation (idat).", z.object({ path: z.string().min(1), out: z.string().min(1) }), (a) => rea_ida_idb(a.path, a.out)],
+  ["rea_ida_flirt", "String-based compiler/library guess (not a real FLIRT signature; if IDA is installed, validate with rea_ida_idb output applied as a signature in IDA).", P, (a) => rea_ida_flirt(a.path)],
   ["rea_jeb_sorgu", "JEB MCP sorgusu.", z.object({ url: z.string().min(1), yontem: z.string().min(1), govde: z.string().optional() }), (a) => rea_jeb_sorgu(a.url, a.yontem, a.govde ?? "")],
   ["rea_crash_kayit_parse", "Crash notu parse.", J, (a) => rea_crash_kayit_parse(a.text)],
-  ["rea_crash_ozet", "Crash özeti.", J, (a) => rea_crash_ozet(a.text)],
+  ["rea_crash_ozet", "Crash summary.", J, (a) => rea_crash_ozet(a.text)],
   ["rea_fs_snapshot", "Dizin snapshot.", P, (a) => rea_fs_snapshot(a.path)],
   ["rea_fs_diff", "Snapshot diff.", z.object({ once: z.string().min(1), sonra: z.string().min(1) }), (a) => rea_fs_diff(a.once, a.sonra)],
   ["rea_storage_dump", "Cookies + localStorage.", z.object({ url: z.string().min(1) }), (a) => rea_storage_dump(a.url)],
-  ["rea_console_yakala", "Konsol mesajları.", z.object({ url: z.string().min(1) }), (a) => rea_console_yakala(a.url)],
-  ["rea_js_require", "Require/import grafı.", P, (a) => rea_js_require(a.path)],
-  ["rea_js_export_shape", "Export şekli.", P, (a) => rea_js_export_shape(a.path)],
-  ["rea_investigate", "Otomatik soruşturma planı (sniff+skor+yedek).", z.object({ path: z.string().min(1), soru: z.string().optional() }), (a) => rea_investigate(a.path, a.soru ?? "")],
-  ["rea_dosya_izi", "API olaylarından dosya yazma/okuma.", J, (a) => {
+  ["rea_console_yakala", "Console messages.", z.object({ url: z.string().min(1) }), (a) => rea_console_yakala(a.url)],
+  ["rea_js_require", "Require/import graph.", P, (a) => rea_js_require(a.path)],
+  ["rea_js_export_shape", "Export shape.", P, (a) => rea_js_export_shape(a.path)],
+  ["rea_investigate", "Automatic investigation plan (sniff + score + fallbacks).", z.object({ path: z.string().min(1), soru: z.string().optional() }), (a) => rea_investigate(a.path, a.soru ?? "")],
+  ["rea_dosya_izi", "File write/read from API events.", J, (a) => {
     const p = jsonParse<any[]>("rea_dosya_izi", a.text); if ("err" in p) return p.err;
     return rea_dosya_izi(p.v);
   }],
-  ["rea_registry_izi", "API olaylarından registry yazma.", J, (a) => {
+  ["rea_registry_izi", "Registry writes from API events.", J, (a) => {
     const p = jsonParse<any[]>("rea_registry_izi", a.text); if ("err" in p) return p.err;
     return rea_registry_izi(p.v);
   }],
-  ["rea_behavior_full", "Tek çağrıda davranış raporu.", z.object({ api: z.string().min(1), net: z.string().optional() }), (a) => {
+  ["rea_behavior_full", "Behavior report in a single call.", z.object({ api: z.string().min(1), net: z.string().optional() }), (a) => {
     const pa = jsonParse<any[]>("rea_behavior_full", a.api); if ("err" in pa) return pa.err;
     const pn = a.net ? jsonParse<any[]>("rea_behavior_full", a.net) : null;
     if (pn && "err" in pn) return pn.err;
@@ -494,12 +494,12 @@ const R: Array<[string, string, any, H]> = [
   }],
   ["rea_pdb_yolu", "PE debug dizininden PDB yolu.", P, (a) => rea_pdb_yolu(a.path)],
   ["rea_pdb_indir", REA_PDB_INDIR_ACIKLAMA, P, (a) => reaPdbIndirKayitHandler(a)],
-  ["rea_dwarf_ozet", "ELF DWARF özeti.", P, (a) => rea_dwarf_ozet(a.path)],
-  ["rea_typedef_oner", "Argüman adı önerisi + yayılım.", J, (a) => rea_typedef_oner(a.text)],
-  ["rea_scan_repo", "Repo taraması (tip+plan).", P, (a, ctx) => reaScanRepoStaged(a, ctx)],
-  ["rea_scan_repo_paralel", "Paralel repo taraması (4'lü havuz, iptalli).", z.object({ path: z.string().min(1), eszamanlilik: z.number().int().min(1).max(4).optional() }), (a) => rea_scan_repo_paralel(a.path, a.eszamanlilik ? { eszamanlilik: a.eszamanlilik } : undefined)],
-  ["rea_android_dinamik_recete", "Android dinamik analiz reçetesi üretimi.", z.object({ path: z.string().min(1) }), (a) => rea_android_dinamik_recete({ apkYolu: a.path })],
-  ["rea_android_recete_dogrula", "Reçete kuru-doğrulaması.", J, (a) => { const p = JSON.parse(a.text); return rea_android_recete_dogrula(p); }],
+  ["rea_dwarf_ozet", "ELF DWARF summary.", P, (a) => rea_dwarf_ozet(a.path)],
+  ["rea_typedef_oner", "Argument-name suggestion + spread.", J, (a) => rea_typedef_oner(a.text)],
+  ["rea_scan_repo", "Repo scan (type + plan).", P, (a, ctx) => reaScanRepoStaged(a, ctx)],
+  ["rea_scan_repo_paralel", "Parallel repo scan (pool of 4, cancellable).", z.object({ path: z.string().min(1), eszamanlilik: z.number().int().min(1).max(4).optional() }), (a) => rea_scan_repo_paralel(a.path, a.eszamanlilik ? { eszamanlilik: a.eszamanlilik } : undefined)],
+  ["rea_android_dinamik_recete", "Android dynamic-analysis recipe generation.", z.object({ path: z.string().min(1) }), (a) => rea_android_dinamik_recete({ apkYolu: a.path })],
+  ["rea_android_recete_dogrula", "Dry-run validation of a recipe.", J, (a) => { const p = JSON.parse(a.text); return rea_android_recete_dogrula(p); }],
 ];
 
 export function registerReaTools(server: McpServer): void {

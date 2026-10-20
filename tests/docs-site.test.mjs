@@ -53,11 +53,11 @@ function ozetOku(md) {
     return Number(m[1]);
   };
   return {
-    arac: al(/^- Toplam araç: (\d+)$/m),
-    sema: al(/^- outputSchema taşıyan araç: (\d+)$/m),
-    ann: al(/^- annotations taşıyan araç: (\d+)$/m),
-    res: al(/^- Toplam resource: (\d+)$/m),
-    prompt: al(/^- Toplam prompt: (\d+)$/m),
+    arac: al(/^- Total tools: (\d+)$/m),
+    sema: al(/^- Tools with outputSchema: (\d+)$/m),
+    ann: al(/^- Tools with annotations: (\d+)$/m),
+    res: al(/^- Total resources: (\d+)$/m),
+    prompt: al(/^- Total prompts: (\d+)$/m),
   };
 }
 
@@ -173,10 +173,10 @@ describe("(d) PROMPTS.md 10 prompt içerir, her birinde örnek çağrı var", ()
     const bolumler = md.split(/^## \d+\) .+$/m).slice(1);
     assert.equal(bolumler.length, 10);
     bolumler.forEach((b, i) => {
-      assert.ok(b.includes("Amaç"), `prompt ${i + 1}: Amaç yok`);
-      assert.ok(b.includes("Örnek çağrı"), `prompt ${i + 1}: Örnek çağrı yok`);
-      assert.ok(b.includes("Beklenen çıktı"), `prompt ${i + 1}: Beklenen çıktı yok`);
-      assert.ok(/```(bash|json|text|console)/.test(b), `prompt ${i + 1}: örnek çağrı kod bloğu yok`);
+      assert.ok(b.includes("Goal"), `prompt ${i + 1}: Goal yok`);
+      assert.ok(b.includes("Sample call"), `prompt ${i + 1}: Sample call yok`);
+      assert.ok(b.includes("Expected output"), `prompt ${i + 1}: Expected output yok`);
+      assert.ok(/```(bash|json|text|console)/.test(b), `prompt ${i + 1}: sample-call code block yok`);
     });
     for (const t of GEREKLI_TERIMLER) {
       assert.ok(md.includes(t), `PROMPTS.md gerçek adı içermeli: ${t}`);

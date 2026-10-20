@@ -88,9 +88,9 @@ describe("tool-reference: docs/TOOLS.md gercek yuzeyle eslesir", () => {
     for (const t of yuzey.tools) {
       assert.ok(dokuman.includes(`### \`${t.name}\``), `${t.name} basligi yok`);
     }
-    const girdiSayisi = (dokuman.match(/^- Girdi alanları/gm) ?? []).length;
-    const outSayisi = (dokuman.match(/^- outputSchema: (var|yok)/gm) ?? []).length;
-    const annSayisi = (dokuman.match(/^- annotations: (var|yok)/gm) ?? []).length;
+    const girdiSayisi = (dokuman.match(/^- Input fields/gm) ?? []).length;
+    const outSayisi = (dokuman.match(/^- outputSchema: (present|absent)/gm) ?? []).length;
+    const annSayisi = (dokuman.match(/^- annotations: (present|absent)/gm) ?? []).length;
     assert.equal(girdiSayisi, yuzey.tools.length);
     assert.equal(outSayisi, yuzey.tools.length);
     assert.equal(annSayisi, yuzey.tools.length);
@@ -99,8 +99,8 @@ describe("tool-reference: docs/TOOLS.md gercek yuzeyle eslesir", () => {
     const gercekAnn = yuzey.tools.filter(
       (t) => t.annotations && typeof t.annotations === "object" && Object.keys(t.annotations).length,
     ).length;
-    assert.equal((dokuman.match(/^- outputSchema: var/gm) ?? []).length, gercekOut);
-    assert.equal((dokuman.match(/^- annotations: var/gm) ?? []).length, gercekAnn);
+    assert.equal((dokuman.match(/^- outputSchema: present/gm) ?? []).length, gercekOut);
+    assert.equal((dokuman.match(/^- annotations: present/gm) ?? []).length, gercekAnn);
   });
 
   it("dokuman kisisel yol veya ev dizini sizdirmaz", () => {
@@ -117,7 +117,7 @@ describe("tool-reference: docs/TOOLS.md gercek yuzeyle eslesir", () => {
     assert.equal(ok, false);
     assert.ok(problemler.some((p) => p.includes(ilk)), "eksik arac raporlanmali");
     assert.ok(problemler.some((p) => p.includes("__olmayan_arac__")), "fazla arac raporlanmali");
-    const toplamBozuk = dokuman.replace(/^- Toplam araç: \d+$/m, "- Toplam araç: 999");
+    const toplamBozuk = dokuman.replace(/^- Total tools: \d+$/m, "- Total tools: 999");
     assert.equal(checkReference(toplamBozuk, yuzey).ok, false, "yanlis toplam yakalanmali");
   });
 });

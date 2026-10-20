@@ -20,7 +20,7 @@ describe("generate-tool-reference CLI girisi", () => {
   it("gercek yolla calisir ve cikti uretir", () => {
     const r = calistir(betik);
     assert.equal(r.status, 0, `exit=0 olmali: ${r.stderr}`);
-    assert.match(r.stdout + r.stderr, /TOOLS\.md (guncel|uretildi)/, "cikti olmali");
+    assert.match(r.stdout + r.stderr, /TOOLS\.md (current|generated)/, "cikti olmali");
   });
 
   it("junction yoluyla da calisir (sessiz no-op degil)", (t) => {
@@ -35,7 +35,7 @@ describe("generate-tool-reference CLI girisi", () => {
       assert.ok(existsSync(betikLink), "junction betigi gosteriyor olmali");
       const r = spawnSync(process.execPath, [betikLink, "--check"], { cwd: kok, encoding: "utf8", timeout: 60_000 });
       assert.equal(r.status, 0, `exit=0 olmali: ${r.stderr}`);
-      assert.match(r.stdout + r.stderr, /TOOLS\.md (guncel|uretildi)/, `junction yolu sessiz kalmamali: stdout='${r.stdout}' stderr='${r.stderr}'`);
+      assert.match(r.stdout + r.stderr, /TOOLS\.md (current|generated)/, `junction yolu sessiz kalmamali: stdout='${r.stdout}' stderr='${r.stderr}'`);
     } finally {
       rmSync(taban, { recursive: true, force: true });
     }

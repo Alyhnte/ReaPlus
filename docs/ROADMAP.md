@@ -1,152 +1,144 @@
-# ROADMAP — ReaPlus yol haritası
+# ROADMAP — ReaPlus roadmap
 
-> Durum: v0.13.0 yayında (npm `latest` + MCP Registry + GitHub Release + SBOM asset
-> + GHCR imajı + CI/pages/docker yeşil). Bu belge ilk
-> 2026-10-12 incelemesinin bulgularıyla doğmuş, her dalga sonunda gerçekleşenle
-> senkronlanmıştır. v0.13.0 dalgaları kapattı: PE makine kimliği (ARMNT/ARM64),
-> ELF e_machine + Hexagon, plist tip-duyarlı kayıpsız değerler, JS CJS/require
-> çözümleme + cross-bundle ilişkiler, apktool sürüm gözlemi (advisory), raw m68k
-> Ghidra profili, sürüm taşıyıcı senkronu (9 kontrol). Araç yüzeyi değişmedi
-> (191 araç).
-> Sayılar derlenmiş sunucunun gerçek yüzeyindendir
-> ([`TOOLS.md`](TOOLS.md) üretim çıktısı).
+> Status: v0.13.0 released (npm + MCP Registry + green CI). This document was
+> born from the findings of the first 2026-10-12 review and is synced with
+> what actually shipped at the end of every wave. v0.13.0 closed PE machine
+> identity (ARMNT/ARM64), ELF e_machine + Hexagon, type-aware lossless plist
+> values, JS CJS/require resolution + cross-bundle relations, apktool version
+> observation (advisory), a raw m68k Ghidra profile, and version-carrier sync
+> (9 checks). The tool surface is unchanged (191 tools). Numbers come from the
+> compiled server's real surface (the [`TOOLS.md`](TOOLS.md) generation output).
 >
-> **Ölçütler:** Etki = kullanıcı/ajan değerine katkı · Efor = S (günler) / M (1-2 hafta) / L (ay+)
-> · Öncelik = P0 (dış kapı) → P3 (uzun vade).
+> **Scales:** Impact = contribution to user/agent value · Effort = S (days) / M (1-2 weeks) / L (month+) · Priority = P0 (outer gate) → P3 (long term).
 
-## v0.10.0 tabanıyla kapananlar (özet)
+## Closed on the v0.10.0 baseline (summary)
 
-- MCP yüzeyi: 191 araç + 2 resource + 7 prompt; üretilmiş tam referans [`TOOLS.md`](TOOLS.md).
-- `REA_TOOLSETS` profilleri: `all` 191 (varsayılan), `minimal` 8, `static` 98, `android` 27, `dotnet` 20, `web` 26, `debug` 50; virgüllü birleşim, bilinmeyen profil açılış hatası. Yeni araç yalnız `all`'da (fail-closed).
-- `REA_WORKSPACE_ROOT`: `rea_*` + conduit yolları + kullanıcıya görünür türev yazmalar kök içinde; operatör temp/cache yüzeyleri bilinçli istisna. Roots (legacy + modern MRTR) yalnız daraltır.
-- Tokensiz HTTP: 44 salt-okunur araçlık allowlist (toolset ile kesişim) + `REA_AUDIT_LOG` (argümansız JSONL) + rate limit (120/dk) + eşzamanlılık tavanı (16) + oturum TTL (30dk).
-- Tip tabanı: 187 `outputSchema`, 191 annotations (sıfır işaretsiz; 4 araç kalıcı şemasız).
-- Async job (5 araç, 177→192 yüzey) + oturum FIFO kuyruğu + tam serileştirme + worker cache + progress genelleme.
-- Motor sağlamlığı: Frida kurulum timeout'ları, cdb async pause+push, x64dbg provizyonu, jadx `-cp` düzeltmesi + canlı APK kabulü.
-- Statik dürüstlük: browser scenario, FLIRT, Wasm/DWARF, PE/PDB, Mach-O, IL2CPP/Go/Flutter, binary diff, PCAP/TLS, Android reçete.
-- Kurulum: `setup` sihirbazı + `doctor --fix`; manifestler (winget/scoop/brew) + SBOM + sandbox reçetesi; SEA fizibilitesi.
-- Kalite: golden korpus manifesti, fuzz smoke (CI), e2e varsayılan, perf + şema bütçeleri, docs sitesi + prompt kütüphanesi.
-- Yayın: `rea-plus@0.10.0` npm'de, `io.github.Alyhnte/rea-plus` MCP Registry'de, tag zinciri (npm→bekle→registry) tek tetikleyicili. **Frida canlı VM onayı açık kapı olarak durur** (aşağıda kapatılmadı).
+- MCP surface: 191 tools + 2 resources + 7 prompts; generated full reference [`TOOLS.md`](TOOLS.md).
+- `REA_TOOLSETS` profiles: `all` 191 (default), `minimal` 8, `static` 98, `android` 27, `dotnet` 20, `web` 26, `debug` 50; comma-separated union, unknown profile is a startup error. New tools land in `all` only (fail-closed).
+- `REA_WORKSPACE_ROOT`: `rea_*` + conduit paths + user-visible derived writes stay inside the root; operator temp/cache surfaces are a deliberate exception. Roots (legacy + modern MRTR) only narrows.
+- Tokenless HTTP: 44 read-only-tool allowlist (intersected with toolset) + `REA_AUDIT_LOG` (argument-free JSONL) + rate limit (120/min) + concurrency cap (16) + session TTL (30min).
+- Type base: 187 `outputSchema`s, 191 annotations (zero unannotated; 4 tools permanently schema-less).
+- Async jobs (5 tools, 177→192 surface) + session FIFO queue + full serialization + worker cache + progress generalization.
+- Engine hardening: Frida setup timeouts, cdb async pause+push, x64dbg provisioning, jadx `-cp` fix + live APK acceptance.
+- Static honesty: browser scenario, FLIRT, Wasm/DWARF, PE/PDB, Mach-O, IL2CPP/Go/Flutter, binary diff, PCAP/TLS, Android recipe.
+- Install: `setup` wizard + `doctor --fix`; manifests (winget/scoop/brew) + SBOM + sandbox recipe; SEA feasibility.
+- Quality: golden corpus manifest, fuzz smoke (CI), e2e by default, perf + schema budgets, docs site + prompt library.
+- Release: `rea-plus@0.10.0` on npm, `io.github.Alyhnte/rea-plus` on the MCP Registry, tag chain (npm→wait→registry) with a single trigger. **Live Frida VM approval remains an open gate** (not closed below).
 
-## 0.7.2 + 0.7.3 ile kapananlar (özet)
+## Closed with 0.7.2 + 0.7.3 (summary)
 
-- Kırık `npm start`/`npm test`, sürüm uyumsuzluğu, dist'e kopyalanmayan runtime asset'leri düzeltildi.
-- Hata zarfı (`isError`), adres enjeksiyonu kapısı, sahte `ok` dönen araçlar, Frida timeout/yarım oturum, checkpoint çapraz yazımı düzeltildi.
-- Varsayılan test kümesi yazar makinesi dışında da yeşil (taşınabilir fixture'lar, dürüst araç kapıları, kişisel yol sıfır); CI Ubuntu Node 20+22 yeşil.
-- Kurulum: `prepare` ile git kurulumu, tek-tık Cursor/VS Code bağlantıları, Dockerfile + GHCR workflow'u, istemci config örnekleri.
+- Fixed broken `npm start`/`npm test`, version mismatch, and runtime assets not copied to dist.
+- Fixed the error envelope (`isError`), the address-injection gate, tools returning fake `ok`, Frida timeout/half-session, and cross-session checkpoint writes.
+- Default test suite is green outside the author's machine too (portable fixtures, honest tool gates, zero personal paths); CI Ubuntu Node 20+22 green.
+- Install: git install via `prepare`, one-click Cursor/VS Code links, Dockerfile + GHCR workflow, client config samples.
 
-## A) Dağıtım ve kurulum
+## A) Distribution and install
 
-| Öneri | Bugün ne var / boşluk | Etki | Efor | Öncelik |
+| Proposal | Current state / gap | Impact | Effort | Priority |
 |---|---|---|---|---|
-| ✅ npm'e yayın (`rea-plus`) | KAPANDI (v0.8.0, zincir v0.9.0+): `rea-plus@0.10.0` registry'de; tag zinciri (npm→bekle→registry, tek tetikleyici) | Kurulum tek komut: `npx -y rea-plus` | S | — |
-| ✅ MCP Registry kaydı (`mcp-publisher`) | KAPANDI (v0.8.0, zincir v0.9.0+): `io.github.Alyhnte/rea-plus` yayında | Resmi katalogda keşfedilebilirlik | S | — |
-| ✅ GHCR imajını ilk release ile basma | KAPANDI (v0.7.4): `ghcr.io/alyhnte/reaplus` için etiketler yayımlandı ve anonim çekilebilirliği doğrulandı | Docker kullanıcılarına sıfır kurulum | S | — |
-| ✅ `rea-plus-cli setup` sihirbazı | KAPANDI (v0.10.0): istemci algısı + onaylı yazma + `.bak` + dry-run; yalnız geçici HOME'da testli | En büyük sürtünme gider | M | — |
-| ✅ `doctor --fix` | KAPANDI (v0.10.0): onay kapılı kurulum önerisi (winget/brew/apt); onaysız çalıştırmaz | Eksik araçta tek komut | M | — |
-| ◐ Tek dosya Windows exe (Node SEA) | FİZİBİLİTE TAMAM (v0.10.0): hello-world SEA çalıştı; tam uygulama 3 engelli (129MB Frida binding, dinamik playwright, imzalama) — alternatif: portable node bundle | Node'suz dağıtım; release asset'i olarak | M | P2 |
-| ✅ winget/scoop/homebrew manifesti | KAPANDI (v0.10.0): üç manifest sürümlü + hash'li; mağaza gönderimi yapılmadı | Paket yöneticisiyle keşif | S | — |
-| ◐ İmzalı release + SBOM | KISMEN (v0.11.0): npm OIDC `--provenance` imzalı publish + CycloneDX SBOM GitHub Release asset'i + GHCR `release` tetikli; **npm Trusted Publisher (OIDC) hâlâ yok** | Tedarik zinciri güveni | S | P2 |
+| ✅ Publish to npm (`rea-plus`) | CLOSED (v0.8.0, chain v0.9.0+): `rea-plus@0.10.0` on the registry; tag chain (npm→wait→registry, single trigger) | Install is one command: `npx -y rea-plus` | S | — |
+| ✅ MCP Registry listing (`mcp-publisher`) | CLOSED (v0.8.0, chain v0.9.0+): `io.github.Alyhnte/rea-plus` live | Discoverability in the official catalog | S | — |
+| ✅ Push the GHCR image with the first release | CLOSED (v0.7.4): tags published for `ghcr.io/alyhnte/reaplus` and anonymous pullability verified | Zero-install for Docker users | S | — |
+| ✅ `rea-plus-cli setup` wizard | CLOSED (v0.10.0): client detection + confirmed writes + `.bak` + dry-run; tested only under a temp HOME | Biggest friction removed | M | — |
+| ✅ `doctor --fix` | CLOSED (v0.10.0): confirmation-gated install suggestion (winget/brew/apt); never runs unconfirmed | One command for a missing tool | M | — |
+| ◐ Single-file Windows exe (Node SEA) | FEASIBILITY DONE (v0.10.0): hello-world SEA ran; full app blocked by 3 obstacles (129MB Frida binding, dynamic playwright, signing) — alternative: portable node bundle | Node-less distribution; as a release asset | M | P2 |
+| ✅ winget/scoop/homebrew manifest | CLOSED (v0.10.0): three manifests versioned + hashed; no store submission | Discovery via package managers | S | — |
+| ◐ Signed release + SBOM | PARTIAL (v0.10.0): SBOM (CycloneDX) generated; no signature + provenance/Trusted Publisher | Supply-chain trust | S | P2 |
 
-## B) MCP protokolü ve ajan deneyimi
+## B) MCP protocol and agent experience
 
-| Öneri | Bugün ne var / boşluk | Etki | Efor | Öncelik |
+| Proposal | Current state / gap | Impact | Effort | Priority |
 |---|---|---|---|---|
-| ✅ Toolset profilleri (`REA_TOOLSETS=static,debug`) | KAPANDI: `all` 191, `minimal` 8, `static` 98, `android` 27, `dotnet` 20, `web` 26, `debug` 50; virgüllü birleşim, bilinmeyen profil açılış hatası, resources/prompts filtresiz | Araç listesi bağlamı küçülür, isabet artar | S | — |
-| ✅ Resources | KAPANDI: 2 statik salt-okunur resource (`rea-plus://server-info`, `rea-plus://capabilities-safety`); keyfi dosya/env açılmaz, subscribe yok | Sunucu kimliği + güvenlik kuralları URI ile okunur | M | — |
-| ✅ Prompts | KAPANDI: 3 yan etkisiz prompt (`packer-triage`, `dotnet-malware-triage`, `android-triage`); prompt araç çalıştırmaz, yalnız sıralı akış metni döner | Hazır triage akışları tek seçimde | S | — |
-| ✅ `outputSchema` + `structuredContent` | KAPANDI (v0.10.0): 187 araç `outputSchema` (4 kalıcı şemasız); düz nesne sonuçlarda `structuredContent` metin JSON'uyla aynı — araç başına durum [`TOOLS.md`](TOOLS.md)'de | Tip güvenli tüketim | M | — |
-| ✅ Progress bildirimi + iptal | KAPANDI (v0.10.0): stage yardımcıları + 3 staged araç; senkron handler'lar kapsam dışı (belgeli) | Ajan ilerlemeyi görür, vazgeçebilir | M | — |
-| ✅ Tool annotation'ları | KAPANDI (v0.10.0): 191 annotations (sıfır işaretsiz) | İstemci onay UX'i | S | — |
-| ✅ Async job modeli (başlat → poll) | KAPANDI (v0.10.0): 5 job aracı (192 yüzey); whitelist 3'lü; iptal süreç ağacını öldürür | Uzun işler kilitlemeden poll edilir | M | — |
-| ✅ Roots desteği | KAPANDI (v0.10.0): legacy + modern MRTR; workspace hiçbir yolda genişlemez | Çalışma alanı otomatik daralır | S | — |
-| ✅ Oturum kuyruğu + serileştirme | KAPANDI (v0.10.0): FIFO-32 + `REA_SESSION_SERIALIZE` (zaman-damga kanıtlı), timeout+iptal korunur | Yarışlar biter | M | — |
+| ✅ Toolset profiles (`REA_TOOLSETS=static,debug`) | CLOSED: `all` 191, `minimal` 8, `static` 98, `android` 27, `dotnet` 20, `web` 26, `debug` 50; comma-separated union, unknown profile is a startup error, resources/prompts unfiltered | Smaller tool-list context, better hits | S | — |
+| ✅ Resources | CLOSED: 2 static read-only resources (`rea-plus://server-info`, `rea-plus://capabilities-safety`); no arbitrary file/env exposure, no subscribe | Server identity + safety rules readable via URI | M | — |
+| ✅ Prompts | CLOSED: 3 side-effect-free prompts (`packer-triage`, `dotnet-malware-triage`, `android-triage`); a prompt runs no tool, returns only sequenced flow text | Ready triage flows in one pick | S | — |
+| ✅ `outputSchema` + `structuredContent` | CLOSED (v0.10.0): 187 tools with `outputSchema` (4 permanently schema-less); on plain-object results `structuredContent` equals the text JSON — per-tool status in [`TOOLS.md`](TOOLS.md) | Type-safe consumption | M | — |
+| ✅ Progress reporting + cancel | CLOSED (v0.10.0): stage helpers + 3 staged tools; sync handlers out of scope (documented) | Agent sees progress, can cancel | M | — |
+| ✅ Tool annotations | CLOSED (v0.10.0): 191 annotations (zero unannotated) | Client approval UX | S | — |
+| ✅ Async job model (start → poll) | CLOSED (v0.10.0): 5 job tools (192 surface); 3-item whitelist; cancel kills the process tree | Long jobs polled without blocking | M | — |
+| ✅ Roots support | CLOSED (v0.10.0): legacy + modern MRTR; workspace never widens on any path | Workspace narrows automatically | S | — |
+| ✅ Session queue + serialization | CLOSED (v0.10.0): FIFO-32 + `REA_SESSION_SERIALIZE` (timestamp-evidenced), timeout+cancel preserved | Races end | M | — |
 
-## C) Güvenlik
+## C) Security
 
-| Öneri | Bugün ne var / boşluk | Etki | Efor | Öncelik |
+| Proposal | Current state / gap | Impact | Effort | Priority |
 |---|---|---|---|---|
-| ✅ Çalışma kökü kısıtı (`REA_WORKSPACE_ROOT`) | KAPANDI: `rea_*` + conduit yolları + türev yazmalar realpath ile kök içinde; operatör temp/cache istisna | Prompt-injection yüzeyi kapanır | M | — |
-| ✅ Token'sız HTTP'de salt-okunur kip | KAPANDI: token yokken 44 araçlık allowlist; toolset ile kesişim | Açık port zararsızlaşır | S | — |
-| ✅ Audit log (JSONL) | KAPANDI: satır başına `ts`/`transport`/`tool`/`durationMs`/`isError`; sır yazılmaz | Olay incelemesi | S | — |
-| ✅ Rate limit + eşzamanlılık + oturum TTL | KAPANDI: 120/dk + 16 eşzamanlı + 30dk TTL; geçersiz değer açılış hatası | Dayanım + hijyen | S | — |
-| ✅ Sandbox reçetesi (VM profili dokümanı) | KAPANDI (v0.10.0): `docs/SANDBOX.md` (Hyper-V + VirtualBox, snapshot + geri yükleme) | Hazır izole ortam | S | — |
+| ✅ Workspace root restriction (`REA_WORKSPACE_ROOT`) | CLOSED: `rea_*` + conduit paths + derived writes inside the root via realpath; operator temp/cache excepted | Prompt-injection surface closed | M | — |
+| ✅ Read-only mode on tokenless HTTP | CLOSED: 44-tool allowlist without a token; intersected with toolset | Open port rendered harmless | S | — |
+| ✅ Audit log (JSONL) | CLOSED: per line `ts`/`transport`/`tool`/`durationMs`/`isError`; no secrets written | Incident review | S | — |
+| ✅ Rate limit + concurrency + session TTL | CLOSED: 120/min + 16 concurrent + 30min TTL; invalid value is a startup error | Resilience + hygiene | S | — |
+| ✅ Sandbox recipe (VM profile doc) | CLOSED (v0.10.0): `docs/SANDBOX.md` (Hyper-V + VirtualBox, snapshot + restore) | Ready isolated environment | S | — |
 
-## D) Debugger motorları
+## D) Debugger engines
 
-| Öneri | Bugün ne var / boşluk | Etki | Efor | Öncelik |
+| Proposal | Current state / gap | Impact | Effort | Priority |
 |---|---|---|---|---|
-| ✅ Oturum kuyruğu + serileştirme | KAPANDI (v0.10.0): FIFO-32 + tam seri modu; timeout+iptal korunur | Yarışlar biter | M | — |
-| ◐ Frida ajanında gerçek exception raporlama | KOD + KİLİT TAMAM, CANLI KAPI AÇIK: slot dışı `false`, kurulum timeout'ları; Frida canlı VM onayı yok | Gerçek çökmeler görünür olur | S | **P0** (canlı VM) |
-| ✅ Frida attach/createScript/load timeout'ları | KAPANDI (v0.10.0): 15/10/15sn + env override + temizlikli `engine_timeout` | Asılma biter | S | — |
-| ✅ cdb: async pause + gerçek push olayları | KAPANDI (v0.10.0): event loop bloklanmaz, aboneye push | Çok oturumlu rahatlık | M | — |
-| ✅ x64dbg eklenti oto-provizyonu | KAPANDI (v0.10.0): doctor + setup, idempotent + hash doğrulamalı | Kurulum sürtünmesi kalkar | M | — |
-| LLDB motoru (Linux/macOS) | Canlı debug yalnız Windows | Platform kapsamı genişler | L | P3 |
-| WinDbg TTD kayıtlarını okuma | Yok | Zaman yolculuğu analizi | L | P3 |
+| ✅ Session queue + serialization | CLOSED (v0.10.0): FIFO-32 + full serial mode; timeout+cancel preserved | Races end | M | — |
+| ◐ Real exception reporting in the Frida agent | CODE + LOCK DONE, LIVE GATE OPEN: off-slot `false`, setup timeouts; no live Frida VM approval | Real crashes become visible | S | **P0** (live VM) |
+| ✅ Frida attach/createScript/load timeouts | CLOSED (v0.10.0): 15/10/15s + env override + cleanup-bearing `engine_timeout` | Hangs end | S | — |
+| ✅ cdb: async pause + real push events | CLOSED (v0.10.0): event loop never blocked, push to subscribers | Multi-session comfort | M | — |
+| ✅ x64dbg plugin auto-provisioning | CLOSED (v0.10.0): doctor + setup, idempotent + hash-verified | Setup friction gone | M | — |
+| LLDB engine (Linux/macOS) | Live debugging is Windows-only | Wider platform coverage | L | P3 |
+| Reading WinDbg TTD traces | Missing | Time-travel analysis | L | P3 |
 
-## E) Statik domainler (derinlik ve dürüstlük)
+## E) Static domains (depth and honesty)
 
-| Öneri | Bugün ne var / boşluk | Etki | Efor | Öncelik |
+| Proposal | Current state / gap | Impact | Effort | Priority |
 |---|---|---|---|---|
-| ✅ jadx gerçek manifest/sınıf alanları | KAPANDI (v0.10.0): `-cp` düzeltmesi + gerçek APK birebir + POSIX keşif taramalı | Android çıktısı güvenilir | S | — |
-| ✅ Browser scenario | KAPANDI (v0.10.0): adımlar gerçekten koşar + kanıtlı + dry-run | Adı gibi çalışır | M | — |
-| ✅ FLIRT dürüstlüğü | KAPANDI (v0.10.0): `string-heuristic` + güven skoru | Güven | S | — |
-| ✅ Wasm/DWARF | KAPANDI (v0.10.0): çok-bayt LEB + v5/abbrev_offset | Gerçek özet | S/M | — |
-| ✅ PE + PDB | KAPANDI (v0.10.0): gerçek header + indirme + önbellek | Doğru adlar + sembol | S/M | — |
-| ✅ Mach-O/iOS | KAPANDI (v0.10.0): saf TS + fat + ObjC listesi | Apple hedefleri | M | — |
-| ✅ IL2CPP/Go/Flutter | KAPANDI (v0.10.0): sayım + eşleme + snapshot; araç yoksa dürüst dal | RE derinliği | L | — |
-| ✅ Binary diff | KAPANDI (v0.10.0): eklenen/çıkarılan/değişen + streaming | Yama analizi | M | — |
-| ◐ Hopper gerçek köprü | ARAŞTIRMA TAMAM: headless API YOK (resmi kaynaklı) → istek-hazırlama olarak dürüst; POSIX benzerlik kapısı eklendi | Lisanslıda gerçek veri | L | P3 |
+| ✅ Real jadx manifest/class fields | CLOSED (v0.10.0): `-cp` fix + real-APK parity + POSIX discovery scan | Trustworthy Android output | S | — |
+| ✅ Browser scenario | CLOSED (v0.10.0): steps really run + evidenced + dry-run | Works as named | M | — |
+| ✅ FLIRT honesty | CLOSED (v0.10.0): `string-heuristic` + confidence score | Trust | S | — |
+| ✅ Wasm/DWARF | CLOSED (v0.10.0): multi-byte LEB + v5/abbrev_offset | Real summary | S/M | — |
+| ✅ PE + PDB | CLOSED (v0.10.0): real headers + download + cache | Correct names + symbols | S/M | — |
+| ✅ Mach-O/iOS | CLOSED (v0.10.0): pure TS + fat + ObjC listing | Apple targets | M | — |
+| ✅ IL2CPP/Go/Flutter | CLOSED (v0.10.0): counts + mapping + snapshot; honest branch when tool is missing | RE depth | L | — |
+| ✅ Binary diff | CLOSED (v0.10.0): added/removed/changed + streaming | Patch analysis | M | — |
+| ◐ Real Hopper bridge | RESEARCH DONE: NO headless API (from official sources) → honest as request-preparation; POSIX similarity gate added | Real data where licensed | L | P3 |
 
-## F) Davranış ve dinamik analiz
+## F) Behavior and dynamic analysis
 
-| Öneri | Bugün ne var / boşluk | Etki | Efor | Öncelik |
+| Proposal | Current state / gap | Impact | Effort | Priority |
 |---|---|---|---|---|
-| ✅ Syscall matrisi + CreateFileW/RegSet | KAPANDI (v0.10.0): ntdll numara eşleme + erişim profilleri | Derin rapor | S | — |
-| ✅ Tek-çağrı davranış koşusu | KAPANDI (v0.10.0): spawn+trace+capture, zorunlu timeout, crash dürüstlüğü | Tek çağrıda profil | M | — |
-| ✅ PCAP + TLS keylog | KAPANDI (v0.10.0): akış birleştirme + keylog çözme; çözülemeyen `sifreli` | C2 trafiği okunur | M | — |
-| ✅ Android dinamik reçetesi | KAPANDI (v0.10.0): 5 adımlı üretim + kuru-doğrulama; eksik araç işaretli | Mobil başlangıç | M | — |
-| Sembolik yürütme (angr/Triton, WSL) | Yok | VMProtect sınıfında tek gerçek yol | L | P3 |
-| Fuzzing harness (AFL++ WSL) | Yok | Hedef parser'larda crash bulma | L | P3 |
+| ✅ Syscall matrix + CreateFileW/RegSet | CLOSED (v0.10.0): ntdll number mapping + access profiles | Deep report | S | — |
+| ✅ Single-call behavior run | CLOSED (v0.10.0): spawn+trace+capture, mandatory timeout, crash honesty | Profile in one call | M | — |
+| ✅ PCAP + TLS keylog | CLOSED (v0.10.0): stream reassembly + keylog decryption; undecryptable stays `sifreli` | C2 traffic readable | M | — |
+| ✅ Android dynamic recipe | CLOSED (v0.10.0): 5-step generation + dry validation; missing tools flagged | Mobile starting point | M | — |
+| Symbolic execution (angr/Triton, WSL) | Missing | The only real path in the VMProtect class | L | P3 |
+| Fuzzing harness (AFL++ WSL) | Missing | Crash hunting in target parsers | L | P3 |
 
-## G) Ölçek ve performans
+## G) Scale and performance
 
-| Öneri | Bugün ne var / boşluk | Etki | Efor | Öncelik |
+| Proposal | Current state / gap | Impact | Effort | Priority |
 |---|---|---|---|---|
-| ✅ Worker cache canlı bağlama | KAPANDI (v0.10.0): reposcan yolu sayaç-kanıtlı | Hızlı tekrar | M | — |
-| ✅ Ölü facade temizliği (`probeCache`/`parallelProbe`) | KAPANDI (v0.10.1): davranış `workerCache`'e taşındı (`ResultCache` TTL + `runProbes`); `probe.test.mjs` `worker-cache.test.mjs` altına taşındı | Ölü kod kalktı | S | — |
-| ✅ Paralel tarama (4'lü havuz) | KAPANDI (v0.10.0): sıralı birleştirme + iptal + hata izolasyonu | CI entegrasyonu | M | — |
-| ✅ Şema bütçesi | KAPANDI (v0.10.0): ölçülü eşikler (200KB/110KB/600B) | Şişme biter | S | — |
-| ✅ Şema bütçesi CI zorlaması | KAPANDI (v0.11.0): bütçe testleri CI koşusunda | Bütçe CI'da kırar | S | — |
-| ✅ Streaming okuma | KAPANDI (v0.10.0): 64KB tampon + iptalde durma | OOM biter | M | — |
+| ✅ Live worker-cache wiring | CLOSED (v0.10.0): reposcan path counter-evidenced | Fast repeats | M | — |
+| ✅ Dead facade cleanup (`probeCache`/`parallelProbe`) | CLOSED (v0.10.1): behavior moved to `workerCache` (`ResultCache` TTL + `runProbes`); `probe.test.mjs` moved under `worker-cache.test.mjs` | Dead code gone | S | — |
+| ✅ Parallel scan (pool of 4) | CLOSED (v0.10.0): ordered merge + cancel + error isolation | CI integration | M | — |
+| ✅ Schema budget | CLOSED (v0.10.0): measured thresholds (200KB/110KB/600B) | Bloat ends | S | — |
+| Schema-budget CI enforcement | Test exists, no CI step | Budget breaks in CI | S | P2 |
+| ✅ Streaming reads | CLOSED (v0.10.0): 64KB buffer + stop on cancel | OOM ends | M | — |
 
-## H) Test ve kalite
+## H) Tests and quality
 
-| Öneri | Bugün ne var / boşluk | Etki | Efor | Öncelik |
+| Proposal | Current state / gap | Impact | Effort | Priority |
 |---|---|---|---|---|
-| ✅ Golden korpus manifesti | KAPANDI (v0.10.1): `tests/corpus/mini.dex` (sentetik minimal DEX v035, `scripts/dex-fixture-uret.mjs`) + `dex-golden` 7 test + HASHES girdisi | Regresyon erken yakalanır | M | — |
-| Self-hosted Windows runner | Frida/debug testleri CI'da koşmuyor | En riskli yüzey sürekli doğrulanır | M | P0 |
-| ✅ Parser fuzz CI smoke | KAPANDI (v0.10.0): deterministik mutasyon, crash/hang=0 | Sessiz sınıflar yakalanır | M | — |
-| ✅ HTTP e2e varsayılan kümede | KAPANDI (v0.10.0): LIVE'dan çıkarıldı, flake yok | Transport regresyonu görünür | S | — |
-| ✅ Performans bütçeleri | KAPANDI (v0.10.0): ölçülü eşikler, medyan yöntemi | Birikme biter | S | — |
+| ✅ Golden corpus manifest | CLOSED (v0.10.1): `tests/corpus/mini.dex` (synthetic minimal DEX v035, `scripts/dex-fixture-uret.mjs`) + `dex-golden` 7 tests + HASHES entry | Regressions caught early | M | — |
+| Self-hosted Windows runner | Frida/debug tests don't run in CI | Riskiest surface verified continuously | M | P0 |
+| ✅ Parser fuzz CI smoke | CLOSED (v0.10.0): deterministic mutation, crash/hang=0 | Silent bug classes caught | M | — |
+| ✅ HTTP e2e in the default suite | CLOSED (v0.10.0): removed from LIVE, no flakes | Transport regressions visible | S | — |
+| ✅ Performance budgets | CLOSED (v0.10.0): measured thresholds, median method | Accumulation ends | S | — |
 
-## I) Dokümantasyon ve topluluk
+## I) Documentation and community
 
-| Öneri | Bugün ne var / boşluk | Etki | Efor | Öncelik |
+| Proposal | Current state / gap | Impact | Effort | Priority |
 |---|---|---|---|---|
-| ✅ Otomatik araç referansı | KAPANDI (v0.10.0): [`TOOLS.md`](TOOLS.md) gerçek yüzeyden (191 araç + 2 resource + 3 prompt) | Güncel katalog | S | — |
-| ◐ Örnek oturumlar (asciinema/GIF) README'de | METİN VAR (v0.11.0): `docs/` altında örnek oturum transkriptleri; görsel kayıt (asciinema/GIF) yok | İlk 10 saniyede ikna (yıldız dönüşümü) | S | P1 |
-| ◐ Docs sitesi | ÜRETİLDİ (v0.10.0): 7 statik sayfa + 0 kırık link | Aranabilir doküman | M | P2 |
-| ✅ Pages deployu | KAPANDI (v0.11.0): `pages.yml` main push'ta deploy eder + `site-uret --check` 35/35 | Tek URL'de doküman | S | — |
-| ✅ Docs sitesi i18n | KAPANDI (v0.11.0): 5 dil (tr/en/de/fr/es) statik site + CHANGELOG senkronu | Uluslararası erişim | M | — |
-| ✅ Prompt kütüphanesi | KAPANDI (v0.10.0): `docs/PROMPTS.md` (10 prompt, örnek çağrılı) | İlk değer dakikalar içinde | S | — |
-| ✅ good-first-issue + CONTRIBUTING genişletme | KAPANDI (v0.11.0): CONTRIBUTING 6 bölüm + bug/feature/PR issue formları | Katkı hunisi açılır | S | — |
+| ✅ Automatic tool reference | CLOSED (v0.10.0): [`TOOLS.md`](TOOLS.md) from the real surface (191 tools + 2 resources + 3 prompts) | Current catalog | S | — |
+| Example sessions (asciinema/GIF) in README | No visual proof | Convince in the first 10 seconds (star conversion) | S | P1 |
+| ◐ Docs site | GENERATED (v0.10.0): 7 static pages + 0 broken links | Searchable docs | M | P2 |
+| Pages deploy (site ready, not published) | `docs/site/` generated but not wired to GitHub Pages | Docs at a single URL | S | P2 |
+| ✅ Prompt library | CLOSED (v0.10.0): `docs/PROMPTS.md` (10 prompts with sample calls) | First value within minutes | S | — |
+| good-first-issue + CONTRIBUTING expansion | Single paragraph | Contribution funnel opens | S | P3 |
 
 ---
 
-**Önerilen sıra (açık kalanlar):** Frida canlı VM → self-hosted Windows runner →
-npm Trusted Publisher → asciinema/GIF örnek oturumlar → SEA tek-dosya exe → P3 araştırma.
-v0.11.0'da kapananlar: 5 dilli site i18n + `--check`, örnek oturum (metin), provenance
-+ SBOM release asset'i, Pages deploy, CONTRIBUTING + issue formları; v0.10.1'de kapananlar:
-ölü facade temizliği + golden DEX korpusu; v0.10.0'da kapananlar: I/J/K dalgalarının tamamı.
-
+**Suggested order (open items):** live Frida VM → runner → trusted publisher → example sessions → Pages deploy → P3 research.
+Closed in v0.10.1: dead facade cleanup + golden DEX corpus (marked ✅ above); closed in v0.10.0: all of waves I/J/K.

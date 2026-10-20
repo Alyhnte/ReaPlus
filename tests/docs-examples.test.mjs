@@ -279,11 +279,11 @@ describe("sayı senkronu: EXAMPLES.md güncel yüzeyi yansıtır", () => {
   function ozet(md) {
     const al = (re) => { const m = md.match(re); assert.ok(m, `${re} bulunamadı`); return Number(m[1]); };
     return {
-      arac: al(/^- Toplam araç: (\d+)$/m),
-      sema: al(/^- outputSchema taşıyan araç: (\d+)$/m),
-      ann: al(/^- annotations taşıyan araç: (\d+)$/m),
-      res: al(/^- Toplam resource: (\d+)$/m),
-      prompt: al(/^- Toplam prompt: (\d+)$/m),
+      arac: al(/^- Total tools: (\d+)$/m),
+      sema: al(/^- Tools with outputSchema: (\d+)$/m),
+      ann: al(/^- Tools with annotations: (\d+)$/m),
+      res: al(/^- Total resources: (\d+)$/m),
+      prompt: al(/^- Total prompts: (\d+)$/m),
     };
   }
 
@@ -291,11 +291,11 @@ describe("sayı senkronu: EXAMPLES.md güncel yüzeyi yansıtır", () => {
   it("araç/şema/resource/prompt sayıları TOOLS.md ile eşleşir", () => {
     const g = ozet(readFileSync(TOOLS_MD, "utf8"));
     const ornekler = readFileSync(ORNEKLER_MD, "utf8");
-    for (const [ad, deger] of [["araç", g.arac], ["outputSchema", g.sema], ["annotations", g.ann]]) {
-      assert.ok(ornekler.includes(`**${deger} ${ad}`), `EXAMPLES.md **${deger} ${ad} içermeli`);
+    for (const [ad, deger] of [["tools", g.arac], ["outputSchemas", g.sema], ["annotations", g.ann]]) {
+      assert.ok(ornekler.includes(`**${deger} ${ad}**`), `EXAMPLES.md **${deger} ${ad}** içermeli`);
     }
-    assert.ok(ornekler.includes(`${g.res} resource`), "resource sayısı geçmeli");
-    assert.ok(ornekler.includes(`${g.prompt} prompt`), "prompt sayısı geçmeli");
+    assert.ok(ornekler.includes(`${g.res} resources`), "resource sayısı geçmeli");
+    assert.ok(ornekler.includes(`${g.prompt} prompts`), "prompt sayısı geçmeli");
     // Kişisel yol sızıntısı yok (ev dizini / kullanıcı profili).
     assert.ok(!ornekler.includes(":\\Users\\"), "kullanıcı yolu sızmamalı");
     assert.ok(!ornekler.includes(":/Users/"), "kullanıcı yolu (/) sızmamalı");

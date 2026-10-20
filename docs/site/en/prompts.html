@@ -23,14 +23,15 @@
 </section>
 <main id="icerik"><div class="reveal">
 <h1>Prompt Library</h1>
-<h1 id="reaplus-prompt-library-10-ready-made-prompts">ReaPlus Prompt Library (10 ready-made prompts)</h1>
-<p>10 ready-made question patterns for an agent to ask rea-plus. Each prompt:
-<strong>Goal</strong> + <strong>Sample call</strong> (real MCP/<code>rea-plus-cli</code> form; field names match
-the generated reference <a href="tools.html"><code>TOOLS.md</code></a>) + <strong>Expected output</strong> kind.
+<h1 id="reaplus-prompt-library-10-ready-made-prompts--4-task-templates">ReaPlus Prompt Library (10 ready-made prompts + 4 task templates)</h1>
+<p>10 ready-made question patterns for an agent to ask rea-plus, plus 4 registered
+MCP task-template flows. Each prompt: <strong>Goal</strong> + <strong>Sample call</strong> (real
+MCP/<code>rea-plus-cli</code> form; field names match the generated reference
+<a href="tools.html"><code>TOOLS.md</code></a>) + <strong>Expected output</strong> kind.
 Surface: <strong>191 tools</strong>, <strong>187 outputSchemas</strong>, <strong>191 annotations</strong>, 2
 resources, 7 prompts.</p>
 <blockquote>Note: live-debug calls requiring <code>confirm:true</code> are not in this list; all
-10 prompts here are read-only/static flows.</blockquote>
+14 prompts here are read-only/static flows.</blockquote>
 <h2 id="1-triage--what-is-this-file-where-do-i-start">1) Triage — &quot;what is this file, where do I start?&quot;</h2>
 <p><strong>Goal:</strong> Classify an unknown file in one call and get the next-step plan.</p>
 <p><strong>Sample call:</strong></p>
@@ -120,8 +121,61 @@ catch regressions via test.</p>
 <p><strong>Expected output:</strong> node:test output (budget thresholds defined in
 <code>tests/perf-budget.test.mjs</code>); a threshold breach turns the test red,
 durations are reported in milliseconds on the console.</p>
+<h2 id="task-template-prompts-registered-in-mcp-4-flows">Task-template prompts (registered in MCP, 4 flows)</h2>
+<p>The following 4 prompts are registered via <code>prompts/list</code>; each returns only
+an <strong>ordered flow text</strong> (<code>promptSonuc</code>) and never calls a tool. <code>path</code> (or
+<code>eski</code>/<code>yeni</code>) is required, <code>focus</code> is optional. Every tool name is verified
+against <a href="tools.html"><code>TOOLS.md</code></a>. All flows skip live-debug steps that require
+<code>confirm:true</code> on VM/CI and never execute the sample.</p>
+<h3 id="11-pecrash-triage---how-do-i-inspect-a-crashing-pe-from-static-to-behavior">11) PE/crash triage - &quot;how do I inspect a crashing PE from static to behavior?&quot;</h3>
+<p><strong>Goal:</strong> Move a PE target through triage → static → crash evidence → behavior
+in order; when there is no crash record, state the gap without inventing
+behavior.</p>
+<p><strong>Sample call:</strong></p>
+<pre><code class="language-json">{ &quot;name&quot;: &quot;pe-crash-triage&quot;, &quot;arguments&quot;: { &quot;path&quot;: &quot;sample.exe&quot;, &quot;focus&quot;: &quot;high entropy&quot; } }</code></pre>
+<p><strong>Expected output:</strong> text flow: <code>rea_investigate</code> → <code>rea_pe_info</code> /
+<code>rea_pe_sections</code> / <code>rea_pe_imports</code> → <code>rea_crash_kayit_parse</code> /
+<code>rea_crash_ozet</code> / <code>rea_crash_timeline</code> / <code>rea_crash_hint</code> →
+<code>rea_behavior_full</code> / <code>rea_behavior_timeline</code> → <code>rea_pdb_yolu</code> (if present);
+the result includes the triage item, static findings, the strength of the
+crash evidence, and the behavior summary + a confidence level per finding.</p>
+<h3 id="12-elflinux-triage---how-do-i-scan-an-elf-target-for-symbols-and-gadgets">12) ELF/Linux triage - &quot;how do I scan an ELF target for symbols and gadgets?&quot;</h3>
+<p><strong>Goal:</strong> Collect segment/section layout, DWARF symbols, Go build info, and
+gadget candidates for an ELF/Linux target in order.</p>
+<p><strong>Sample call:</strong></p>
+<pre><code class="language-json">{ &quot;name&quot;: &quot;elf-linux-triage&quot;, &quot;arguments&quot;: { &quot;path&quot;: &quot;target.elf&quot; } }</code></pre>
+<p><strong>Expected output:</strong> text flow: <code>rea_investigate</code> → <code>rea_pwn_elf_layout</code> →
+<code>rea_dwarf_ozet</code> → <code>rea_go_buildinfo</code> / <code>rea_go_funclines</code> (if Go) →
+<code>rea_cutter_funcs</code> / <code>rea_cutter_strings</code> (or Ghidra: <code>rea_ghidra_analyze</code> →
+<code>rea_ghidra_funcs</code> / <code>rea_ghidra_strings</code>) → <code>rea_pwn_gadgets</code>; the result
+includes the ELF type + mitigation state (NX/PIE/RELRO/canary), symbol/gadget
+evidence, and a confidence level.</p>
+<h3 id="13-binary-diff---what-changed-between-two-versions-and-what-is-the-patch-impact">13) Binary diff - &quot;what changed between two versions, and what is the patch impact?&quot;</h3>
+<p><strong>Goal:</strong> Produce a function diff between two versions and decompile the
+changed functions to determine the patch's impact area.</p>
+<p><strong>Sample call:</strong></p>
+<pre><code class="language-json">{ &quot;name&quot;: &quot;binary-diff&quot;, &quot;arguments&quot;: { &quot;eski&quot;: &quot;v1.exe&quot;, &quot;yeni&quot;: &quot;v2.exe&quot;, &quot;focus&quot;: &quot;patch diff&quot; } }</code></pre>
+<p><strong>Expected output:</strong> text flow: <code>rea_investigate</code> (both versions) →
+<code>rea_bindiff_fonksiyonlar</code> (old + new) → <code>rea_bindiff_karsilastir</code> (input
+JSON: <code>{&quot;eski&quot;: &quot;&lt;old&gt;&quot;, &quot;yeni&quot;: &quot;&lt;new&gt;&quot;}</code>) → <code>rea_ghidra_vt</code> (if Ghidra is
+available) → <code>rea_ghidra_decompile</code> (changed function addresses); the result
+includes added / removed / changed functions + evidence per function
+(hash/signature/address) and the patch impact area.</p>
+<h3 id="14-evidence-report---how-do-i-turn-collected-evidence-into-a-report">14) Evidence report - &quot;how do I turn collected evidence into a report?&quot;</h3>
+<p><strong>Goal:</strong> Digest and verify the evidence bundle, close each finding's evidence
+chain with the obligation ledger, and report the readiness score + coverage
+ratio.</p>
+<p><strong>Sample call:</strong></p>
+<pre><code class="language-json">{ &quot;name&quot;: &quot;evidence-report&quot;, &quot;arguments&quot;: { &quot;path&quot;: &quot;sample.bin&quot;, &quot;focus&quot;: &quot;report coverage&quot; } }</code></pre>
+<p><strong>Expected output:</strong> text flow: <code>rea_investigate</code> → <code>rea_evidence_bundle</code> →
+<code>rea_evidence_verify</code> → <code>rea_obligation_ledger</code> / <code>rea_obligation_advance</code> /
+<code>rea_obligation_verify</code> / <code>rea_obligation_close</code> → <code>rea_readiness</code> /
+<code>rea_coverage</code> → <code>rea_missing_reason</code> (missing tool); the result includes an
+executive summary, a finding list (finding + evidence + confidence), the
+evidence digest, obligation-chain state, the readiness score, and the coverage
+ratio.</p>
 </div></main>
-<footer class="altbilgi"><p>ReaPlus Docs — static site. Generate: <code>node scripts/site-uret.mjs</code> · Numbers from docs/TOOLS.md summary (real run).</p></footer>
+<footer class="altbilgi"><p>ReaPlus Docs — static site. Generate: <code>node scripts/site-uret.mjs</code> · Numbers from the docs/i18n/tr/TOOLS.md summary (real run).</p></footer>
 </div>
 <script>
 document.documentElement.classList.add("js");

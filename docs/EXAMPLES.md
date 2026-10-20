@@ -1,22 +1,22 @@
-# ReaPlus Örnek Prompt Kütüphanesi
+# ReaPlus Example Prompt Library
 
-5 hazır senaryo: komut + beklenen çıktı + ne anlama geldiği. Buradaki **her
-komut ve her sayı gerçek koşudan alınmıştır** (uydurma çıktı yok);
-`tests/docs-examples.test.mjs` hepsini çalıştırıp doğrular.
+5 ready-made scenarios: command + expected output + what it means. **Every
+command and every number here comes from a real run** (no fabricated output);
+`tests/docs-examples.test.mjs` executes and verifies all of them.
 
-Yüzey (üretilmiş referans [`TOOLS.md`](TOOLS.md) özeti): **191 araç**,
-**187 outputSchema**, **191 annotations**, 2 resource, 7 prompt.
+Surface (generated reference [`TOOLS.md`](TOOLS.md) summary): **191 tools**,
+**187 outputSchemas**, **191 annotations**, 2 resources, 7 prompts.
 
-Ön koşul: `npm run build` (örnekler `dist/` üstünden koşar). Corpus
-dosyaları salt okunur (`tests/corpus/`); hiçbir örnek onları değiştirmez.
+Prerequisite: `npm run build` (examples run against `dist/`). Corpus
+files are read-only (`tests/corpus/`); no example modifies them.
 
-## 1) PE triage — "bu exe nedir, ne çağırır?"
+## 1) PE triage — "what is this exe, what does it call?"
 
 ```bash
 node dist/cli/index.js analyze-pe tests/corpus/mini_pe_x64.exe
 ```
 
-Beklenen çıktı (gerçek koşu):
+Expected output (real run):
 
 ```text
 dosya: tests/corpus/mini_pe_x64.exe
@@ -25,9 +25,9 @@ dll (1): kernel32.dll
 fonksiyon (1): kernel32.dll!ExitProcess
 ```
 
-Ne anlama gelir: `0x8664` = x64 COFF, tek `.text` bölümü, giriş `0x1000`;
-tek import `kernel32.dll!ExitProcess` — minimal bir test ikilisi profili.
-Makineye okunur hali:
+What it means: `0x8664` = x64 COFF, a single `.text` section, entry at
+`0x1000`; a single import `kernel32.dll!ExitProcess` — the profile of a
+minimal test binary. Machine-readable form:
 
 ```bash
 node dist/cli/index.js analyze-pe tests/corpus/mini_pe_x64.exe --json
@@ -41,32 +41,33 @@ node dist/cli/index.js analyze-pe tests/corpus/mini_pe_x64.exe --json
  "bolumler":[{"ad":".text","vsize":4096,"vaddr":4096}]}
 ```
 
-## 2) APK manifest — "bu paketin adı, izinleri, aktiviteleri?"
+## 2) APK manifest — "what are this package's name, permissions, activities?"
 
-`jadx` kuruluysa (yoksa `capability_unsupported` + kurulum ipucu döner,
-uydurma manifest üretilmez):
+If `jadx` is installed (otherwise it returns `capability_unsupported` + an
+install hint; no fabricated manifest is generated):
 
 ```bash
 node -e "import('./dist/rea-domains/android/JadxBridge.js').then(m=>console.log(JSON.stringify(m.rea_jadx_manifest('tests/corpus/sahte.apk'))))"
 ```
 
-Beklenen çıktı (gerçek koşu, jadx 1.x):
+Expected output (real run, jadx 1.x):
 
 ```json
 {"ok":true,"arac":"rea_jadx_manifest","apk":"tests/corpus/sahte.apk",
  "paket":"com.ornek.sahte","izinler":[],"aktiviteler":[]}
 ```
 
-Ne anlama gelir: jadx `--no-src` ile kaynakları açıp `AndroidManifest.xml`'i
-parse eder; sahte korpus APK'sında paket adı var ama izin/aktivite yok —
-gerçek bir uygulamada burada `INTERNET` gibi izinler ve `.MainActivity`
-gibi aktiviteler listelenir. `rea_jadx_classes` ile sınıf listesine,
-`rea_jadx_decompile` ile tek sınıf kaynağına inilir.
+What it means: jadx unpacks sources with `--no-src` and parses
+`AndroidManifest.xml`; the fake corpus APK has a package name but no
+permissions/activities — in a real app, permissions like `INTERNET` and
+activities like `.MainActivity` would be listed here. Drill into the class
+list with `rea_jadx_classes`, into a single class's source with
+`rea_jadx_decompile`.
 
-## 3) Davranış profili — "olayları zaman çizgisine diz"
+## 3) Behavior profile — "lay events on a timeline"
 
-Saf fonksiyon, yürütme yok — API/syscall/net/dosya/process olaylarını
-kaynak önceliğine dizer, ilk/son + top-5 API özeti üretir:
+Pure function, no execution — orders API/syscall/net/file/process events by
+source priority and produces a first/last + top-5 API summary:
 
 ```bash
 node -e "import('./dist/rea-domains/behavior/BehaviorTimeline.js').then(m=>console.log(m.rea_behavior_timeline([
@@ -77,71 +78,74 @@ node -e "import('./dist/rea-domains/behavior/BehaviorTimeline.js').then(m=>conso
 ]).summary))"
 ```
 
-Beklenen çıktı (gerçek koşu):
+Expected output (real run):
 
 ```text
 4 olay api@2 -> process@4 top_api=CreateFileW
 ```
 
-Ne anlama gelir: 4 olay kronolojiye değil **kaynak önceliğine**
-(api > syscall > net > dosya > process) dizilir; `sayılar`
-`{api:2, net:1, process:1}`, `top_api` en sık API'yi verir. Boş/eksik
-listede `capability_unsupported` döner — boş timeline uydurulmaz.
+What it means: the 4 events are ordered not chronologically but by **source
+priority** (api > syscall > net > dosya > process); `sayılar` is
+`{api:2, net:1, process:1}` and `top_api` gives the most frequent API. An
+empty/missing list returns `capability_unsupported` — no empty timeline is
+fabricated.
 
-## 4) Repo tarama — "bu dizinde ne tür dosyalar var?"
+## 4) Repo scan — "what kinds of files are in this directory?"
 
-Sihir bayt + uzantı ipucuyla PE/ELF/APK/JS/WASM tespiti, motor önerisi ve
-5 dosyalık plan (tamamen offline, `.git`/`node_modules`/`dist` atlanır):
+PE/ELF/APK/JS/WASM detection via magic bytes + extension hints, engine
+suggestion, and a 5-file plan (fully offline; `.git`/`node_modules`/`dist`
+are skipped):
 
 ```bash
 node -e "import('node:fs').then(async fs=>{const {rea_scan_repo}=await import('./dist/rea-domains/reposcan/RepoScan.js');
-const r=await rea_scan_repo('<hedef-dizin>');console.log(r.summary,JSON.stringify(r.details.tipler));})"
+const r=await rea_scan_repo('<target-dir>');console.log(r.summary,JSON.stringify(r.details.tipler));})"
 ```
 
-5 sihirli dosyalı bir dizinde gerçek koşu:
+Real run in a directory with 5 magic-byte files:
 
 ```text
 5 dosya, 5 tip {"pe":1,"elf":1,"apk":1,"js":1,"wasm":1}
 ```
 
-Ne anlama gelir: her dosya `yol/tip/motor` üçlüsüyle listelenir
-(örn. `.exe` → `pe`/`cutter`, `.apk` → `apk`/`jadx`, `.elf` →
-`elf`/`radare2`); `planlar` her dosya için önerilen sonraki aracı verir.
-Hedefsiz/boş dizinde boş liste (`ok:true`), yok dizinde
+What it means: each file is listed as a `yol/tip/motor` triple (e.g. `.exe`
+→ `pe`/`cutter`, `.apk` → `apk`/`jadx`, `.elf` → `elf`/`radare2`);
+`planlar` gives the suggested next tool per file. A targetless/empty
+directory yields an empty list (`ok:true`); a missing directory yields
 `capability_unsupported`.
 
-## 5) PDB indirme — "debug kaydından sembole"
+## 5) PDB download — "from debug record to symbols"
 
-Adım 1 — CodeView RSDS kaydından PDB kimliğini çöz (salt okunur):
+Step 1 — Resolve the PDB identity from the CodeView RSDS record (read-only):
 
 ```bash
-node -e "import('./dist/rea-domains/typedef/PdbReader.js').then(m=>console.log(JSON.stringify(m.rea_pdb_yolu('<debug-bilgili.exe>'))))"
+node -e "import('./dist/rea-domains/typedef/PdbReader.js').then(m=>console.log(JSON.stringify(m.rea_pdb_yolu('<debug-info.exe>'))))"
 ```
 
-Debug bilgili bir PE'de gerçek koşu (yerel üretilmiş örnek):
+Real run on a PE with debug info (locally generated sample):
 
 ```json
 {"ok":true,"arac":"rea_pdb_yolu","pdb":"ornek_test.pdb",
  "guid":"ABCDEF01-2345-6789-ABCD-EF0123456789","yas":1}
 ```
 
-Debug kaydı yoksa `bulunamadi` döner (`PDB debug kaydı yok`) — uydurma
-GUID üretilmez.
+Without a debug record it returns `bulunamadi` (`PDB debug kaydı yok`) — no
+fabricated GUID is generated.
 
-Adım 2 — Microsoft symbol server düzeninde indir + bütünlük + önbellek:
+Step 2 — Download in Microsoft symbol server layout + integrity + cache:
 
 ```text
 <server>/ornek_test.pdb/ABCDEF0123456789ABCDEF01234567891/ornek_test.pdb
 ```
 
-Ne anlama gelir: URL `Ad/GUID-tiresiz+YAŞ/Ad` düzenindedir; inen dosya
-MSF imzası + GUID+yaş deseniyle doğrulanır, `<önbellek>/Ad/SİG/Ad`
-altına yazılır; ikinci çağrı ağa gitmeden `cache:true` döner. Bozuk
-içerik `butunluk_hatasi` ile reddedilir, yarım dosya yazılmaz; ağ yoksa
-`ag_hatasi` — sahte PDB asla yazılmaz. Önbellek dizini
-`REAPLUS_SYMBOL_CACHE` ile taşınır.
+What it means: the URL follows the `Name/GUID-dashless+AGE/Name` layout; the
+downloaded file is verified against the MSF signature + GUID+age pattern
+and written under `<cache>/Name/SIG/Name`; the second call returns
+`cache:true` without hitting the network. Corrupt content is rejected with
+`butunluk_hatasi` and no partial file is written; without network,
+`ag_hatasi` — a fake PDB is never written. The cache directory can be moved
+with `REAPLUS_SYMBOL_CACHE`.
 
-## Sonraki adımlar
+## Next steps
 
-- Tam araç listesi: [`TOOLS.md`](TOOLS.md) (üretilmiş, 187 araç).
-- Doğrulama akışı: [`VERIFY.md`](VERIFY.md); katkı akışı: `CONTRIBUTING.md`.
+- Full tool list: [`TOOLS.md`](TOOLS.md) (generated, 191 tools).
+- Verification flow: [`VERIFY.md`](VERIFY.md); contribution flow: `CONTRIBUTING.md`.

@@ -1,1862 +1,1862 @@
-# ReaPlus Araç Referansı
+# ReaPlus Tool Reference
 
-> Bu dosya otomatik üretilir; elle düzenlemeyin. Kaynak: derlenmiş sunucunun
-> (`dist/server.js`) gerçek MCP yüzeyi. Yeniden üretmek için:
+> This file is auto-generated; do not edit by hand. Source: the real MCP
+> surface of the compiled server (`dist/server.js`). To regenerate:
 > `npm run build && node scripts/generate-tool-reference.mjs`
 
-## Özet
+## Summary
 
-- Sunucu: `rea-plus` 0.13.0
-- Toplam araç: 191
-- Toplam resource: 2
-- Toplam prompt: 7
-- outputSchema taşıyan araç: 187
-- annotations taşıyan araç: 191
+- Server: `rea-plus` 0.13.0
+- Total tools: 191
+- Total resources: 2
+- Total prompts: 7
+- Tools with outputSchema: 187
+- Tools with annotations: 191
 
-## Araçlar
+## Tools
 
 ### `close_target`
 
 Release the binary target (and its radare2 process) held by a session.
 
-- Girdi alanları:
-  - `session_id` (string, zorunlu) — Application session id. Not an MCP protocol session.
-- outputSchema: var (alanlar: closed, session_id)
-- annotations: var (destructiveHint=true, openWorldHint=true, readOnlyHint=false)
+- Input fields:
+  - `session_id` (string, required) — Application session id. Not an MCP protocol session.
+- outputSchema: present (fields: closed, session_id)
+- annotations: present (destructiveHint=true, openWorldHint=true, readOnlyHint=false)
 
 ### `debug_attach`
 
 Attach by pid, or, on a frida session, connect to a listening Frida Gadget (gadget host:port) or a running mobile package on USB (usb + package). The target keeps running after debug_close.
 
-- Girdi alanları:
-  - `auto_analyze` (boolean, opsiyonel) — Run x64dbg auto-analysis after attaching (slower).
-  - `break_on_entry` (boolean, opsiyonel) — Pause the debuggee right after attaching.
-  - `gadget` (string, opsiyonel) — Frida Gadget listen address host:port. For targets that cannot be attached by pid.
-  - `package` (string, opsiyonel) — Process or mobile package name. Defaults to Gadget. Required with usb.
-  - `pid` (integer, opsiyonel) — Live process id. Required unless gadget or usb is set.
-  - `session_id` (string, zorunlu) — Application session id. Not an MCP protocol session.
-  - `usb` (boolean, opsiyonel) — Use the USB Frida device (phone or tablet) instead of a host:port Gadget.
-- outputSchema: var (alanlar: architecture, attached, engine, entry_point, mode, module_base, module_entry, path, pid, session_id)
-- annotations: var (destructiveHint=true, openWorldHint=true, readOnlyHint=false)
+- Input fields:
+  - `auto_analyze` (boolean, optional) — Run x64dbg auto-analysis after attaching (slower).
+  - `break_on_entry` (boolean, optional) — Pause the debuggee right after attaching.
+  - `gadget` (string, optional) — Frida Gadget listen address host:port. For targets that cannot be attached by pid.
+  - `package` (string, optional) — Process or mobile package name. Defaults to Gadget. Required with usb.
+  - `pid` (integer, optional) — Live process id. Required unless gadget or usb is set.
+  - `session_id` (string, required) — Application session id. Not an MCP protocol session.
+  - `usb` (boolean, optional) — Use the USB Frida device (phone or tablet) instead of a host:port Gadget.
+- outputSchema: present (fields: architecture, attached, engine, entry_point, mode, module_base, module_entry, path, pid, session_id)
+- annotations: present (destructiveHint=true, openWorldHint=true, readOnlyHint=false)
 
 ### `debug_breakpoint`
 
 Set, remove, or list breakpoints. Address may be hex, a number, or an x64dbg expression.
 
-- Girdi alanları:
-  - `action` (enum, opsiyonel)
-  - `address` (string | number, opsiyonel) — Required for set/remove; ignored for list.
-  - `condition` (string, opsiyonel) — Break condition expression (set only).
-  - `log_text` (string, opsiyonel) — Log text on hit (set only).
-  - `name` (string, opsiyonel) — Breakpoint name (set only).
-  - `session_id` (string, zorunlu) — Application session id. Not an MCP protocol session.
-  - `type` (enum, opsiyonel)
-- outputSchema: var
-- annotations: var (destructiveHint=true, openWorldHint=true, readOnlyHint=false)
+- Input fields:
+  - `action` (enum, optional)
+  - `address` (string | number, optional) — Required for set/remove; ignored for list.
+  - `condition` (string, optional) — Break condition expression (set only).
+  - `log_text` (string, optional) — Log text on hit (set only).
+  - `name` (string, optional) — Breakpoint name (set only).
+  - `session_id` (string, required) — Application session id. Not an MCP protocol session.
+  - `type` (enum, optional)
+- outputSchema: present
+- annotations: present (destructiveHint=true, openWorldHint=true, readOnlyHint=false)
 
 ### `debug_callstack`
 
 Read the current thread's call stack (address, module, function per frame).
 
-- Girdi alanları:
-  - `max_frames` (integer, opsiyonel) — Max frames returned (default 50).
-  - `session_id` (string, zorunlu) — Application session id. Not an MCP protocol session.
-- outputSchema: var (alanlar: frames, session_id, threadId)
-- annotations: var (openWorldHint=true, readOnlyHint=false)
+- Input fields:
+  - `max_frames` (integer, optional) — Max frames returned (default 50).
+  - `session_id` (string, required) — Application session id. Not an MCP protocol session.
+- outputSchema: present (fields: frames, session_id, threadId)
+- annotations: present (openWorldHint=true, readOnlyHint=false)
 
 ### `debug_close`
 
 Tear down the hidden x64dbg process held by a session. Launched targets are stopped; attached targets are detached and left running.
 
-- Girdi alanları:
-  - `session_id` (string, zorunlu) — Application session id. Not an MCP protocol session.
-- outputSchema: var (alanlar: closed, session_id)
-- annotations: var (destructiveHint=true, openWorldHint=true, readOnlyHint=false)
+- Input fields:
+  - `session_id` (string, required) — Application session id. Not an MCP protocol session.
+- outputSchema: present (fields: closed, session_id)
+- annotations: present (destructiveHint=true, openWorldHint=true, readOnlyHint=false)
 
 ### `debug_code`
 
 Live code: disassemble at an address (default: the stopped instruction pointer), assemble one instruction, or run until an address. Requires confirm:true.
 
-- Girdi alanları:
-  - `action` (enum, zorunlu)
-  - `address` (string | number, opsiyonel) — Address as hex ("0x140001000"), decimal, or an engine expression ("cip").
-  - `confirm` (boolean, opsiyonel) — Must be true or the tool returns confirmation_required and does not touch the debuggee.
-  - `count` (integer, opsiyonel) — Instruction count for disassemble (default 12).
-  - `instruction` (string, opsiyonel) — Single instruction for assemble.
-  - `session_id` (string, zorunlu) — Application session id. Not an MCP protocol session.
-- outputSchema: var
-- annotations: var (destructiveHint=true, openWorldHint=true, readOnlyHint=false)
+- Input fields:
+  - `action` (enum, required)
+  - `address` (string | number, optional) — Address as hex ("0x140001000"), decimal, or an engine expression ("cip").
+  - `confirm` (boolean, optional) — Must be true or the tool returns confirmation_required and does not touch the debuggee.
+  - `count` (integer, optional) — Instruction count for disassemble (default 12).
+  - `instruction` (string, optional) — Single instruction for assemble.
+  - `session_id` (string, required) — Application session id. Not an MCP protocol session.
+- outputSchema: present
+- annotations: present (destructiveHint=true, openWorldHint=true, readOnlyHint=false)
 
 ### `debug_continue`
 
 Resume the debuggee until the next breakpoint, single-step, or exit. The stop posts an event (debug.breakpoint_hit / debug.exited / debug.paused) retrievable via events_pull.
 
-- Girdi alanları:
-  - `session_id` (string, zorunlu) — Application session id. Not an MCP protocol session.
-- outputSchema: var (alanlar: address, reason, session_id)
-- annotations: var (destructiveHint=true, openWorldHint=true, readOnlyHint=false)
+- Input fields:
+  - `session_id` (string, required) — Application session id. Not an MCP protocol session.
+- outputSchema: present (fields: address, reason, session_id)
+- annotations: present (destructiveHint=true, openWorldHint=true, readOnlyHint=false)
 
 ### `debug_memory`
 
 Live process memory: read, search, or dump. Requires confirm:true. Without it the call returns confirmation_required and does not touch the debuggee.
 
-- Girdi alanları:
-  - `action` (enum, zorunlu)
-  - `address` (string | number, opsiyonel) — Read/dump address.
-  - `confirm` (boolean, opsiyonel) — Must be true or the tool returns confirmation_required and does not touch the debuggee.
-  - `length` (integer, opsiyonel) — Search length in bytes (default 4096, or the main module).
-  - `max_results` (integer, opsiyonel)
-  - `pattern` (string, opsiyonel) — Search pattern. Hex bytes, or ascii when search_type is ascii.
-  - `search_type` (enum, opsiyonel)
-  - `session_id` (string, zorunlu) — Application session id. Not an MCP protocol session.
-  - `size` (integer, opsiyonel) — Byte count for read (default 64) or dump (default 256).
-  - `start_address` (string | number, opsiyonel) — Address as hex ("0x140001000"), decimal, or an engine expression ("cip").
-- outputSchema: var
-- annotations: var (openWorldHint=true, readOnlyHint=false)
+- Input fields:
+  - `action` (enum, required)
+  - `address` (string | number, optional) — Read/dump address.
+  - `confirm` (boolean, optional) — Must be true or the tool returns confirmation_required and does not touch the debuggee.
+  - `length` (integer, optional) — Search length in bytes (default 4096, or the main module).
+  - `max_results` (integer, optional)
+  - `pattern` (string, optional) — Search pattern. Hex bytes, or ascii when search_type is ascii.
+  - `search_type` (enum, optional)
+  - `session_id` (string, required) — Application session id. Not an MCP protocol session.
+  - `size` (integer, optional) — Byte count for read (default 64) or dump (default 256).
+  - `start_address` (string | number, optional) — Address as hex ("0x140001000"), decimal, or an engine expression ("cip").
+- outputSchema: present
+- annotations: present (openWorldHint=true, readOnlyHint=false)
 
 ### `debug_open`
 
 Open a PE target for live debugging on this session's debug engine. Auto-detects x86/x64 and leaves the debuggee paused. x64dbg breaks on entry; cdb stops at the initial loader breakpoint and reports the PE entry.
 
-- Girdi alanları:
-  - `auto_analyze` (boolean, opsiyonel) — Run x64dbg auto-analysis after loading (slower).
-  - `break_on_entry` (boolean, opsiyonel) — Stop at the entry point after loading.
-  - `command_line_args` (string, opsiyonel) — Command line arguments for the debuggee.
-  - `path` (string, zorunlu) — Filesystem path of the PE binary to debug.
-  - `session_id` (string, zorunlu) — Application session id. Not an MCP protocol session.
-- outputSchema: var (alanlar: architecture, attached, engine, entry_point, mode, module_base, module_entry, opened, path, pid, session_id)
-- annotations: var (destructiveHint=true, openWorldHint=true, readOnlyHint=false)
+- Input fields:
+  - `auto_analyze` (boolean, optional) — Run x64dbg auto-analysis after loading (slower).
+  - `break_on_entry` (boolean, optional) — Stop at the entry point after loading.
+  - `command_line_args` (string, optional) — Command line arguments for the debuggee.
+  - `path` (string, required) — Filesystem path of the PE binary to debug.
+  - `session_id` (string, required) — Application session id. Not an MCP protocol session.
+- outputSchema: present (fields: architecture, attached, engine, entry_point, mode, module_base, module_entry, opened, path, pid, session_id)
+- annotations: present (destructiveHint=true, openWorldHint=true, readOnlyHint=false)
 
 ### `debug_pause`
 
 Asynchronously break a running debuggee. Idempotent when already paused.
 
-- Girdi alanları:
-  - `session_id` (string, zorunlu) — Application session id. Not an MCP protocol session.
-- outputSchema: var (alanlar: address, reason, session_id)
-- annotations: var (destructiveHint=true, openWorldHint=true, readOnlyHint=false)
+- Input fields:
+  - `session_id` (string, required) — Application session id. Not an MCP protocol session.
+- outputSchema: present (fields: address, reason, session_id)
+- annotations: present (destructiveHint=true, openWorldHint=true, readOnlyHint=false)
 
 ### `debug_plugin`
 
 x64dbg Scylla and ScyllaHide. status reports files on disk. dump and hide do not open a window: a missing headless plugin returns engine_unavailable with the plugins path. Requires confirm:true. cdb and frida return capability_unsupported.
 
-- Girdi alanları:
-  - `action` (enum, zorunlu)
-  - `confirm` (boolean, opsiyonel) — Must be true or the tool returns confirmation_required and does not touch the debuggee.
-  - `session_id` (string, zorunlu) — Application session id. Not an MCP protocol session.
-- outputSchema: var
-- annotations: var (openWorldHint=true, readOnlyHint=false)
+- Input fields:
+  - `action` (enum, required)
+  - `confirm` (boolean, optional) — Must be true or the tool returns confirmation_required and does not touch the debuggee.
+  - `session_id` (string, required) — Application session id. Not an MCP protocol session.
+- outputSchema: present
+- annotations: present (openWorldHint=true, readOnlyHint=false)
 
 ### `debug_registers`
 
 Read debuggee registers (general + flags; segment/debug optionally).
 
-- Girdi alanları:
-  - `include_debug` (boolean, opsiyonel) — Include debug registers.
-  - `include_segment` (boolean, opsiyonel) — Include segment registers.
-  - `session_id` (string, zorunlu) — Application session id. Not an MCP protocol session.
-- outputSchema: var (alanlar: debug, flags, general, segment, session_id)
-- annotations: var (openWorldHint=true, readOnlyHint=false)
+- Input fields:
+  - `include_debug` (boolean, optional) — Include debug registers.
+  - `include_segment` (boolean, optional) — Include segment registers.
+  - `session_id` (string, required) — Application session id. Not an MCP protocol session.
+- outputSchema: present (fields: debug, flags, general, segment, session_id)
+- annotations: present (openWorldHint=true, readOnlyHint=false)
 
 ### `debug_state`
 
 Report live debug state (running/paused/terminated + pause reason) and the open target, if any.
 
-- Girdi alanları:
-  - `session_id` (string, zorunlu) — Application session id. Not an MCP protocol session.
-- outputSchema: var
-- annotations: var (openWorldHint=true, readOnlyHint=false)
+- Input fields:
+  - `session_id` (string, required) — Application session id. Not an MCP protocol session.
+- outputSchema: present
+- annotations: present (openWorldHint=true, readOnlyHint=false)
 
 ### `debug_step`
 
 Single-step the debuggee (into or over calls) and report the new location.
 
-- Girdi alanları:
-  - `count` (integer, opsiyonel) — Steps to take (default 1).
-  - `kind` (enum, opsiyonel)
-  - `session_id` (string, zorunlu) — Application session id. Not an MCP protocol session.
-- outputSchema: var (alanlar: address, disassembly, function, kind, module, registers, session_id)
-- annotations: var (destructiveHint=true, openWorldHint=true, readOnlyHint=false)
+- Input fields:
+  - `count` (integer, optional) — Steps to take (default 1).
+  - `kind` (enum, optional)
+  - `session_id` (string, required) — Application session id. Not an MCP protocol session.
+- outputSchema: present (fields: address, disassembly, function, kind, module, registers, session_id)
+- annotations: present (destructiveHint=true, openWorldHint=true, readOnlyHint=false)
 
 ### `debug_thread`
 
 Live threads: list, select, freeze, thaw, or read one thread's context. The id is the value returned by list (cdb index, x64dbg/frida OS thread id). Requires confirm:true. Frida has no suspend or switch API.
 
-- Girdi alanları:
-  - `action` (enum, zorunlu)
-  - `confirm` (boolean, opsiyonel) — Must be true or the tool returns confirmation_required and does not touch the debuggee.
-  - `session_id` (string, zorunlu) — Application session id. Not an MCP protocol session.
-  - `thread_id` (integer, opsiyonel)
-- outputSchema: var
-- annotations: var (destructiveHint=true, openWorldHint=true, readOnlyHint=false)
+- Input fields:
+  - `action` (enum, required)
+  - `confirm` (boolean, optional) — Must be true or the tool returns confirmation_required and does not touch the debuggee.
+  - `session_id` (string, required) — Application session id. Not an MCP protocol session.
+  - `thread_id` (integer, optional)
+- outputSchema: present
+- annotations: present (destructiveHint=true, openWorldHint=true, readOnlyHint=false)
 
 ### `debug_time`
 
 Checkpoint snapshot, the checkpoint timeline, and rewind of one checkpoint. A checkpoint is the active thread's registers, the thread list, and one memory window. Requires confirm:true.
 
-- Girdi alanları:
-  - `action` (enum, zorunlu)
-  - `checkpoint_id` (string, opsiyonel)
-  - `confirm` (boolean, opsiyonel) — Must be true or the tool returns confirmation_required and does not touch the debuggee.
-  - `memory_size` (integer, opsiyonel) — Bytes captured at the instruction pointer (default 64).
-  - `session_id` (string, zorunlu) — Application session id. Not an MCP protocol session.
-- outputSchema: var
-- annotations: var (destructiveHint=true, openWorldHint=true, readOnlyHint=false)
+- Input fields:
+  - `action` (enum, required)
+  - `checkpoint_id` (string, optional)
+  - `confirm` (boolean, optional) — Must be true or the tool returns confirmation_required and does not touch the debuggee.
+  - `memory_size` (integer, optional) — Bytes captured at the instruction pointer (default 64).
+  - `session_id` (string, required) — Application session id. Not an MCP protocol session.
+- outputSchema: present
+- annotations: present (destructiveHint=true, openWorldHint=true, readOnlyHint=false)
 
 ### `disassemble`
 
 Disassemble instructions at an address (linear, `count` ops) or a whole function. Defaults to the entry function.
 
-- Girdi alanları:
-  - `address` (string | number, opsiyonel) — Target address as hex ("0x400200"), decimal, or flag name ("entry0").
-  - `count` (integer, opsiyonel) — Ops for address mode (default 32).
-  - `function` (string, opsiyonel) — Function name or address, e.g. "entry0".
-  - `session_id` (string, zorunlu) — Application session id. Not an MCP protocol session.
-- outputSchema: var (alanlar: count, location, ops, session_id, text)
-- annotations: var (openWorldHint=true, readOnlyHint=false)
+- Input fields:
+  - `address` (string | number, optional) — Target address as hex ("0x400200"), decimal, or flag name ("entry0").
+  - `count` (integer, optional) — Ops for address mode (default 32).
+  - `function` (string, optional) — Function name or address, e.g. "entry0".
+  - `session_id` (string, required) — Application session id. Not an MCP protocol session.
+- outputSchema: present (fields: count, location, ops, session_id, text)
+- annotations: present (openWorldHint=true, readOnlyHint=false)
 
 ### `dump`
 
 Read raw bytes at an address as hexdump text or a JSON byte array.
 
-- Girdi alanları:
-  - `address` (string | number, zorunlu) — Target address as hex ("0x400200"), decimal, or flag name ("entry0").
-  - `format` (enum, opsiyonel)
-  - `length` (integer, opsiyonel) — Bytes to read (default 128).
-  - `session_id` (string, zorunlu) — Application session id. Not an MCP protocol session.
-- outputSchema: var (alanlar: address, bytes, format, length, session_id, text)
-- annotations: var (openWorldHint=true, readOnlyHint=false)
+- Input fields:
+  - `address` (string | number, required) — Target address as hex ("0x400200"), decimal, or flag name ("entry0").
+  - `format` (enum, optional)
+  - `length` (integer, optional) — Bytes to read (default 128).
+  - `session_id` (string, required) — Application session id. Not an MCP protocol session.
+- outputSchema: present (fields: address, bytes, format, length, session_id, text)
+- annotations: present (openWorldHint=true, readOnlyHint=false)
 
 ### `events_pull`
 
 Pull events stored for one application session since a sequence number. This does not subscribe to push notifications.
 
-- Girdi alanları:
-  - `after` (integer, opsiyonel) — Return events with seq greater than this.
-  - `limit` (integer, opsiyonel)
-  - `session_id` (string, zorunlu) — Application session id. Not an MCP protocol session.
-- outputSchema: var (alanlar: events, retainedFrom, session_id)
-- annotations: var (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)
+- Input fields:
+  - `after` (integer, optional) — Return events with seq greater than this.
+  - `limit` (integer, optional)
+  - `session_id` (string, required) — Application session id. Not an MCP protocol session.
+- outputSchema: present (fields: events, retainedFrom, session_id)
+- annotations: present (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)
 
 ### `explain`
 
 Short Turkish explanation of an assembly window: what the region does, where it jumps, and which calls notify the user or the system. Pass instructions already disassembled, or a session_id. A live debug session is read only when confirm is true. Call this when the user asks what the assembly means.
 
-- Girdi alanları:
-  - `address` (string | number, opsiyonel) — Address to disassemble when instructions are omitted.
-  - `confirm` (boolean, opsiyonel) — Required only when explain itself disassembles a live debug session. Pasted instructions skip this.
-  - `count` (integer, opsiyonel) — How many instructions to read (default 16).
-  - `instructions` (object[], opsiyonel) — Already fetched ops. When set, the debugger is not called.
-  - `session_id` (string, opsiyonel) — Application session id. Not an MCP protocol session.
-- outputSchema: var (alanlar: atlamalar, bildirimler, cagrilar, dil, gosterilen, kaynak, komut_sayisi, ozet, satirlar)
-- annotations: var (openWorldHint=true, readOnlyHint=false)
+- Input fields:
+  - `address` (string | number, optional) — Address to disassemble when instructions are omitted.
+  - `confirm` (boolean, optional) — Required only when explain itself disassembles a live debug session. Pasted instructions skip this.
+  - `count` (integer, optional) — How many instructions to read (default 16).
+  - `instructions` (object[], optional) — Already fetched ops. When set, the debugger is not called.
+  - `session_id` (string, optional) — Application session id. Not an MCP protocol session.
+- outputSchema: present (fields: atlamalar, bildirimler, cagrilar, dil, gosterilen, kaynak, komut_sayisi, ozet, satirlar)
+- annotations: present (openWorldHint=true, readOnlyHint=false)
 
 ### `get_cfg`
 
 Control-flow graph of a function as JSON and/or Graphviz DOT. Defaults to the entry function.
 
-- Girdi alanları:
-  - `address` (string | number, opsiyonel) — Target address as hex ("0x400200"), decimal, or flag name ("entry0").
-  - `format` (enum, opsiyonel)
-  - `function` (string, opsiyonel) — Function name or address, e.g. "entry0".
-  - `session_id` (string, zorunlu) — Application session id. Not an MCP protocol session.
-- outputSchema: var (alanlar: dot, function, json, location, session_id)
-- annotations: var (openWorldHint=true, readOnlyHint=false)
+- Input fields:
+  - `address` (string | number, optional) — Target address as hex ("0x400200"), decimal, or flag name ("entry0").
+  - `format` (enum, optional)
+  - `function` (string, optional) — Function name or address, e.g. "entry0".
+  - `session_id` (string, required) — Application session id. Not an MCP protocol session.
+- outputSchema: present (fields: dot, function, json, location, session_id)
+- annotations: present (openWorldHint=true, readOnlyHint=false)
 
 ### `health`
 
 Report bridge liveness. Does not touch a debugger engine.
 
-- Girdi alanları: yok
-- outputSchema: var (alanlar: name, protocol, sessions, status)
-- annotations: var (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)
+- Input fields: none
+- outputSchema: present (fields: name, protocol, sessions, status)
+- annotations: present (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)
 
 ### `open_target`
 
 Open a binary target for static analysis in a radare2 session. Only mode 'static' is supported; anything else is a capability error. Requires r2 on PATH.
 
-- Girdi alanları:
-  - `mode` (string, opsiyonel) — Analysis mode. Only "static" is supported.
-  - `path` (string, zorunlu) — Filesystem path of the binary to analyze.
-  - `session_id` (string, zorunlu) — Application session id. Not an MCP protocol session.
-- outputSchema: var (alanlar: engine, mode, opened, path, session_id)
-- annotations: var (destructiveHint=true, openWorldHint=true, readOnlyHint=false)
+- Input fields:
+  - `mode` (string, optional) — Analysis mode. Only "static" is supported.
+  - `path` (string, required) — Filesystem path of the binary to analyze.
+  - `session_id` (string, required) — Application session id. Not an MCP protocol session.
+- outputSchema: present (fields: engine, mode, opened, path, session_id)
+- annotations: present (destructiveHint=true, openWorldHint=true, readOnlyHint=false)
 
 ### `prerequisites`
 
 Check the programs Conduit uses (radare2, x64dbg, cdb, Python, Frida, Graphviz, ScyllaHide). Missing ones include a download URL and where to put the files. The bridge does not download them. Call this when a tool is missing or before choosing an engine.
 
-- Girdi alanları: yok
-- outputSchema: var (alanlar: araclar, ozet)
-- annotations: var (destructiveHint=false, idempotentHint=true, openWorldHint=true, readOnlyHint=true)
+- Input fields: none
+- outputSchema: present (fields: araclar, ozet)
+- annotations: present (destructiveHint=false, idempotentHint=true, openWorldHint=true, readOnlyHint=true)
 
 ### `rea_adb_devices`
 
-Bağlı cihaz listesi.
+List of connected devices.
 
-- Girdi alanları: yok
-- outputSchema: var (alanlar: arac, cihazlar, ok)
-- annotations: var (openWorldHint=true, readOnlyHint=false)
+- Input fields: none
+- outputSchema: present (fields: arac, cihazlar, ok)
+- annotations: present (openWorldHint=true, readOnlyHint=false)
 
 ### `rea_adb_install`
 
 APK cihaza kurulum.
 
-- Girdi alanları:
-  - `apk_path` (string, zorunlu)
-  - `seri` (string, opsiyonel)
-- outputSchema: var (alanlar: apk, arac, ok, sonuc)
-- annotations: var (destructiveHint=true, openWorldHint=true, readOnlyHint=false)
+- Input fields:
+  - `apk_path` (string, required)
+  - `seri` (string, optional)
+- outputSchema: present (fields: apk, arac, ok, sonuc)
+- annotations: present (destructiveHint=true, openWorldHint=true, readOnlyHint=false)
 
 ### `rea_adb_logcat`
 
-Cihaz logcat dökümü.
+Device logcat dump.
 
-- Girdi alanları:
-  - `seri` (string, opsiyonel)
-- outputSchema: var (alanlar: arac, ok, satirlar, toplam_satir)
-- annotations: var (openWorldHint=true, readOnlyHint=false)
+- Input fields:
+  - `seri` (string, optional)
+- outputSchema: present (fields: arac, ok, satirlar, toplam_satir)
+- annotations: present (openWorldHint=true, readOnlyHint=false)
 
 ### `rea_adb_packages`
 
-Yüklü paket listesi.
+List of installed packages.
 
-- Girdi alanları:
-  - `filtre` (string, opsiyonel)
-  - `seri` (string, opsiyonel)
-- outputSchema: var (alanlar: arac, ok, paketler)
-- annotations: var (openWorldHint=true, readOnlyHint=false)
+- Input fields:
+  - `filtre` (string, optional)
+  - `seri` (string, optional)
+- outputSchema: present (fields: arac, ok, paketler)
+- annotations: present (openWorldHint=true, readOnlyHint=false)
 
 ### `rea_adb_screencap`
 
-Cihaz ekran görüntüsü.
+Device screenshot.
 
-- Girdi alanları:
-  - `out` (string, zorunlu)
-  - `seri` (string, opsiyonel)
-- outputSchema: var (alanlar: arac, bayt, ok, yol)
-- annotations: var (destructiveHint=true, openWorldHint=true, readOnlyHint=false)
+- Input fields:
+  - `out` (string, required)
+  - `seri` (string, optional)
+- outputSchema: present (fields: arac, bayt, ok, yol)
+- annotations: present (destructiveHint=true, openWorldHint=true, readOnlyHint=false)
 
 ### `rea_android_dinamik_recete`
 
-Android dinamik analiz reçetesi üretimi.
+Android dynamic-analysis recipe generation.
 
-- Girdi alanları:
-  - `path` (string, zorunlu)
-- outputSchema: var (alanlar: arac, ok, recete)
-- annotations: var (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)
+- Input fields:
+  - `path` (string, required)
+- outputSchema: present (fields: arac, ok, recete)
+- annotations: present (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)
 
 ### `rea_android_recete_dogrula`
 
-Reçete kuru-doğrulaması.
+Dry-run validation of a recipe.
 
-- Girdi alanları:
-  - `text` (string, zorunlu)
-- outputSchema: var (alanlar: adim_sayisi, arac, ok)
-- annotations: var (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)
+- Input fields:
+  - `text` (string, required)
+- outputSchema: present (fields: adim_sayisi, arac, ok)
+- annotations: present (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)
 
 ### `rea_aot_detect`
 
 NativeAOT sinyali.
 
-- Girdi alanları:
-  - `b64dosya` (string, zorunlu)
-  - `metin` (string, opsiyonel)
-- outputSchema: var (alanlar: details, ok, summary, tool)
-- annotations: var (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)
+- Input fields:
+  - `b64dosya` (string, required)
+  - `metin` (string, optional)
+- outputSchema: present (fields: details, ok, summary, tool)
+- annotations: present (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)
 
 ### `rea_aot_objc`
 
 ObjC dispatch izleri.
 
-- Girdi alanları:
-  - `text` (string, zorunlu)
-- outputSchema: var (alanlar: details, ok, summary, tool)
-- annotations: var (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)
+- Input fields:
+  - `text` (string, required)
+- outputSchema: present (fields: details, ok, summary, tool)
+- annotations: present (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)
 
 ### `rea_aot_profile`
 
 AOT profili.
 
-- Girdi alanları:
-  - `b64dosya` (string, zorunlu)
-  - `metin` (string, opsiyonel)
-- outputSchema: var (alanlar: details, ok, summary, tool)
-- annotations: var (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)
+- Input fields:
+  - `b64dosya` (string, required)
+  - `metin` (string, optional)
+- outputSchema: present (fields: details, ok, summary, tool)
+- annotations: present (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)
 
 ### `rea_aot_swift`
 
 Swift dispatch izleri.
 
-- Girdi alanları:
-  - `text` (string, zorunlu)
-- outputSchema: var (alanlar: details, ok, summary, tool)
-- annotations: var (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)
+- Input fields:
+  - `text` (string, required)
+- outputSchema: present (fields: details, ok, summary, tool)
+- annotations: present (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)
 
 ### `rea_apktool_build`
 
 Decode dizinden APK rebuild.
 
-- Girdi alanları:
-  - `dir` (string, zorunlu)
-  - `out` (string, zorunlu)
-- outputSchema: var (alanlar: arac, ciktiApk, ok, proje)
-- annotations: var (destructiveHint=true, openWorldHint=true, readOnlyHint=false)
+- Input fields:
+  - `dir` (string, required)
+  - `out` (string, required)
+- outputSchema: present (fields: arac, ciktiApk, ok, proje)
+- annotations: present (destructiveHint=true, openWorldHint=true, readOnlyHint=false)
 
 ### `rea_apktool_caps`
 
-apktool yetenek yoklaması.
+apktool capability probe.
 
-- Girdi alanları: yok
-- outputSchema: var (alanlar: aapt2, aapt2Tamam, apktool, arac, ok)
-- annotations: var (openWorldHint=true, readOnlyHint=false)
+- Input fields: none
+- outputSchema: present (fields: aapt2, aapt2Tamam, apktool, arac, ok, surumGozlem)
+- annotations: present (openWorldHint=true, readOnlyHint=false)
 
 ### `rea_apktool_decode`
 
 APK decode (resource).
 
-- Girdi alanları:
-  - `apk_path` (string, zorunlu)
-  - `out` (string, zorunlu)
-- outputSchema: var (alanlar: apk, arac, ciktiDir, ok)
-- annotations: var (destructiveHint=true, openWorldHint=true, readOnlyHint=false)
+- Input fields:
+  - `apk_path` (string, required)
+  - `out` (string, required)
+- outputSchema: present (fields: apk, arac, ciktiDir, ok)
+- annotations: present (destructiveHint=true, openWorldHint=true, readOnlyHint=false)
 
 ### `rea_apktool_framework`
 
 Framework APK kurulumu.
 
-- Girdi alanları:
-  - `path` (string, zorunlu)
-- outputSchema: var (alanlar: apk, arac, ok)
-- annotations: var (destructiveHint=true, openWorldHint=true, readOnlyHint=false)
+- Input fields:
+  - `path` (string, required)
+- outputSchema: present (fields: apk, arac, ok)
+- annotations: present (destructiveHint=true, openWorldHint=true, readOnlyHint=false)
 
 ### `rea_apktool_info`
 
-apktool+aapt2 sürümleri.
+apktool+aapt2 versions.
 
-- Girdi alanları: yok
-- outputSchema: var (alanlar: arac, ok, surum)
-- annotations: var (openWorldHint=true, readOnlyHint=false)
+- Input fields: none
+- outputSchema: present (fields: arac, ok, surum, surumGozlem)
+- annotations: present (openWorldHint=true, readOnlyHint=false)
 
 ### `rea_apple_bundle`
 
 Bundle anatomisi.
 
-- Girdi alanları:
-  - `path` (string, zorunlu)
-- outputSchema: var (alanlar: details, ok, summary, tool)
-- annotations: var (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)
+- Input fields:
+  - `path` (string, required)
+- outputSchema: present (fields: details, ok, summary, tool)
+- annotations: present (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)
 
 ### `rea_apple_macho`
 
 Mach-O sihir + dyld listesi.
 
-- Girdi alanları:
-  - `path` (string, zorunlu)
-- outputSchema: var (alanlar: details, ok, summary, tool)
-- annotations: var (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)
+- Input fields:
+  - `path` (string, required)
+- outputSchema: present (fields: details, ok, summary, tool)
+- annotations: present (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)
 
 ### `rea_apple_plist`
 
 Info.plist anahtar okuma.
 
-- Girdi alanları:
-  - `path` (string, zorunlu)
-- outputSchema: var (alanlar: details, ok, summary, tool)
-- annotations: var (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)
+- Input fields:
+  - `path` (string, required)
+- outputSchema: present (fields: details, ok, summary, tool)
+- annotations: present (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)
 
 ### `rea_behavior_full`
 
-Tek çağrıda davranış raporu.
+Behavior report in a single call.
 
-- Girdi alanları:
-  - `api` (string, zorunlu)
-  - `net` (string, opsiyonel)
-- outputSchema: var (alanlar: bulgular, cizelge, ok, ozet, tool)
-- annotations: var (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)
+- Input fields:
+  - `api` (string, required)
+  - `net` (string, optional)
+- outputSchema: present (fields: bulgular, cizelge, ok, ozet, tool)
+- annotations: present (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)
 
 ### `rea_behavior_timeline`
 
-Olay çizelgesi + özet.
+Event timeline + summary.
 
-- Girdi alanları:
-  - `olaylar` (string, zorunlu)
-- outputSchema: var (alanlar: details, ok, summary, tool)
-- annotations: var (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)
+- Input fields:
+  - `olaylar` (string, required)
+- outputSchema: present (fields: details, ok, summary, tool)
+- annotations: present (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)
 
 ### `rea_best_motor`
 
-Hedef tip için en iyi motor (skor).
+Best engine for a target type (scored).
 
-- Girdi alanları:
-  - `adaylar` (string[], zorunlu)
-  - `tip` (string, zorunlu)
-- outputSchema: yok
-- annotations: var (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)
+- Input fields:
+  - `adaylar` (string[], required)
+  - `tip` (string, required)
+- outputSchema: absent
+- annotations: present (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)
 
 ### `rea_bindiff_fonksiyonlar`
 
 Binary fonksiyon listesi (ad/adres + hash).
 
-- Girdi alanları:
-  - `path` (string, zorunlu)
-- outputSchema: var (alanlar: arac, bicim, dosya, fonksiyonlar, istatistik, ok, sayi, sembollu)
-- annotations: var (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)
+- Input fields:
+  - `path` (string, required)
+- outputSchema: present (fields: arac, bicim, dosya, fonksiyonlar, istatistik, ok, sayi, sembollu)
+- annotations: present (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)
 
 ### `rea_bindiff_karsilastir`
 
-İki sürüm arası fonksiyon farkı.
+Function-level diff between two versions.
 
-- Girdi alanları:
-  - `text` (string, zorunlu)
-- outputSchema: var (alanlar: arac, aynen, cikarilan, degisen, eklenen, eski, istatistik, ok, ozet, yeni)
-- annotations: var (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)
+- Input fields:
+  - `text` (string, required)
+- outputSchema: present (fields: arac, aynen, cikarilan, degisen, eklenen, eski, istatistik, ok, ozet, yeni)
+- annotations: present (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)
 
 ### `rea_browser_caps`
 
-Browser yetenek yoklaması.
+Browser capability probe.
 
-- Girdi alanları: yok
-- outputSchema: var (alanlar: details, ok, summary, tool)
-- annotations: var (openWorldHint=true, readOnlyHint=false)
+- Input fields: none
+- outputSchema: present (fields: details, ok, summary, tool)
+- annotations: present (openWorldHint=true, readOnlyHint=false)
 
 ### `rea_browser_click`
 
-Tıklama + sonrası durum.
+Click + post-click state.
 
-- Girdi alanları:
-  - `selector` (string, zorunlu)
-  - `url` (string, zorunlu)
-- outputSchema: var (alanlar: details, ok, summary, tool)
-- annotations: var (openWorldHint=true, readOnlyHint=false)
+- Input fields:
+  - `selector` (string, required)
+  - `url` (string, required)
+- outputSchema: present (fields: details, ok, summary, tool)
+- annotations: present (openWorldHint=true, readOnlyHint=false)
 
 ### `rea_browser_har_import`
 
-HAR içe aktarma.
+HAR import.
 
-- Girdi alanları:
-  - `path` (string, zorunlu)
-- outputSchema: var (alanlar: details, ok, summary, tool)
-- annotations: var (openWorldHint=true, readOnlyHint=false)
+- Input fields:
+  - `path` (string, required)
+- outputSchema: present (fields: details, ok, summary, tool)
+- annotations: present (openWorldHint=true, readOnlyHint=false)
 
 ### `rea_browser_nav`
 
-Sayfa açma + başlık.
+Open a page + title.
 
-- Girdi alanları:
-  - `url` (string, zorunlu)
-- outputSchema: var (alanlar: details, ok, summary, tool)
-- annotations: var (openWorldHint=true, readOnlyHint=false)
+- Input fields:
+  - `url` (string, required)
+- outputSchema: present (fields: details, ok, summary, tool)
+- annotations: present (openWorldHint=true, readOnlyHint=false)
 
 ### `rea_browser_scenario`
 
-Senaryo kaydı.
+Scenario recording.
 
-- Girdi alanları:
-  - `text` (string, zorunlu)
-- outputSchema: var (alanlar: details, ok, summary, tool)
-- annotations: var (destructiveHint=true, openWorldHint=true, readOnlyHint=false)
+- Input fields:
+  - `text` (string, required)
+- outputSchema: present (fields: details, ok, summary, tool)
+- annotations: present (destructiveHint=true, openWorldHint=true, readOnlyHint=false)
 
 ### `rea_browser_shot`
 
-Tam sayfa ekran görüntüsü.
+Full-page screenshot.
 
-- Girdi alanları:
-  - `out` (string, zorunlu)
-  - `url` (string, zorunlu)
-- outputSchema: var (alanlar: details, ok, summary, tool)
-- annotations: var (destructiveHint=true, openWorldHint=true, readOnlyHint=false)
+- Input fields:
+  - `out` (string, required)
+  - `url` (string, required)
+- outputSchema: present (fields: details, ok, summary, tool)
+- annotations: present (destructiveHint=true, openWorldHint=true, readOnlyHint=false)
 
 ### `rea_config_suggest`
 
-Bulunan araçlara MCP config snippet.
+MCP config snippet for the engines found.
 
-- Girdi alanları:
-  - `bulunan` (string[], zorunlu)
-- outputSchema: var (alanlar: snippet)
-- annotations: var (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)
+- Input fields:
+  - `bulunan` (string[], required)
+- outputSchema: present (fields: snippet)
+- annotations: present (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)
 
 ### `rea_console_yakala`
 
-Konsol mesajları.
+Console messages.
 
-- Girdi alanları:
-  - `url` (string, zorunlu)
-- outputSchema: var (alanlar: details, ok, summary, tool)
-- annotations: var (openWorldHint=true, readOnlyHint=false)
+- Input fields:
+  - `url` (string, required)
+- outputSchema: present (fields: details, ok, summary, tool)
+- annotations: present (openWorldHint=true, readOnlyHint=false)
 
 ### `rea_coverage`
 
-Kapsama oranı.
+Coverage ratio.
 
-- Girdi alanları:
-  - `incelenen` (integer, zorunlu)
-  - `toplam` (integer, zorunlu)
-- outputSchema: var (alanlar: arac, kalan, ok, oran)
-- annotations: var (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)
+- Input fields:
+  - `incelenen` (integer, required)
+  - `toplam` (integer, required)
+- outputSchema: present (fields: arac, kalan, ok, oran)
+- annotations: present (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)
 
 ### `rea_crash_append`
 
-Crash olayı ekleme.
+Append a crash event.
 
-- Girdi alanları:
-  - `olay` (string, zorunlu)
-  - `olaylar` (string, zorunlu)
-- outputSchema: var (alanlar: details, ok, summary, tool)
-- annotations: var (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)
+- Input fields:
+  - `olay` (string, required)
+  - `olaylar` (string, required)
+- outputSchema: present (fields: details, ok, summary, tool)
+- annotations: present (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)
 
 ### `rea_crash_hint`
 
 Crash ipucu.
 
-- Girdi alanları:
-  - `olaylar` (string, zorunlu)
-- outputSchema: var (alanlar: details, ok, summary, tool)
-- annotations: var (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)
+- Input fields:
+  - `olaylar` (string, required)
+- outputSchema: present (fields: details, ok, summary, tool)
+- annotations: present (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)
 
 ### `rea_crash_kayit_parse`
 
 Crash notu parse.
 
-- Girdi alanları:
-  - `text` (string, zorunlu)
-- outputSchema: var (alanlar: arac, ok, registerlar, sinyal, threadSayisi, threadler)
-- annotations: var (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)
+- Input fields:
+  - `text` (string, required)
+- outputSchema: present (fields: arac, ok, registerlar, sinyal, threadSayisi, threadler)
+- annotations: present (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)
 
 ### `rea_crash_ozet`
 
-Crash özeti.
+Crash summary.
 
-- Girdi alanları:
-  - `text` (string, zorunlu)
-- outputSchema: var (alanlar: arac, ilkFrame, ok, registerSayisi, sinyal, threadSayisi)
-- annotations: var (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)
+- Input fields:
+  - `text` (string, required)
+- outputSchema: present (fields: arac, ilkFrame, ok, registerSayisi, sinyal, threadSayisi)
+- annotations: present (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)
 
 ### `rea_crash_timeline`
 
 Crash timeline.
 
-- Girdi alanları:
-  - `olaylar` (string, zorunlu)
-- outputSchema: var (alanlar: details, ok, summary, tool)
-- annotations: var (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)
+- Input fields:
+  - `olaylar` (string, required)
+- outputSchema: present (fields: details, ok, summary, tool)
+- annotations: present (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)
 
 ### `rea_cutter_caps`
 
-Cutter/rizin yetenek yoklaması.
+Cutter/rizin capability probe.
 
-- Girdi alanları: yok
-- outputSchema: var (alanlar: arac, ok, pdc, surum)
-- annotations: var (openWorldHint=true, readOnlyHint=false)
+- Input fields: none
+- outputSchema: present (fields: arac, ok, pdc, surum)
+- annotations: present (openWorldHint=true, readOnlyHint=false)
 
 ### `rea_cutter_decompile`
 
-Cutter sözde-derleme.
+Cutter pseudo-decompilation.
 
-- Girdi alanları:
-  - `addr` (string, zorunlu)
-  - `path` (string, zorunlu)
-- outputSchema: var (alanlar: addr, arac, hedef, kaynak, kod, not, ok)
-- annotations: var (openWorldHint=true, readOnlyHint=false)
+- Input fields:
+  - `addr` (string, required)
+  - `path` (string, required)
+- outputSchema: present (fields: addr, arac, hedef, kaynak, kod, not, ok)
+- annotations: present (openWorldHint=true, readOnlyHint=false)
 
 ### `rea_cutter_disasm`
 
 Cutter/rizin disassembly.
 
-- Girdi alanları:
-  - `addr` (string, zorunlu)
-  - `path` (string, zorunlu)
-- outputSchema: var (alanlar: addr, arac, hedef, ok, ops)
-- annotations: var (openWorldHint=true, readOnlyHint=false)
+- Input fields:
+  - `addr` (string, required)
+  - `path` (string, required)
+- outputSchema: present (fields: addr, arac, hedef, ok, ops)
+- annotations: present (openWorldHint=true, readOnlyHint=false)
 
 ### `rea_cutter_funcs`
 
 Cutter/rizin fonksiyon listesi.
 
-- Girdi alanları:
-  - `path` (string, zorunlu)
-- outputSchema: var (alanlar: arac, fonksiyonlar, hedef, ok)
-- annotations: var (openWorldHint=true, readOnlyHint=false)
+- Input fields:
+  - `path` (string, required)
+- outputSchema: present (fields: arac, fonksiyonlar, hedef, ok)
+- annotations: present (openWorldHint=true, readOnlyHint=false)
 
 ### `rea_cutter_strings`
 
 Cutter/rizin string listesi.
 
-- Girdi alanları:
-  - `path` (string, zorunlu)
-- outputSchema: var (alanlar: arac, hedef, ok, strings)
-- annotations: var (openWorldHint=true, readOnlyHint=false)
+- Input fields:
+  - `path` (string, required)
+- outputSchema: present (fields: arac, hedef, ok, strings)
+- annotations: present (openWorldHint=true, readOnlyHint=false)
 
 ### `rea_cutter_xrefs`
 
 Cutter/rizin xref listesi.
 
-- Girdi alanları:
-  - `addr` (string, zorunlu)
-  - `path` (string, zorunlu)
-- outputSchema: var (alanlar: addr, arac, hedef, ok, xrefs)
-- annotations: var (openWorldHint=true, readOnlyHint=false)
+- Input fields:
+  - `addr` (string, required)
+  - `path` (string, required)
+- outputSchema: present (fields: addr, arac, hedef, ok, xrefs)
+- annotations: present (openWorldHint=true, readOnlyHint=false)
 
 ### `rea_diff_match`
 
-Fonksiyon eşleme (JSON diziler).
+Function matching (JSON arrays).
 
-- Girdi alanları:
-  - `a` (string, zorunlu)
-  - `b` (string, zorunlu)
-- outputSchema: var (alanlar: details, ok, summary, tool)
-- annotations: var (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)
+- Input fields:
+  - `a` (string, required)
+  - `b` (string, required)
+- outputSchema: present (fields: details, ok, summary, tool)
+- annotations: present (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)
 
 ### `rea_diff_summary`
 
-Eklenen/silinen özeti.
+Added/removed summary.
 
-- Girdi alanları:
-  - `a` (string, zorunlu)
-  - `b` (string, zorunlu)
-- outputSchema: var (alanlar: details, ok, summary, tool)
-- annotations: var (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)
+- Input fields:
+  - `a` (string, required)
+  - `b` (string, required)
+- outputSchema: present (fields: details, ok, summary, tool)
+- annotations: present (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)
 
 ### `rea_dos_com`
 
 COM tespiti.
 
-- Girdi alanları:
-  - `path` (string, zorunlu)
-- outputSchema: var (alanlar: details, ok, summary, tool)
-- annotations: var (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)
+- Input fields:
+  - `path` (string, required)
+- outputSchema: present (fields: details, ok, summary, tool)
+- annotations: present (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)
 
 ### `rea_dos_int21`
 
-INT21 çağrı taraması.
+INT21 call scan.
 
-- Girdi alanları:
-  - `b64` (string, zorunlu)
-- outputSchema: var (alanlar: details, ok, summary, tool)
-- annotations: var (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)
+- Input fields:
+  - `b64` (string, required)
+- outputSchema: present (fields: details, ok, summary, tool)
+- annotations: present (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)
 
 ### `rea_dos_mz`
 
-MZ başlık kontrolü.
+MZ header check.
 
-- Girdi alanları:
-  - `b64` (string, zorunlu)
-- outputSchema: var (alanlar: details, ok, summary, tool)
-- annotations: var (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)
+- Input fields:
+  - `b64` (string, required)
+- outputSchema: present (fields: details, ok, summary, tool)
+- annotations: present (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)
 
 ### `rea_dos_psp`
 
 PSP struct parse.
 
-- Girdi alanları:
-  - `b64` (string, zorunlu)
-- outputSchema: var (alanlar: details, ok, summary, tool)
-- annotations: var (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)
+- Input fields:
+  - `b64` (string, required)
+- outputSchema: present (fields: details, ok, summary, tool)
+- annotations: present (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)
 
 ### `rea_dosya_izi`
 
-API olaylarından dosya yazma/okuma.
+File write/read from API events.
 
-- Girdi alanları:
-  - `text` (string, zorunlu)
-- outputSchema: var (alanlar: details, ok, summary, tool)
-- annotations: var (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)
+- Input fields:
+  - `text` (string, required)
+- outputSchema: present (fields: details, ok, summary, tool)
+- annotations: present (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)
 
 ### `rea_dotnet_cil`
 
-CIL method dökümü (dnfile).
+CIL method dump (dnfile).
 
-- Girdi alanları:
-  - `filtre` (string, opsiyonel)
-  - `path` (string, zorunlu)
-- outputSchema: var (alanlar: arac, assembly, dosya, filtre, method_sayisi, methods, not, ok)
-- annotations: var (openWorldHint=true, readOnlyHint=false)
+- Input fields:
+  - `filtre` (string, optional)
+  - `path` (string, required)
+- outputSchema: present (fields: arac, assembly, dosya, filtre, method_sayisi, methods, not, ok)
+- annotations: present (openWorldHint=true, readOnlyHint=false)
 
 ### `rea_dotnet_metadata`
 
 Assembly metadata okuma.
 
-- Girdi alanları:
-  - `path` (string, zorunlu)
-- outputSchema: var (alanlar: arac, clr, dosya, not, ok, okuyucu)
-- annotations: var (openWorldHint=true, readOnlyHint=false)
+- Input fields:
+  - `path` (string, required)
+- outputSchema: present (fields: arac, clr, dosya, not, ok, okuyucu)
+- annotations: present (openWorldHint=true, readOnlyHint=false)
 
 ### `rea_dwarf_ozet`
 
-ELF DWARF özeti.
+ELF DWARF summary.
 
-- Girdi alanları:
-  - `path` (string, zorunlu)
-- outputSchema: var (alanlar: arac, dosya, fonksiyonAdlari, ok, subprogramSayisi, unitSayisi)
-- annotations: var (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)
+- Input fields:
+  - `path` (string, required)
+- outputSchema: present (fields: arac, dosya, fonksiyonAdlari, ok, subprogramSayisi, unitSayisi)
+- annotations: present (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)
 
 ### `rea_evidence_bundle`
 
-Kanıt paketi derleme.
+Assemble an evidence bundle.
 
-- Girdi alanları:
-  - `ogeler` (string, zorunlu)
-  - `sakli` (string, zorunlu)
-- outputSchema: var (alanlar: digest, items, retained, tools_sha256)
-- annotations: var (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)
+- Input fields:
+  - `ogeler` (string, required)
+  - `sakli` (string, required)
+- outputSchema: present (fields: digest, items, retained, tools_sha256)
+- annotations: present (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)
 
 ### `rea_evidence_verify`
 
-Kanıt paketi doğrulama.
+Verify an evidence bundle.
 
-- Girdi alanları:
-  - `text` (string, zorunlu)
-- outputSchema: var (alanlar: ok)
-- annotations: var (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)
+- Input fields:
+  - `text` (string, required)
+- outputSchema: present (fields: ok)
+- annotations: present (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)
 
 ### `rea_evm_disasm`
 
 EVM bytecode disassembly (offline).
 
-- Girdi alanları:
-  - `hex` (string, zorunlu)
-- outputSchema: var (alanlar: arac, detay, ok, ozet)
-- annotations: var (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)
+- Input fields:
+  - `hex` (string, required)
+- outputSchema: present (fields: arac, detay, ok, ozet)
+- annotations: present (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)
 
 ### `rea_evm_selector`
 
 EVM 4-byte selector (keccak, offline).
 
-- Girdi alanları:
-  - `sig` (string, zorunlu)
-- outputSchema: var (alanlar: details, ok, summary, tool)
-- annotations: var (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)
+- Input fields:
+  - `sig` (string, required)
+- outputSchema: present (fields: details, ok, summary, tool)
+- annotations: present (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)
 
 ### `rea_evm_selectors`
 
-EVM seçici adayları.
+EVM selector candidates.
 
-- Girdi alanları:
-  - `hex` (string, zorunlu)
-- outputSchema: var (alanlar: details, ok, summary, tool)
-- annotations: var (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)
+- Input fields:
+  - `hex` (string, required)
+- outputSchema: present (fields: details, ok, summary, tool)
+- annotations: present (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)
 
 ### `rea_evm_stats`
 
-EVM opcode istatistiği.
+EVM opcode statistics.
 
-- Girdi alanları:
-  - `hex` (string, zorunlu)
-- outputSchema: var (alanlar: details, ok, summary, tool)
-- annotations: var (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)
+- Input fields:
+  - `hex` (string, required)
+- outputSchema: present (fields: details, ok, summary, tool)
+- annotations: present (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)
 
 ### `rea_fallback`
 
 Birincil yoksa yedek zincir.
 
-- Girdi alanları:
-  - `birincil` (string, zorunlu)
-  - `mevcut` (string[], zorunlu)
-- outputSchema: yok
-- annotations: var (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)
+- Input fields:
+  - `birincil` (string, required)
+  - `mevcut` (string[], required)
+- outputSchema: absent
+- annotations: present (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)
 
 ### `rea_firmware_caps`
 
-Firmware yetenek yoklaması.
+Firmware capability probe.
 
-- Girdi alanları: yok
-- outputSchema: var (alanlar: ok, summary, tool)
-- annotations: var (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)
+- Input fields: none
+- outputSchema: present (fields: ok, summary, tool)
+- annotations: present (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)
 
 ### `rea_firmware_extract`
 
-Firmware çıkarma.
+Firmware extraction.
 
-- Girdi alanları:
-  - `path` (string, zorunlu)
-- outputSchema: var (alanlar: ok, summary, tool)
-- annotations: var (destructiveHint=true, openWorldHint=true, readOnlyHint=false)
+- Input fields:
+  - `path` (string, required)
+- outputSchema: present (fields: ok, summary, tool)
+- annotations: present (destructiveHint=true, openWorldHint=true, readOnlyHint=false)
 
 ### `rea_firmware_handoff`
 
 Firmware handoff notu.
 
-- Girdi alanları:
-  - `neden` (string, zorunlu)
-  - `path` (string, zorunlu)
-- outputSchema: var (alanlar: handoff, ok, summary, tool)
-- annotations: var (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)
+- Input fields:
+  - `neden` (string, required)
+  - `path` (string, required)
+- outputSchema: present (fields: handoff, ok, summary, tool)
+- annotations: present (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)
 
 ### `rea_flutter_blutter`
 
-Blutter ile Dart analizi (yoksa dürüst hata).
+Dart analysis via Blutter (honest error if missing).
 
-- Girdi alanları:
-  - `path` (string, zorunlu)
-- outputSchema: var (alanlar: izler, ok, summary, tool)
-- annotations: var (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)
+- Input fields:
+  - `path` (string, required)
+- outputSchema: present (fields: izler, ok, summary, tool)
+- annotations: present (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)
 
 ### `rea_flutter_payload`
 
 Flutter payload izleri.
 
-- Girdi alanları:
-  - `path` (string, zorunlu)
-- outputSchema: var (alanlar: izler, ok, summary, tool)
-- annotations: var (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)
+- Input fields:
+  - `path` (string, required)
+- outputSchema: present (fields: izler, ok, summary, tool)
+- annotations: present (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)
 
 ### `rea_flutter_scan`
 
 Flutter/Dart izi tarama.
 
-- Girdi alanları:
-  - `path` (string, zorunlu)
-- outputSchema: var (alanlar: buildId, dartMi, motor, ok, summary, tool, tur)
-- annotations: var (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)
+- Input fields:
+  - `path` (string, required)
+- outputSchema: present (fields: buildId, dartMi, motor, ok, summary, tool, tur)
+- annotations: present (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)
 
 ### `rea_flutter_snapshot`
 
-Flutter AOT snapshot bilgisi (Dart magic + sürüm).
+Flutter AOT snapshot info (Dart magic + version).
 
-- Girdi alanları:
-  - `path` (string, zorunlu)
-- outputSchema: var (alanlar: dartMi, dartSurumu, izolasyon, magic, ok, summary, tool, tur)
-- annotations: var (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)
+- Input fields:
+  - `path` (string, required)
+- outputSchema: present (fields: dartMi, dartSurumu, izolasyon, magic, ok, summary, tool, tur)
+- annotations: present (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)
 
 ### `rea_frida_api`
 
 API tracer (isim+args+retval).
 
-- Girdi alanları:
-  - `desen` (string, opsiyonel)
-  - `pid` (integer, zorunlu)
-- outputSchema: var (alanlar: arac, cagrilar, ok, pid, sayi)
-- annotations: var (openWorldHint=true, readOnlyHint=false)
+- Input fields:
+  - `desen` (string, optional)
+  - `pid` (integer, required)
+- outputSchema: present (fields: arac, cagrilar, ok, pid, sayi)
+- annotations: present (openWorldHint=true, readOnlyHint=false)
 
 ### `rea_frida_cond`
 
-Koşullu breakpoint.
+Conditional breakpoint.
 
-- Girdi alanları:
-  - `adres` (string, zorunlu)
-  - `kosul` (string, zorunlu)
-  - `pid` (integer, zorunlu)
-- outputSchema: var (alanlar: adres, arac, hitSayisi, ok, pid, tuttu)
-- annotations: var (destructiveHint=true, openWorldHint=true, readOnlyHint=false)
+- Input fields:
+  - `adres` (string, required)
+  - `kosul` (string, required)
+  - `pid` (integer, required)
+- outputSchema: present (fields: adres, arac, hitSayisi, ok, pid, tuttu)
+- annotations: present (destructiveHint=true, openWorldHint=true, readOnlyHint=false)
 
 ### `rea_frida_pause`
 
-Hedef süreç duraklatma (NtSuspend).
+Suspend the target process (NtSuspend).
 
-- Girdi alanları:
-  - `pid` (integer, zorunlu)
-- outputSchema: var (alanlar: arac, durum, ok, pid)
-- annotations: var (destructiveHint=true, openWorldHint=true, readOnlyHint=false)
+- Input fields:
+  - `pid` (integer, required)
+- outputSchema: present (fields: arac, durum, ok, pid)
+- annotations: present (destructiveHint=true, openWorldHint=true, readOnlyHint=false)
 
 ### `rea_frida_resume`
 
-Duraklatılmış süreci devam ettirme.
+Resume a suspended process.
 
-- Girdi alanları:
-  - `pid` (integer, zorunlu)
-- outputSchema: var (alanlar: arac, durum, ok, pid)
-- annotations: var (destructiveHint=true, openWorldHint=true, readOnlyHint=false)
+- Input fields:
+  - `pid` (integer, required)
+- outputSchema: present (fields: arac, durum, ok, pid)
+- annotations: present (destructiveHint=true, openWorldHint=true, readOnlyHint=false)
 
 ### `rea_frida_stalker`
 
-Stalker çağrı izleme.
+Stalker call tracing.
 
-- Girdi alanları:
-  - `pid` (integer, zorunlu)
-  - `sure_ms` (integer, opsiyonel)
-- outputSchema: var (alanlar: arac, cagrilar, ok, pid, sayi)
-- annotations: var (openWorldHint=true, readOnlyHint=false)
+- Input fields:
+  - `pid` (integer, required)
+  - `sure_ms` (integer, optional)
+- outputSchema: present (fields: arac, cagrilar, ok, pid, sayi)
+- annotations: present (openWorldHint=true, readOnlyHint=false)
 
 ### `rea_frida_step`
 
-Sonraki-komut emülasyonu.
+Next-instruction emulation.
 
-- Girdi alanları:
-  - `adres` (string, opsiyonel)
-  - `pid` (integer, zorunlu)
-- outputSchema: var (alanlar: adres, arac, ok, pid, sonraki, vurdu)
-- annotations: var (destructiveHint=true, openWorldHint=true, readOnlyHint=false)
+- Input fields:
+  - `adres` (string, optional)
+  - `pid` (integer, required)
+- outputSchema: present (fields: adres, arac, ok, pid, sonraki, vurdu)
+- annotations: present (destructiveHint=true, openWorldHint=true, readOnlyHint=false)
 
 ### `rea_fs_diff`
 
 Snapshot diff.
 
-- Girdi alanları:
-  - `once` (string, zorunlu)
-  - `sonra` (string, zorunlu)
-- outputSchema: var (alanlar: kayıt, ok, summary, tool)
-- annotations: var (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)
+- Input fields:
+  - `once` (string, required)
+  - `sonra` (string, required)
+- outputSchema: present (fields: kayıt, ok, summary, tool)
+- annotations: present (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)
 
 ### `rea_fs_snapshot`
 
 Dizin snapshot.
 
-- Girdi alanları:
-  - `path` (string, zorunlu)
-- outputSchema: var (alanlar: kayıt, ok, summary, tool)
-- annotations: var (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)
+- Input fields:
+  - `path` (string, required)
+- outputSchema: present (fields: kayıt, ok, summary, tool)
+- annotations: present (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)
 
 ### `rea_ghidra_analyze`
 
 Ghidra headless import+analiz.
 
-- Girdi alanları:
-  - `path` (string, zorunlu)
-- outputSchema: var (alanlar: arac, hedef, log, ok)
-- annotations: var (destructiveHint=true, openWorldHint=true, readOnlyHint=false)
+- Input fields:
+  - `path` (string, required)
+- outputSchema: present (fields: arac, hedef, log, ok)
+- annotations: present (destructiveHint=true, openWorldHint=true, readOnlyHint=false)
 
 ### `rea_ghidra_decompile`
 
-Ghidra sözde-kod.
+Ghidra pseudo-code.
 
-- Girdi alanları:
-  - `addr` (string, zorunlu)
-  - `path` (string, zorunlu)
-- outputSchema: var (alanlar: addr, arac, hedef, kod, ok)
-- annotations: var (openWorldHint=true, readOnlyHint=false)
+- Input fields:
+  - `addr` (string, required)
+  - `path` (string, required)
+- outputSchema: present (fields: addr, arac, hedef, kod, ok)
+- annotations: present (openWorldHint=true, readOnlyHint=false)
 
 ### `rea_ghidra_disasm`
 
 Ghidra disassembly.
 
-- Girdi alanları:
-  - `addr` (string, zorunlu)
-  - `path` (string, zorunlu)
-- outputSchema: var (alanlar: addr, arac, hedef, kod, ok, sayi, talimatlar)
-- annotations: var (openWorldHint=true, readOnlyHint=false)
+- Input fields:
+  - `addr` (string, required)
+  - `path` (string, required)
+- outputSchema: present (fields: addr, arac, hedef, kod, ok, sayi, talimatlar)
+- annotations: present (openWorldHint=true, readOnlyHint=false)
 
 ### `rea_ghidra_funcs`
 
 Ghidra fonksiyon listesi.
 
-- Girdi alanları:
-  - `path` (string, zorunlu)
-- outputSchema: var (alanlar: arac, fonksiyonlar, hedef, ok)
-- annotations: var (openWorldHint=true, readOnlyHint=false)
+- Input fields:
+  - `path` (string, required)
+- outputSchema: present (fields: arac, fonksiyonlar, hedef, ok)
+- annotations: present (openWorldHint=true, readOnlyHint=false)
 
 ### `rea_ghidra_strings`
 
 Ghidra string listesi.
 
-- Girdi alanları:
-  - `path` (string, zorunlu)
-- outputSchema: var (alanlar: arac, hedef, ok, strings)
-- annotations: var (openWorldHint=true, readOnlyHint=false)
+- Input fields:
+  - `path` (string, required)
+- outputSchema: present (fields: arac, hedef, ok, strings)
+- annotations: present (openWorldHint=true, readOnlyHint=false)
 
 ### `rea_ghidra_trace`
 
 Snapshot -> Ghidra Trace import.
 
-- Girdi alanları:
-  - `kayit` (string, zorunlu)
-  - `path` (string, zorunlu)
-- outputSchema: var (alanlar: arac, hedef, ok, sonuc)
-- annotations: var (destructiveHint=true, openWorldHint=true, readOnlyHint=false)
+- Input fields:
+  - `kayit` (string, required)
+  - `path` (string, required)
+- outputSchema: present (fields: arac, hedef, ok, sonuc)
+- annotations: present (destructiveHint=true, openWorldHint=true, readOnlyHint=false)
 
 ### `rea_ghidra_vt`
 
-İki binary fonksiyon diff (version tracking).
+Function diff of two binaries (version tracking).
 
-- Girdi alanları:
-  - `eski` (string, zorunlu)
-  - `yeni` (string, zorunlu)
-- outputSchema: var (alanlar: arac, degisen, eklenen, eski, ok, ozet, silinen, yeni)
-- annotations: var (openWorldHint=true, readOnlyHint=false)
+- Input fields:
+  - `eski` (string, required)
+  - `yeni` (string, required)
+- outputSchema: present (fields: arac, degisen, eklenen, eski, ok, ozet, silinen, yeni)
+- annotations: present (openWorldHint=true, readOnlyHint=false)
 
 ### `rea_ghidra_xrefs`
 
 Ghidra xref listesi.
 
-- Girdi alanları:
-  - `addr` (string, zorunlu)
-  - `path` (string, zorunlu)
-- outputSchema: var (alanlar: addr, arac, hedef, ok, xrefs)
-- annotations: var (openWorldHint=true, readOnlyHint=false)
+- Input fields:
+  - `addr` (string, required)
+  - `path` (string, required)
+- outputSchema: present (fields: addr, arac, hedef, ok, xrefs)
+- annotations: present (openWorldHint=true, readOnlyHint=false)
 
 ### `rea_go_buildinfo`
 
-Go build-id + modül bağımlılıkları.
+Go build-id + module dependencies.
 
-- Girdi alanları:
-  - `path` (string, zorunlu)
-- outputSchema: var (alanlar: details, ok, summary, tool)
-- annotations: var (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)
+- Input fields:
+  - `path` (string, required)
+- outputSchema: present (fields: details, ok, summary, tool)
+- annotations: present (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)
 
 ### `rea_go_funclines`
 
-Go fonksiyon + dosya:satır eşlemesi.
+Go function + file:line map.
 
-- Girdi alanları:
-  - `path` (string, zorunlu)
-- outputSchema: var (alanlar: details, ok, summary, tool)
-- annotations: var (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)
+- Input fields:
+  - `path` (string, required)
+- outputSchema: present (fields: details, ok, summary, tool)
+- annotations: present (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)
 
 ### `rea_go_goresym`
 
-GoReSym analizi (yoksa dürüst hata).
+GoReSym analysis (honest error if missing).
 
-- Girdi alanları:
-  - `path` (string, zorunlu)
-- outputSchema: var (alanlar: details, ok, summary, tool)
-- annotations: var (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)
+- Input fields:
+  - `path` (string, required)
+- outputSchema: present (fields: details, ok, summary, tool)
+- annotations: present (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)
 
 ### `rea_go_module`
 
-Go modül bilgisi.
+Go module info.
 
-- Girdi alanları:
-  - `text` (string, zorunlu)
-- outputSchema: var (alanlar: details, ok, summary, tool)
-- annotations: var (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)
+- Input fields:
+  - `text` (string, required)
+- outputSchema: present (fields: details, ok, summary, tool)
+- annotations: present (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)
 
 ### `rea_go_version`
 
-Go sürüm izi.
+Go version fingerprint.
 
-- Girdi alanları:
-  - `text` (string, zorunlu)
-- outputSchema: var (alanlar: details, ok, summary, tool)
-- annotations: var (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)
+- Input fields:
+  - `text` (string, required)
+- outputSchema: present (fields: details, ok, summary, tool)
+- annotations: present (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)
 
 ### `rea_hap_liste`
 
 HAP dosya listesi.
 
-- Girdi alanları:
-  - `path` (string, zorunlu)
-- outputSchema: var (alanlar: arac, dosya, dosyalar, ok, sayi)
-- annotations: var (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)
+- Input fields:
+  - `path` (string, required)
+- outputSchema: present (fields: arac, dosya, dosyalar, ok, sayi)
+- annotations: present (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)
 
 ### `rea_hap_manifest`
 
 HAP manifest (bundle/version).
 
-- Girdi alanları:
-  - `path` (string, zorunlu)
-- outputSchema: var (alanlar: arac, bundleName, dosya, kaynak, ok, version)
-- annotations: var (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)
+- Input fields:
+  - `path` (string, required)
+- outputSchema: present (fields: arac, bundleName, dosya, kaynak, ok, version)
+- annotations: present (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)
 
 ### `rea_hopper_istek`
 
-Hopper istek dosyası üretimi.
+Hopper request-file generation.
 
-- Girdi alanları:
-  - `path` (string, zorunlu)
-- outputSchema: var (alanlar: adresler, arac, hedef, hopper, istekDosyasi, ok)
-- annotations: var (destructiveHint=true, readOnlyHint=false)
+- Input fields:
+  - `path` (string, required)
+- outputSchema: present (fields: adresler, arac, hedef, hopper, istekDosyasi, ok)
+- annotations: present (destructiveHint=true, readOnlyHint=false)
 
 ### `rea_hopper_tara`
 
 Dosyada string/regex tarama.
 
-- Girdi alanları:
-  - `desen` (string, zorunlu)
-  - `path` (string, zorunlu)
-- outputSchema: var (alanlar: arac, desen, eslesmeler, hedef, ok, regex, sayi)
-- annotations: var (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)
+- Input fields:
+  - `desen` (string, required)
+  - `path` (string, required)
+- outputSchema: present (fields: arac, desen, eslesmeler, hedef, ok, regex, sayi)
+- annotations: present (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)
 
 ### `rea_ida_flirt`
 
-String-tabanlı derleyici/kütüphane tahmini (gerçek FLIRT imzası değil; IDA kuruluysa doğrulama için rea_ida_idb çıktısını IDA'da imza uygulayarak kullanın).
+String-based compiler/library guess (not a real FLIRT signature; if IDA is installed, validate with rea_ida_idb output applied as a signature in IDA).
 
-- Girdi alanları:
-  - `path` (string, zorunlu)
-- outputSchema: var (alanlar: arac, eslesmeler, guven, hedef, idaMevcut, kutuphane, method, not, ok, sayi, surumler)
-- annotations: var (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)
+- Input fields:
+  - `path` (string, required)
+- outputSchema: present (fields: arac, eslesmeler, guven, hedef, idaMevcut, kutuphane, method, not, ok, sayi, surumler)
+- annotations: present (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)
 
 ### `rea_ida_idb`
 
-IDB batch üretimi (idat).
+IDB batch generation (idat).
 
-- Girdi alanları:
-  - `out` (string, zorunlu)
-  - `path` (string, zorunlu)
-- outputSchema: var (alanlar: arac, hedef, idat, idb, ok)
-- annotations: var (destructiveHint=true, openWorldHint=true, readOnlyHint=false)
+- Input fields:
+  - `out` (string, required)
+  - `path` (string, required)
+- outputSchema: present (fields: arac, hedef, idat, idb, ok)
+- annotations: present (destructiveHint=true, openWorldHint=true, readOnlyHint=false)
 
 ### `rea_il2cpp_dump`
 
-Il2CppDumper ile döküm (yoksa dürüst hata).
+Dump via Il2CppDumper (honest error if missing).
 
-- Girdi alanları:
-  - `path` (string, zorunlu)
-- outputSchema: var (alanlar: arac, cikti, dosya, dosyaSayisi, log, ok, ozet)
-- annotations: var (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)
+- Input fields:
+  - `path` (string, required)
+- outputSchema: present (fields: arac, cikti, dosya, dosyaSayisi, log, ok, ozet)
+- annotations: present (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)
 
 ### `rea_il2cpp_metadata`
 
-IL2CPP global-metadata sınıf/metod sayımı.
+IL2CPP global-metadata class/method counts.
 
-- Girdi alanları:
-  - `path` (string, zorunlu)
-- outputSchema: var (alanlar: arac, assemblySayisi, dosya, goruntuSayisi, metodSayisi, not, ok, ozet, sinifSayisi, surum)
-- annotations: var (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)
+- Input fields:
+  - `path` (string, required)
+- outputSchema: present (fields: arac, assemblySayisi, dosya, goruntuSayisi, metodSayisi, not, ok, ozet, sinifSayisi, surum)
+- annotations: present (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)
 
 ### `rea_il2cpp_methods`
 
-IL2CPP method imzaları (sınırlıysa dürüst işaret).
+IL2CPP method signatures (honest flag when truncated).
 
-- Girdi alanları:
-  - `path` (string, zorunlu)
-- outputSchema: var (alanlar: arac, dosya, imzaSayisi, imzalar, metodSayisi, not, ok, sinirli, surum)
-- annotations: var (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)
+- Input fields:
+  - `path` (string, required)
+- outputSchema: present (fields: arac, dosya, imzaSayisi, imzalar, metodSayisi, not, ok, sinirli, surum)
+- annotations: present (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)
 
 ### `rea_ilspy_decompile`
 
 .NET C# decompile.
 
-- Girdi alanları:
-  - `out` (string, zorunlu)
-  - `path` (string, zorunlu)
-- outputSchema: var (alanlar: arac, ciktiDir, cs_sayisi, dosya, not, ok)
-- annotations: var (destructiveHint=true, openWorldHint=true, readOnlyHint=false)
+- Input fields:
+  - `out` (string, required)
+  - `path` (string, required)
+- outputSchema: present (fields: arac, ciktiDir, cs_sayisi, dosya, not, ok)
+- annotations: present (destructiveHint=true, openWorldHint=true, readOnlyHint=false)
 
 ### `rea_investigate`
 
-Otomatik soruşturma planı (sniff+skor+yedek).
+Automatic investigation plan (sniff + score + fallbacks).
 
-- Girdi alanları:
-  - `path` (string, zorunlu)
-  - `soru` (string, opsiyonel)
-- outputSchema: var (alanlar: arac, motor, ok, plan, skor, tip, yedekler)
-- annotations: var (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)
+- Input fields:
+  - `path` (string, required)
+  - `soru` (string, optional)
+- outputSchema: present (fields: arac, motor, ok, plan, skor, tip, yedekler)
+- annotations: present (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)
 
 ### `rea_jadx_classes`
 
-APK sınıf listesi.
+APK class list.
 
-- Girdi alanları:
-  - `apk_path` (string, zorunlu)
-- outputSchema: var (alanlar: arac, ok, siniflar, toplam_sinif)
-- annotations: var (openWorldHint=true, readOnlyHint=false)
+- Input fields:
+  - `apk_path` (string, required)
+- outputSchema: present (fields: arac, ok, siniflar, toplam_sinif)
+- annotations: present (openWorldHint=true, readOnlyHint=false)
 
 ### `rea_jadx_decompile`
 
-APK tek sınıf decompile.
+Decompile a single APK class.
 
-- Girdi alanları:
-  - `apk_path` (string, zorunlu)
-  - `out` (string, zorunlu)
-  - `sinif` (string, zorunlu)
-- outputSchema: var (alanlar: arac, bayt, ciktiDir, dosya, ok, sinif)
-- annotations: var (destructiveHint=true, openWorldHint=true, readOnlyHint=false)
+- Input fields:
+  - `apk_path` (string, required)
+  - `out` (string, required)
+  - `sinif` (string, required)
+- outputSchema: present (fields: arac, bayt, ciktiDir, dosya, ok, sinif)
+- annotations: present (destructiveHint=true, openWorldHint=true, readOnlyHint=false)
 
 ### `rea_jadx_full`
 
 APK tam decompile.
 
-- Girdi alanları:
-  - `apk_path` (string, zorunlu)
-  - `out` (string, zorunlu)
-- outputSchema: var (alanlar: arac, ciktiDir, java_dosya_sayisi, ok)
-- annotations: var (destructiveHint=true, openWorldHint=true, readOnlyHint=false)
+- Input fields:
+  - `apk_path` (string, required)
+  - `out` (string, required)
+- outputSchema: present (fields: arac, ciktiDir, java_dosya_sayisi, ok)
+- annotations: present (destructiveHint=true, openWorldHint=true, readOnlyHint=false)
 
 ### `rea_jadx_manifest`
 
-APK manifest özeti.
+APK manifest summary.
 
-- Girdi alanları:
-  - `apk_path` (string, zorunlu)
-- outputSchema: var (alanlar: aktiviteler, apk, arac, izinler, ok, paket)
-- annotations: var (openWorldHint=true, readOnlyHint=false)
+- Input fields:
+  - `apk_path` (string, required)
+- outputSchema: present (fields: aktiviteler, apk, arac, izinler, ok, paket)
+- annotations: present (openWorldHint=true, readOnlyHint=false)
 
 ### `rea_jadx_methods`
 
-Decompile çıktıda method listesi.
+Method list from decompile output.
 
-- Girdi alanları:
-  - `dir` (string, zorunlu)
-- outputSchema: var (alanlar: arac, methodlar, ok)
-- annotations: var (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)
+- Input fields:
+  - `dir` (string, required)
+- outputSchema: present (fields: arac, methodlar, ok)
+- annotations: present (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)
 
 ### `rea_jadx_read`
 
-Decompile sınıf okuma (400 satır).
+Read a decompiled class (400 lines).
 
-- Girdi alanları:
-  - `dir` (string, zorunlu)
-  - `sinif` (string, zorunlu)
-- outputSchema: var (alanlar: arac, dosya, ok, satirlar, toplam_satir)
-- annotations: var (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)
+- Input fields:
+  - `dir` (string, required)
+  - `sinif` (string, required)
+- outputSchema: present (fields: arac, dosya, ok, satirlar, toplam_satir)
+- annotations: present (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)
 
 ### `rea_jadx_xrefs`
 
-Decompile çıktıda terim arama.
+Term search across decompile output.
 
-- Girdi alanları:
-  - `dir` (string, zorunlu)
-  - `terim` (string, zorunlu)
-- outputSchema: var (alanlar: arac, kayitlar, ok)
-- annotations: var (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)
+- Input fields:
+  - `dir` (string, required)
+  - `terim` (string, required)
+- outputSchema: present (fields: arac, kayitlar, ok)
+- annotations: present (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)
 
 ### `rea_jeb_sorgu`
 
 JEB MCP sorgusu.
 
-- Girdi alanları:
-  - `govde` (string, opsiyonel)
-  - `url` (string, zorunlu)
-  - `yontem` (string, zorunlu)
-- outputSchema: var (alanlar: arac, durum, govde, ok, url, yontem)
-- annotations: var (openWorldHint=true, readOnlyHint=false)
+- Input fields:
+  - `govde` (string, optional)
+  - `url` (string, required)
+  - `yontem` (string, required)
+- outputSchema: present (fields: arac, durum, govde, ok, url, yontem)
+- annotations: present (openWorldHint=true, readOnlyHint=false)
 
 ### `rea_js_bundle`
 
-Bundle özeti.
+Bundle summary.
 
-- Girdi alanları:
-  - `text` (string, zorunlu)
-- outputSchema: var (alanlar: ok, summary, tool)
-- annotations: var (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)
+- Input fields:
+  - `text` (string, required)
+- outputSchema: present (fields: ok, summary, tool)
+- annotations: present (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)
 
 ### `rea_js_export_shape`
 
-Export şekli.
+Export shape.
 
-- Girdi alanları:
-  - `path` (string, zorunlu)
-- outputSchema: var (alanlar: details, ok, summary, tool)
-- annotations: var (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)
+- Input fields:
+  - `path` (string, required)
+- outputSchema: present (fields: details, ok, summary, tool)
+- annotations: present (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)
 
 ### `rea_js_require`
 
-Require/import grafı.
+Require/import graph.
 
-- Girdi alanları:
-  - `path` (string, zorunlu)
-- outputSchema: var (alanlar: details, ok, summary, tool)
-- annotations: var (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)
+- Input fields:
+  - `path` (string, required)
+- outputSchema: present (fields: details, ok, summary, tool)
+- annotations: present (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)
 
 ### `rea_js_sourcemap`
 
-Source-map çözümleme.
+Source-map resolution.
 
-- Girdi alanları:
-  - `text` (string, zorunlu)
-- outputSchema: var (alanlar: ok, summary, tool)
-- annotations: var (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)
+- Input fields:
+  - `text` (string, required)
+- outputSchema: present (fields: ok, summary, tool)
+- annotations: present (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)
 
 ### `rea_macho_classdump`
 
-class-dump çıktısı (yoksa dürüst hata).
+class-dump output (honest error if missing).
 
-- Girdi alanları:
-  - `path` (string, zorunlu)
-- outputSchema: var (alanlar: details, ok, summary, tool)
-- annotations: var (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)
+- Input fields:
+  - `path` (string, required)
+- outputSchema: present (fields: details, ok, summary, tool)
+- annotations: present (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)
 
 ### `rea_macho_info`
 
-Mach-O başlık (mimari + dosya tipi).
+Mach-O header (architecture + file type).
 
-- Girdi alanları:
-  - `path` (string, zorunlu)
-- outputSchema: var (alanlar: details, ok, summary, tool)
-- annotations: var (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)
+- Input fields:
+  - `path` (string, required)
+- outputSchema: present (fields: details, ok, summary, tool)
+- annotations: present (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)
 
 ### `rea_macho_loads`
 
-Mach-O load komutları (segment/dylib).
+Mach-O load commands (segment/dylib).
 
-- Girdi alanları:
-  - `path` (string, zorunlu)
-- outputSchema: var (alanlar: details, ok, summary, tool)
-- annotations: var (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)
+- Input fields:
+  - `path` (string, required)
+- outputSchema: present (fields: details, ok, summary, tool)
+- annotations: present (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)
 
 ### `rea_macho_objc`
 
-ObjC sınıf/kategori listesi (saf okuma).
+ObjC class/category list (read-only).
 
-- Girdi alanları:
-  - `path` (string, zorunlu)
-- outputSchema: var (alanlar: details, ok, summary, tool)
-- annotations: var (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)
+- Input fields:
+  - `path` (string, required)
+- outputSchema: present (fields: details, ok, summary, tool)
+- annotations: present (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)
 
 ### `rea_macho_otool`
 
-otool çıktısı (yoksa dürüst hata).
+otool output (honest error if missing).
 
-- Girdi alanları:
-  - `path` (string, zorunlu)
-- outputSchema: var (alanlar: details, ok, summary, tool)
-- annotations: var (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)
+- Input fields:
+  - `path` (string, required)
+- outputSchema: present (fields: details, ok, summary, tool)
+- annotations: present (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)
 
 ### `rea_managed_compare`
 
-Managed üye diff.
+Managed member diff.
 
-- Girdi alanları:
-  - `a` (string, zorunlu)
-  - `b` (string, zorunlu)
-- outputSchema: var (alanlar: arac, detay, ok, ozet)
-- annotations: var (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)
+- Input fields:
+  - `a` (string, required)
+  - `b` (string, required)
+- outputSchema: present (fields: arac, detay, ok, ozet)
+- annotations: present (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)
 
 ### `rea_managed_import`
 
-Reconstruction kaydı.
+Reconstruction import.
 
-- Girdi alanları:
-  - `path` (string, zorunlu)
-- outputSchema: var (alanlar: arac, detay, ok, ozet)
-- annotations: var (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)
+- Input fields:
+  - `path` (string, required)
+- outputSchema: present (fields: arac, detay, ok, ozet)
+- annotations: present (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)
 
 ### `rea_managed_verify`
 
-Native bağımlılık doğrulama.
+Native dependency verification.
 
-- Girdi alanları:
-  - `beklenen` (string, zorunlu)
-  - `path` (string, zorunlu)
-- outputSchema: var (alanlar: arac, detay, ok, ozet)
-- annotations: var (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)
+- Input fields:
+  - `beklenen` (string, required)
+  - `path` (string, required)
+- outputSchema: present (fields: arac, detay, ok, ozet)
+- annotations: present (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)
 
 ### `rea_mips_funcs`
 
-MIPS fonksiyon ön-tarama.
+MIPS function pre-scan.
 
-- Girdi alanları:
-  - `b64` (string, zorunlu)
-- outputSchema: var (alanlar: details, ok, summary, tool)
-- annotations: var (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)
+- Input fields:
+  - `b64` (string, required)
+- outputSchema: present (fields: details, ok, summary, tool)
+- annotations: present (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)
 
 ### `rea_mips_psp_profile`
 
 MIPS/PSP profili.
 
-- Girdi alanları:
-  - `b64` (string, zorunlu)
-- outputSchema: var (alanlar: details, ok, summary, tool)
-- annotations: var (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)
+- Input fields:
+  - `b64` (string, required)
+- outputSchema: present (fields: details, ok, summary, tool)
+- annotations: present (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)
 
 ### `rea_missing_reason`
 
-Eksik araç + kur komutu.
+Missing tool + install command.
 
-- Girdi alanları:
-  - `eksik` (string, zorunlu)
-  - `platform` (string, opsiyonel)
-- outputSchema: var (alanlar: alternatif, eksik, kur, neden)
-- annotations: var (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)
+- Input fields:
+  - `eksik` (string, required)
+  - `platform` (string, optional)
+- outputSchema: present (fields: alternatif, eksik, kur, neden)
+- annotations: present (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)
 
 ### `rea_net_capture`
 
-Yerel ağ yakalama (HAR).
+Local network capture (HAR).
 
-- Girdi alanları:
-  - `url` (string, zorunlu)
-- outputSchema: var (alanlar: kayıt, ok, summary, tool)
-- annotations: var (destructiveHint=true, openWorldHint=true, readOnlyHint=false)
+- Input fields:
+  - `url` (string, required)
+- outputSchema: present (fields: kayıt, ok, summary, tool)
+- annotations: present (destructiveHint=true, openWorldHint=true, readOnlyHint=false)
 
 ### `rea_obligation_advance`
 
 Halka ilerletme.
 
-- Girdi alanları:
-  - `bulgu` (string, zorunlu)
-  - `defter` (string, zorunlu)
-  - `kod` (string, zorunlu)
-- outputSchema: var (alanlar: links)
-- annotations: var (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)
+- Input fields:
+  - `bulgu` (string, required)
+  - `defter` (string, required)
+  - `kod` (string, required)
+- outputSchema: present (fields: links)
+- annotations: present (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)
 
 ### `rea_obligation_close`
 
-Defter mühürleme.
+Seal the ledger.
 
-- Girdi alanları:
-  - `text` (string, zorunlu)
-- outputSchema: var (alanlar: kapatıldı, links)
-- annotations: var (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)
+- Input fields:
+  - `text` (string, required)
+- outputSchema: present (fields: kapatıldı, links)
+- annotations: present (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)
 
 ### `rea_obligation_ledger`
 
 Defter kurma.
 
-- Girdi alanları:
-  - `bulgular` (string[], zorunlu)
-  - `evidence_digest` (string, zorunlu)
-  - `tools_sha256` (string, zorunlu)
-- outputSchema: var (alanlar: evidence_digest, kapatıldı, ledger_id, links, tools_sha256)
-- annotations: var (destructiveHint=false, idempotentHint=false, openWorldHint=false, readOnlyHint=true)
+- Input fields:
+  - `bulgular` (string[], required)
+  - `evidence_digest` (string, required)
+  - `tools_sha256` (string, required)
+- outputSchema: present (fields: evidence_digest, kapatıldı, ledger_id, links, tools_sha256)
+- annotations: present (destructiveHint=false, idempotentHint=false, openWorldHint=false, readOnlyHint=true)
 
 ### `rea_obligation_verify`
 
-Zincir doğrulama.
+Chain verification.
 
-- Girdi alanları:
-  - `text` (string, zorunlu)
-- outputSchema: var (alanlar: eksik, ok)
-- annotations: var (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)
+- Input fields:
+  - `text` (string, required)
+- outputSchema: present (fields: eksik, ok)
+- annotations: present (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)
 
 ### `rea_pcap_oku`
 
-PCAP akış birleştirme + keylog TLS çözme.
+PCAP stream reassembly + TLS keylog decrypt.
 
-- Girdi alanları:
-  - `keylog` (string, opsiyonel)
-  - `path` (string, zorunlu)
-- outputSchema: var (alanlar: details, ok, summary, tool)
-- annotations: var (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)
+- Input fields:
+  - `keylog` (string, optional)
+  - `path` (string, required)
+- outputSchema: present (fields: details, ok, summary, tool)
+- annotations: present (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)
 
 ### `rea_pdb_indir`
 
-PE debug dizinindeki CodeView RSDS kaydından Microsoft symbol server'dan PDB indirme + bütünlük + önbellek.
+Download a PDB from the Microsoft symbol server using the CodeView RSDS record in the PE debug directory + integrity + cache.
 
-- Girdi alanları:
-  - `path` (string, zorunlu)
-- outputSchema: var (alanlar: arac, cache, dosya, guid, ok, pdb, url, yas, yol)
-- annotations: var (destructiveHint=true, openWorldHint=true, readOnlyHint=false)
+- Input fields:
+  - `path` (string, required)
+- outputSchema: present (fields: arac, cache, dosya, guid, ok, pdb, url, yas, yol)
+- annotations: present (destructiveHint=true, openWorldHint=true, readOnlyHint=false)
 
 ### `rea_pdb_yolu`
 
 PE debug dizininden PDB yolu.
 
-- Girdi alanları:
-  - `path` (string, zorunlu)
-- outputSchema: var (alanlar: arac, dosya, guid, ok, pdb, yas)
-- annotations: var (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)
+- Input fields:
+  - `path` (string, required)
+- outputSchema: present (fields: arac, dosya, guid, ok, pdb, yas)
+- annotations: present (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)
 
 ### `rea_pe_imports`
 
 PE import listesi.
 
-- Girdi alanları:
-  - `path` (string, zorunlu)
-- outputSchema: var (alanlar: arac, dlls, dosya, fonksiyonlar, not, ok, sayi)
-- annotations: var (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)
+- Input fields:
+  - `path` (string, required)
+- outputSchema: present (fields: arac, dlls, dosya, fonksiyonlar, not, ok, sayi)
+- annotations: present (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)
 
 ### `rea_pe_info`
 
-PE başlık bilgisi.
+PE header info.
 
-- Girdi alanları:
-  - `path` (string, zorunlu)
-- outputSchema: var (alanlar: arac, bit, dosya, entry, entry_hex, machine, machine_hex, ok, section_sayisi)
-- annotations: var (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)
+- Input fields:
+  - `path` (string, required)
+- outputSchema: present (fields: arac, bit, dosya, entry, entry_hex, machine, machine_hex, ok, section_sayisi)
+- annotations: present (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)
 
 ### `rea_pe_sections`
 
 PE section tablosu.
 
-- Girdi alanları:
-  - `path` (string, zorunlu)
-- outputSchema: var (alanlar: arac, bolumler, dosya, ok, sayi)
-- annotations: var (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)
+- Input fields:
+  - `path` (string, required)
+- outputSchema: present (fields: arac, bolumler, dosya, ok, sayi)
+- annotations: present (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)
 
 ### `rea_process_caps`
 
-Süreç yetenek yoklaması.
+Process capability probe.
 
-- Girdi alanları: yok
-- outputSchema: var (alanlar: kayıt, ok, summary, tool)
-- annotations: var (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)
+- Input fields: none
+- outputSchema: present (fields: kayıt, ok, summary, tool)
+- annotations: present (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)
 
 ### `rea_process_compare`
 
-Pipe/PTY karşılaştırma.
+Pipe/PTY comparison.
 
-- Girdi alanları:
-  - `cmd` (string, zorunlu)
-- outputSchema: yok
-- annotations: var (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)
+- Input fields:
+  - `cmd` (string, required)
+- outputSchema: absent
+- annotations: present (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)
 
 ### `rea_process_run`
 
-Süreç koşusu kaydı.
+Process-run recording.
 
-- Girdi alanları:
-  - `cmd` (string, zorunlu)
-- outputSchema: var (alanlar: kayıt, ok, summary, tool)
-- annotations: var (destructiveHint=true, openWorldHint=true, readOnlyHint=false)
+- Input fields:
+  - `cmd` (string, required)
+- outputSchema: present (fields: kayıt, ok, summary, tool)
+- annotations: present (destructiveHint=true, openWorldHint=true, readOnlyHint=false)
 
 ### `rea_pwn_elf_layout`
 
 ELF layout + mitigation.
 
-- Girdi alanları:
-  - `path` (string, zorunlu)
-- outputSchema: yok
-- annotations: var (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)
+- Input fields:
+  - `path` (string, required)
+- outputSchema: absent
+- annotations: present (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)
 
 ### `rea_pwn_gadgets`
 
 Gadget ipucu.
 
-- Girdi alanları:
-  - `text` (string, zorunlu)
-- outputSchema: var (alanlar: details, ok, summary, tool)
-- annotations: var (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)
+- Input fields:
+  - `text` (string, required)
+- outputSchema: present (fields: details, ok, summary, tool)
+- annotations: present (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)
 
 ### `rea_r2_callgraph`
 
-r2 fonksiyon çağrı grafı.
+r2 function call graph.
 
-- Girdi alanları:
-  - `path` (string, zorunlu)
-- outputSchema: var (alanlar: arac, fonksiyonlar, hedef, ok)
-- annotations: var (openWorldHint=true, readOnlyHint=false)
+- Input fields:
+  - `path` (string, required)
+- outputSchema: present (fields: arac, fonksiyonlar, hedef, ok)
+- annotations: present (openWorldHint=true, readOnlyHint=false)
 
 ### `rea_r2_debug`
 
 r2 toplu debug (bp+regs).
 
-- Girdi alanları:
-  - `addr` (string, zorunlu)
-  - `path` (string, zorunlu)
-- outputSchema: var (alanlar: arac, bpAddr, cikti, hedef, not, ok)
-- annotations: var (destructiveHint=true, openWorldHint=true, readOnlyHint=false)
+- Input fields:
+  - `addr` (string, required)
+  - `path` (string, required)
+- outputSchema: present (fields: arac, bpAddr, cikti, hedef, not, ok)
+- annotations: present (destructiveHint=true, openWorldHint=true, readOnlyHint=false)
 
 ### `rea_r2_esil`
 
-r2 ESIL emülasyon regs.
+r2 ESIL emulation regs.
 
-- Girdi alanları:
-  - `addr` (string, zorunlu)
-  - `path` (string, zorunlu)
-- outputSchema: var (alanlar: addr, adim, arac, hedef, ok, regs)
-- annotations: var (openWorldHint=true, readOnlyHint=false)
+- Input fields:
+  - `addr` (string, required)
+  - `path` (string, required)
+- outputSchema: present (fields: addr, adim, arac, hedef, ok, regs)
+- annotations: present (openWorldHint=true, readOnlyHint=false)
 
 ### `rea_readiness`
 
-Reconstruction hazırlık skoru.
+Reconstruction readiness score.
 
-- Girdi alanları:
-  - `text` (string, zorunlu)
-- outputSchema: var (alanlar: arac, eksik, ok, seviye, skor)
-- annotations: var (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)
+- Input fields:
+  - `text` (string, required)
+- outputSchema: present (fields: arac, eksik, ok, seviye, skor)
+- annotations: present (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)
 
 ### `rea_recon_funcs`
 
 Pseudo-code fonksiyon listesi.
 
-- Girdi alanları:
-  - `text` (string, zorunlu)
-- outputSchema: var (alanlar: details, ok, summary, tool)
-- annotations: var (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)
+- Input fields:
+  - `text` (string, required)
+- outputSchema: present (fields: details, ok, summary, tool)
+- annotations: present (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)
 
 ### `rea_recon_harness`
 
 C harness iskeleti.
 
-- Girdi alanları:
-  - `text` (string, zorunlu)
-- outputSchema: var (alanlar: details, ok, summary, tool)
-- annotations: var (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)
+- Input fields:
+  - `text` (string, required)
+- outputSchema: present (fields: details, ok, summary, tool)
+- annotations: present (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)
 
 ### `rea_recon_tag`
 
 Vaka etiketi.
 
-- Girdi alanları: yok
-- outputSchema: var (alanlar: details, ok, summary, tool)
-- annotations: var (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)
+- Input fields: none
+- outputSchema: present (fields: details, ok, summary, tool)
+- annotations: present (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)
 
 ### `rea_registry_izi`
 
-API olaylarından registry yazma.
+Registry writes from API events.
 
-- Girdi alanları:
-  - `text` (string, zorunlu)
-- outputSchema: var (alanlar: details, ok, summary, tool)
-- annotations: var (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)
+- Input fields:
+  - `text` (string, required)
+- outputSchema: present (fields: details, ok, summary, tool)
+- annotations: present (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)
 
 ### `rea_scan_repo`
 
-Repo taraması (tip+plan).
+Repo scan (type + plan).
 
-- Girdi alanları:
-  - `path` (string, zorunlu)
-- outputSchema: var (alanlar: details, ok, summary, tool)
-- annotations: var (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)
+- Input fields:
+  - `path` (string, required)
+- outputSchema: present (fields: details, ok, summary, tool)
+- annotations: present (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)
 
 ### `rea_scan_repo_paralel`
 
-Paralel repo taraması (4'lü havuz, iptalli).
+Parallel repo scan (pool of 4, cancellable).
 
-- Girdi alanları:
-  - `eszamanlilik` (integer, opsiyonel)
-  - `path` (string, zorunlu)
-- outputSchema: var (alanlar: details, iptalEdildi, ok, summary, tool)
-- annotations: var (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)
+- Input fields:
+  - `eszamanlilik` (integer, optional)
+  - `path` (string, required)
+- outputSchema: present (fields: details, iptalEdildi, ok, summary, tool)
+- annotations: present (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)
 
 ### `rea_sniff`
 
-Dosya tip + motor önerisi (magic-byte).
+File type + engine suggestion (magic-byte).
 
-- Girdi alanları:
-  - `b64dosya` (string, zorunlu)
-- outputSchema: var (alanlar: motor, tip)
-- annotations: var (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)
+- Input fields:
+  - `b64dosya` (string, required)
+- outputSchema: present (fields: makine, motor, tip)
+- annotations: present (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)
 
 ### `rea_storage_dump`
 
 Cookies + localStorage.
 
-- Girdi alanları:
-  - `url` (string, zorunlu)
-- outputSchema: var (alanlar: details, ok, summary, tool)
-- annotations: var (openWorldHint=true, readOnlyHint=false)
+- Input fields:
+  - `url` (string, required)
+- outputSchema: present (fields: details, ok, summary, tool)
+- annotations: present (openWorldHint=true, readOnlyHint=false)
 
 ### `rea_typedef_oner`
 
-Argüman adı önerisi + yayılım.
+Argument-name suggestion + spread.
 
-- Girdi alanları:
-  - `text` (string, zorunlu)
-- outputSchema: var (alanlar: arac, ok, oneriler, sayi)
-- annotations: var (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)
+- Input fields:
+  - `text` (string, required)
+- outputSchema: present (fields: arac, ok, oneriler, sayi)
+- annotations: present (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)
 
 ### `rea_unpack_hunt`
 
-Bilinmeyen packer rehberli akışı.
+Guided flow for an unknown packer.
 
-- Girdi alanları:
-  - `path` (string, zorunlu)
-- outputSchema: var (alanlar: adimlar, arac, karar, ok)
-- annotations: var (openWorldHint=true, readOnlyHint=false)
+- Input fields:
+  - `path` (string, required)
+- outputSchema: present (fields: adimlar, arac, karar, ok)
+- annotations: present (openWorldHint=true, readOnlyHint=false)
 
 ### `rea_unpack_try`
 
-Otomatik unpack yönlendirme.
+Automatic unpack routing.
 
-- Girdi alanları:
-  - `path` (string, zorunlu)
-- outputSchema: var (alanlar: sonuc, yontem)
-- annotations: var (destructiveHint=true, openWorldHint=true, readOnlyHint=false)
+- Input fields:
+  - `path` (string, required)
+- outputSchema: present (fields: sonuc, yontem)
+- annotations: present (destructiveHint=true, openWorldHint=true, readOnlyHint=false)
 
 ### `rea_upx_info`
 
-UPX sıkışık mı bilgisi.
+Whether the file is UPX-packed.
 
-- Girdi alanları:
-  - `path` (string, zorunlu)
-- outputSchema: var (alanlar: arac, cikti, dosya, not, ok, sikisik)
-- annotations: var (openWorldHint=true, readOnlyHint=false)
+- Input fields:
+  - `path` (string, required)
+- outputSchema: present (fields: arac, cikti, dosya, not, ok, sikisik)
+- annotations: present (openWorldHint=true, readOnlyHint=false)
 
 ### `rea_upx_unpack`
 
-UPX açma.
+UPX unpack.
 
-- Girdi alanları:
-  - `out` (string, zorunlu)
-  - `path` (string, zorunlu)
-- outputSchema: var (alanlar: arac, cikti, dosya, log, ok)
-- annotations: var (destructiveHint=true, openWorldHint=true, readOnlyHint=false)
+- Input fields:
+  - `out` (string, required)
+  - `path` (string, required)
+- outputSchema: present (fields: arac, cikti, dosya, log, ok)
+- annotations: present (destructiveHint=true, openWorldHint=true, readOnlyHint=false)
 
 ### `rea_wasm_decode`
 
-WASM/WAT çözümleme (wabt).
+WASM/WAT decode (wabt).
 
-- Girdi alanları:
-  - `path` (string, zorunlu)
-- outputSchema: var (alanlar: details, ok, summary, tool)
-- annotations: var (openWorldHint=true, readOnlyHint=false)
+- Input fields:
+  - `path` (string, required)
+- outputSchema: present (fields: details, ok, summary, tool)
+- annotations: present (openWorldHint=true, readOnlyHint=false)
 
 ### `rea_wasm_exports`
 
 WAT export listesi (offline).
 
-- Girdi alanları:
-  - `wat` (string, zorunlu)
-- outputSchema: var (alanlar: details, ok, summary, tool)
-- annotations: var (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)
+- Input fields:
+  - `wat` (string, required)
+- outputSchema: present (fields: details, ok, summary, tool)
+- annotations: present (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)
 
 ### `rea_wasm_imports`
 
 WASM import listesi.
 
-- Girdi alanları:
-  - `b64` (string, zorunlu)
-- outputSchema: var (alanlar: details, ok, summary, tool)
-- annotations: var (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)
+- Input fields:
+  - `b64` (string, required)
+- outputSchema: present (fields: details, ok, summary, tool)
+- annotations: present (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)
 
 ### `rea_wasm_sections`
 
 WASM section tablosu.
 
-- Girdi alanları:
-  - `b64` (string, zorunlu)
-- outputSchema: var (alanlar: details, ok, summary, tool)
-- annotations: var (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)
+- Input fields:
+  - `b64` (string, required)
+- outputSchema: present (fields: details, ok, summary, tool)
+- annotations: present (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)
 
 ### `rea_wasm_validate`
 
-WASM doğrulama (wasm-validate).
+WASM validation (wasm-validate).
 
-- Girdi alanları:
-  - `path` (string, zorunlu)
-- outputSchema: var (alanlar: arac, detay, ok, ozet)
-- annotations: var (openWorldHint=true, readOnlyHint=false)
+- Input fields:
+  - `path` (string, required)
+- outputSchema: present (fields: arac, detay, ok, ozet)
+- annotations: present (openWorldHint=true, readOnlyHint=false)
 
 ### `session_close`
 
 Drop an application session and its event buffer.
 
-- Girdi alanları:
-  - `session_id` (string, zorunlu) — Application session id. Not an MCP protocol session.
-- outputSchema: var (alanlar: closed, session_id)
-- annotations: var (destructiveHint=true, openWorldHint=true, readOnlyHint=false)
+- Input fields:
+  - `session_id` (string, required) — Application session id. Not an MCP protocol session.
+- outputSchema: present (fields: closed, session_id)
+- annotations: present (destructiveHint=true, openWorldHint=true, readOnlyHint=false)
 
 ### `session_list`
 
 List application sessions held in this process.
 
-- Girdi alanları: yok
-- outputSchema: var (alanlar: sessions)
-- annotations: var (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)
+- Input fields: none
+- outputSchema: present (fields: sessions)
+- annotations: present (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)
 
 ### `session_open`
 
 Open an application session for an engine. Returns session_id for later tool arguments.
 
-- Girdi alanları:
-  - `engine` (enum, zorunlu)
-- outputSchema: var (alanlar: createdAt, engine, session_id)
-- annotations: var (destructiveHint=false, idempotentHint=false, openWorldHint=false, readOnlyHint=false)
+- Input fields:
+  - `engine` (enum, required)
+- outputSchema: present (fields: createdAt, engine, session_id)
+- annotations: present (destructiveHint=false, idempotentHint=false, openWorldHint=false, readOnlyHint=false)
 
 ### `static_info`
 
 Report radare2 static-engine capabilities, r2 availability, and the open target (if any).
 
-- Girdi alanları:
-  - `session_id` (string, zorunlu) — Application session id. Not an MCP protocol session.
-- outputSchema: var (alanlar: capabilities, engine, r2, session_id, target)
-- annotations: var (openWorldHint=true, readOnlyHint=false)
+- Input fields:
+  - `session_id` (string, required) — Application session id. Not an MCP protocol session.
+- outputSchema: present (fields: capabilities, engine, r2, session_id, target)
+- annotations: present (openWorldHint=true, readOnlyHint=false)
 
 ### `strings`
 
 Strings found in the binary (address, section, length, text).
 
-- Girdi alanları:
-  - `limit` (integer, opsiyonel) — Max strings returned (default 200).
-  - `min_length` (integer, opsiyonel) — Keep strings with length >= this (default 0).
-  - `offset` (integer, opsiyonel) — Skip this many matches (default 0).
-  - `section` (string, opsiyonel) — Only strings from this section, e.g. ".rodata".
-  - `session_id` (string, zorunlu) — Application session id. Not an MCP protocol session.
-- outputSchema: var (alanlar: offset, session_id, strings, total)
-- annotations: var (openWorldHint=true, readOnlyHint=false)
+- Input fields:
+  - `limit` (integer, optional) — Max strings returned (default 200).
+  - `min_length` (integer, optional) — Keep strings with length >= this (default 0).
+  - `offset` (integer, optional) — Skip this many matches (default 0).
+  - `section` (string, optional) — Only strings from this section, e.g. ".rodata".
+  - `session_id` (string, required) — Application session id. Not an MCP protocol session.
+- outputSchema: present (fields: offset, session_id, strings, total)
+- annotations: present (openWorldHint=true, readOnlyHint=false)
 
 ### `xrefs`
 
 Cross-references to and/or from an address (code and data).
 
-- Girdi alanları:
-  - `address` (string | number, zorunlu) — Target address as hex ("0x400200"), decimal, or flag name ("entry0").
-  - `direction` (enum, opsiyonel)
-  - `session_id` (string, zorunlu) — Application session id. Not an MCP protocol session.
-- outputSchema: var (alanlar: address, from, session_id, to)
-- annotations: var (openWorldHint=true, readOnlyHint=false)
+- Input fields:
+  - `address` (string | number, required) — Target address as hex ("0x400200"), decimal, or flag name ("entry0").
+  - `direction` (enum, optional)
+  - `session_id` (string, required) — Application session id. Not an MCP protocol session.
+- outputSchema: present (fields: address, from, session_id, to)
+- annotations: present (openWorldHint=true, readOnlyHint=false)
 
 ## Resources
 
-- `rea-plus://capabilities-safety` — ad: `capabilities-safety` — mimeType: `application/json` — Statik yetenek ve guvenlik kurallari ozeti (salt-okunur).
-- `rea-plus://server-info` — ad: `server-info` — mimeType: `application/json` — Statik sunucu kimligi ve yuzey ozeti (salt-okunur).
+- `rea-plus://capabilities-safety` — name: `capabilities-safety` — mimeType: `application/json` — Statik yetenek ve guvenlik kurallari ozeti (salt-okunur).
+- `rea-plus://server-info` — name: `server-info` — mimeType: `application/json` — Statik sunucu kimligi ve yuzey ozeti (salt-okunur).
 
 ## Prompts
 
-- `android-triage` — argümanlar: `focus` (opsiyonel), `path` (zorunlu) — APK icin jadx tabanli statik triage akisi (yan etkisiz prompt).
-- `binary-diff` — argümanlar: `eski` (zorunlu), `focus` (opsiyonel), `yeni` (zorunlu) — Iki surum arasi fonksiyon diff ve yama incelemesi akisi (yan etkisiz prompt).
-- `dotnet-malware-triage` — argümanlar: `focus` (opsiyonel), `path` (zorunlu) — .NET ornegi icin statik zararli-yazilim triage akisi (yan etkisiz prompt).
-- `elf-linux-triage` — argümanlar: `focus` (opsiyonel), `path` (zorunlu) — ELF hedefte layout -> sembol -> gadget statik triage akisi (yan etkisiz prompt).
-- `evidence-report` — argümanlar: `focus` (opsiyonel), `path` (zorunlu) — Kanit paketini dogrulanmis rapora donduren akis (yan etkisiz prompt).
-- `packer-triage` — argümanlar: `focus` (opsiyonel), `path` (zorunlu) — Packer/koruma tespiti icin sirali, statik-oncelikli rea akisi (yan etkisiz prompt).
-- `pe-crash-triage` — argümanlar: `focus` (opsiyonel), `path` (zorunlu) — PE hedefte triage -> statik -> crash -> davranis akisi (yan etkisiz prompt).
+- `android-triage` — arguments: `focus` (optional), `path` (required) — jadx-based static triage flow for an APK (side-effect-free prompt).
+- `binary-diff` — arguments: `eski` (required), `focus` (optional), `yeni` (required) — Function diff and patch-review flow between two versions (side-effect-free prompt).
+- `dotnet-malware-triage` — arguments: `focus` (optional), `path` (required) — Static malware-triage flow for a .NET sample (side-effect-free prompt).
+- `elf-linux-triage` — arguments: `focus` (optional), `path` (required) — Static layout -> symbol -> gadget triage flow for an ELF target (side-effect-free prompt).
+- `evidence-report` — arguments: `focus` (optional), `path` (required) — Flow that turns an evidence bundle into a verified report (side-effect-free prompt).
+- `packer-triage` — arguments: `focus` (optional), `path` (required) — Sequential, static-first rea flow for packer/protection detection (side-effect-free prompt).
+- `pe-crash-triage` — arguments: `focus` (optional), `path` (required) — Triage -> static -> crash -> behavior flow for a PE target (side-effect-free prompt).

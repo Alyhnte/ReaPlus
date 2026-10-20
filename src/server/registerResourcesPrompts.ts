@@ -206,37 +206,37 @@ export function registerResourcesPrompts(server: McpServer, info: ReaServerInfoI
 
   server.registerPrompt(
     "packer-triage",
-    { title: "Packer triage", description: "Packer/koruma tespiti icin sirali, statik-oncelikli rea akisi (yan etkisiz prompt).", argsSchema: TRIAGE_ARGS },
+    { title: "Packer triage", description: "Sequential, static-first rea flow for packer/protection detection (side-effect-free prompt).", argsSchema: TRIAGE_ARGS },
     ({ path, focus }) => promptSonuc(buildPackerTriageText(path, focus)),
   );
   server.registerPrompt(
     "dotnet-malware-triage",
-    { title: ".NET malware triage", description: ".NET ornegi icin statik zararli-yazilim triage akisi (yan etkisiz prompt).", argsSchema: TRIAGE_ARGS },
+    { title: ".NET malware triage", description: "Static malware-triage flow for a .NET sample (side-effect-free prompt).", argsSchema: TRIAGE_ARGS },
     ({ path, focus }) => promptSonuc(buildDotnetMalwareTriageText(path, focus)),
   );
   server.registerPrompt(
     "android-triage",
-    { title: "Android triage", description: "APK icin jadx tabanli statik triage akisi (yan etkisiz prompt).", argsSchema: TRIAGE_ARGS },
+    { title: "Android triage", description: "jadx-based static triage flow for an APK (side-effect-free prompt).", argsSchema: TRIAGE_ARGS },
     ({ path, focus }) => promptSonuc(buildAndroidTriageText(path, focus)),
   );
   server.registerPrompt(
     "pe-crash-triage",
-    { title: "PE/crash triage", description: "PE hedefte triage -> statik -> crash -> davranis akisi (yan etkisiz prompt).", argsSchema: TRIAGE_ARGS },
+    { title: "PE/crash triage", description: "Triage -> static -> crash -> behavior flow for a PE target (side-effect-free prompt).", argsSchema: TRIAGE_ARGS },
     ({ path, focus }) => promptSonuc(buildPeCrashTriageText(path, focus)),
   );
   server.registerPrompt(
     "elf-linux-triage",
-    { title: "ELF/Linux triage", description: "ELF hedefte layout -> sembol -> gadget statik triage akisi (yan etkisiz prompt).", argsSchema: TRIAGE_ARGS },
+    { title: "ELF/Linux triage", description: "Static layout -> symbol -> gadget triage flow for an ELF target (side-effect-free prompt).", argsSchema: TRIAGE_ARGS },
     ({ path, focus }) => promptSonuc(buildElfLinuxTriageText(path, focus)),
   );
   server.registerPrompt(
     "binary-diff",
-    { title: "Binary diff / yama analizi", description: "Iki surum arasi fonksiyon diff ve yama incelemesi akisi (yan etkisiz prompt).", argsSchema: DIFF_ARGS },
+    { title: "Binary diff / patch analysis", description: "Function diff and patch-review flow between two versions (side-effect-free prompt).", argsSchema: DIFF_ARGS },
     ({ eski, yeni, focus }) => promptSonuc(buildBinaryDiffText(eski, yeni, focus)),
   );
   server.registerPrompt(
     "evidence-report",
-    { title: "Evidence report", description: "Kanit paketini dogrulanmis rapora donduren akis (yan etkisiz prompt).", argsSchema: TRIAGE_ARGS },
+    { title: "Evidence report", description: "Flow that turns an evidence bundle into a verified report (side-effect-free prompt).", argsSchema: TRIAGE_ARGS },
     ({ path, focus }) => promptSonuc(buildEvidenceReportText(path, focus)),
   );
 }

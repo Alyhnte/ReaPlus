@@ -4,7 +4,7 @@
 
 # Reverse Engine Anything Plus
 
-**One MCP server for reverse engineering — live Windows debugging plus a 157-tool static-analysis suite for PE/ELF, Mach-O, .NET, APK, IL2CPP, WASM/EVM, firmware, and the web.**
+**One MCP server for reverse engineering — live Windows debugging plus a 161-tool static-analysis suite for PE/ELF, Mach-O, .NET, APK, IL2CPP, WASM/EVM, firmware, and the web.**
 
 Your agent asks questions; rea-plus inspects the binary and answers with evidence, not guesses.
 
@@ -24,7 +24,7 @@ Your agent asks questions; rea-plus inspects the binary and answers with evidenc
 ## ✨ Why rea-plus?
 
 - 🐞 **Real debugging, not screenshots** — x64dbg, cdb (WinDbg), and Frida engines behind one frozen 30-tool core: breakpoints, stepping, registers, memory, call stacks, time-travel checkpoints.
-- 🧰 **157 static tools** — Ghidra headless, rizin/radare2, .NET CIL (dnfile) and ILSpy, jadx/apktool/adb, WASM + EVM, firmware, browser/HAR, UPX, PE/ELF/Mach-O readers, and more.
+- 🧰 **161 static tools** — Ghidra headless, rizin/radare2, .NET CIL (dnfile) and ILSpy, jadx/apktool/adb, WASM + EVM, firmware, browser/HAR, UPX, PE/ELF/Mach-O readers, and more.
 - 🤝 **Honest by design** — a missing backend answers `capability_unsupported` with an install hint. Nothing fakes a result, errors come back as proper MCP `isError`, and mutating live-debug calls require `confirm:true`.
 - 🧩 **191 tools, 2 resources, 7 prompts** — the full generated catalog lives in [`docs/TOOLS.md`](docs/TOOLS.md); `REA_TOOLSETS` lets small-context clients load only a profile slice (see [Configuration](#-configuration)). Without an HTTP token, only a 44-tool read-only allowlist is registered instead of the full surface.
 - 🔌 **Two transports** — stdio for local agents, streamable HTTP (`/mcp` + `/health`, bearer token, localhost Host/Origin validation) for shared setups.
@@ -233,7 +233,7 @@ The complete, generated reference — **191 tools + 2 resources (`rea-plus://ser
 flowchart LR
     A["AI agent / MCP client"] -->|stdio or streamable HTTP| S["rea-plus server"]
     S --> C["Conduit core · 30 frozen tools<br/>x64dbg · cdb · Frida · radare2"]
-    S --> D["rea domains · 157 tools<br/>Ghidra · rizin · jadx · dnfile · wabt · Playwright"]
+    S --> D["rea domains · 161 tools<br/>Ghidra · rizin · jadx · dnfile · wabt · Playwright"]
     C --> T["Target binary / live process"]
     D --> T
     C --> E["Evidence bundle + obligation ledger"]
@@ -242,11 +242,11 @@ flowchart LR
 ```
 
 - **Frozen core.** The 30 conduit tool names are immutable (`src/facade/toolNamespace.ts`); renames are forbidden, so existing conduit clients keep working.
-- **rea domains.** 157 `rea_*` tools register centrally in `src/server/registerReaTools.ts`.
+- **rea domains.** 161 `rea_*` tools register centrally in `src/server/registerReaTools.ts`.
 - **Confirm gates.** Live operations that mutate a target require `confirm:true`; otherwise you get `confirmation_required`, never a silent side effect.
 - **One catalog.** `mergedCatalog()` (8 conduit + 16 rea prerequisite entries) is the single source `doctor` reads for versions and download links.
-- **Resources + prompts.** Two static, read-only resources (`rea-plus://server-info`, `rea-plus://capabilities-safety`) and three side-effect-free prompts (`packer-triage`, `dotnet-malware-triage`, `android-triage`) are registered alongside the tools; prompts only return text and never run a tool.
-- **Typed outputs (partial).** `structuredContent` mirrors the text JSON, and coverage is deliberately partial: 187 tools declare an `outputSchema` and 187 tools carry annotations. Tools outside the schema set return text JSON without a declared output schema — see [`docs/TOOLS.md`](docs/TOOLS.md) per tool.
+- **Resources + prompts.** Two static, read-only resources (`rea-plus://server-info`, `rea-plus://capabilities-safety`) and seven side-effect-free prompts (`packer-triage`, `dotnet-malware-triage`, `android-triage`, `pe-crash-triage`, `elf-linux-triage`, `binary-diff`, `evidence-report`) are registered alongside the tools; prompts only return text and never run a tool.
+- **Typed outputs (partial).** `structuredContent` mirrors the text JSON, and coverage is deliberately partial: 187 tools declare an `outputSchema` and 191 tools carry annotations. Tools outside the schema set return text JSON without a declared output schema — see [`docs/TOOLS.md`](docs/TOOLS.md) per tool.
 - **Toolset profiles.** `REA_TOOLSETS` filters registration to a profile slice (comma-separated union; unknown names fail startup instead of silently falling back to `all`). Resources and prompts are not filtered. New tools land in `all` only (fail-closed).
 - **Roots (legacy + modern).** With `REA_ROOTS=1` on the legacy stdio path, client roots can only narrow `REA_WORKSPACE_ROOT`; they can never widen it. Modern-protocol Roots uses the SDK multi-round-trip flow (`inputRequired` + `inputResponses`); `notifications/roots/list_changed` only exists pre-2026, so refresh happens on the next MRTR round.
 - **Progress (generalized).** Stage helpers (`createStageProgress`/`onAbort`) pace notifications (~20/s) and clean up on cancel; `rea_process_run` pilot unchanged, `rea_scan_repo` + `rea_jadx_full` staged. Other synchronous handlers remain out of scope.
@@ -294,7 +294,7 @@ External tools are discovered from these variables and PATH only — no machine-
 rea-plus is a debugger: by design it can launch, attach to, and instrument local processes. Treat access to it like shell access.
 
 - **stdio first.** The default transport never opens a port.
-- **HTTP is locked down.** Bearer token (constant-time compare), localhost Host/Origin validation against DNS-rebinding/CSRF, per-IP rate and concurrency limits (`REA_HTTP_RATE_LIMIT_PER_MIN`, `REA_HTTP_MAX_CONCURRENT`), and — when started without a token — a loud warning plus a reduced surface of 44 read-only, path-free allowlist tools (intersected with `REA_TOOLSETS`) instead of all 187.
+- **HTTP is locked down.** Bearer token (constant-time compare), localhost Host/Origin validation against DNS-rebinding/CSRF, per-IP rate and concurrency limits (`REA_HTTP_RATE_LIMIT_PER_MIN`, `REA_HTTP_MAX_CONCURRENT`), and — when started without a token — a loud warning plus a reduced surface of 44 read-only, path-free allowlist tools (intersected with `REA_TOOLSETS`) instead of all 191.
 - **Workspace boundary (opt-in).** With `REA_WORKSPACE_ROOT` set, `rea_*` path arguments, the conduit `open_target`/`debug_open` paths, and user-visible derived writes must stay inside the root (realpath-checked, so junction/symlink escapes fail). Operator temp/cache surfaces (browser artifacts, Ghidra tmp dirs, the hopper tmp request file, the apktool framework cache) are a documented exception and are not forced inside the root.
 - **Audit without content.** `REA_AUDIT_LOG` records one JSONL line per tool call with only time, transport, tool name, duration, and `isError` — never arguments, tokens, paths, or target content.
 - **Inputs are validated.** Addresses that reach backend command languages are restricted to hex/decimal/symbol form — no `;`/`!` command injection into r2/rizin.
@@ -328,7 +328,7 @@ Three end-to-end analysis sessions written with **real tool commands and real ou
 Near the top of the list — the full, prioritized table lives in [`docs/ROADMAP.md`](docs/ROADMAP.md):
 
 - npm + MCP Registry are live (`rea-plus@0.13.0`, `io.github.Alyhnte/rea-plus`) — supported installs are `npx -y rea-plus` and GHCR
-- Typed surface is closed: 183 tools carry `outputSchema` (4 permanently schema-less) and 187 carry annotations; async whitelist is 3 tools, progress helpers cover the staged tools
+- Typed surface is closed: 187 tools carry `outputSchema` (4 permanently schema-less) and 191 carry annotations; async whitelist is 3 tools, progress helpers cover the staged tools
 - Completing the golden binary corpus (expected-output hashes per provider) — including the still-open live Frida VM check and the DEX golden APK acceptance test
 - Signed releases + SBOM, and a documented VM sandbox profile for live work
 

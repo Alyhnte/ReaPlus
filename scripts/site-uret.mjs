@@ -1,6 +1,6 @@
 // site-uret.mjs: Dalga K/2 — aranabilir tek statik site üretimi (i18n).
-// Kaynaklar: README.md + docs/{TOOLS,EXAMPLES,ROADMAP}.md + CHANGELOG.md +
-// docs/PROMPTS.md  ->  docs/site/*.html (TR) + docs/site/{en,de,fr,es}/*.html.
+// Kaynaklar: docs/i18n/{lang}/{README,TOOLS,EXAMPLES,ROADMAP,CHANGELOG,PROMPTS}.md
+// -> docs/site/*.html (TR) + docs/site/{en,de,fr,es}/*.html.
 // Sayılar TR TOOLS.md özetinden alınır (gerçek koşu; uydurma sayı YOK).
 // Chrome metinleri docs/i18n/{lang}/index-chrome.md'den okunur (18 key + EK_CHROME).
 // Bağımlılık yok (yalnız node:fs/path/url), ağ/süreç/timer yok.
@@ -19,11 +19,11 @@ const VARSAYILAN_DIL = "tr";
 
 // Dil başına ek chrome (theme/skip/a18n — chrome dosyası 18 key sınırını korur).
 const EK_CHROME = {
-  tr: { "theme.light": "Açık tema", "theme.dark": "Koyu tema", "skip": "İçeriğe atla", "a11y.siteNav": "Site", "a11y.summary": "Yüzey özeti", "brand.tagline": "tersine mühendislik çalışma yüzeyi", "footer.gen": "ReaPlus Docs — statik site. Üretim: <code>node scripts/site-uret.mjs</code> · Sayılar docs/TOOLS.md özetinden alınır (gerçek koşu).", "prompt.ready": "hazır prompt", "meta.desc": "ReaPlus teknik dokümantasyon sitesi: kurulum, araç referansı, örnekler, yol haritası.", "dil.aria": "Dil" },
-  en: { "theme.light": "Light theme", "theme.dark": "Dark theme", "skip": "Skip to content", "a11y.siteNav": "Site", "a11y.summary": "Surface summary", "brand.tagline": "reverse engineering work surface", "footer.gen": "ReaPlus Docs — static site. Generate: <code>node scripts/site-uret.mjs</code> · Numbers from docs/TOOLS.md summary (real run).", "prompt.ready": "ready prompt", "meta.desc": "ReaPlus technical documentation: install, tool reference, examples, roadmap.", "dil.aria": "Language" },
-  de: { "theme.light": "Helles Design", "theme.dark": "Dunkles Design", "skip": "Zum Inhalt springen", "a11y.siteNav": "Site", "a11y.summary": "Oberflächenzusammenfassung", "brand.tagline": "Reverse-Engineering-Arbeitsfläche", "footer.gen": "ReaPlus Docs — statische Site. Erzeugung: <code>node scripts/site-uret.mjs</code> · Zahlen aus der TOOLS.md-Zusammenfassung (echter Lauf).", "prompt.ready": "fertige Prompt", "meta.desc": "ReaPlus technische Dokumentation: Installation, Werkzeugreferenz, Beispiele, Fahrplan.", "dil.aria": "Sprache" },
-  fr: { "theme.light": "Thème clair", "theme.dark": "Thème sombre", "skip": "Aller au contenu", "a11y.siteNav": "Site", "a11y.summary": "Résumé de surface", "brand.tagline": "surface de travail de rétro-ingénierie", "footer.gen": "ReaPlus Docs — site statique. Production : <code>node scripts/site-uret.mjs</code> · Nombres du résumé TOOLS.md (exécution réelle).", "prompt.ready": "prompt prêt", "meta.desc": "Documentation technique ReaPlus : installation, référence des outils, exemples, feuille de route.", "dil.aria": "Langue" },
-  es: { "theme.light": "Tema claro", "theme.dark": "Tema oscuro", "skip": "Saltar al contenido", "a11y.siteNav": "Sitio", "a11y.summary": "Resumen de superficie", "brand.tagline": "superficie de trabajo de ingeniería inversa", "footer.gen": "ReaPlus Docs — sitio estático. Generación: <code>node scripts/site-uret.mjs</code> · Números del resumen TOOLS.md (ejecución real).", "prompt.ready": "prompt listo", "meta.desc": "Documentación técnica de ReaPlus: instalación, referencia de herramientas, ejemplos, hoja de ruta.", "dil.aria": "Idioma" },
+  tr: { "theme.light": "Açık tema", "theme.dark": "Koyu tema", "skip": "İçeriğe atla", "a11y.siteNav": "Site", "a11y.summary": "Yüzey özeti", "brand.tagline": "tersine mühendislik çalışma yüzeyi", "footer.gen": "ReaPlus Docs — statik site. Üretim: <code>node scripts/site-uret.mjs</code> · Sayılar docs/i18n/tr/TOOLS.md özetinden alınır (gerçek koşu).", "prompt.ready": "hazır prompt", "meta.desc": "ReaPlus teknik dokümantasyon sitesi: kurulum, araç referansı, örnekler, yol haritası.", "dil.aria": "Dil" },
+  en: { "theme.light": "Light theme", "theme.dark": "Dark theme", "skip": "Skip to content", "a11y.siteNav": "Site", "a11y.summary": "Surface summary", "brand.tagline": "reverse engineering work surface", "footer.gen": "ReaPlus Docs — static site. Generate: <code>node scripts/site-uret.mjs</code> · Numbers from the docs/i18n/tr/TOOLS.md summary (real run).", "prompt.ready": "ready prompt", "meta.desc": "ReaPlus technical documentation: install, tool reference, examples, roadmap.", "dil.aria": "Language" },
+  de: { "theme.light": "Helles Design", "theme.dark": "Dunkles Design", "skip": "Zum Inhalt springen", "a11y.siteNav": "Site", "a11y.summary": "Oberflächenzusammenfassung", "brand.tagline": "Reverse-Engineering-Arbeitsfläche", "footer.gen": "ReaPlus Docs — statische Site. Erzeugung: <code>node scripts/site-uret.mjs</code> · Zahlen aus der docs/i18n/tr/TOOLS.md-Zusammenfassung (echter Lauf).", "prompt.ready": "fertige Prompt", "meta.desc": "ReaPlus technische Dokumentation: Installation, Werkzeugreferenz, Beispiele, Fahrplan.", "dil.aria": "Sprache" },
+  fr: { "theme.light": "Thème clair", "theme.dark": "Thème sombre", "skip": "Aller au contenu", "a11y.siteNav": "Site", "a11y.summary": "Résumé de surface", "brand.tagline": "surface de travail de rétro-ingénierie", "footer.gen": "ReaPlus Docs — site statique. Production : <code>node scripts/site-uret.mjs</code> · Nombres du résumé docs/i18n/tr/TOOLS.md (exécution réelle).", "prompt.ready": "prompt prêt", "meta.desc": "Documentation technique ReaPlus : installation, référence des outils, exemples, feuille de route.", "dil.aria": "Langue" },
+  es: { "theme.light": "Tema claro", "theme.dark": "Tema oscuro", "skip": "Saltar al contenido", "a11y.siteNav": "Sitio", "a11y.summary": "Resumen de superficie", "brand.tagline": "superficie de trabajo de ingeniería inversa", "footer.gen": "ReaPlus Docs — sitio estático. Generación: <code>node scripts/site-uret.mjs</code> · Números del resumen docs/i18n/tr/TOOLS.md (ejecución real).", "prompt.ready": "prompt listo", "meta.desc": "Documentación técnica de ReaPlus: instalación, referencia de herramientas, ejemplos, hoja de ruta.", "dil.aria": "Idioma" },
 };
 
 // Sayfa tanımı: çıktı + kaynak anahtarı + chrome key önekleri.
@@ -185,9 +185,8 @@ function chromeOku(lang) {
   return map;
 }
 
-// Dil için içerik yolu: TR docs/, diğerleri docs/i18n/{lang}/.
+// Dil için içerik yolu: her dil kendi docs/i18n/{lang}/ kopyasını okur.
 function icerikYolu(lang, relPath) {
-  if (lang === VARSAYILAN_DIL) return relPath;
   const base = relPath.split("/").pop();
   return `docs/i18n/${lang}/${base}`;
 }
@@ -356,7 +355,7 @@ function siteDogrula() {
 
 // --- main ---
 if (process.argv.includes("--check")) siteDogrula();
-const toolsMdTR = oku("docs/TOOLS.md");
+const toolsMdTR = oku("docs/i18n/tr/TOOLS.md");
 const sayilar = ozetSayilari(toolsMdTR);
 
 mkdirSync(siteDir, { recursive: true });
