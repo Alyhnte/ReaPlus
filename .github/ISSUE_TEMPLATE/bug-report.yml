@@ -1,0 +1,58 @@
+name: "Bug report"
+description: "Report a reproducible bug"
+title: "[bug] "
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: "Read CONTRIBUTING.md first. Try the bug on the main branch before filling this form; if you are on a personal worktree or change, say so."
+  - type: textarea
+    id: steps-to-reproduce
+    attributes:
+      label: "Steps to reproduce"
+      description: "Small, repeatable steps. Include commands and inputs so a maintainer can run the same thing."
+      placeholder: "1. npm ci | 2. node dist/cli/index.js ... | 3. ..."
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: "Expected behavior"
+      description: "What should have happened? Describe the expected output or result."
+      placeholder: "Example: tools are listed and the doctor output is clean"
+    validations:
+      required: true
+  - type: textarea
+    id: actual
+    attributes:
+      label: "Actual behavior"
+      description: "What happened? Paste the error message, exit code, or observed behavior."
+      placeholder: "Example: capability_unsupported error plus the full error text"
+    validations:
+      required: true
+  - type: textarea
+    id: environment
+    attributes:
+      label: "Environment"
+      description: "Operating system, `node -v` output, rea-plus version, and the backend in use (is ghidra/rizin/jadx/frida installed?)."
+      placeholder: "OS: ... | node -v: ... | rea-plus: ... | backend: ..."
+    validations:
+      required: true
+  - type: textarea
+    id: logs
+    attributes:
+      label: "Logs / error output"
+      description: "Full trace or the relevant log excerpt, if available. Do not leak personal paths or home directories (use tmpdir)."
+      placeholder: "raw output"
+    validations:
+      required: false
+  - type: checkboxes
+    id: preflight
+    attributes:
+      label: "Pre-flight checks"
+      description: "Confirm the following before submitting."
+      options:
+        - label: "I read CONTRIBUTING.md and can reproduce the steps on the main branch"
+          required: true
+        - label: "I searched existing issues and did not find the same bug"
+          required: true

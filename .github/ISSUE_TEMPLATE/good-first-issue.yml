@@ -1,58 +1,58 @@
 name: "Good first issue"
-description: "Yeni baslayanlar icin kucuk, tek konulu gorev onerisi"
+description: "Propose a small, single-topic task for newcomers"
 title: "[good-first] "
 labels: ["good-first-issue"]
 body:
   - type: markdown
     attributes:
-      value: "Bu form yeni baslayanlara uygun kucuk isler icindir. Baslamadan once CONTRIBUTING.md dosyasini okuyun."
+      value: "This form is for small tasks suitable for newcomers. Read CONTRIBUTING.md before starting."
   - type: textarea
-    id: gorev
+    id: task
     attributes:
-      label: "Gorev tanimi"
-      description: "Ne yapilacak, tek cumleyle ve tek konulu olsun."
-      placeholder: "Ornek: README sayi senkronu tutarsizligi"
+      label: "Task description"
+      description: "What needs to be done? One sentence, single topic."
+      placeholder: "Example: README number-sync inconsistency"
     validations:
       required: true
   - type: textarea
-    id: kabul
+    id: acceptance
     attributes:
-      label: "Kabul kriteri"
-      description: "Isin bittigi nasil anlasilir (komut ve beklenen sonuc)."
-      placeholder: "Ornek: npm run typecheck ve npm test yesil"
+      label: "Acceptance criteria"
+      description: "How do we know the work is done (command and expected result)?"
+      placeholder: "Example: npm run typecheck and npm test are green"
     validations:
       required: true
   - type: dropdown
-    id: alan
+    id: area
     attributes:
-      label: "Alan"
-      description: "Gorevin dokundugu alan."
+      label: "Area"
+      description: "The area this task touches."
       options:
         - "docs"
-        - "sayi-senkronu"
-        - "korpus-koken"
+        - "number-sync"
+        - "corpus-provenance"
         - "test"
-        - "kucuk-hata"
-        - "diger"
+        - "small-bug"
+        - "other"
     validations:
       required: true
   - type: input
-    id: dosya
+    id: file
     attributes:
-      label: "Ilgili dosya ya da alan"
-      description: "Ornek: tests/corpus/README.md"
-      placeholder: "yol ya da alan adi"
+      label: "Related file or area"
+      description: "Example: tests/corpus/README.md"
+      placeholder: "path or area name"
     validations:
       required: false
   - type: checkboxes
-    id: uygunluk
+    id: suitability
     attributes:
-      label: "Yeni baslayan uygunlugu"
-      description: "Bu is gercekten ilk PR olabilir mi?"
+      label: "Newcomer suitability"
+      description: "Could this really be a first PR?"
       options:
-        - label: "Tek PR boyutunda, tek konulu"
+        - label: "PR-sized and single-topic"
           required: true
-        - label: "Canli enjeksiyon, debugger, paket yakalama ya da ag indirmesi gerektirmez"
+        - label: "Does not require live injection, a debugger, packet capture, or network downloads"
           required: true
-        - label: "Conduit cekirdek arac adi eklemez ya da degistirmez"
+        - label: "Does not add or change a conduit core tool name"
           required: true

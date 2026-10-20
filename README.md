@@ -315,13 +315,13 @@ node --test tests/evm.test.mjs # single-domain runs work too
 
 Details: [`docs/VERIFY.md`](docs/VERIFY.md) · [`docs/MCP-CONTRACTS.md`](docs/MCP-CONTRACTS.md) · [`CHANGELOG.md`](CHANGELOG.md)
 
-## 🎬 Örnek Oturumlar
+## 🎬 Example Sessions
 
-Uçtan uca, **gerçek araç komutları ve gerçek çıktılarla** yazılmış üç örnek analiz oturumu (uydurma sayı yok; eksik araçta `capability_unsupported` akışı anlatılır):
+Three end-to-end analysis sessions written with **real tool commands and real output** (no invented numbers; the `capability_unsupported` path is explained when a backend is missing):
 
-- [`docs/ornek-oturumlar/ghidra-analiz.md`](docs/ornek-oturumlar/ghidra-analiz.md) — Ghidra headless: import + analiz, `rea_ghidra_*` (funcs/disasm/strings/decompile), ham `analyzeHeadless`/`pyghidraRun` karşılıkları, sık hatalar
-- [`docs/ornek-oturumlar/ida-karsilastirma.md`](docs/ornek-oturumlar/ida-karsilastirma.md) — IDA `idat` batch (`rea_ida_idb`/`rea_ida_flirt`), IDA kurulu değilse kapı davranışı, Ghidra ↔ r2 fonksiyon karşılaştırması (`rea_diff_*`)
-- [`docs/ornek-oturumlar/r2-triage.md`](docs/ornek-oturumlar/r2-triage.md) — radare2 ile 60 sn triage (`iI`/`iz`/`afl`/`pdf`) + `rea_r2_callgraph`/`rea_r2_esil`
+- [`docs/example-sessions/ghidra-analysis.md`](docs/example-sessions/ghidra-analysis.md) — Ghidra headless: import + analysis, `rea_ghidra_*` (funcs/disasm/strings/decompile), raw `analyzeHeadless`/`pyghidraRun` equivalents, common errors
+- [`docs/example-sessions/ida-comparison.md`](docs/example-sessions/ida-comparison.md) — IDA `idat` batch (`rea_ida_idb`/`rea_ida_flirt`), behavior when IDA is not installed, Ghidra ↔ r2 function comparison (`rea_diff_*`)
+- [`docs/example-sessions/r2-triage.md`](docs/example-sessions/r2-triage.md) — 60-second triage with radare2 (`iI`/`iz`/`afl`/`pdf`) + `rea_r2_callgraph`/`rea_r2_esil`
 
 ## 🗺️ Roadmap
 

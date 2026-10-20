@@ -1,0 +1,56 @@
+name: "Feature request"
+description: "Suggest a new feature or improvement"
+title: "[feature] "
+labels: ["enhancement"]
+body:
+  - type: markdown
+    attributes:
+      value: "Check CONTRIBUTING.md and docs/ROADMAP.md first; the work you are proposing may already be planned."
+  - type: textarea
+    id: problem
+    attributes:
+      label: "Problem statement"
+      description: "What is the pain point, and who is affected? Describe the current state briefly and clearly."
+      placeholder: "Example: a new file format cannot be analyzed"
+    validations:
+      required: true
+  - type: textarea
+    id: solution
+    attributes:
+      label: "Proposed solution"
+      description: "What should it look like? Describe the expected behavior, output, or interface."
+      placeholder: "Example: the rea_... tool returns a real result instead of capability_unsupported"
+    validations:
+      required: true
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: "Alternatives"
+      description: "Other approaches you considered and why they are secondary (optional)."
+      placeholder: "Example: a manual CLI workaround exists but is not automated"
+    validations:
+      required: false
+  - type: dropdown
+    id: area
+    attributes:
+      label: "Area"
+      description: "The area this proposal touches."
+      options:
+        - "tool"
+        - "cli"
+        - "docs"
+        - "test"
+        - "install/distribution"
+        - "other"
+    validations:
+      required: true
+  - type: checkboxes
+    id: scope
+    attributes:
+      label: "Scope"
+      description: "Does the proposal respect the following limits?"
+      options:
+        - label: "It does not touch the 30 conduit core tool names (toolNamespace.ts is frozen)"
+          required: true
+        - label: "It contains no invented numbers/tools/claims; evidence will be backed by a source"
+          required: true

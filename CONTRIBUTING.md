@@ -1,206 +1,199 @@
-# Katkı Rehberi (Contributing)
+# Contributing Guide
 
-Issues ve PR'ler açık — hata raporu, özellik fikri, docs. Aşağıdaki akış
-README'daki kısa bölümü genişletir; kurallar ihlal edilirse CI kızarır.
+Issues and PRs are welcome — bug reports, feature ideas, and docs. The flow below
+expands the short section in the README; CI fails when the rules are broken.
 
-Formlar: `.github/ISSUE_TEMPLATE/` altında `bug-raporu.yml` (hata),
-`ozellik-istegi.yml` (özellik) ve `good-first-issue.yml` (ilk PR adayı
-küçük iş) — doğru formu seçin, boş issue yerine formu doldurun.
+Forms: under `.github/ISSUE_TEMPLATE/`, use `bug-report.yml` (bugs),
+`feature-request.yml` (features), and `good-first-issue.yml` (small starter
+tasks) — pick the right form instead of opening an empty issue.
 
-## Kurulum
+## Setup
 
 ```bash
 git clone https://github.com/Alyhnte/ReaPlus.git
 cd ReaPlus
-npm ci                 # temiz kurulum (CI ile aynı)
-npm run build          # tsc + çalışma-zamanı asset'leri -> dist/
+npm ci                 # clean install (same as CI)
+npm run build          # tsc + runtime assets -> dist/
 ```
 
-Gereksinim: Node.js ≥ 20. Ghidra/rizin/jadx/Frida araçları opsiyoneldir —
-eksik backend `capability_unsupported` + kurulum ipucu verir; kurulu
-olmayan araç için sahte sonuç yazmayın. Kendi makine haritanız için
-`node dist/cli/index.js doctor` koşturun.
+Requirement: Node.js ≥ 20. Ghidra/rizin/jadx/Frida tooling is optional —
+a missing backend returns `capability_unsupported` plus an install hint; never
+fake a result for a tool that is not installed. Run
+`node dist/cli/index.js doctor` for a map of your machine.
 
-Kendi işinizi ana projeden izole edin (bkz. **Dalga Kuralları**): ayrı bir
-çalışma ağacında çalışın (`git worktree add ../ReaPlus-<konu> -b <konu>`)
-ve `npm ci`'yi o dizinde çalıştırın; `npm ci` `prepare` sırasında `build`
-de koşar.
+Isolate your work from the main project (see **Wave Rules**): work in a separate
+worktree (`git worktree add ../ReaPlus-<topic> -b <topic>`) and run `npm ci`
+there; `npm ci` also runs `build` during `prepare`.
 
-## Test
+## Tests
 
 ```bash
-npm run typecheck      # tsc --noEmit, PR öncesi zorunlu
-npm test               # varsayılan küme (canlı enjeksiyon/debugger/paket
-                       # yakalama/tarayıcı hariç; VM/CI işi için ayrı)
-npm run test:live      # her şey dahil — yalnız VM/ayrı CI işinde
-node --test tests/<alan>.test.mjs   # tek dosya koşusu
+npm run typecheck      # tsc --noEmit, required before a PR
+npm test               # default lane (excludes live injection/debugger,
+                       # packet capture, and browser; run those in a VM/CI job)
+npm run test:live      # everything — only in a VM or a dedicated CI job
+node --test tests/<area>.test.mjs   # single-file run
 ```
 
-Tek dosya koşusu en hızlı geri bildirimdir; önce o testi kırmızıya düşürüp
-sonra tam kümeye (`npm test`) geçin. CI (`.github/workflows/ci.yml`,
-Ubuntu, Node 20 + 22) aynısını koşar: `npm ci` → `typecheck` → `build`
-→ `test`.
+A single-file run gives the fastest feedback: make that test red first, then
+move to the full suite (`npm test`). CI (`.github/workflows/ci.yml`, Ubuntu,
+Node 20 + 22) runs the same gates: `npm ci` → `typecheck` → `build` → `test`.
 
-Kurallar:
+Rules:
 
-- Her dosya 90 sn tavanla koşar; asılı süreç/timer bırakmayın (ağaç-kill
-  sizi kurtarır ama bilinçli yazın).
-- Yeni örnek/çıktı ekliyorsanız sayıları gerçek koşudan alın, uydurmayın;
-  `docs/EXAMPLES.md` + `tests/docs-examples.test.mjs` desenini izleyin.
-- `tests/corpus/ornek.js` metin dosyasıdır: LF/CRLF churn'u normaldir,
-  test bitince `git restore -- tests/corpus/ornek.js` ile döndürün.
-- Test ve docs'ta kişisel yol/ev dizini sızdırmayın (`tmpdir()` kullanın,
-  mutlak yolları assert etmeyin).
-- Yeni fixture: `tests/corpus/README.md` adımlarını izleyin (dosya +
-  sha256 + `HASHES.json` + `verify-corpus`); manifest-dışı dosya
-  `corpus-manifest` testini geçirmez.
+- Every file is capped at 90s; do not leave hanging processes or timers (the
+  process-tree kill saves you, but write it deliberately).
+- When adding examples/output, take the numbers from a real run; follow the
+  `docs/EXAMPLES.md` + `tests/docs-examples.test.mjs` pattern.
+- `tests/corpus/ornek.js` is a text file: LF/CRLF churn is normal; restore it
+  with `git restore -- tests/corpus/ornek.js` after the test run.
+- Do not leak personal paths or home directories in tests/docs (use
+  `tmpdir()`; do not assert absolute paths).
+- New fixture: follow `tests/corpus/README.md` (file + sha256 +
+  `HASHES.json` + `verify-corpus`); a file missing from the manifest fails the
+  `corpus-manifest` test.
 
-### Korpus kuralları (`tests/corpus/`)
+### Corpus rules (`tests/corpus/`)
 
-Kanon: `tests/corpus/README.md`. Özet:
+Canonical source: `tests/corpus/README.md`. Summary:
 
-1. Dosyayı bu dizine koy.
-2. sha256 özetini hesapla.
-3. `HASHES.json` içine `kaynak` + `lisans` alanlarıyla yeni girdi ekle
-   (bilinmiyorsa `"bilinmiyor"` yaz, uydurma lisans yazılmaz).
-4. `node scripts/verify-corpus.mjs` ile doğrula — başarıda exit `0`;
-   eksik/uyuşmaz/manifest-dışı dosyada dosya adıyla rapor + exit `1`
-   (`HASHES.json` ve `README.md` fixture sayılmaz).
-5. Manifest'e eklenmeyen dosya testleri geçirmez
+1. Put the file in this directory.
+2. Compute its sha256 digest.
+3. Add an entry to `HASHES.json` with `source` + `license` fields (write
+   `"unknown"` when unknown; never invent a license).
+4. Verify with `node scripts/verify-corpus.mjs` — exit `0` on success; a
+   missing/mismatched/unmanifested file is reported by name with exit `1`
+   (`HASHES.json` and `README.md` are not fixtures).
+5. A file that is not added to the manifest does not pass the tests
    (`tests/corpus-manifest.test.mjs`).
 
-Notlar:
+Notes:
 
-- `tests/corpus/ornek.js` metin dosyasıdır: LF/CRLF churn'u normaldir,
-  test bitince `git restore -- tests/corpus/ornek.js` ile döndürün.
-- `tests/corpus/*` içine el ile oynanmış ya da manifestsiz dosya
-  bırakmayın.
+- `tests/corpus/ornek.js` is a text file: LF/CRLF churn is normal; restore it
+  with `git restore -- tests/corpus/ornek.js` after the test run.
+- Do not leave hand-edited or unmanifested files under `tests/corpus/*`.
 
-## Kod Stili
+## Code Style
 
-- **Dosya adları `kebab-case`**: `bug-raporu.yml`, `docs-examples.test.mjs`,
-  `verify-corpus.mjs`. Test dosyası deseni `<konu>.test.mjs`.
-- **Fonksiyon ve değişken adları `camelCase`**; sınıf/Sabit (örn.
-  `REA_PLUS_VERSION`) yazımlarını değiştirmeyin — `version-sync` testi
-  bağlayıcıdır.
-- **TypeScript `strict: true`** (`tsconfig.json`): tip deliği (`any`,
-  `@ts-ignore`) ile testten kaçmayın; hata dürüstçe fırlatın.
-- **Yorum yalnızca "why" için**: "ne yaptığı" açıklayan yorum tekrardır,
-  kod okunuyorsa yorum yazılmaz; nedenini anlatmayan yorum yazmayın.
-- Yazım/dil tutarlılığı: belge ve şablonlarda Türkçe, kod içi log/uyarı
-  mesajları mevcut dosyanın diliyle uyumlu.
+- **File names use `kebab-case`**: `bug-report.yml`, `docs-examples.test.mjs`,
+  `verify-corpus.mjs`. Test file pattern: `<topic>.test.mjs`.
+- **Function and variable names use `camelCase`**; do not change class/constant
+  spellings (e.g. `REA_PLUS_VERSION`) — the `version-sync` test is binding.
+- **TypeScript `strict: true`** (`tsconfig.json`): do not escape tests with type
+  holes (`any`, `@ts-ignore`); throw an honest error instead.
+- **Comments explain "why" only**: a comment that restates what the code does is
+  noise; do not write comments that omit the reason.
+- Language consistency: docs, templates, and user-facing messages are English;
+  code comments and internal logs follow the language of the surrounding file.
 
-## Dalga Kuralları
+## Wave Rules
 
-Paralel dalgalar aynı repoda farklı worktree'lerde çalışır; kurallar:
+Parallel waves work in separate worktrees of the same repo; rules:
 
-- **Worktree izolasyonu**: her dalga kendi worktree'nde (`dalga-<n>/<konu>`
-  dalı) çalışır; ana dal (main) ve başka dalgaların worktree'lerine
-  dokunulmaz. Kendi worktree'nizde `npm ci` yapın, işi orada bitirin.
-- **Sadece kendi yetki alanınız**: yalnız sizin görevlendirildiğiniz
-  dosyaları değiştirin. Çakışması muhtemel dosyalara (ör.
+- **Worktree isolation**: each wave works in its own worktree (`wave-<n>/<topic>`
+  branch); do not touch main or another wave's worktree. Run `npm ci` in your
+  worktree and finish the work there.
+- **Only your own scope**: change only the files you were assigned. If another
+  wave is touching a likely-conflict file (e.g.
   `.github/ISSUE_TEMPLATE/good-first-issue.yml`, `docs/TOOLS.md`,
-  `.github/workflows/`) başka dal dokunuyorsa dokunmayın.
-- **TDD zorunlu**: yeni davranış ve hata düzeltmesi test-önce yazılır;
-  kırmızı → yeşil → refactor. Testi gevşeterek yeşile dönmek yasaktır
-  (aşağıdaki **TDD kuralı**).
-- **commit / push yalnız ana ajan**: dalga ajanı değişiklik dosyalarını
-  olduğu gibi bırakır ve test sonucunu raporlar; kendisi commit/push atmaz.
-- **`tests/corpus/ornek.js` kirlenir**: test koşusu dosyayı LF'ye çevirir
-  (churn normaldir); iş bitmeden önce
-  `git restore -- tests/corpus/ornek.js` ile temizleyin.
+  `.github/workflows/`), leave it alone.
+- **TDD is mandatory**: new behavior and bug fixes are test-first; red → green →
+  refactor. Going green by loosening a test is forbidden (see **TDD rule**).
+- **commit / push only by the main agent**: a wave agent leaves the changed files
+  in place and reports the test result; it does not commit or push.
+- **`tests/corpus/ornek.js` gets dirty**: the test run converts the file to LF
+  (churn is normal); clean it with
+  `git restore -- tests/corpus/ornek.js` before finishing.
 
-### TDD kuralı
+### TDD rule
 
-Yeni davranış ve hata düzeltmesi test-önce (test-first) yazılır:
-önce başarısız test (kırmızı), sonra en küçük implementasyon (yeşil),
-sonra temizlik (refactor). Testi gevşeterek yeşile dönmek yasaktır.
+New behavior and bug fixes are written test-first: a failing test (red), then
+the smallest implementation (green), then cleanup (refactor). Going green by
+loosening a test is forbidden.
 
 ```bash
-node --test tests/<alan>.test.mjs   # tek dosya koşusu, örn. tests/corpus-manifest.test.mjs
-npm run typecheck                     # tsc --noEmit, PR öncesi zorunlu
-npm test                              # varsayılan küme (node scripts/run-tests.mjs)
+node --test tests/<area>.test.mjs   # single-file run, e.g. tests/corpus-manifest.test.mjs
+npm run typecheck                     # tsc --noEmit, required before a PR
+npm test                              # default lane (node scripts/run-tests.mjs)
 ```
 
-- Yeni örnek/çıktı sayılarını gerçek koşudan alın, uydurmayın;
-  `docs/EXAMPLES.md` + `tests/docs-examples.test.mjs` desenini izleyin.
-- Her dosya 90 sn tavanla koşar; asılı süreç/timer bırakmayın.
-- Test ve docs'ta kişisel yol/ev dizini sızdırmayın (`tmpdir()`
-  kullanın, mutlak yolları assert etmeyin).
+- Take new example/output numbers from a real run; follow the
+  `docs/EXAMPLES.md` + `tests/docs-examples.test.mjs` pattern.
+- Every file is capped at 90s; do not leave hanging processes or timers.
+- Do not leak personal paths or home directories in tests/docs (use `tmpdir()`;
+  do not assert absolute paths).
 
-## PR Akışı
+## PR Flow
 
-1. **Dal açın**: `dalga-<n>/<konu>` (düzeltme `fix/...`, docs `docs/...`).
-2. **Worktree'de çalışın**: kendi izole çalışma ağacınızda (Dalga
-   Kuralları); ana projeye dokunmayın.
-3. **TDD**: önce kırmızı test, sonra en küçük yeşil implementasyon.
-4. **Test yeşil**: yerelde `npm run typecheck` + `npm test` geçmeli;
-   çıktıyı (`npm test` özeti) PR açıklamasına test kanıtı olarak ekleyin.
-5. **PR**: küçük ve tek konulu; açıklama + test kanıtı zorunlu.
-6. **Review → merge**: yorumlar düzeltilir, CI yeşil olduktan sonra merge.
+1. **Create a branch**: `wave-<n>/<topic>` (fixes `fix/...`, docs `docs/...`).
+2. **Work in a worktree**: in your isolated tree (Wave Rules); do not touch the
+   main project.
+3. **TDD**: red test first, then the smallest green implementation.
+4. **Green tests**: `npm run typecheck` + `npm test` must pass locally; include
+   the output (`npm test` summary) in the PR description as test evidence.
+5. **PR**: small and single-topic; description + test evidence are required.
+6. **Review → merge**: address comments and merge after CI is green.
 
-Ek kurallar:
+Additional rules:
 
-- CI (`.github/workflows/ci.yml`, Ubuntu, Node 20 + 22) aynı kapıları
-  koşar: `npm ci` → `typecheck` → `build` → `test`.
-- Bunlara dokunmayın/kırmayın:
-  - Conduit çekirdek 30 araç adı dondurulmuştur
-    (`src/facade/toolNamespace.ts`); yeniden adlandırma yasaktır.
-  - `docs/TOOLS.md` elle düzenlenmez —
-    `node scripts/generate-tool-reference.mjs` ile üretilir;
-    `tool-reference` testi sapmayı yakalar.
-  - Yeni araç dürüst başarısız olur (`capability_unsupported`, asla sahte
-    `ok`); canlı-mutasyon çağrıları `confirm:true` ister.
-- `good-first-issue` arıyorsanız: README/ROADMAP sayı senkronu, corpus
-  fixture köken tablosu gibi küçük tutarlılık işleri ideal ilk PR'dır.
+- CI (`.github/workflows/ci.yml`, Ubuntu, Node 20 + 22) runs the same gates:
+  `npm ci` → `typecheck` → `build` → `test`.
+- Do not touch or break these:
+  - The 30 conduit core tool names are frozen
+    (`src/facade/toolNamespace.ts`); renaming is forbidden.
+  - `docs/TOOLS.md` is not edited by hand — generate it with
+    `node scripts/generate-tool-reference.mjs`; the `tool-reference` test
+    catches drift.
+  - New tools fail honestly (`capability_unsupported`, never a fake `ok`);
+    live-mutation calls require `confirm:true`.
+- If you are looking for a `good-first-issue`: small consistency work such as
+  README/ROADMAP number sync or the corpus provenance table is an ideal first PR.
 
-### `good-first-issue` etiketi + ilk PR
+### `good-first-issue` label + first PR
 
-Etiketin anlamı: bakımcıların yeni başlayanlara uygun gördüğü küçük,
-tek konulu iş. Bulmak için Issues sekmesinde `good-first-issue` etiket
-filtresini kullanın.
+The label means a small, single-topic task that maintainers consider suitable
+for newcomers. Use the `good-first-issue` label filter on the Issues tab to find
+them.
 
-Uygun iş ölçütleri:
+Suitable task criteria:
 
-- Tek PR boyutunda, tek konulu.
-- Canlı enjeksiyon/debugger, paket yakalama, tarayıcı, ağ indirmesi
-  gerektirmez; yeni araç adı eklemez (Conduit çekirdek 30 araç adı
-  dondurulmuştur — `src/facade/toolNamespace.ts`).
-- Korpus fixture'ı ekliyorsa korpus kurallarına uyar.
-- Klasik örnekler: README/ROADMAP sayı senkronu, corpus köken tablosu
-  tamamlama, docs yazım tutarlılığı.
+- PR-sized and single-topic.
+- Does not require live injection/debugger, packet capture, a browser, or
+  network downloads; does not add a new tool name (the 30 conduit core tool
+  names are frozen — `src/facade/toolNamespace.ts`).
+- If it adds a corpus fixture, it follows the corpus rules.
+- Classic examples: README/ROADMAP number sync, completing the corpus provenance
+  table, docs copy consistency.
 
-Öneri formu: `.github/ISSUE_TEMPLATE/good-first-issue.yml` — görev
-tanımı, kabul kriteri, alan, ilgili dosya ve "yeni başlayan uygunluğu"
-kutularını doldurun; bakımcılar etiketi forma göre takar.
+Proposal form: `.github/ISSUE_TEMPLATE/good-first-issue.yml` — fill in the task
+description, acceptance criteria, area, related file, and "newcomer suitability"
+boxes; maintainers apply the label based on the form.
 
-İlk PR adımları:
+First PR steps:
 
-1. Yerde `npm run typecheck` + `npm test` yeşil olmalı.
-2. Küçük, tek konulu PR + açıklama + test kanıtı (`npm test` çıktısı).
-3. Dokunulmazlar: `docs/TOOLS.md` (üretim:
-   `node scripts/generate-tool-reference.mjs`), conduit araç adları,
-   mevcut CI workflow'ları (`.github/workflows/`).
+1. `npm run typecheck` + `npm test` must be green locally.
+2. Small, single-topic PR + description + test evidence (`npm test` output).
+3. Do not touch: `docs/TOOLS.md` (generated by
+   `node scripts/generate-tool-reference.mjs`), conduit tool names, or existing
+   CI workflows (`.github/workflows/`).
 
-## Yayın
+## Release
 
-Yayın yetkisi bakımcıdadır; katkıcılar PR ile sınırlıdır.
+Release authority belongs to the maintainers; contributors are limited to PRs.
 
-- **Tetikleyici**: `v*` tag push — `.github/workflows/publish.yml`
-  (tek tetikleyici; manuel publish workflow'u emekli).
-- **Sıra**: kapılar (`npm ci` → `typecheck` → `build` → `test` →
-  publish kontrol) → `npm publish --access public` (`NPM_TOKEN`) →
-  npm'de sürüm görünene kadar yoklama (10 dk tavan) → MCP Registry
-  yayını (`server.json` validate + GitHub OIDC).
-- **Kuru prova**: `node scripts/publish-kontrol.mjs`
-  (`npm pack --dry-run`; publish yapmaz, paket içeriğini doğrular).
-  `prepublishOnly` zaten `npm run build` koşar.
+- **Trigger**: push a `v*` tag — `.github/workflows/publish.yml` (the only
+  trigger; the manual publish workflow is retired).
+- **Order**: gates (`npm ci` → `typecheck` → `build` → `test` → publish check) →
+  `npm publish --access public` (`NPM_TOKEN`) → poll until the version appears on
+  npm (10 min cap) → MCP Registry publish (`server.json` validate + GitHub OIDC).
+- **Dry run**: `node scripts/publish-kontrol.mjs` (`npm pack --dry-run`; does not
+  publish, validates package contents). `prepublishOnly` already runs
+  `npm run build`.
 - **SBOM**: `node scripts/sbom-uret.mjs` → `sbom.json` (CycloneDX).
-  `tests/dagitim-manifest.test.mjs` sürüm + bileşen tutarlılığını kapıda
-  otomatik doğrular — sürüm atlanınca SBOM'u yeniden üretin, yoksa tam
-  küme testi düşer.
-- **Sürüm senkronu**: `package.json` `version` tek otorite;
-  `package-lock.json`, `server.json` ve `src/**` içindeki
-  `REA_PLUS_VERSION` onunla aynı kalmalı (`tests/version-sync.test.mjs`).
-  `CHANGELOG.md` + `docs/release-v*.md` yayın notlarıyla birlikte
-  güncellenir.
+  `tests/dagitim-manifest.test.mjs` automatically verifies version + component
+  consistency; regenerate the SBOM when you bump the version or the full suite
+  fails.
+- **Version sync**: `package.json` `version` is the single authority;
+  `package-lock.json`, `server.json`, and `REA_PLUS_VERSION` under `src/**` must
+  match it (`tests/version-sync.test.mjs`). Update `CHANGELOG.md` +
+  `docs/release-v*.md` together with the release notes.
