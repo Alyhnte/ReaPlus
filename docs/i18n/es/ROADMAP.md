@@ -1,10 +1,13 @@
 # ROADMAP — hoja de ruta de ReaPlus
 
-> Estado: v0.12.0 publicada (npm + MCP Registry + CI en verde). Este documento nació
+> Estado: v0.13.0 publicada (npm + MCP Registry + CI en verde). Este documento nació
 > con los hallazgos de la revisión inicial del 2026-10-12 y se sincroniza con lo realizado
-> al final de cada oleada. v0.10.1 cerró los puntos de código P1 (limpieza de facade muerta +
-> fixture DEX dorado); la superficie de herramientas no cambió. Los números provienen de la superficie real
-> del servidor compilado (salida de producción de [`TOOLS.md`](TOOLS.md)).
+> al final de cada oleada. v0.13.0 cerró la identidad de máquina PE (ARMNT/ARM64),
+> ELF e_machine + Hexagon, valores plist sin pérdida con tipos, resolución JS
+> CJS/require + relaciones cross-bundle, observación de versión de apktool
+> (advisory), perfil Ghidra raw m68k y sincronía de portadores de versión
+> (9 comprobaciones). La superficie de herramientas no cambió (191 herramientas).
+> Los números provienen de la superficie real del servidor compilado (salida de producción de [`TOOLS.md`](TOOLS.md)).
 >
 > **Métricas:** Impacto = contribución al valor de usuario/agente · Esfuerzo = S (días) / M (1-2 semanas) / L (mes+) · Prioridad = P0 (puerta externa) → P3 (largo plazo).
 

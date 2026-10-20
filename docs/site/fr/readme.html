@@ -68,7 +68,7 @@ node setup.mjs --yes         # write MCP config (asks unless --yes)</code></pre>
     }
   }
 }</code></pre>
-<blockquote><strong>État de publication :</strong> <code>rea-plus@0.12.0</code> est en ligne sur le <a href="https://www.npmjs.com/package/rea-plus">registre npm</a> et <a href="https://registry.modelcontextprotocol.io"><code>io.github.Alyhnte/rea-plus</code></a> est publié sur le MCP Registry. Les installations prises en charge sont <code>npx -y rea-plus</code> (ci-dessus) et GHCR (voir <a href="#-docker">Docker</a>).</blockquote>
+<blockquote><strong>État de publication :</strong> <code>rea-plus@0.13.0</code> est en ligne sur le <a href="https://www.npmjs.com/package/rea-plus">registre npm</a> et <a href="https://registry.modelcontextprotocol.io"><code>io.github.Alyhnte/rea-plus</code></a> est publié sur le MCP Registry. Les installations prises en charge sont <code>npx -y rea-plus</code> (ci-dessus) et GHCR (voir <a href="#-docker">Docker</a>).</blockquote>
 <h3 id="cloner--compiler">Cloner &amp; compiler</h3>
 <pre><code class="language-bash">git clone https://github.com/Alyhnte/ReaPlus.git
 cd ReaPlus
@@ -176,7 +176,7 @@ node --test tests/evm.test.mjs # single-domain runs work too</code></pre>
 <p>Détails : <a href="https://github.com/Alyhnte/ReaPlus/blob/main/docs/VERIFY.md"><code>docs/VERIFY.md</code></a> · <a href="https://github.com/Alyhnte/ReaPlus/blob/main/docs/MCP-CONTRACTS.md"><code>docs/MCP-CONTRACTS.md</code></a> · <a href="changelog.html"><code>CHANGELOG.md</code></a></p>
 <h2 id="-feuille-de-route">🗺️ Feuille de route</h2>
 <p>En tête de liste — le tableau complet et priorisé vit dans <a href="roadmap.html"><code>docs/ROADMAP.md</code></a> :</p>
-<ul><li>npm + MCP Registry sont en ligne (<code>rea-plus@0.12.0</code>, <code>io.github.Alyhnte/rea-plus</code>) — les installations prises en charge sont <code>npx -y rea-plus</code> et GHCR</li><li>La surface typée est close : 183 outils portent <code>outputSchema</code> (4 durablement sans schéma) et 187 portent des annotations ; la whitelist async est de 3 outils, les helpers de progression couvrent les outils étagés</li><li>Finalisation du corpus binaire golden (hashes de sorties attendues par provider) — dont la vérification Frida live sur VM encore ouverte et le test d'acceptation APK DEX golden</li><li>Releases signées + SBOM, et un profil sandbox VM documenté pour le travail live</li></ul>
+<ul><li>npm + MCP Registry sont en ligne (<code>rea-plus@0.13.0</code>, <code>io.github.Alyhnte/rea-plus</code>) — les installations prises en charge sont <code>npx -y rea-plus</code> et GHCR</li><li>La surface typée est close : 183 outils portent <code>outputSchema</code> (4 durablement sans schéma) et 187 portent des annotations ; la whitelist async est de 3 outils, les helpers de progression couvrent les outils étagés</li><li>Finalisation du corpus binaire golden (hashes de sorties attendues par provider) — dont la vérification Frida live sur VM encore ouverte et le test d'acceptation APK DEX golden</li><li>Releases signées + SBOM, et un profil sandbox VM documenté pour le travail live</li></ul>
 <h2 id="-faq">❓ FAQ</h2>
 <p><strong>Faut-il Ghidra, IDA, Hopper ou JEB ?</strong>
 Non. Le JS/.NET/WASM/EVM statique et l'inspection hors ligne fonctionnent sans eux ; la profondeur adossée aux providers utilise vos propres installations quand elles sont présentes. Les outils commerciaux ne sont jamais groupés ni licenciés par rea-plus.</p>
@@ -187,7 +187,7 @@ Elles mutent une cible en cours d'exécution (breakpoints, pas-à-pas, écriture
 <p><strong>Cela entre-t-il en conflit avec conduit ?</strong>
 Non. Conduit utilise par défaut le port 3847 ; rea-plus sert 3848, et les 30 noms d'outils conduit sont figés.</p>
 <p><strong>npm dit que le paquet est introuvable ?</strong>
-Mettez à jour votre cache — <code>rea-plus@0.12.0</code> est sur le <a href="https://www.npmjs.com/package/rea-plus">registre npm</a> et publié sur le MCP Registry. Utilisez <code>npx -y rea-plus</code> partout ci-dessus ou l'image GHCR.</p>
+Mettez à jour votre cache — <code>rea-plus@0.13.0</code> est sur le <a href="https://www.npmjs.com/package/rea-plus">registre npm</a> et publié sur le MCP Registry. Utilisez <code>npx -y rea-plus</code> partout ci-dessus ou l'image GHCR.</p>
 <h2 id="-contribution">🤝 Contribution</h2>
 <p>Issues et PR sont bienvenues — rapports de bugs, idées de fonctionnalités, docs. Exécutez <code>npm run typecheck</code> et <code>npm test</code> avant de soumettre, gardez les noms d'outils conduit figés, et faites échouer honnêtement les nouveaux outils (<code>capability_unsupported</code>, jamais un faux <code>ok</code>).</p>
 <p>Si rea-plus vous a épargné un après-midi d'archéologie à l'éditeur hexadécimal, un ⭐ aide les autres reverseurs à le trouver.</p>

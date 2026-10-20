@@ -1,10 +1,13 @@
 # FEUILLE DE ROUTE — Feuille de route ReaPlus
 
-> État : v0.12.0 publiée (npm + MCP Registry + CI au vert). Ce document est né des
+> État : v0.13.0 publiée (npm + MCP Registry + CI au vert). Ce document est né des
 > constats de la première revue du 2026-10-12, et a été synchronisé avec le réalisé à la fin
-> de chaque vague. v0.10.1 a clos les points de code P1 (nettoyage de la façade morte +
-> fixture DEX golden) ; la surface d'outils est inchangée. Les nombres proviennent de la surface réelle
-> du serveur compilé (sortie de production de [`TOOLS.md`](TOOLS.md)).
+> de chaque vague. v0.13.0 a clos l'identité de machine PE (ARMNT/ARM64),
+> ELF e_machine + Hexagon, les valeurs plist sans perte typées, la résolution JS
+> CJS/require + les relations cross-bundle, l'observation de version apktool
+> (advisory), le profil Ghidra raw m68k et la synchronisation des porteurs de
+> version (9 contrôles). La surface d'outils est inchangée (191 outils). Les nombres
+> proviennent de la surface réelle du serveur compilé (sortie de production de [`TOOLS.md`](TOOLS.md)).
 >
 > **Mesures :** Impact = contribution à la valeur utilisateur/agent · Effort = S (jours) / M (1-2 semaines) / L (mois+)
 > · Priorité = P0 (porte extérieure) → P3 (long terme).

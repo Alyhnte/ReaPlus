@@ -3,6 +3,50 @@
 Todos los cambios notables se guardan en este archivo. Formato: Keep a Changelog + SemVer.
 All notable changes are documented here (resumen en español + English detail).
 
+## [0.13.0] — 2026-10-20
+
+Versión 0.13.0: dalga-13 + dalga-14 — identidad de máquina en sniff (PE
+ARMNT/ARM64, ELF e_machine + Hexagon), valores plist sin pérdida con tipos,
+resolución JS CJS/require + relaciones cross-bundle, observación de versión de
+apktool (advisory), perfil Ghidra raw m68k y sincronía de portadores de versión
+(9 comprobaciones). Superficie de herramientas sin cambios (191 herramientas ·
+187 outputSchema · 2 resources · 7 prompts, 6 idiomas). 107/107 pruebas en
+verde.
+
+### Añadido / Added
+
+- `rea_sniff`: el campo PE `makine` informa ARMNT (`0x01c4`) y ARM64
+  (`0xaa64`); x86/x64 y legacy ARM/Thumb/ARM64EC quedan deliberadamente fuera
+  de alcance. ELF `e_machine` (LE/BE, ≥20B) se mapea a 14 nombres, incluido
+  Hexagon (164).
+- `rea_apple_plist`: lectura sin pérdida con tipos (se conservan cadenas
+  raw de integer/real, se decodifican entidades XML) + `details.anahtarTipleri`.
+- `rea_js_require` / `rea_js_export_shape`: resolución relative +
+  node_modules, forma de export CJS; `rea_js_bundle_diff` con `mapA`/`mapB`
+  opcionales añade `details.iliskiler {paylasilanKaynaklar, yalnizA,
+  yalnizB}` (determinista).
+- `rea_apktool_info` / `rea_apktool_caps`: `surumGozlem {ham, sayisal?}`
+  opcional — solo observación, no evidencia; ausente si la línea no se puede
+  analizar.
+- Perfil de lenguaje Ghidra raw m68k (`GhidraRawProfil`, módulo puro fuera de
+  la superficie).
+
+### Corregido / Fixed
+
+- Guard CLI de `analyze-js` directorio-vs-archivo: un directorio ya no se
+  trata como `index.js` ni se recorre en silencio; error claro + código de
+  salida.
+- Portadores de versión: README, i18n, site, CHANGELOG y manifiestos dist
+  cubiertos por version-sync (9 comprobaciones); valores obsoletos
+  0.8.2/0.9.0/0.10.1 eliminados.
+- Líneas de estado README/TOOLS/ROADMAP actualizadas a v0.13.0 en 6 idiomas;
+  registros históricos intactos a propósito.
+
+### Interno
+
+- Oleadas 13–14 en worktrees aislados + TDD; 4/4 ramas fusionadas; suite
+  completa 107/107.
+
 ## [0.12.0] — 2026-10-18
 
 Versión 0.12.0: dalga-11 — 4 prompts de plantillas de tarea (3 → 7) +

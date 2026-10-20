@@ -68,7 +68,7 @@ node setup.mjs --yes         # write MCP config (asks unless --yes)</code></pre>
     }
   }
 }</code></pre>
-<blockquote><strong>Publishing status:</strong> <code>rea-plus@0.12.0</code> is live on the <a href="https://www.npmjs.com/package/rea-plus">npm registry</a> and <a href="https://registry.modelcontextprotocol.io"><code>io.github.Alyhnte/rea-plus</code></a> is published on the MCP Registry. The supported installs are <code>npx -y rea-plus</code> (above) and GHCR (see <a href="#-docker">Docker</a>).</blockquote>
+<blockquote><strong>Publishing status:</strong> <code>rea-plus@0.13.0</code> is live on the <a href="https://www.npmjs.com/package/rea-plus">npm registry</a> and <a href="https://registry.modelcontextprotocol.io"><code>io.github.Alyhnte/rea-plus</code></a> is published on the MCP Registry. The supported installs are <code>npx -y rea-plus</code> (above) and GHCR (see <a href="#-docker">Docker</a>).</blockquote>
 <h3 id="clone--build">Clone &amp; build</h3>
 <pre><code class="language-bash">git clone https://github.com/Alyhnte/ReaPlus.git
 cd ReaPlus
@@ -179,7 +179,7 @@ node --test tests/evm.test.mjs # single-domain runs work too</code></pre>
 <ul><li><a href="https://github.com/Alyhnte/ReaPlus/blob/main/docs/ornek-oturumlar/ghidra-analiz.md"><code>docs/ornek-oturumlar/ghidra-analiz.md</code></a> — Ghidra headless: import + analiz, <code>rea_ghidra_*</code> (funcs/disasm/strings/decompile), ham <code>analyzeHeadless</code>/<code>pyghidraRun</code> karşılıkları, sık hatalar</li><li><a href="https://github.com/Alyhnte/ReaPlus/blob/main/docs/ornek-oturumlar/ida-karsilastirma.md"><code>docs/ornek-oturumlar/ida-karsilastirma.md</code></a> — IDA <code>idat</code> batch (<code>rea_ida_idb</code>/<code>rea_ida_flirt</code>), IDA kurulu değilse kapı davranışı, Ghidra ↔ r2 fonksiyon karşılaştırması (<code>rea_diff_*</code>)</li><li><a href="https://github.com/Alyhnte/ReaPlus/blob/main/docs/ornek-oturumlar/r2-triage.md"><code>docs/ornek-oturumlar/r2-triage.md</code></a> — radare2 ile 60 sn triage (<code>iI</code>/<code>iz</code>/<code>afl</code>/<code>pdf</code>) + <code>rea_r2_callgraph</code>/<code>rea_r2_esil</code></li></ul>
 <h2 id="-roadmap">🗺️ Roadmap</h2>
 <p>Near the top of the list — the full, prioritized table lives in <a href="roadmap.html"><code>docs/ROADMAP.md</code></a>:</p>
-<ul><li>npm + MCP Registry are live (<code>rea-plus@0.12.0</code>, <code>io.github.Alyhnte/rea-plus</code>) — supported installs are <code>npx -y rea-plus</code> and GHCR</li><li>Typed surface is closed: 183 tools carry <code>outputSchema</code> (4 permanently schema-less) and 187 carry annotations; async whitelist is 3 tools, progress helpers cover the staged tools</li><li>Completing the golden binary corpus (expected-output hashes per provider) — including the still-open live Frida VM check and the DEX golden APK acceptance test</li><li>Signed releases + SBOM, and a documented VM sandbox profile for live work</li></ul>
+<ul><li>npm + MCP Registry are live (<code>rea-plus@0.13.0</code>, <code>io.github.Alyhnte/rea-plus</code>) — supported installs are <code>npx -y rea-plus</code> and GHCR</li><li>Typed surface is closed: 183 tools carry <code>outputSchema</code> (4 permanently schema-less) and 187 carry annotations; async whitelist is 3 tools, progress helpers cover the staged tools</li><li>Completing the golden binary corpus (expected-output hashes per provider) — including the still-open live Frida VM check and the DEX golden APK acceptance test</li><li>Signed releases + SBOM, and a documented VM sandbox profile for live work</li></ul>
 <h2 id="-faq">❓ FAQ</h2>
 <p><strong>Do I need Ghidra, IDA, Hopper, or JEB?</strong>
 No. Static JS/.NET/WASM/EVM and offline inspection work without them; provider-backed depth uses your own installations when present. Commercial tools are never bundled or licensed by rea-plus.</p>
@@ -190,7 +190,7 @@ They mutate a running target (breakpoints, stepping, memory writes). The gate ke
 <p><strong>Does it clash with conduit?</strong>
 No. Conduit defaults to port 3847; rea-plus serves 3848, and the 30 conduit tool names are frozen.</p>
 <p><strong>npm says the package is not found?</strong>
-Update your cache — <code>rea-plus@0.12.0</code> is on the <a href="https://www.npmjs.com/package/rea-plus">npm registry</a> and published on the MCP Registry. Use <code>npx -y rea-plus</code> everywhere above or the GHCR image.</p>
+Update your cache — <code>rea-plus@0.13.0</code> is on the <a href="https://www.npmjs.com/package/rea-plus">npm registry</a> and published on the MCP Registry. Use <code>npx -y rea-plus</code> everywhere above or the GHCR image.</p>
 <h2 id="-contributing">🤝 Contributing</h2>
 <p>Issues and PRs are welcome — bug reports, feature ideas, docs. Run <code>npm run typecheck</code> and <code>npm test</code> before submitting, keep conduit tool names frozen, and make new tools fail honestly (<code>capability_unsupported</code>, never a fake <code>ok</code>).</p>
 <p>If rea-plus saved you an afternoon of hex-editor archaeology, a ⭐ helps other reversers find it.</p>

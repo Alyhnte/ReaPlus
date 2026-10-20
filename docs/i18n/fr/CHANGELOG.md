@@ -3,6 +3,48 @@
 Tous les changements notables sont consignés dans ce fichier. Format : Keep a Changelog + SemVer.
 All notable changes are documented here (résumé en français + détail en anglais).
 
+## [0.13.0] — 2026-10-20
+
+Version 0.13.0 : dalga-13 + dalga-14 — identité de machine au sniff (PE
+ARMNT/ARM64, ELF e_machine + Hexagon), valeurs plist sans perte typées,
+résolution JS CJS/require + relations cross-bundle, observation de version
+apktool (advisory), profil Ghidra raw m68k et synchronisation des porteurs de
+version (9 contrôles). Surface d'outils inchangée (191 outils · 187
+outputSchema · 2 resources · 7 prompts, 6 langues). 107/107 tests verts.
+
+### Ajouté / Added
+
+- `rea_sniff` : le champ PE `makine` remonte ARMNT (`0x01c4`) et ARM64
+  (`0xaa64`) ; x86/x64 et legacy ARM/Thumb/ARM64EC volontairement hors
+  périmètre. ELF `e_machine` (LE/BE, ≥20B) est mappé sur 14 noms, dont
+  Hexagon (164).
+- `rea_apple_plist` : lecture sans perte typée (chaînes brutes integer/real
+  conservées, entités XML décodées) + `details.anahtarTipleri`.
+- `rea_js_require` / `rea_js_export_shape` : résolution relative +
+  node_modules, forme d'export CJS ; `rea_js_bundle_diff` avec `mapA`/`mapB`
+  optionnels ajoute `details.iliskiler {paylasilanKaynaklar, yalnizA,
+  yalnizB}` (déterministe).
+- `rea_apktool_info` / `rea_apktool_caps` : `surumGozlem {ham, sayisal?}`
+  optionnel — observation seulement, pas une preuve ; absent si la ligne
+  n'est pas analysable.
+- Profil de langage Ghidra raw m68k (`GhidraRawProfil`, module pur hors
+  surface).
+
+### Corrigé / Fixed
+
+- Garde CLI `analyze-js` répertoire-vs-fichier : un répertoire n'est plus pris
+  pour `index.js` et parcouru silencieusement ; erreur claire + code de sortie.
+- Porteurs de version : README, i18n, site, CHANGELOG et manifestes dist sont
+  couverts par version-sync (9 contrôles) ; valeurs obsolètes
+  0.8.2/0.9.0/0.10.1 supprimées.
+- Lignes de statut README/TOOLS/ROADMAP passées à v0.13.0 en 6 langues ;
+  entrées historiques volontairement intactes.
+
+### Interne
+
+- Vagues 13–14 en worktrees isolés + TDD ; 4/4 branches fusionnées ; suite
+  complète 107/107.
+
 ## [0.12.0] — 2026-10-18
 
 Version 0.12.0 : dalga-11 — 4 prompts de modèles de tâches (3 → 7) +

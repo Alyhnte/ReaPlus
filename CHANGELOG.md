@@ -3,6 +3,42 @@
 Tüm önemli değişiklikler bu dosyada tutulur. Format: Keep a Changelog + SemVer.
 All notable changes are documented here (Türkçe özet + English detail).
 
+## [0.13.0] — 2026-10-20
+
+Sürüm 0.13.0: dalga-13 + dalga-14 — sniff makine kimliği (PE ARMNT/ARM64,
+ELF e_machine + Hexagon), plist tip-duyarlı kayıpsız değerler, JS CJS/require
+çözümleme + cross-bundle ilişkiler, apktool sürüm gözlemi (advisory), raw m68k
+Ghidra profili ve sürüm taşıyıcı senkronu (9 kontrol). Araç yüzeyi değişmedi
+(191 araç · 187 outputSchema · 2 resource · 7 prompt, 6 dil). 107/107 test yeşil.
+
+### Eklendi / Added
+
+- `rea_sniff`: PE `makine` alanı ARMNT (`0x01c4`) ve ARM64 (`0xaa64`) için
+  dolar; x86/x64 ve legacy ARM/Thumb/ARM64EC bilinçli kapsam dışı. ELF
+  `e_machine` (LE/BE, ≥20B) 14 adla eşlenir; Hexagon (164) dahil.
+- `rea_apple_plist`: tip duyarlı kayıpsız değer okuma (integer/real ham
+  string korunur, XML entity çözülür) + `details.anahtarTipleri`.
+- `rea_js_require` / `rea_js_export_shape`: relative + node_modules çözümü,
+  CJS export şekli; `rea_js_bundle_diff` opsiyonel `mapA`/`mapB` ile
+  `details.iliskiler {paylasilanKaynaklar, yalnizA, yalnizB}` (deterministik).
+- `rea_apktool_info` / `rea_apktool_caps`: opsiyonel `surumGozlem {ham,
+  sayisal?}` — yalnız gözlem, kanıt değil; ayrıştırılamayan satırda alan yok.
+- Ghidra raw m68k dil profili (`GhidraRawProfil`, yüzey dışı saf modül).
+
+### Düzeltildi / Fixed
+
+- `analyze-js` CLI dizin-vs-dosya kapısı: dizin `index.js` sanılıp sessiz
+  yürümüyor; net hata + exit kodu.
+- Sürüm taşıyıcıları: README, i18n, site, CHANGELOG ve dist manifestleri
+  version-sync testine bağlandı (9 kontrol); bayat 0.8.2/0.9.0/0.10.1
+  değerleri temizlendi.
+- README/TOOLS/ROADMAP durum satırları 6 dilde v0.13.0'a çekildi; tarihsel
+  kayıtlar bilinçli olarak korundu.
+
+### Altyapı / Internal
+
+- Dalga 13–14 izole worktree + TDD; 4/4 branch merge; tam suite 107/107.
+
 ## [0.12.0] — 2026-10-18
 
 Sürüm 0.12.0: dalga-11 — 4 görev şablonu prompt'u (3 → 7) + golden korpus

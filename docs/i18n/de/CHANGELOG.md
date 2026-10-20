@@ -3,6 +3,46 @@
 Alle wichtigen Änderungen werden in dieser Datei festgehalten. Format: Keep a Changelog + SemVer.
 Alle nennenswerten Änderungen sind hier dokumentiert (deutsche Zusammenfassung + englisches Detail).
 
+## [0.13.0] — 2026-10-20
+
+Release 0.13.0: dalga-13 + dalga-14 — Sniff-Maschinenidentität (PE ARMNT/ARM64,
+ELF e_machine + Hexagon), typbewusste verlustfreie plist-Werte, JS-CJS/require-
+Auflösung + Cross-Bundle-Beziehungen, apktool-Versionsbeobachtung (advisory),
+rohes m68k-Ghidra-Profil und Versions-Träger-Synchronisierung (9 Prüfungen).
+Werkzeugoberfläche unverändert (191 Werkzeuge · 187 outputSchema · 2 Resources ·
+7 Prompts, 6 Sprachen). 107/107 Tests grün.
+
+### Hinzugefügt
+
+- `rea_sniff`: PE-`makine` meldet ARMNT (`0x01c4`) und ARM64 (`0xaa64`);
+  x86/x64 sowie legacy ARM/Thumb/ARM64EC bewusst außerhalb des Umfangs. ELF
+  `e_machine` (LE/BE, ≥20B) wird auf 14 Namen abgebildet, inkl. Hexagon (164).
+- `rea_apple_plist`: typbewusstes verlustfreies Lesen (integer/real-Rohstrings
+  bleiben erhalten, XML-Entities werden dekodiert) + `details.anahtarTipleri`.
+- `rea_js_require` / `rea_js_export_shape`: relative + node_modules-Auflösung,
+  CJS-Exportform; `rea_js_bundle_diff` mit optionalem `mapA`/`mapB` ergänzt
+  `details.iliskiler {paylasilanKaynaklar, yalnizA, yalnizB}` (deterministisch).
+- `rea_apktool_info` / `rea_apktool_caps`: optionales `surumGozlem {ham,
+  sayisal?}` — nur Beobachtung, kein Beweis; bei nicht parsebaren Zeilen fehlt
+  das Feld.
+- Ghidra-Roh-m68k-Sprachprofil (`GhidraRawProfil`, reines oberflächenexternes
+  Modul).
+
+### Behoben
+
+- `analyze-js`-CLI-Verzeichnis-vs-Datei-Schutz: ein Verzeichnis wird nicht mehr
+  als `index.js` behandelt und still durchlaufen; klarer Fehler + Exit-Code.
+- Versions-Träger: README, i18n, Site, CHANGELOG und Dist-Manifeste sind jetzt
+  durch version-sync abgedeckt (9 Prüfungen); veraltete 0.8.2/0.9.0/0.10.1-
+  Werte entfernt.
+- Statuszeilen in README/TOOLS/ROADMAP in 6 Sprachen auf v0.13.0 gesetzt;
+  historische Einträge bewusst unverändert.
+
+### Intern
+
+- Wellen 13–14 in isolierten Worktrees + TDD; 4/4 Branches gemergt; volle
+  Suite 107/107.
+
 ## [0.12.0] — 2026-10-18
 
 Release 0.12.0: dalga-11 — 4 Aufgabenvorlagen-Prompts (3 → 7) + Golden-

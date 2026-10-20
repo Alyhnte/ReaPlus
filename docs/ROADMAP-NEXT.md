@@ -1,7 +1,7 @@
 # ROADMAP-NEXT — v0.11.0 sonrası derin işler
 
 Durum: rea'nın tüm kamusal yetenekleri ReaPlus'ta (191 araç, 2 resource, 7 prompt,
-104 test dosyası). Ticari lisanslılar kapılı (Hopper/IDA/JEB), Linux-özeller belgeli
+107 test dosyası). Ticari lisanslılar kapılı (Hopper/IDA/JEB), Linux-özeller belgeli
 (binwalk). v0.11.0'da kapananlar: 5 dilli site i18n + `--check`, örnek oturum (metin),
 npm OIDC provenance + SBOM release asset'i, Pages deploy, CONTRIBUTING + issue formları.
 v0.12.0'da kapananlar: golden korpus (5 gerçek gcc binary + 16 test), 4 görev şablonu
@@ -96,3 +96,20 @@ Trusted Publisher).
 Kanıt: 4/4 branch merge (`fa9fcbd`→`38f7dcf`); tam suite **104/104 PASS**; yüzey
 191 araç/187 şema sabit (yeni araç yok); şema bütçesi 176598B liste / 92353B şema
 (limitler 204800/112640). B4+ (version-sync genişletme) ve kalan adaylar dalga-14.
+
+### dalga-14 — sürüm taşıyıcıları + B4 → KAPANDI (v0.13.0)
+
+10. ✓ B4 version-sync genişletme — README/i18n/site/CHANGELOG/dist manifest
+    taşıyıcıları 9 kontrolle kilitlendi; bayat 0.8.2/0.9.0/0.10.1 değerleri
+    0.12.0'a çekildi (`a2f0c5d`).
+11. ✓ PE makine kimliği — `rea_sniff` ARMNT (`0x01c4`) / ARM64 (`0xaa64`);
+    x86/x64 ve legacy ARM/Thumb/ARM64EC bilinçli kapsam dışı (`79e44c9`).
+12. ✓ Ghidra admission — raw m68k dil profili (`GhidraRawProfil`), yüzey dışı
+    saf modül; upstream 6.6.0 paritesi (`79e44c9`).
+13. ✓ apktool sürüm gözlemi — `surumGozlem {ham, sayisal?}` (advisory; kanıt
+    değil), bozuk satırda alan üretilmez (`aca9fba`).
+14. ✓ JS cross-bundle — `iliskiler {paylasilanKaynaklar, yalnizA, yalnizB}`,
+    deterministik sıralama; yeni araç yok (`0de3ef7`).
+
+Kanıt: 4/4 branch merge (`081d6b3`→`55226c0`); tam suite **107/107 PASS**; yüzey
+191 araç/187 şema sabit (yeni araç yok); v0.13.0 release.

@@ -1,11 +1,13 @@
 # ROADMAP — ReaPlus roadmap
 
-> Status: v0.12.0 released (npm + MCP Registry + green CI). This document was
+> Status: v0.13.0 released (npm + MCP Registry + green CI). This document was
 > born from the findings of the first 2026-10-12 review and is synced with
-> what actually shipped at the end of every wave. v0.10.1 closed the P1 code
-> items (dead facade cleanup + golden DEX fixture); the tool surface is
-> unchanged. Numbers come from the compiled server's real surface (the
-> [`TOOLS.md`](TOOLS.md) generation output).
+> what actually shipped at the end of every wave. v0.13.0 closed PE machine
+> identity (ARMNT/ARM64), ELF e_machine + Hexagon, type-aware lossless plist
+> values, JS CJS/require resolution + cross-bundle relations, apktool version
+> observation (advisory), a raw m68k Ghidra profile, and version-carrier sync
+> (9 checks). The tool surface is unchanged (191 tools). Numbers come from the
+> compiled server's real surface (the [`TOOLS.md`](TOOLS.md) generation output).
 >
 > **Scales:** Impact = contribution to user/agent value · Effort = S (days) / M (1-2 weeks) / L (month+) · Priority = P0 (outer gate) → P3 (long term).
 

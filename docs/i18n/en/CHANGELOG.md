@@ -2,6 +2,45 @@
 
 All notable changes are kept in this file. Format: Keep a Changelog + SemVer.
 
+## [0.13.0] — 2026-10-20
+
+Release 0.13.0: dalga-13 + dalga-14 — sniff machine identity (PE ARMNT/ARM64,
+ELF e_machine + Hexagon), type-aware lossless plist values, JS CJS/require
+resolution + cross-bundle relations, apktool version observation (advisory), a
+raw m68k Ghidra profile, and version-carrier sync (9 checks). Tool surface
+unchanged (191 tools · 187 outputSchema · 2 resources · 7 prompts, 6 languages).
+107/107 tests green.
+
+### Added
+
+- `rea_sniff`: PE `makine` now reports ARMNT (`0x01c4`) and ARM64 (`0xaa64`);
+  x86/x64 and legacy ARM/Thumb/ARM64EC are deliberately out of scope. ELF
+  `e_machine` (LE/BE, ≥20B) maps to 14 names, including Hexagon (164).
+- `rea_apple_plist`: type-aware lossless value reading (integer/real raw
+  strings preserved, XML entities decoded) + `details.anahtarTipleri`.
+- `rea_js_require` / `rea_js_export_shape`: relative + node_modules
+  resolution, CJS export shape; `rea_js_bundle_diff` optional `mapA`/`mapB`
+  adds `details.iliskiler {paylasilanKaynaklar, yalnizA, yalnizB}`
+  (deterministic).
+- `rea_apktool_info` / `rea_apktool_caps`: optional `surumGozlem {ham,
+  sayisal?}` — observation only, not evidence; absent on unparseable lines.
+- Ghidra raw m68k language profile (`GhidraRawProfil`, pure surface-external
+  module).
+
+### Fixed
+
+- `analyze-js` CLI directory-vs-file guard: a directory is no longer treated
+  as `index.js` and silently walked; clear error + exit code.
+- Version carriers: README, i18n, site, CHANGELOG and dist manifests are now
+  covered by version-sync (9 checks); stale 0.8.2/0.9.0/0.10.1 values removed.
+- Status lines in README/TOOLS/ROADMAP updated to v0.13.0 in 6 languages;
+  historical records intentionally untouched.
+
+### Internal
+
+- Waves 13–14 in isolated worktrees + TDD; 4/4 branches merged; full suite
+  107/107.
+
 ## [0.12.0] — 2026-10-18
 
 Release 0.12.0: dalga-11 — 4 task-template prompts (3 → 7) + golden
