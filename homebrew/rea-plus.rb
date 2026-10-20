@@ -1,14 +1,13 @@
 # homebrew/rea-plus.rb — ReaPlus Homebrew formulu (hazirlik; tap yayini YOK).
 # Surum kaynagi: package.json (0.13.0).
-# sha256: yerel `npm pack` ciktisinin gercek olcumu (sbom.json kok hash'i ile ayni).
-# Registry tarball'i `npm publish` sonrasi farkli olabilir; siseleme oncesi guncelleyin.
+# sha256: npm registry tarball'inin yayin sonrasi gercek olcumu (0.13.0).
 # Uydurma hash YOK.
 class ReaPlus < Formula
   desc "Conduit live-debug core + Rea static domains over MCP stdio/HTTP"
   homepage "https://github.com/Alyhnte/ReaPlus"
   url "https://registry.npmjs.org/rea-plus/-/rea-plus-0.13.0.tgz"
   version "0.13.0"
-  sha256 "b79a07083062a7425854790cf47660333246f549d6b73612a6ff0d6bf9df84c8"
+  sha256 "cae7bebaf67902ff186023e90e3598281fbb31f196eede9a889c3371f7e95019"
   license "MIT"
 
   depends_on "node"

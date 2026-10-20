@@ -4,8 +4,8 @@
   "homepage": "https://github.com/Alyhnte/ReaPlus",
   "license": "MIT",
   "url": "https://registry.npmjs.org/rea-plus/-/rea-plus-0.13.0.tgz",
-  "hash": "b79a07083062a7425854790cf47660333246f549d6b73612a6ff0d6bf9df84c8",
-  "_hashNotu": "Yerel `npm pack` ciktisinin gercek sha256 olcumu (sbom.json kok hash'i ile ayni). Registry tarball'i `npm publish` sonrasi farkli olabilir; yayin oncesi guncelleyin. Magaza yayini YOK.",
+  "hash": "cae7bebaf67902ff186023e90e3598281fbb31f196eede9a889c3371f7e95019",
+  "_hashNotu": "npm registry tarball'inin yayin sonrasi gercek sha256 olcumu (0.13.0). Magaza yayini YOK.",
   "bin": [
     "dist/cli/index.js"
   ],
