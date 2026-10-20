@@ -951,10 +951,18 @@ const OUTPUT_SCHEMAS: Readonly<Record<string, StandardSchemaWithJSON>> = {
   rea_cutter_decompile: z.object({ ok: z.literal(true), arac: z.string(), hedef: z.string(), addr: z.string(), kaynak: z.enum(["pdc", "pdf"]), kod: z.string(), not: z.string().optional() }),
   rea_cutter_caps: z.object({ ok: z.literal(true), arac: z.string(), surum: z.string(), pdc: z.boolean() }),
   rea_apktool_decode: z.object({ ok: z.literal(true), arac: z.string(), apk: z.string(), ciktiDir: z.string() }),
-  rea_apktool_info: z.object({ ok: z.literal(true), arac: z.string(), surum: z.string() }),
+  // surumGozlem additive ve opsiyoneldir: metinsel gözlem (kanıt değil);
+  // satır parse edilemezse alan hiç üretilmez, eski şekil aynen geçerli kalır.
+  rea_apktool_info: z.object({
+    ok: z.literal(true), arac: z.string(), surum: z.string(),
+    surumGozlem: z.object({ ham: z.string(), sayisal: z.string().optional() }).optional(),
+  }),
   rea_apktool_build: z.object({ ok: z.literal(true), arac: z.string(), proje: z.string(), ciktiApk: z.string() }),
   rea_apktool_framework: z.object({ ok: z.literal(true), arac: z.string(), apk: z.string() }),
-  rea_apktool_caps: z.object({ ok: z.literal(true), arac: z.string(), apktool: z.string(), aapt2: z.string().nullable(), aapt2Tamam: z.boolean() }),
+  rea_apktool_caps: z.object({
+    ok: z.literal(true), arac: z.string(), apktool: z.string(), aapt2: z.string().nullable(), aapt2Tamam: z.boolean(),
+    surumGozlem: z.object({ ham: z.string(), sayisal: z.string().optional() }).optional(),
+  }),
   rea_adb_devices: z.object({ ok: z.literal(true), arac: z.string(), cihazlar: z.array(z.string()) }),
   rea_adb_packages: z.object({ ok: z.literal(true), arac: z.string(), paketler: z.array(z.string()) }),
   rea_adb_install: z.object({ ok: z.literal(true), arac: z.string(), apk: z.string(), sonuc: z.string() }),

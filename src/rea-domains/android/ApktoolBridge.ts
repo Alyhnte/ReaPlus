@@ -76,13 +76,33 @@ export function rea_apktool_decode(apkYolu: string, ciktiDir: string, frameworkD
   return { ok: true as const, arac: "rea_apktool_decode", apk: apkYolu, ciktiDir };
 }
 
+// Sürüm satırı GÖZLEMİ: ham metin aynen + (yalnız desene uyuyorsa) sayısal
+// çekirdek. Bu alan bir KANIT değildir; launcher çıktısının gözlemidir.
+// Parse edilemeyen/bozuk satırda alan ÜRETİLMEZ (uydurma yok).
+export interface ApktoolSurumGozlem {
+  ham: string;
+  sayisal?: string;
+}
+
+const APKTOOL_SURUM_DESENI = /^\d+\.\d+(?:\.\d+)?(?:[-+][0-9A-Za-z][0-9A-Za-z.-]*)?$/;
+const APKTOOL_SAYISAL_DESENI = /^\d+\.\d+(?:\.\d+)?/;
+
+// Saf ayrıştırıcı (exec yok): satırı kırpar, desene uymuyorsa undefined döner.
+export function apktoolSurumGozlem(surumSatiri: string): ApktoolSurumGozlem | undefined {
+  const ham = typeof surumSatiri === "string" ? surumSatiri.trim() : "";
+  if (!ham || !APKTOOL_SURUM_DESENI.test(ham)) return undefined;
+  const sayisal = ham.match(APKTOOL_SAYISAL_DESENI)?.[0];
+  return { ham, sayisal };
+}
+
 // Ortam bilgisi: sürüm metni (launcher `pause` satırı ayıklanır, ilk dolu satır alınır).
 export function rea_apktool_info() {
   const engel = kapi();
   if (engel) return engel;
   const { cikti } = apktoolKos(["version"], 60_000);
   const surum = cikti.split("\n").map((s) => s.trim()).find((s) => s.length > 0) ?? "";
-  return { ok: true as const, arac: "rea_apktool_info", surum };
+  const gozlem = apktoolSurumGozlem(surum);
+  return { ok: true as const, arac: "rea_apktool_info", surum, ...(gozlem ? { surumGozlem: gozlem } : {}) };
 }
 
 // aapt2 yolu: REA_AAPT2_BIN önce (varsa ve mevcutsa), PATH sonra.
@@ -149,5 +169,6 @@ export function rea_apktool_caps() {
   const { cikti } = apktoolKos(["version"], 60_000);
   const apktool = cikti.split("\n").map((s) => s.trim()).find((s) => s.length > 0) ?? "";
   const aapt2 = aapt2Surum();
-  return { ok: true as const, arac: "rea_apktool_caps", apktool, aapt2, aapt2Tamam: aapt2 !== null };
+  const gozlem = apktoolSurumGozlem(apktool);
+  return { ok: true as const, arac: "rea_apktool_caps", apktool, aapt2, aapt2Tamam: aapt2 !== null, ...(gozlem ? { surumGozlem: gozlem } : {}) };
 }
