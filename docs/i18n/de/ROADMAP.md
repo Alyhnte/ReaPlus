@@ -1,6 +1,6 @@
 # ROADMAP — ReaPlus-Fahrplan
 
-> Stand: v0.10.1 released (npm + MCP Registry + CI grün). Dieses Dokument ist mit den
+> Stand: v0.12.0 released (npm + MCP Registry + CI grün). Dieses Dokument ist mit den
 > Befunden der ersten Prüfung vom 2026-10-12 geboren und wurde am Ende jeder Welle mit dem
 > Erreichten synchronisiert. v0.10.1 schloss die P1-Codepunkte (tote-Facade-Bereinigung +
 > Golden-DEX-Fixture); die Werkzeugoberfläche änderte sich nicht. Zahlen stammen von der echten Oberfläche des kompilierten Servers

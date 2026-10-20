@@ -68,7 +68,7 @@ node setup.mjs --yes         # write MCP config (asks unless --yes)</code></pre>
     }
   }
 }</code></pre>
-<blockquote><strong>Estado de publicación:</strong> <code>rea-plus@0.8.2</code> está en vivo en el <a href="https://www.npmjs.com/package/rea-plus">registro npm</a> y <a href="https://registry.modelcontextprotocol.io"><code>io.github.Alyhnte/rea-plus</code></a> está publicado en el MCP Registry. Las instalaciones soportadas son <code>npx -y rea-plus</code> (arriba) y GHCR (ver <a href="#-docker">Docker</a>).</blockquote>
+<blockquote><strong>Estado de publicación:</strong> <code>rea-plus@0.12.0</code> está en vivo en el <a href="https://www.npmjs.com/package/rea-plus">registro npm</a> y <a href="https://registry.modelcontextprotocol.io"><code>io.github.Alyhnte/rea-plus</code></a> está publicado en el MCP Registry. Las instalaciones soportadas son <code>npx -y rea-plus</code> (arriba) y GHCR (ver <a href="#-docker">Docker</a>).</blockquote>
 <h3 id="clonar-y-compilar">Clonar y compilar</h3>
 <pre><code class="language-bash">git clone https://github.com/Alyhnte/ReaPlus.git
 cd ReaPlus
@@ -176,7 +176,7 @@ node --test tests/evm.test.mjs # single-domain runs work too</code></pre>
 <p>Detalles: <a href="https://github.com/Alyhnte/ReaPlus/blob/main/docs/VERIFY.md"><code>docs/VERIFY.md</code></a> · <a href="https://github.com/Alyhnte/ReaPlus/blob/main/docs/MCP-CONTRACTS.md"><code>docs/MCP-CONTRACTS.md</code></a> · <a href="changelog.html"><code>CHANGELOG.md</code></a></p>
 <h2 id="-hoja-de-ruta">🗺️ Hoja de ruta</h2>
 <p>Al tope de la lista — la tabla completa priorizada vive en <a href="roadmap.html"><code>docs/ROADMAP.md</code></a>:</p>
-<ul><li>npm + MCP Registry en vivo (<code>rea-plus@0.8.2</code>, <code>io.github.Alyhnte/rea-plus</code>) — installs soportadas: <code>npx -y rea-plus</code> y GHCR</li><li>Superficie tipada cerrada: 183 herramientas llevan <code>outputSchema</code> (4 permanentemente sin esquema) y 187 llevan annotations; whitelist asíncrona de 3 herramientas, ayudantes de progress cubren las herramientas con etapas</li><li>Completando el corpus dorado de binarios (hashes de salida esperada por proveedor) — incluidos el pendiente check Frida en VM en vivo y la prueba de aceptación DEX dorada del APK</li><li>Releases firmados + SBOM, y un perfil VM documentado para trabajo en vivo</li></ul>
+<ul><li>npm + MCP Registry en vivo (<code>rea-plus@0.12.0</code>, <code>io.github.Alyhnte/rea-plus</code>) — installs soportadas: <code>npx -y rea-plus</code> y GHCR</li><li>Superficie tipada cerrada: 183 herramientas llevan <code>outputSchema</code> (4 permanentemente sin esquema) y 187 llevan annotations; whitelist asíncrona de 3 herramientas, ayudantes de progress cubren las herramientas con etapas</li><li>Completando el corpus dorado de binarios (hashes de salida esperada por proveedor) — incluidos el pendiente check Frida en VM en vivo y la prueba de aceptación DEX dorada del APK</li><li>Releases firmados + SBOM, y un perfil VM documentado para trabajo en vivo</li></ul>
 <h2 id="-faq">❓ FAQ</h2>
 <p><strong>¿Necesito Ghidra, IDA, Hopper o JEB?</strong>
 No. JS/.NET/WASM/EVM estáticos e inspección offline funcionan sin ellos; la profundidad con proveedores usa tus propias instalaciones cuando existen. Las herramientas comerciales nunca las agrupa ni licencia rea-plus.</p>
@@ -187,7 +187,7 @@ Mutan un objetivo en ejecución (puntos de interrupción, paso, escrituras de me
 <p><strong>¿Choca con conduit?</strong>
 No. Conduit usa el puerto 3847 por defecto; rea-plus sirve 3848, y los 30 nombres de herramienta conduit están congelados.</p>
 <p><strong>¿npm dice que el paquete no existe?</strong>
-Actualiza tu caché — <code>rea-plus@0.8.2</code> está en el <a href="https://www.npmjs.com/package/rea-plus">registro npm</a> y publicado en el MCP Registry. Usa <code>npx -y rea-plus</code> en todas partes o la imagen GHCR.</p>
+Actualiza tu caché — <code>rea-plus@0.12.0</code> está en el <a href="https://www.npmjs.com/package/rea-plus">registro npm</a> y publicado en el MCP Registry. Usa <code>npx -y rea-plus</code> en todas partes o la imagen GHCR.</p>
 <h2 id="-contribución">🤝 Contribución</h2>
 <p>Issues y PR son bienvenidos — informes de errores, ideas de funciones, docs. Ejecuta <code>npm run typecheck</code> y <code>npm test</code> antes de enviar, mantén congelados los nombres de herramienta conduit y haz que las herramientas nuevas fallen con honestidad (<code>capability_unsupported</code>, nunca un <code>ok</code> falso).</p>
 <p>Si rea-plus te ahorró una tarde de arqueología con editor hexadecimal, una ⭐ ayuda a otros reversers a encontrarlo.</p>
