@@ -26,17 +26,24 @@
 <h1 id="changelog--rea-plus">Changelog — rea-plus</h1>
 <p>Alle wichtigen Änderungen werden in dieser Datei festgehalten. Format: Keep a Changelog + SemVer.
 Alle nennenswerten Änderungen sind hier dokumentiert (deutsche Zusammenfassung + englisches Detail).</p>
-<h2 id="0140--2026-11-25">[0.14.0] — 2026-11-25</h2>
+<h2 id="0150--2026-11-25">[0.15.0] — 2026-11-25</h2>
 <h3 id="added">Added</h3>
-<ul><li><code>rea_pwn_elf_layout</code> reads ELF program headers and reports PIE, NX, and RELRO. <code>rea_pwn_gadgets</code> keeps 1-5 instruction sequences that end in <code>ret</code>, <code>retn</code>, or <code>retf</code> (<code>0039bb3dbed5314c3485a4f04ac794e4706c4c14</code>).</li></ul>
+<ul><li>The JS walk includes <code>.mts</code> and <code>.cts</code>. Package resolution reads <code>exports</code> before <code>main</code> (<code>1be78a491a3a4b961f74ad7762b977c0c15acbe2</code>).</li></ul>
 <h3 id="fixed">Fixed</h3>
-<ul><li><code>rea_frida_api</code> no longer calls <code>GetTickCount</code>, <code>CreateFileW</code>, or <code>CloseHandle</code> inside the target. The script only attaches hooks and waits (<code>0039bb3dbed5314c3485a4f04ac794e4706c4c14</code>).</li><li><code>sniff.test.mjs</code> runs in the default test lane. Live Frida and Ghidra files stay excluded (<code>0039bb3dbed5314c3485a4f04ac794e4706c4c14</code>).</li></ul>
+<ul><li><code>src/native-windows/addon.ts</code> reads the live Win32 process name, token integrity, and a directory snapshot. It no longer returns a skeleton success (<code>1be78a491a3a4b961f74ad7762b977c0c15acbe2</code>).</li></ul>
 <h3 id="updated">Updated</h3>
+<ul><li><code>rea_aot_profile</code> and <code>rea_mips_psp_profile</code> declare <code>details.iskelet: true</code>. The surface stays 191 tools and 188 output schemas (<code>1be78a491a3a4b961f74ad7762b977c0c15acbe2</code>).</li></ul>
+<h2 id="0140--2026-11-25">[0.14.0] — 2026-11-25</h2>
+<h3 id="added-1">Added</h3>
+<ul><li><code>rea_pwn_elf_layout</code> reads ELF program headers and reports PIE, NX, and RELRO. <code>rea_pwn_gadgets</code> keeps 1-5 instruction sequences that end in <code>ret</code>, <code>retn</code>, or <code>retf</code> (<code>0039bb3dbed5314c3485a4f04ac794e4706c4c14</code>).</li></ul>
+<h3 id="fixed-1">Fixed</h3>
+<ul><li><code>rea_frida_api</code> no longer calls <code>GetTickCount</code>, <code>CreateFileW</code>, or <code>CloseHandle</code> inside the target. The script only attaches hooks and waits (<code>0039bb3dbed5314c3485a4f04ac794e4706c4c14</code>).</li><li><code>sniff.test.mjs</code> runs in the default test lane. Live Frida and Ghidra files stay excluded (<code>0039bb3dbed5314c3485a4f04ac794e4706c4c14</code>).</li></ul>
+<h3 id="updated-1">Updated</h3>
 <ul><li><code>rea_pwn_elf_layout</code> now has an output schema. The surface is 191 tools, 188 output schemas, and 3 schema-less tools (<code>0039bb3dbed5314c3485a4f04ac794e4706c4c14</code>).</li></ul>
 <h2 id="0131--2026-11-25">[0.13.1] — 2026-11-25</h2>
-<h3 id="added-1">Added</h3>
+<h3 id="added-2">Added</h3>
 <ul><li><code>tests/docs-english.test.mjs</code> rejects Turkish prose on the GitHub-facing markdown allowlist (<code>e68f61beb643b2fa20440c55cf0ef93a985d67a9</code>).</li></ul>
-<h3 id="updated-1">Updated</h3>
+<h3 id="updated-2">Updated</h3>
 <ul><li>GitHub-facing documentation is English, including the roadmap, coverage gaps, and the morluto comparison (<code>e68f61beb643b2fa20440c55cf0ef93a985d67a9</code>).</li><li>The roadmap table records the schema-budget CI step, the Pages deploy workflow, 7 prompts, and npm provenance (<code>e68f61beb643b2fa20440c55cf0ef93a985d67a9</code>).</li></ul>
 <h2 id="0130--2026-10-20">[0.13.0] — 2026-10-20</h2>
 <p>Release 0.13.0: dalga-13 + dalga-14 — Sniff-Maschinenidentität (PE ARMNT/ARM64,

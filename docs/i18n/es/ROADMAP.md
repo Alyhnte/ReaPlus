@@ -1,6 +1,6 @@
 # ROADMAP — hoja de ruta de ReaPlus
 
-> Estado: v0.14.0 publicada (npm + MCP Registry + CI en verde). Este documento nació
+> Estado: v0.15.0 publicada (npm + MCP Registry + CI en verde). Este documento nació
 > con los hallazgos de la revisión inicial del 2026-10-12 y se sincroniza con lo realizado
 > al final de cada oleada. v0.13.0 cerró la identidad de máquina PE (ARMNT/ARM64),
 > ELF e_machine + Hexagon, valores plist sin pérdida con tipos, resolución JS

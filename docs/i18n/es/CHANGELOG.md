@@ -3,6 +3,20 @@
 Todos los cambios notables se guardan en este archivo. Formato: Keep a Changelog + SemVer.
 All notable changes are documented here (resumen en español + English detail).
 
+## [0.15.0] — 2026-11-25
+
+### Added
+
+- The JS walk includes `.mts` and `.cts`. Package resolution reads `exports` before `main` (`1be78a491a3a4b961f74ad7762b977c0c15acbe2`).
+
+### Fixed
+
+- `src/native-windows/addon.ts` reads the live Win32 process name, token integrity, and a directory snapshot. It no longer returns a skeleton success (`1be78a491a3a4b961f74ad7762b977c0c15acbe2`).
+
+### Updated
+
+- `rea_aot_profile` and `rea_mips_psp_profile` declare `details.iskelet: true`. The surface stays 191 tools and 188 output schemas (`1be78a491a3a4b961f74ad7762b977c0c15acbe2`).
+
 ## [0.14.0] — 2026-11-25
 
 ### Added
