@@ -101,8 +101,9 @@ describe("SessionQueue birimi (sahte kosucular)", () => {
     const toplam = Date.now() - t0;
     assert.equal(a, "a");
     assert.equal(b, "b");
-    // Seri olsaydi ~240ms surerdi; paralel ~120ms. CI payiyla 200ms alti paralel kanitidir.
-    assert.ok(toplam < 200, `paralel beklenen <200ms, gelen ${toplam}ms`);
+    // Ortusme damgasi asil kanittir. Duvar saati yalniz askida kalmayi yakalar;
+    // GitHub runner'da 120ms'lik iki is 200ms'yi asabiliyor.
+    assert.ok(toplam < 2000, `paralel is askiya dusmemeli, gelen ${toplam}ms`);
     const basla2 = olay.find((o) => o.ev === "basla" && o.ad === "b").t;
     const bit1 = olay.find((o) => o.ev === "bit" && o.ad === "a").t;
     assert.ok(basla2 < bit1, "ikinci oturum birincinin bitisini beklememeli (ortusme olmali)");
@@ -247,8 +248,8 @@ describe("sessionSerializeEnabled + TAM serilestirme (Dalga I/1, birim)", () => 
     const toplam = Date.now() - t0;
     assert.equal(a, "a");
     assert.equal(b, "b");
-    // Paralel ispat: ~120ms; seri olsaydi ~240ms surerdi.
-    assert.ok(toplam < 200, `paralel beklenen <200ms, gelen ${toplam}ms`);
+    // Ortusme damgasi asil kanittir. Duvar saati yalniz askida kalmayi yakalar.
+    assert.ok(toplam < 2000, `paralel is askiya dusmemeli, gelen ${toplam}ms`);
     // Ortusme: ikinci, birinci bitmeden baslar.
     assert.ok(iz.b.basla < iz.a.bit, `ortusme beklenir: a=[${iz.a.basla},${iz.a.bit}] b basla=${iz.b.basla}`);
   });
