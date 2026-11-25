@@ -1,7 +1,7 @@
-# winget/Alyhnte.ReaPlus/0.16.0/Alyhnte.ReaPlus.locale.en-US.yaml — locale manifest.
-# Version source: package.json (0.16.0). Store submission was not run.
+# winget/Alyhnte.ReaPlus/0.17.0/Alyhnte.ReaPlus.locale.en-US.yaml — locale manifest.
+# Version source: package.json (0.17.0). Store submission was not run.
 PackageIdentifier: Alyhnte.ReaPlus
-PackageVersion: 0.16.0
+PackageVersion: 0.17.0
 PackageLocale: en-US
 Publisher: Alyhnte
 PackageName: ReaPlus

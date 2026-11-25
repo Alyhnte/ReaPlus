@@ -1,11 +1,11 @@
 # homebrew/rea-plus.rb — ReaPlus Homebrew formula (prepared; tap is not published).
-# Version source: package.json (0.16.0).
+# Version source: package.json (0.17.0).
 # sha256 is measured from the npm registry tarball after publish. No invented hash.
 class ReaPlus < Formula
   desc "Conduit live-debug core + Rea static domains over MCP stdio/HTTP"
   homepage "https://github.com/Alyhnte/ReaPlus"
-  url "https://registry.npmjs.org/rea-plus/-/rea-plus-0.16.0.tgz"
-  version "0.16.0"
+  url "https://registry.npmjs.org/rea-plus/-/rea-plus-0.17.0.tgz"
+  version "0.17.0"
   sha256 "bilinmiyor"
   license "MIT"
 
@@ -18,6 +18,6 @@ class ReaPlus < Formula
   end
 
   test do
-    assert_match "0.16.0", shell_output("#{bin}/rea-plus-cli --version")
+    assert_match "0.17.0", shell_output("#{bin}/rea-plus-cli --version")
   end
 end

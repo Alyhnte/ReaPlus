@@ -6,7 +6,7 @@
 
 ## Summary
 
-- Server: `rea-plus` 0.16.0
+- Server: `rea-plus` 0.17.0
 - Total tools: 200
 - Total resources: 2
 - Total prompts: 7

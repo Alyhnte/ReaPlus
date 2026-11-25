@@ -1,11 +1,11 @@
 {
-  "version": "0.16.0",
+  "version": "0.17.0",
   "description": "Conduit live-debug core + Rea static domains. 30 frozen tools + prefixed rea domains over stdio/HTTP.",
   "homepage": "https://github.com/Alyhnte/ReaPlus",
   "license": "MIT",
-  "url": "https://registry.npmjs.org/rea-plus/-/rea-plus-0.16.0.tgz",
+  "url": "https://registry.npmjs.org/rea-plus/-/rea-plus-0.17.0.tgz",
   "hash": "bilinmiyor",
-  "_hashNotu": "npm registry tarball hash is measured after publish (0.16.0). No invented hash. Store submission was not run.",
+  "_hashNotu": "npm registry tarball hash is measured after publish (0.17.0). No invented hash. Store submission was not run.",
   "bin": [
     "dist/cli/index.js"
   ],

@@ -2,6 +2,16 @@
 
 All notable changes are kept in this file. Format: Keep a Changelog + SemVer.
 
+## [0.17.0] — 2026-11-25
+
+### Added
+
+- `rea_angr_explore`, `rea_afl_fuzz`, `rea_lldb_script`, and `rea_ttd_info` parse the external program stdout. A missing program returns `capability_unsupported` (`3ab174f64ea1ba3f10ad050bedadc31a4d3a542a`).
+
+### Updated
+
+- The four probes are on the `all` profile only. The surface is 200 tools and 197 output schemas (`3ab174f64ea1ba3f10ad050bedadc31a4d3a542a`).
+
 ## [0.16.0] — 2026-11-25
 
 ### Added
