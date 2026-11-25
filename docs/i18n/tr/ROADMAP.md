@@ -1,6 +1,6 @@
 # ROADMAP — ReaPlus yol haritası
 
-> Durum: v0.13.1 yayında (npm `latest` + MCP Registry + GitHub Release + SBOM asset
+> Durum: v0.14.0 yayında (npm `latest` + MCP Registry + GitHub Release + SBOM asset
 > + GHCR imajı + CI/pages/docker yeşil). Bu belge ilk
 > 2026-10-12 incelemesinin bulgularıyla doğmuş, her dalga sonunda gerçekleşenle
 > senkronlanmıştır. v0.13.0 dalgaları kapattı: PE makine kimliği (ARMNT/ARM64),

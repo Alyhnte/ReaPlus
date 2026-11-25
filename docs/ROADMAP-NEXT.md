@@ -77,17 +77,17 @@ Evidence: 4/4 branch merges (`081d6b3` through `55226c0`). Full suite **107/107 
 
 ---
 
-## Remaining plan (status as of wave 15: not done)
+## Remaining plan
 
-v0.14.0 is not tagged in this worktree. de/fr/es/tr translations of the new English happen once after wave 19, not on each wave. `docs/i18n/tr` is not edited for that reason, and de/fr/es wait as well.
+de/fr/es/tr translations of the new English happen once after wave 19, not on each wave.
 
-### Wave 15 (this branch, `wave-15/docs-english`) — not done
+### Wave 15 — closed in v0.13.1
 
-English GitHub docs, the stale roadmap table, and English pages only. Turkish stays under `docs/i18n/tr`. Other languages are not translated on this wave.
+English GitHub docs, the stale roadmap table, and English pages. Other languages were not translated.
 
-### Wave 16 (separate branch `wave-16/honesty`, in progress elsewhere) — not done
+### Wave 16 — closed in v0.14.0
 
-Real ELF program-header layout (NX/PIE/RELRO). A real disassembly gadget scan. Remove the Frida API self-trigger of `GetTickCount` / `CreateFileW`. Move `sniff.test.mjs` out of the LIVE exclusion list.
+`rea_pwn_elf_layout` reads ELF program headers (PIE, NX, RELRO). `rea_pwn_gadgets` keeps sequences that end in `ret`, `retn`, or `retf`. The Frida API script only attaches hooks and waits. `sniff.test.mjs` runs in the default test lane.
 
 ### Wave 17 — not done
 

@@ -2,7 +2,7 @@
 
 Date of the original pass: 2026-10-19. That pass compared ReaPlus `v0.12.0` (`9fd2057`) with upstream `rea-agents-6.7.0` (the latest release then). Sources: a live `gh` API read (releases, merged PRs, commits) plus ReaPlus grep evidence (2026-10-18/19).
 
-Status revised for v0.13.0 (191 tools, 187 `outputSchema`, 191 annotations, 2 resources, 7 prompts). The tool count did not change. v0.14.0 is not tagged. Rows that shipped are marked closed below. Rows that did not ship stay open.
+Status revised for v0.14.0 (191 tools, 188 `outputSchema`, 191 annotations, 2 resources, 7 prompts). The tool count did not change. `rea_pwn_elf_layout` now has an output schema. Rows that shipped are marked closed below. Rows that did not ship stay open.
 
 ## 1. Upstream releases (6.1.0 through 6.7.0) against ReaPlus
 
@@ -79,6 +79,8 @@ Partial-fact retention discipline (fs snapshot, uninstall, native routes, refere
 v0.12.0: `63e775f` golden corpus (5 real gcc binaries plus 16 tests). `d5ef760` four task-template prompts (7 total). `a0ea39b` plus `582b9b2` plus `6d67eaf` portable bundle and the release-asset chain. `0c16da6` docs sync to 191/2/7 (6 languages) plus a CLI guard realpath fix. `9fd2057` release.
 
 v0.13.0 closed the static rows named above and locked version carriers (9 checks). The surface stayed 191 tools / 187 schemas / 191 annotations / 2 resources / 7 prompts. `ci.yml` runs `tests/schema-budget.test.mjs`. `pages.yml` deploys. `publish.yml` uses `npm publish --provenance`. Trusted Publisher account setup is still an external gap. Frida live VM approval is still open. CI is `ubuntu-latest` only.
+
+v0.14.0 (`0039bb3dbed5314c3485a4f04ac794e4706c4c14`) makes `rea_pwn_elf_layout` read program headers and `rea_pwn_gadgets` keep ret-terminated sequences. The surface is 191 tools / 188 schemas. The three schema-less tools are `rea_best_motor`, `rea_fallback`, and `rea_process_compare`.
 
 ## 6. Release-note cleanup (2026-10-19)
 

@@ -18,18 +18,25 @@
 <button id="tema-toggle" type="button" aria-pressed="false">Dunkles Design</button>
 </header>
 <section class="ozet reveal" aria-label="Oberflächenzusammenfassung">
-<p class="ozet-metin">Oberflächenzusammenfassung (echter Lauf, TOOLS.md): 191 Werkzeuge · 187 outputSchema · 191 annotations · 2 Ressourcen · 7 Prompts</p>
-<dl class="istatistik"><div><dt>Werkzeuge</dt><dd><span class="sayi" data-sayi="191">191</span></dd></div><div><dt>outputSchema</dt><dd><span class="sayi" data-sayi="187">187</span></dd></div><div><dt>annotations</dt><dd><span class="sayi" data-sayi="191">191</span></dd></div><div><dt>Ressourcen</dt><dd><span class="sayi" data-sayi="2">2</span></dd></div><div><dt>Prompts</dt><dd><span class="sayi" data-sayi="7">7</span></dd></div></dl>
+<p class="ozet-metin">Oberflächenzusammenfassung (echter Lauf, TOOLS.md): 191 Werkzeuge · 188 outputSchema · 191 annotations · 2 Ressourcen · 7 Prompts</p>
+<dl class="istatistik"><div><dt>Werkzeuge</dt><dd><span class="sayi" data-sayi="191">191</span></dd></div><div><dt>outputSchema</dt><dd><span class="sayi" data-sayi="188">188</span></dd></div><div><dt>annotations</dt><dd><span class="sayi" data-sayi="191">191</span></dd></div><div><dt>Ressourcen</dt><dd><span class="sayi" data-sayi="2">2</span></dd></div><div><dt>Prompts</dt><dd><span class="sayi" data-sayi="7">7</span></dd></div></dl>
 </section>
 <main id="icerik"><div class="reveal">
 <h1>Änderungen</h1>
 <h1 id="changelog--rea-plus">Changelog — rea-plus</h1>
 <p>Alle wichtigen Änderungen werden in dieser Datei festgehalten. Format: Keep a Changelog + SemVer.
 Alle nennenswerten Änderungen sind hier dokumentiert (deutsche Zusammenfassung + englisches Detail).</p>
-<h2 id="0131--2026-11-25">[0.13.1] — 2026-11-25</h2>
+<h2 id="0140--2026-11-25">[0.14.0] — 2026-11-25</h2>
 <h3 id="added">Added</h3>
-<ul><li><code>tests/docs-english.test.mjs</code> rejects Turkish prose on the GitHub-facing markdown allowlist (<code>e68f61beb643b2fa20440c55cf0ef93a985d67a9</code>).</li></ul>
+<ul><li><code>rea_pwn_elf_layout</code> reads ELF program headers and reports PIE, NX, and RELRO. <code>rea_pwn_gadgets</code> keeps 1-5 instruction sequences that end in <code>ret</code>, <code>retn</code>, or <code>retf</code> (<code>0039bb3dbed5314c3485a4f04ac794e4706c4c14</code>).</li></ul>
+<h3 id="fixed">Fixed</h3>
+<ul><li><code>rea_frida_api</code> no longer calls <code>GetTickCount</code>, <code>CreateFileW</code>, or <code>CloseHandle</code> inside the target. The script only attaches hooks and waits (<code>0039bb3dbed5314c3485a4f04ac794e4706c4c14</code>).</li><li><code>sniff.test.mjs</code> runs in the default test lane. Live Frida and Ghidra files stay excluded (<code>0039bb3dbed5314c3485a4f04ac794e4706c4c14</code>).</li></ul>
 <h3 id="updated">Updated</h3>
+<ul><li><code>rea_pwn_elf_layout</code> now has an output schema. The surface is 191 tools, 188 output schemas, and 3 schema-less tools (<code>0039bb3dbed5314c3485a4f04ac794e4706c4c14</code>).</li></ul>
+<h2 id="0131--2026-11-25">[0.13.1] — 2026-11-25</h2>
+<h3 id="added-1">Added</h3>
+<ul><li><code>tests/docs-english.test.mjs</code> rejects Turkish prose on the GitHub-facing markdown allowlist (<code>e68f61beb643b2fa20440c55cf0ef93a985d67a9</code>).</li></ul>
+<h3 id="updated-1">Updated</h3>
 <ul><li>GitHub-facing documentation is English, including the roadmap, coverage gaps, and the morluto comparison (<code>e68f61beb643b2fa20440c55cf0ef93a985d67a9</code>).</li><li>The roadmap table records the schema-budget CI step, the Pages deploy workflow, 7 prompts, and npm provenance (<code>e68f61beb643b2fa20440c55cf0ef93a985d67a9</code>).</li></ul>
 <h2 id="0130--2026-10-20">[0.13.0] — 2026-10-20</h2>
 <p>Release 0.13.0: dalga-13 + dalga-14 — Sniff-Maschinenidentität (PE ARMNT/ARM64,

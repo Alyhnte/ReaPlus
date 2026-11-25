@@ -6,11 +6,11 @@
 
 ## Summary
 
-- Server: `rea-plus` 0.13.1
+- Server: `rea-plus` 0.14.0
 - Total tools: 191
 - Total resources: 2
 - Total prompts: 7
-- Tools with outputSchema: 187
+- Tools with outputSchema: 188
 - Tools with annotations: 191
 
 ## Tools
@@ -21,7 +21,7 @@ Release the binary target (and its radare2 process) held by a session.
 
 - Input fields:
   - `session_id` (string, required) — Application session id. Not an MCP protocol session.
-- outputSchema: present (fields: closed, session_id)
+- outputSchema: present (fields: `closed`, `session_id`)
 - annotations: present (destructiveHint=true, openWorldHint=true, readOnlyHint=false)
 
 ### `debug_attach`
@@ -36,7 +36,7 @@ Attach by pid, or, on a frida session, connect to a listening Frida Gadget (gadg
   - `pid` (integer, optional) — Live process id. Required unless gadget or usb is set.
   - `session_id` (string, required) — Application session id. Not an MCP protocol session.
   - `usb` (boolean, optional) — Use the USB Frida device (phone or tablet) instead of a host:port Gadget.
-- outputSchema: present (fields: architecture, attached, engine, entry_point, mode, module_base, module_entry, path, pid, session_id)
+- outputSchema: present (fields: `architecture`, `attached`, `engine`, `entry_point`, `mode`, `module_base`, `module_entry`, `path`, `pid`, `session_id`)
 - annotations: present (destructiveHint=true, openWorldHint=true, readOnlyHint=false)
 
 ### `debug_breakpoint`
@@ -61,7 +61,7 @@ Read the current thread's call stack (address, module, function per frame).
 - Input fields:
   - `max_frames` (integer, optional) — Max frames returned (default 50).
   - `session_id` (string, required) — Application session id. Not an MCP protocol session.
-- outputSchema: present (fields: frames, session_id, threadId)
+- outputSchema: present (fields: `frames`, `session_id`, `threadId`)
 - annotations: present (openWorldHint=true, readOnlyHint=false)
 
 ### `debug_close`
@@ -70,7 +70,7 @@ Tear down the hidden x64dbg process held by a session. Launched targets are stop
 
 - Input fields:
   - `session_id` (string, required) — Application session id. Not an MCP protocol session.
-- outputSchema: present (fields: closed, session_id)
+- outputSchema: present (fields: `closed`, `session_id`)
 - annotations: present (destructiveHint=true, openWorldHint=true, readOnlyHint=false)
 
 ### `debug_code`
@@ -93,7 +93,7 @@ Resume the debuggee until the next breakpoint, single-step, or exit. The stop po
 
 - Input fields:
   - `session_id` (string, required) — Application session id. Not an MCP protocol session.
-- outputSchema: present (fields: address, reason, session_id)
+- outputSchema: present (fields: `address`, `reason`, `session_id`)
 - annotations: present (destructiveHint=true, openWorldHint=true, readOnlyHint=false)
 
 ### `debug_memory`
@@ -124,7 +124,7 @@ Open a PE target for live debugging on this session's debug engine. Auto-detects
   - `command_line_args` (string, optional) — Command line arguments for the debuggee.
   - `path` (string, required) — Filesystem path of the PE binary to debug.
   - `session_id` (string, required) — Application session id. Not an MCP protocol session.
-- outputSchema: present (fields: architecture, attached, engine, entry_point, mode, module_base, module_entry, opened, path, pid, session_id)
+- outputSchema: present (fields: `architecture`, `attached`, `engine`, `entry_point`, `mode`, `module_base`, `module_entry`, `opened`, `path`, `pid`, `session_id`)
 - annotations: present (destructiveHint=true, openWorldHint=true, readOnlyHint=false)
 
 ### `debug_pause`
@@ -133,7 +133,7 @@ Asynchronously break a running debuggee. Idempotent when already paused.
 
 - Input fields:
   - `session_id` (string, required) — Application session id. Not an MCP protocol session.
-- outputSchema: present (fields: address, reason, session_id)
+- outputSchema: present (fields: `address`, `reason`, `session_id`)
 - annotations: present (destructiveHint=true, openWorldHint=true, readOnlyHint=false)
 
 ### `debug_plugin`
@@ -155,7 +155,7 @@ Read debuggee registers (general + flags; segment/debug optionally).
   - `include_debug` (boolean, optional) — Include debug registers.
   - `include_segment` (boolean, optional) — Include segment registers.
   - `session_id` (string, required) — Application session id. Not an MCP protocol session.
-- outputSchema: present (fields: debug, flags, general, segment, session_id)
+- outputSchema: present (fields: `debug`, `flags`, `general`, `segment`, `session_id`)
 - annotations: present (openWorldHint=true, readOnlyHint=false)
 
 ### `debug_state`
@@ -175,7 +175,7 @@ Single-step the debuggee (into or over calls) and report the new location.
   - `count` (integer, optional) — Steps to take (default 1).
   - `kind` (enum, optional)
   - `session_id` (string, required) — Application session id. Not an MCP protocol session.
-- outputSchema: present (fields: address, disassembly, function, kind, module, registers, session_id)
+- outputSchema: present (fields: `address`, `disassembly`, `function`, `kind`, `module`, `registers`, `session_id`)
 - annotations: present (destructiveHint=true, openWorldHint=true, readOnlyHint=false)
 
 ### `debug_thread`
@@ -212,7 +212,7 @@ Disassemble instructions at an address (linear, `count` ops) or a whole function
   - `count` (integer, optional) — Ops for address mode (default 32).
   - `function` (string, optional) — Function name or address, e.g. "entry0".
   - `session_id` (string, required) — Application session id. Not an MCP protocol session.
-- outputSchema: present (fields: count, location, ops, session_id, text)
+- outputSchema: present (fields: `count`, `location`, `ops`, `session_id`, `text`)
 - annotations: present (openWorldHint=true, readOnlyHint=false)
 
 ### `dump`
@@ -224,7 +224,7 @@ Read raw bytes at an address as hexdump text or a JSON byte array.
   - `format` (enum, optional)
   - `length` (integer, optional) — Bytes to read (default 128).
   - `session_id` (string, required) — Application session id. Not an MCP protocol session.
-- outputSchema: present (fields: address, bytes, format, length, session_id, text)
+- outputSchema: present (fields: `address`, `bytes`, `format`, `length`, `session_id`, `text`)
 - annotations: present (openWorldHint=true, readOnlyHint=false)
 
 ### `events_pull`
@@ -235,7 +235,7 @@ Pull events stored for one application session since a sequence number. This doe
   - `after` (integer, optional) — Return events with seq greater than this.
   - `limit` (integer, optional)
   - `session_id` (string, required) — Application session id. Not an MCP protocol session.
-- outputSchema: present (fields: events, retainedFrom, session_id)
+- outputSchema: present (fields: `events`, `retainedFrom`, `session_id`)
 - annotations: present (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)
 
 ### `explain`
@@ -248,7 +248,7 @@ Short Turkish explanation of an assembly window: what the region does, where it 
   - `count` (integer, optional) — How many instructions to read (default 16).
   - `instructions` (object[], optional) — Already fetched ops. When set, the debugger is not called.
   - `session_id` (string, optional) — Application session id. Not an MCP protocol session.
-- outputSchema: present (fields: atlamalar, bildirimler, cagrilar, dil, gosterilen, kaynak, komut_sayisi, ozet, satirlar)
+- outputSchema: present (fields: `atlamalar`, `bildirimler`, `cagrilar`, `dil`, `gosterilen`, `kaynak`, `komut_sayisi`, `ozet`, `satirlar`)
 - annotations: present (openWorldHint=true, readOnlyHint=false)
 
 ### `get_cfg`
@@ -260,7 +260,7 @@ Control-flow graph of a function as JSON and/or Graphviz DOT. Defaults to the en
   - `format` (enum, optional)
   - `function` (string, optional) — Function name or address, e.g. "entry0".
   - `session_id` (string, required) — Application session id. Not an MCP protocol session.
-- outputSchema: present (fields: dot, function, json, location, session_id)
+- outputSchema: present (fields: `dot`, `function`, `json`, `location`, `session_id`)
 - annotations: present (openWorldHint=true, readOnlyHint=false)
 
 ### `health`
@@ -268,7 +268,7 @@ Control-flow graph of a function as JSON and/or Graphviz DOT. Defaults to the en
 Report bridge liveness. Does not touch a debugger engine.
 
 - Input fields: none
-- outputSchema: present (fields: name, protocol, sessions, status)
+- outputSchema: present (fields: `name`, `protocol`, `sessions`, `status`)
 - annotations: present (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)
 
 ### `open_target`
@@ -279,7 +279,7 @@ Open a binary target for static analysis in a radare2 session. Only mode 'static
   - `mode` (string, optional) — Analysis mode. Only "static" is supported.
   - `path` (string, required) — Filesystem path of the binary to analyze.
   - `session_id` (string, required) — Application session id. Not an MCP protocol session.
-- outputSchema: present (fields: engine, mode, opened, path, session_id)
+- outputSchema: present (fields: `engine`, `mode`, `opened`, `path`, `session_id`)
 - annotations: present (destructiveHint=true, openWorldHint=true, readOnlyHint=false)
 
 ### `prerequisites`
@@ -287,7 +287,7 @@ Open a binary target for static analysis in a radare2 session. Only mode 'static
 Check the programs Conduit uses (radare2, x64dbg, cdb, Python, Frida, Graphviz, ScyllaHide). Missing ones include a download URL and where to put the files. The bridge does not download them. Call this when a tool is missing or before choosing an engine.
 
 - Input fields: none
-- outputSchema: present (fields: araclar, ozet)
+- outputSchema: present (fields: `araclar`, `ozet`)
 - annotations: present (destructiveHint=false, idempotentHint=true, openWorldHint=true, readOnlyHint=true)
 
 ### `rea_adb_devices`
@@ -295,7 +295,7 @@ Check the programs Conduit uses (radare2, x64dbg, cdb, Python, Frida, Graphviz, 
 List of connected devices.
 
 - Input fields: none
-- outputSchema: present (fields: arac, cihazlar, ok)
+- outputSchema: present (fields: `arac`, `cihazlar`, `ok`)
 - annotations: present (openWorldHint=true, readOnlyHint=false)
 
 ### `rea_adb_install`
@@ -305,7 +305,7 @@ APK cihaza kurulum.
 - Input fields:
   - `apk_path` (string, required)
   - `seri` (string, optional)
-- outputSchema: present (fields: apk, arac, ok, sonuc)
+- outputSchema: present (fields: `apk`, `arac`, `ok`, `sonuc`)
 - annotations: present (destructiveHint=true, openWorldHint=true, readOnlyHint=false)
 
 ### `rea_adb_logcat`
@@ -314,7 +314,7 @@ Device logcat dump.
 
 - Input fields:
   - `seri` (string, optional)
-- outputSchema: present (fields: arac, ok, satirlar, toplam_satir)
+- outputSchema: present (fields: `arac`, `ok`, `satirlar`, `toplam_satir`)
 - annotations: present (openWorldHint=true, readOnlyHint=false)
 
 ### `rea_adb_packages`
@@ -324,7 +324,7 @@ List of installed packages.
 - Input fields:
   - `filtre` (string, optional)
   - `seri` (string, optional)
-- outputSchema: present (fields: arac, ok, paketler)
+- outputSchema: present (fields: `arac`, `ok`, `paketler`)
 - annotations: present (openWorldHint=true, readOnlyHint=false)
 
 ### `rea_adb_screencap`
@@ -334,7 +334,7 @@ Device screenshot.
 - Input fields:
   - `out` (string, required)
   - `seri` (string, optional)
-- outputSchema: present (fields: arac, bayt, ok, yol)
+- outputSchema: present (fields: `arac`, `bayt`, `ok`, `yol`)
 - annotations: present (destructiveHint=true, openWorldHint=true, readOnlyHint=false)
 
 ### `rea_android_dinamik_recete`
@@ -343,7 +343,7 @@ Android dynamic-analysis recipe generation.
 
 - Input fields:
   - `path` (string, required)
-- outputSchema: present (fields: arac, ok, recete)
+- outputSchema: present (fields: `arac`, `ok`, `recete`)
 - annotations: present (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)
 
 ### `rea_android_recete_dogrula`
@@ -352,7 +352,7 @@ Dry-run validation of a recipe.
 
 - Input fields:
   - `text` (string, required)
-- outputSchema: present (fields: adim_sayisi, arac, ok)
+- outputSchema: present (fields: `adim_sayisi`, `arac`, `ok`)
 - annotations: present (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)
 
 ### `rea_aot_detect`
@@ -362,7 +362,7 @@ NativeAOT sinyali.
 - Input fields:
   - `b64dosya` (string, required)
   - `metin` (string, optional)
-- outputSchema: present (fields: details, ok, summary, tool)
+- outputSchema: present (fields: `details`, `ok`, `summary`, `tool`)
 - annotations: present (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)
 
 ### `rea_aot_objc`
@@ -371,7 +371,7 @@ ObjC dispatch izleri.
 
 - Input fields:
   - `text` (string, required)
-- outputSchema: present (fields: details, ok, summary, tool)
+- outputSchema: present (fields: `details`, `ok`, `summary`, `tool`)
 - annotations: present (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)
 
 ### `rea_aot_profile`
@@ -381,7 +381,7 @@ AOT profili.
 - Input fields:
   - `b64dosya` (string, required)
   - `metin` (string, optional)
-- outputSchema: present (fields: details, ok, summary, tool)
+- outputSchema: present (fields: `details`, `ok`, `summary`, `tool`)
 - annotations: present (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)
 
 ### `rea_aot_swift`
@@ -390,7 +390,7 @@ Swift dispatch izleri.
 
 - Input fields:
   - `text` (string, required)
-- outputSchema: present (fields: details, ok, summary, tool)
+- outputSchema: present (fields: `details`, `ok`, `summary`, `tool`)
 - annotations: present (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)
 
 ### `rea_apktool_build`
@@ -400,7 +400,7 @@ Decode dizinden APK rebuild.
 - Input fields:
   - `dir` (string, required)
   - `out` (string, required)
-- outputSchema: present (fields: arac, ciktiApk, ok, proje)
+- outputSchema: present (fields: `arac`, `ciktiApk`, `ok`, `proje`)
 - annotations: present (destructiveHint=true, openWorldHint=true, readOnlyHint=false)
 
 ### `rea_apktool_caps`
@@ -408,7 +408,7 @@ Decode dizinden APK rebuild.
 apktool capability probe.
 
 - Input fields: none
-- outputSchema: present (fields: aapt2, aapt2Tamam, apktool, arac, ok, surumGozlem)
+- outputSchema: present (fields: `aapt2`, `aapt2Tamam`, `apktool`, `arac`, `ok`, `surumGozlem`)
 - annotations: present (openWorldHint=true, readOnlyHint=false)
 
 ### `rea_apktool_decode`
@@ -418,7 +418,7 @@ APK decode (resource).
 - Input fields:
   - `apk_path` (string, required)
   - `out` (string, required)
-- outputSchema: present (fields: apk, arac, ciktiDir, ok)
+- outputSchema: present (fields: `apk`, `arac`, `ciktiDir`, `ok`)
 - annotations: present (destructiveHint=true, openWorldHint=true, readOnlyHint=false)
 
 ### `rea_apktool_framework`
@@ -427,7 +427,7 @@ Framework APK kurulumu.
 
 - Input fields:
   - `path` (string, required)
-- outputSchema: present (fields: apk, arac, ok)
+- outputSchema: present (fields: `apk`, `arac`, `ok`)
 - annotations: present (destructiveHint=true, openWorldHint=true, readOnlyHint=false)
 
 ### `rea_apktool_info`
@@ -435,7 +435,7 @@ Framework APK kurulumu.
 apktool+aapt2 versions.
 
 - Input fields: none
-- outputSchema: present (fields: arac, ok, surum, surumGozlem)
+- outputSchema: present (fields: `arac`, `ok`, `surum`, `surumGozlem`)
 - annotations: present (openWorldHint=true, readOnlyHint=false)
 
 ### `rea_apple_bundle`
@@ -444,7 +444,7 @@ Bundle anatomisi.
 
 - Input fields:
   - `path` (string, required)
-- outputSchema: present (fields: details, ok, summary, tool)
+- outputSchema: present (fields: `details`, `ok`, `summary`, `tool`)
 - annotations: present (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)
 
 ### `rea_apple_macho`
@@ -453,7 +453,7 @@ Mach-O sihir + dyld listesi.
 
 - Input fields:
   - `path` (string, required)
-- outputSchema: present (fields: details, ok, summary, tool)
+- outputSchema: present (fields: `details`, `ok`, `summary`, `tool`)
 - annotations: present (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)
 
 ### `rea_apple_plist`
@@ -462,7 +462,7 @@ Info.plist anahtar okuma.
 
 - Input fields:
   - `path` (string, required)
-- outputSchema: present (fields: details, ok, summary, tool)
+- outputSchema: present (fields: `details`, `ok`, `summary`, `tool`)
 - annotations: present (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)
 
 ### `rea_behavior_full`
@@ -472,7 +472,7 @@ Behavior report in a single call.
 - Input fields:
   - `api` (string, required)
   - `net` (string, optional)
-- outputSchema: present (fields: bulgular, cizelge, ok, ozet, tool)
+- outputSchema: present (fields: `bulgular`, `cizelge`, `ok`, `ozet`, `tool`)
 - annotations: present (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)
 
 ### `rea_behavior_timeline`
@@ -481,7 +481,7 @@ Event timeline + summary.
 
 - Input fields:
   - `olaylar` (string, required)
-- outputSchema: present (fields: details, ok, summary, tool)
+- outputSchema: present (fields: `details`, `ok`, `summary`, `tool`)
 - annotations: present (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)
 
 ### `rea_best_motor`
@@ -500,7 +500,7 @@ Binary fonksiyon listesi (ad/adres + hash).
 
 - Input fields:
   - `path` (string, required)
-- outputSchema: present (fields: arac, bicim, dosya, fonksiyonlar, istatistik, ok, sayi, sembollu)
+- outputSchema: present (fields: `arac`, `bicim`, `dosya`, `fonksiyonlar`, `istatistik`, `ok`, `sayi`, `sembollu`)
 - annotations: present (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)
 
 ### `rea_bindiff_karsilastir`
@@ -509,7 +509,7 @@ Function-level diff between two versions.
 
 - Input fields:
   - `text` (string, required)
-- outputSchema: present (fields: arac, aynen, cikarilan, degisen, eklenen, eski, istatistik, ok, ozet, yeni)
+- outputSchema: present (fields: `arac`, `aynen`, `cikarilan`, `degisen`, `eklenen`, `eski`, `istatistik`, `ok`, `ozet`, `yeni`)
 - annotations: present (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)
 
 ### `rea_browser_caps`
@@ -517,7 +517,7 @@ Function-level diff between two versions.
 Browser capability probe.
 
 - Input fields: none
-- outputSchema: present (fields: details, ok, summary, tool)
+- outputSchema: present (fields: `details`, `ok`, `summary`, `tool`)
 - annotations: present (openWorldHint=true, readOnlyHint=false)
 
 ### `rea_browser_click`
@@ -527,7 +527,7 @@ Click + post-click state.
 - Input fields:
   - `selector` (string, required)
   - `url` (string, required)
-- outputSchema: present (fields: details, ok, summary, tool)
+- outputSchema: present (fields: `details`, `ok`, `summary`, `tool`)
 - annotations: present (openWorldHint=true, readOnlyHint=false)
 
 ### `rea_browser_har_import`
@@ -536,7 +536,7 @@ HAR import.
 
 - Input fields:
   - `path` (string, required)
-- outputSchema: present (fields: details, ok, summary, tool)
+- outputSchema: present (fields: `details`, `ok`, `summary`, `tool`)
 - annotations: present (openWorldHint=true, readOnlyHint=false)
 
 ### `rea_browser_nav`
@@ -545,7 +545,7 @@ Open a page + title.
 
 - Input fields:
   - `url` (string, required)
-- outputSchema: present (fields: details, ok, summary, tool)
+- outputSchema: present (fields: `details`, `ok`, `summary`, `tool`)
 - annotations: present (openWorldHint=true, readOnlyHint=false)
 
 ### `rea_browser_scenario`
@@ -554,7 +554,7 @@ Scenario recording.
 
 - Input fields:
   - `text` (string, required)
-- outputSchema: present (fields: details, ok, summary, tool)
+- outputSchema: present (fields: `details`, `ok`, `summary`, `tool`)
 - annotations: present (destructiveHint=true, openWorldHint=true, readOnlyHint=false)
 
 ### `rea_browser_shot`
@@ -564,7 +564,7 @@ Full-page screenshot.
 - Input fields:
   - `out` (string, required)
   - `url` (string, required)
-- outputSchema: present (fields: details, ok, summary, tool)
+- outputSchema: present (fields: `details`, `ok`, `summary`, `tool`)
 - annotations: present (destructiveHint=true, openWorldHint=true, readOnlyHint=false)
 
 ### `rea_config_suggest`
@@ -573,7 +573,7 @@ MCP config snippet for the engines found.
 
 - Input fields:
   - `bulunan` (string[], required)
-- outputSchema: present (fields: snippet)
+- outputSchema: present (fields: `snippet`)
 - annotations: present (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)
 
 ### `rea_console_yakala`
@@ -582,7 +582,7 @@ Console messages.
 
 - Input fields:
   - `url` (string, required)
-- outputSchema: present (fields: details, ok, summary, tool)
+- outputSchema: present (fields: `details`, `ok`, `summary`, `tool`)
 - annotations: present (openWorldHint=true, readOnlyHint=false)
 
 ### `rea_coverage`
@@ -592,7 +592,7 @@ Coverage ratio.
 - Input fields:
   - `incelenen` (integer, required)
   - `toplam` (integer, required)
-- outputSchema: present (fields: arac, kalan, ok, oran)
+- outputSchema: present (fields: `arac`, `kalan`, `ok`, `oran`)
 - annotations: present (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)
 
 ### `rea_crash_append`
@@ -602,7 +602,7 @@ Append a crash event.
 - Input fields:
   - `olay` (string, required)
   - `olaylar` (string, required)
-- outputSchema: present (fields: details, ok, summary, tool)
+- outputSchema: present (fields: `details`, `ok`, `summary`, `tool`)
 - annotations: present (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)
 
 ### `rea_crash_hint`
@@ -611,7 +611,7 @@ Crash ipucu.
 
 - Input fields:
   - `olaylar` (string, required)
-- outputSchema: present (fields: details, ok, summary, tool)
+- outputSchema: present (fields: `details`, `ok`, `summary`, `tool`)
 - annotations: present (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)
 
 ### `rea_crash_kayit_parse`
@@ -620,7 +620,7 @@ Crash notu parse.
 
 - Input fields:
   - `text` (string, required)
-- outputSchema: present (fields: arac, ok, registerlar, sinyal, threadSayisi, threadler)
+- outputSchema: present (fields: `arac`, `ok`, `registerlar`, `sinyal`, `threadSayisi`, `threadler`)
 - annotations: present (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)
 
 ### `rea_crash_ozet`
@@ -629,7 +629,7 @@ Crash summary.
 
 - Input fields:
   - `text` (string, required)
-- outputSchema: present (fields: arac, ilkFrame, ok, registerSayisi, sinyal, threadSayisi)
+- outputSchema: present (fields: `arac`, `ilkFrame`, `ok`, `registerSayisi`, `sinyal`, `threadSayisi`)
 - annotations: present (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)
 
 ### `rea_crash_timeline`
@@ -638,7 +638,7 @@ Crash timeline.
 
 - Input fields:
   - `olaylar` (string, required)
-- outputSchema: present (fields: details, ok, summary, tool)
+- outputSchema: present (fields: `details`, `ok`, `summary`, `tool`)
 - annotations: present (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)
 
 ### `rea_cutter_caps`
@@ -646,7 +646,7 @@ Crash timeline.
 Cutter/rizin capability probe.
 
 - Input fields: none
-- outputSchema: present (fields: arac, ok, pdc, surum)
+- outputSchema: present (fields: `arac`, `ok`, `pdc`, `surum`)
 - annotations: present (openWorldHint=true, readOnlyHint=false)
 
 ### `rea_cutter_decompile`
@@ -656,7 +656,7 @@ Cutter pseudo-decompilation.
 - Input fields:
   - `addr` (string, required)
   - `path` (string, required)
-- outputSchema: present (fields: addr, arac, hedef, kaynak, kod, not, ok)
+- outputSchema: present (fields: `addr`, `arac`, `hedef`, `kaynak`, `kod`, `not`, `ok`)
 - annotations: present (openWorldHint=true, readOnlyHint=false)
 
 ### `rea_cutter_disasm`
@@ -666,7 +666,7 @@ Cutter/rizin disassembly.
 - Input fields:
   - `addr` (string, required)
   - `path` (string, required)
-- outputSchema: present (fields: addr, arac, hedef, ok, ops)
+- outputSchema: present (fields: `addr`, `arac`, `hedef`, `ok`, `ops`)
 - annotations: present (openWorldHint=true, readOnlyHint=false)
 
 ### `rea_cutter_funcs`
@@ -675,7 +675,7 @@ Cutter/rizin fonksiyon listesi.
 
 - Input fields:
   - `path` (string, required)
-- outputSchema: present (fields: arac, fonksiyonlar, hedef, ok)
+- outputSchema: present (fields: `arac`, `fonksiyonlar`, `hedef`, `ok`)
 - annotations: present (openWorldHint=true, readOnlyHint=false)
 
 ### `rea_cutter_strings`
@@ -684,7 +684,7 @@ Cutter/rizin string listesi.
 
 - Input fields:
   - `path` (string, required)
-- outputSchema: present (fields: arac, hedef, ok, strings)
+- outputSchema: present (fields: `arac`, `hedef`, `ok`, `strings`)
 - annotations: present (openWorldHint=true, readOnlyHint=false)
 
 ### `rea_cutter_xrefs`
@@ -694,7 +694,7 @@ Cutter/rizin xref listesi.
 - Input fields:
   - `addr` (string, required)
   - `path` (string, required)
-- outputSchema: present (fields: addr, arac, hedef, ok, xrefs)
+- outputSchema: present (fields: `addr`, `arac`, `hedef`, `ok`, `xrefs`)
 - annotations: present (openWorldHint=true, readOnlyHint=false)
 
 ### `rea_diff_match`
@@ -704,7 +704,7 @@ Function matching (JSON arrays).
 - Input fields:
   - `a` (string, required)
   - `b` (string, required)
-- outputSchema: present (fields: details, ok, summary, tool)
+- outputSchema: present (fields: `details`, `ok`, `summary`, `tool`)
 - annotations: present (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)
 
 ### `rea_diff_summary`
@@ -714,7 +714,7 @@ Added/removed summary.
 - Input fields:
   - `a` (string, required)
   - `b` (string, required)
-- outputSchema: present (fields: details, ok, summary, tool)
+- outputSchema: present (fields: `details`, `ok`, `summary`, `tool`)
 - annotations: present (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)
 
 ### `rea_dos_com`
@@ -723,7 +723,7 @@ COM tespiti.
 
 - Input fields:
   - `path` (string, required)
-- outputSchema: present (fields: details, ok, summary, tool)
+- outputSchema: present (fields: `details`, `ok`, `summary`, `tool`)
 - annotations: present (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)
 
 ### `rea_dos_int21`
@@ -732,7 +732,7 @@ INT21 call scan.
 
 - Input fields:
   - `b64` (string, required)
-- outputSchema: present (fields: details, ok, summary, tool)
+- outputSchema: present (fields: `details`, `ok`, `summary`, `tool`)
 - annotations: present (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)
 
 ### `rea_dos_mz`
@@ -741,7 +741,7 @@ MZ header check.
 
 - Input fields:
   - `b64` (string, required)
-- outputSchema: present (fields: details, ok, summary, tool)
+- outputSchema: present (fields: `details`, `ok`, `summary`, `tool`)
 - annotations: present (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)
 
 ### `rea_dos_psp`
@@ -750,7 +750,7 @@ PSP struct parse.
 
 - Input fields:
   - `b64` (string, required)
-- outputSchema: present (fields: details, ok, summary, tool)
+- outputSchema: present (fields: `details`, `ok`, `summary`, `tool`)
 - annotations: present (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)
 
 ### `rea_dosya_izi`
@@ -759,7 +759,7 @@ File write/read from API events.
 
 - Input fields:
   - `text` (string, required)
-- outputSchema: present (fields: details, ok, summary, tool)
+- outputSchema: present (fields: `details`, `ok`, `summary`, `tool`)
 - annotations: present (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)
 
 ### `rea_dotnet_cil`
@@ -769,7 +769,7 @@ CIL method dump (dnfile).
 - Input fields:
   - `filtre` (string, optional)
   - `path` (string, required)
-- outputSchema: present (fields: arac, assembly, dosya, filtre, method_sayisi, methods, not, ok)
+- outputSchema: present (fields: `arac`, `assembly`, `dosya`, `filtre`, `method_sayisi`, `methods`, `not`, `ok`)
 - annotations: present (openWorldHint=true, readOnlyHint=false)
 
 ### `rea_dotnet_metadata`
@@ -778,7 +778,7 @@ Assembly metadata okuma.
 
 - Input fields:
   - `path` (string, required)
-- outputSchema: present (fields: arac, clr, dosya, not, ok, okuyucu)
+- outputSchema: present (fields: `arac`, `clr`, `dosya`, `not`, `ok`, `okuyucu`)
 - annotations: present (openWorldHint=true, readOnlyHint=false)
 
 ### `rea_dwarf_ozet`
@@ -787,7 +787,7 @@ ELF DWARF summary.
 
 - Input fields:
   - `path` (string, required)
-- outputSchema: present (fields: arac, dosya, fonksiyonAdlari, ok, subprogramSayisi, unitSayisi)
+- outputSchema: present (fields: `arac`, `dosya`, `fonksiyonAdlari`, `ok`, `subprogramSayisi`, `unitSayisi`)
 - annotations: present (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)
 
 ### `rea_evidence_bundle`
@@ -797,7 +797,7 @@ Assemble an evidence bundle.
 - Input fields:
   - `ogeler` (string, required)
   - `sakli` (string, required)
-- outputSchema: present (fields: digest, items, retained, tools_sha256)
+- outputSchema: present (fields: `digest`, `items`, `retained`, `tools_sha256`)
 - annotations: present (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)
 
 ### `rea_evidence_verify`
@@ -806,7 +806,7 @@ Verify an evidence bundle.
 
 - Input fields:
   - `text` (string, required)
-- outputSchema: present (fields: ok)
+- outputSchema: present (fields: `ok`)
 - annotations: present (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)
 
 ### `rea_evm_disasm`
@@ -815,7 +815,7 @@ EVM bytecode disassembly (offline).
 
 - Input fields:
   - `hex` (string, required)
-- outputSchema: present (fields: arac, detay, ok, ozet)
+- outputSchema: present (fields: `arac`, `detay`, `ok`, `ozet`)
 - annotations: present (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)
 
 ### `rea_evm_selector`
@@ -824,7 +824,7 @@ EVM 4-byte selector (keccak, offline).
 
 - Input fields:
   - `sig` (string, required)
-- outputSchema: present (fields: details, ok, summary, tool)
+- outputSchema: present (fields: `details`, `ok`, `summary`, `tool`)
 - annotations: present (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)
 
 ### `rea_evm_selectors`
@@ -833,7 +833,7 @@ EVM selector candidates.
 
 - Input fields:
   - `hex` (string, required)
-- outputSchema: present (fields: details, ok, summary, tool)
+- outputSchema: present (fields: `details`, `ok`, `summary`, `tool`)
 - annotations: present (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)
 
 ### `rea_evm_stats`
@@ -842,7 +842,7 @@ EVM opcode statistics.
 
 - Input fields:
   - `hex` (string, required)
-- outputSchema: present (fields: details, ok, summary, tool)
+- outputSchema: present (fields: `details`, `ok`, `summary`, `tool`)
 - annotations: present (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)
 
 ### `rea_fallback`
@@ -860,7 +860,7 @@ Birincil yoksa yedek zincir.
 Firmware capability probe.
 
 - Input fields: none
-- outputSchema: present (fields: ok, summary, tool)
+- outputSchema: present (fields: `ok`, `summary`, `tool`)
 - annotations: present (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)
 
 ### `rea_firmware_extract`
@@ -869,7 +869,7 @@ Firmware extraction.
 
 - Input fields:
   - `path` (string, required)
-- outputSchema: present (fields: ok, summary, tool)
+- outputSchema: present (fields: `ok`, `summary`, `tool`)
 - annotations: present (destructiveHint=true, openWorldHint=true, readOnlyHint=false)
 
 ### `rea_firmware_handoff`
@@ -879,7 +879,7 @@ Firmware handoff notu.
 - Input fields:
   - `neden` (string, required)
   - `path` (string, required)
-- outputSchema: present (fields: handoff, ok, summary, tool)
+- outputSchema: present (fields: `handoff`, `ok`, `summary`, `tool`)
 - annotations: present (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)
 
 ### `rea_flutter_blutter`
@@ -888,7 +888,7 @@ Dart analysis via Blutter (honest error if missing).
 
 - Input fields:
   - `path` (string, required)
-- outputSchema: present (fields: izler, ok, summary, tool)
+- outputSchema: present (fields: `izler`, `ok`, `summary`, `tool`)
 - annotations: present (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)
 
 ### `rea_flutter_payload`
@@ -897,7 +897,7 @@ Flutter payload izleri.
 
 - Input fields:
   - `path` (string, required)
-- outputSchema: present (fields: izler, ok, summary, tool)
+- outputSchema: present (fields: `izler`, `ok`, `summary`, `tool`)
 - annotations: present (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)
 
 ### `rea_flutter_scan`
@@ -906,7 +906,7 @@ Flutter/Dart izi tarama.
 
 - Input fields:
   - `path` (string, required)
-- outputSchema: present (fields: buildId, dartMi, motor, ok, summary, tool, tur)
+- outputSchema: present (fields: `buildId`, `dartMi`, `motor`, `ok`, `summary`, `tool`, `tur`)
 - annotations: present (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)
 
 ### `rea_flutter_snapshot`
@@ -915,7 +915,7 @@ Flutter AOT snapshot info (Dart magic + version).
 
 - Input fields:
   - `path` (string, required)
-- outputSchema: present (fields: dartMi, dartSurumu, izolasyon, magic, ok, summary, tool, tur)
+- outputSchema: present (fields: `dartMi`, `dartSurumu`, `izolasyon`, `magic`, `ok`, `summary`, `tool`, `tur`)
 - annotations: present (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)
 
 ### `rea_frida_api`
@@ -925,7 +925,7 @@ API tracer (isim+args+retval).
 - Input fields:
   - `desen` (string, optional)
   - `pid` (integer, required)
-- outputSchema: present (fields: arac, cagrilar, ok, pid, sayi)
+- outputSchema: present (fields: `arac`, `cagrilar`, `ok`, `pid`, `sayi`)
 - annotations: present (openWorldHint=true, readOnlyHint=false)
 
 ### `rea_frida_cond`
@@ -936,7 +936,7 @@ Conditional breakpoint.
   - `adres` (string, required)
   - `kosul` (string, required)
   - `pid` (integer, required)
-- outputSchema: present (fields: adres, arac, hitSayisi, ok, pid, tuttu)
+- outputSchema: present (fields: `adres`, `arac`, `hitSayisi`, `ok`, `pid`, `tuttu`)
 - annotations: present (destructiveHint=true, openWorldHint=true, readOnlyHint=false)
 
 ### `rea_frida_pause`
@@ -945,7 +945,7 @@ Suspend the target process (NtSuspend).
 
 - Input fields:
   - `pid` (integer, required)
-- outputSchema: present (fields: arac, durum, ok, pid)
+- outputSchema: present (fields: `arac`, `durum`, `ok`, `pid`)
 - annotations: present (destructiveHint=true, openWorldHint=true, readOnlyHint=false)
 
 ### `rea_frida_resume`
@@ -954,7 +954,7 @@ Resume a suspended process.
 
 - Input fields:
   - `pid` (integer, required)
-- outputSchema: present (fields: arac, durum, ok, pid)
+- outputSchema: present (fields: `arac`, `durum`, `ok`, `pid`)
 - annotations: present (destructiveHint=true, openWorldHint=true, readOnlyHint=false)
 
 ### `rea_frida_stalker`
@@ -964,7 +964,7 @@ Stalker call tracing.
 - Input fields:
   - `pid` (integer, required)
   - `sure_ms` (integer, optional)
-- outputSchema: present (fields: arac, cagrilar, ok, pid, sayi)
+- outputSchema: present (fields: `arac`, `cagrilar`, `ok`, `pid`, `sayi`)
 - annotations: present (openWorldHint=true, readOnlyHint=false)
 
 ### `rea_frida_step`
@@ -974,7 +974,7 @@ Next-instruction emulation.
 - Input fields:
   - `adres` (string, optional)
   - `pid` (integer, required)
-- outputSchema: present (fields: adres, arac, ok, pid, sonraki, vurdu)
+- outputSchema: present (fields: `adres`, `arac`, `ok`, `pid`, `sonraki`, `vurdu`)
 - annotations: present (destructiveHint=true, openWorldHint=true, readOnlyHint=false)
 
 ### `rea_fs_diff`
@@ -984,7 +984,7 @@ Snapshot diff.
 - Input fields:
   - `once` (string, required)
   - `sonra` (string, required)
-- outputSchema: present (fields: kayıt, ok, summary, tool)
+- outputSchema: present (fields: `kayıt`, `ok`, `summary`, `tool`)
 - annotations: present (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)
 
 ### `rea_fs_snapshot`
@@ -993,7 +993,7 @@ Dizin snapshot.
 
 - Input fields:
   - `path` (string, required)
-- outputSchema: present (fields: kayıt, ok, summary, tool)
+- outputSchema: present (fields: `kayıt`, `ok`, `summary`, `tool`)
 - annotations: present (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)
 
 ### `rea_ghidra_analyze`
@@ -1002,7 +1002,7 @@ Ghidra headless import+analiz.
 
 - Input fields:
   - `path` (string, required)
-- outputSchema: present (fields: arac, hedef, log, ok)
+- outputSchema: present (fields: `arac`, `hedef`, `log`, `ok`)
 - annotations: present (destructiveHint=true, openWorldHint=true, readOnlyHint=false)
 
 ### `rea_ghidra_decompile`
@@ -1012,7 +1012,7 @@ Ghidra pseudo-code.
 - Input fields:
   - `addr` (string, required)
   - `path` (string, required)
-- outputSchema: present (fields: addr, arac, hedef, kod, ok)
+- outputSchema: present (fields: `addr`, `arac`, `hedef`, `kod`, `ok`)
 - annotations: present (openWorldHint=true, readOnlyHint=false)
 
 ### `rea_ghidra_disasm`
@@ -1022,7 +1022,7 @@ Ghidra disassembly.
 - Input fields:
   - `addr` (string, required)
   - `path` (string, required)
-- outputSchema: present (fields: addr, arac, hedef, kod, ok, sayi, talimatlar)
+- outputSchema: present (fields: `addr`, `arac`, `hedef`, `kod`, `ok`, `sayi`, `talimatlar`)
 - annotations: present (openWorldHint=true, readOnlyHint=false)
 
 ### `rea_ghidra_funcs`
@@ -1031,7 +1031,7 @@ Ghidra fonksiyon listesi.
 
 - Input fields:
   - `path` (string, required)
-- outputSchema: present (fields: arac, fonksiyonlar, hedef, ok)
+- outputSchema: present (fields: `arac`, `fonksiyonlar`, `hedef`, `ok`)
 - annotations: present (openWorldHint=true, readOnlyHint=false)
 
 ### `rea_ghidra_strings`
@@ -1040,7 +1040,7 @@ Ghidra string listesi.
 
 - Input fields:
   - `path` (string, required)
-- outputSchema: present (fields: arac, hedef, ok, strings)
+- outputSchema: present (fields: `arac`, `hedef`, `ok`, `strings`)
 - annotations: present (openWorldHint=true, readOnlyHint=false)
 
 ### `rea_ghidra_trace`
@@ -1050,7 +1050,7 @@ Snapshot -> Ghidra Trace import.
 - Input fields:
   - `kayit` (string, required)
   - `path` (string, required)
-- outputSchema: present (fields: arac, hedef, ok, sonuc)
+- outputSchema: present (fields: `arac`, `hedef`, `ok`, `sonuc`)
 - annotations: present (destructiveHint=true, openWorldHint=true, readOnlyHint=false)
 
 ### `rea_ghidra_vt`
@@ -1060,7 +1060,7 @@ Function diff of two binaries (version tracking).
 - Input fields:
   - `eski` (string, required)
   - `yeni` (string, required)
-- outputSchema: present (fields: arac, degisen, eklenen, eski, ok, ozet, silinen, yeni)
+- outputSchema: present (fields: `arac`, `degisen`, `eklenen`, `eski`, `ok`, `ozet`, `silinen`, `yeni`)
 - annotations: present (openWorldHint=true, readOnlyHint=false)
 
 ### `rea_ghidra_xrefs`
@@ -1070,7 +1070,7 @@ Ghidra xref listesi.
 - Input fields:
   - `addr` (string, required)
   - `path` (string, required)
-- outputSchema: present (fields: addr, arac, hedef, ok, xrefs)
+- outputSchema: present (fields: `addr`, `arac`, `hedef`, `ok`, `xrefs`)
 - annotations: present (openWorldHint=true, readOnlyHint=false)
 
 ### `rea_go_buildinfo`
@@ -1079,7 +1079,7 @@ Go build-id + module dependencies.
 
 - Input fields:
   - `path` (string, required)
-- outputSchema: present (fields: details, ok, summary, tool)
+- outputSchema: present (fields: `details`, `ok`, `summary`, `tool`)
 - annotations: present (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)
 
 ### `rea_go_funclines`
@@ -1088,7 +1088,7 @@ Go function + file:line map.
 
 - Input fields:
   - `path` (string, required)
-- outputSchema: present (fields: details, ok, summary, tool)
+- outputSchema: present (fields: `details`, `ok`, `summary`, `tool`)
 - annotations: present (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)
 
 ### `rea_go_goresym`
@@ -1097,7 +1097,7 @@ GoReSym analysis (honest error if missing).
 
 - Input fields:
   - `path` (string, required)
-- outputSchema: present (fields: details, ok, summary, tool)
+- outputSchema: present (fields: `details`, `ok`, `summary`, `tool`)
 - annotations: present (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)
 
 ### `rea_go_module`
@@ -1106,7 +1106,7 @@ Go module info.
 
 - Input fields:
   - `text` (string, required)
-- outputSchema: present (fields: details, ok, summary, tool)
+- outputSchema: present (fields: `details`, `ok`, `summary`, `tool`)
 - annotations: present (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)
 
 ### `rea_go_version`
@@ -1115,7 +1115,7 @@ Go version fingerprint.
 
 - Input fields:
   - `text` (string, required)
-- outputSchema: present (fields: details, ok, summary, tool)
+- outputSchema: present (fields: `details`, `ok`, `summary`, `tool`)
 - annotations: present (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)
 
 ### `rea_hap_liste`
@@ -1124,7 +1124,7 @@ HAP dosya listesi.
 
 - Input fields:
   - `path` (string, required)
-- outputSchema: present (fields: arac, dosya, dosyalar, ok, sayi)
+- outputSchema: present (fields: `arac`, `dosya`, `dosyalar`, `ok`, `sayi`)
 - annotations: present (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)
 
 ### `rea_hap_manifest`
@@ -1133,7 +1133,7 @@ HAP manifest (bundle/version).
 
 - Input fields:
   - `path` (string, required)
-- outputSchema: present (fields: arac, bundleName, dosya, kaynak, ok, version)
+- outputSchema: present (fields: `arac`, `bundleName`, `dosya`, `kaynak`, `ok`, `version`)
 - annotations: present (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)
 
 ### `rea_hopper_istek`
@@ -1142,7 +1142,7 @@ Hopper request-file generation.
 
 - Input fields:
   - `path` (string, required)
-- outputSchema: present (fields: adresler, arac, hedef, hopper, istekDosyasi, ok)
+- outputSchema: present (fields: `adresler`, `arac`, `hedef`, `hopper`, `istekDosyasi`, `ok`)
 - annotations: present (destructiveHint=true, readOnlyHint=false)
 
 ### `rea_hopper_tara`
@@ -1152,7 +1152,7 @@ Dosyada string/regex tarama.
 - Input fields:
   - `desen` (string, required)
   - `path` (string, required)
-- outputSchema: present (fields: arac, desen, eslesmeler, hedef, ok, regex, sayi)
+- outputSchema: present (fields: `arac`, `desen`, `eslesmeler`, `hedef`, `ok`, `regex`, `sayi`)
 - annotations: present (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)
 
 ### `rea_ida_flirt`
@@ -1161,7 +1161,7 @@ String-based compiler/library guess (not a real FLIRT signature; if IDA is insta
 
 - Input fields:
   - `path` (string, required)
-- outputSchema: present (fields: arac, eslesmeler, guven, hedef, idaMevcut, kutuphane, method, not, ok, sayi, surumler)
+- outputSchema: present (fields: `arac`, `eslesmeler`, `guven`, `hedef`, `idaMevcut`, `kutuphane`, `method`, `not`, `ok`, `sayi`, `surumler`)
 - annotations: present (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)
 
 ### `rea_ida_idb`
@@ -1171,7 +1171,7 @@ IDB batch generation (idat).
 - Input fields:
   - `out` (string, required)
   - `path` (string, required)
-- outputSchema: present (fields: arac, hedef, idat, idb, ok)
+- outputSchema: present (fields: `arac`, `hedef`, `idat`, `idb`, `ok`)
 - annotations: present (destructiveHint=true, openWorldHint=true, readOnlyHint=false)
 
 ### `rea_il2cpp_dump`
@@ -1180,7 +1180,7 @@ Dump via Il2CppDumper (honest error if missing).
 
 - Input fields:
   - `path` (string, required)
-- outputSchema: present (fields: arac, cikti, dosya, dosyaSayisi, log, ok, ozet)
+- outputSchema: present (fields: `arac`, `cikti`, `dosya`, `dosyaSayisi`, `log`, `ok`, `ozet`)
 - annotations: present (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)
 
 ### `rea_il2cpp_metadata`
@@ -1189,7 +1189,7 @@ IL2CPP global-metadata class/method counts.
 
 - Input fields:
   - `path` (string, required)
-- outputSchema: present (fields: arac, assemblySayisi, dosya, goruntuSayisi, metodSayisi, not, ok, ozet, sinifSayisi, surum)
+- outputSchema: present (fields: `arac`, `assemblySayisi`, `dosya`, `goruntuSayisi`, `metodSayisi`, `not`, `ok`, `ozet`, `sinifSayisi`, `surum`)
 - annotations: present (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)
 
 ### `rea_il2cpp_methods`
@@ -1198,7 +1198,7 @@ IL2CPP method signatures (honest flag when truncated).
 
 - Input fields:
   - `path` (string, required)
-- outputSchema: present (fields: arac, dosya, imzaSayisi, imzalar, metodSayisi, not, ok, sinirli, surum)
+- outputSchema: present (fields: `arac`, `dosya`, `imzaSayisi`, `imzalar`, `metodSayisi`, `not`, `ok`, `sinirli`, `surum`)
 - annotations: present (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)
 
 ### `rea_ilspy_decompile`
@@ -1208,7 +1208,7 @@ IL2CPP method signatures (honest flag when truncated).
 - Input fields:
   - `out` (string, required)
   - `path` (string, required)
-- outputSchema: present (fields: arac, ciktiDir, cs_sayisi, dosya, not, ok)
+- outputSchema: present (fields: `arac`, `ciktiDir`, `cs_sayisi`, `dosya`, `not`, `ok`)
 - annotations: present (destructiveHint=true, openWorldHint=true, readOnlyHint=false)
 
 ### `rea_investigate`
@@ -1218,7 +1218,7 @@ Automatic investigation plan (sniff + score + fallbacks).
 - Input fields:
   - `path` (string, required)
   - `soru` (string, optional)
-- outputSchema: present (fields: arac, motor, ok, plan, skor, tip, yedekler)
+- outputSchema: present (fields: `arac`, `motor`, `ok`, `plan`, `skor`, `tip`, `yedekler`)
 - annotations: present (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)
 
 ### `rea_jadx_classes`
@@ -1227,7 +1227,7 @@ APK class list.
 
 - Input fields:
   - `apk_path` (string, required)
-- outputSchema: present (fields: arac, ok, siniflar, toplam_sinif)
+- outputSchema: present (fields: `arac`, `ok`, `siniflar`, `toplam_sinif`)
 - annotations: present (openWorldHint=true, readOnlyHint=false)
 
 ### `rea_jadx_decompile`
@@ -1238,7 +1238,7 @@ Decompile a single APK class.
   - `apk_path` (string, required)
   - `out` (string, required)
   - `sinif` (string, required)
-- outputSchema: present (fields: arac, bayt, ciktiDir, dosya, ok, sinif)
+- outputSchema: present (fields: `arac`, `bayt`, `ciktiDir`, `dosya`, `ok`, `sinif`)
 - annotations: present (destructiveHint=true, openWorldHint=true, readOnlyHint=false)
 
 ### `rea_jadx_full`
@@ -1248,7 +1248,7 @@ APK tam decompile.
 - Input fields:
   - `apk_path` (string, required)
   - `out` (string, required)
-- outputSchema: present (fields: arac, ciktiDir, java_dosya_sayisi, ok)
+- outputSchema: present (fields: `arac`, `ciktiDir`, `java_dosya_sayisi`, `ok`)
 - annotations: present (destructiveHint=true, openWorldHint=true, readOnlyHint=false)
 
 ### `rea_jadx_manifest`
@@ -1257,7 +1257,7 @@ APK manifest summary.
 
 - Input fields:
   - `apk_path` (string, required)
-- outputSchema: present (fields: aktiviteler, apk, arac, izinler, ok, paket)
+- outputSchema: present (fields: `aktiviteler`, `apk`, `arac`, `izinler`, `ok`, `paket`)
 - annotations: present (openWorldHint=true, readOnlyHint=false)
 
 ### `rea_jadx_methods`
@@ -1266,7 +1266,7 @@ Method list from decompile output.
 
 - Input fields:
   - `dir` (string, required)
-- outputSchema: present (fields: arac, methodlar, ok)
+- outputSchema: present (fields: `arac`, `methodlar`, `ok`)
 - annotations: present (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)
 
 ### `rea_jadx_read`
@@ -1276,7 +1276,7 @@ Read a decompiled class (400 lines).
 - Input fields:
   - `dir` (string, required)
   - `sinif` (string, required)
-- outputSchema: present (fields: arac, dosya, ok, satirlar, toplam_satir)
+- outputSchema: present (fields: `arac`, `dosya`, `ok`, `satirlar`, `toplam_satir`)
 - annotations: present (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)
 
 ### `rea_jadx_xrefs`
@@ -1286,7 +1286,7 @@ Term search across decompile output.
 - Input fields:
   - `dir` (string, required)
   - `terim` (string, required)
-- outputSchema: present (fields: arac, kayitlar, ok)
+- outputSchema: present (fields: `arac`, `kayitlar`, `ok`)
 - annotations: present (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)
 
 ### `rea_jeb_sorgu`
@@ -1297,7 +1297,7 @@ JEB MCP sorgusu.
   - `govde` (string, optional)
   - `url` (string, required)
   - `yontem` (string, required)
-- outputSchema: present (fields: arac, durum, govde, ok, url, yontem)
+- outputSchema: present (fields: `arac`, `durum`, `govde`, `ok`, `url`, `yontem`)
 - annotations: present (openWorldHint=true, readOnlyHint=false)
 
 ### `rea_js_bundle`
@@ -1306,7 +1306,7 @@ Bundle summary.
 
 - Input fields:
   - `text` (string, required)
-- outputSchema: present (fields: ok, summary, tool)
+- outputSchema: present (fields: `ok`, `summary`, `tool`)
 - annotations: present (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)
 
 ### `rea_js_export_shape`
@@ -1315,7 +1315,7 @@ Export shape.
 
 - Input fields:
   - `path` (string, required)
-- outputSchema: present (fields: details, ok, summary, tool)
+- outputSchema: present (fields: `details`, `ok`, `summary`, `tool`)
 - annotations: present (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)
 
 ### `rea_js_require`
@@ -1324,7 +1324,7 @@ Require/import graph.
 
 - Input fields:
   - `path` (string, required)
-- outputSchema: present (fields: details, ok, summary, tool)
+- outputSchema: present (fields: `details`, `ok`, `summary`, `tool`)
 - annotations: present (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)
 
 ### `rea_js_sourcemap`
@@ -1333,7 +1333,7 @@ Source-map resolution.
 
 - Input fields:
   - `text` (string, required)
-- outputSchema: present (fields: ok, summary, tool)
+- outputSchema: present (fields: `ok`, `summary`, `tool`)
 - annotations: present (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)
 
 ### `rea_macho_classdump`
@@ -1342,7 +1342,7 @@ class-dump output (honest error if missing).
 
 - Input fields:
   - `path` (string, required)
-- outputSchema: present (fields: details, ok, summary, tool)
+- outputSchema: present (fields: `details`, `ok`, `summary`, `tool`)
 - annotations: present (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)
 
 ### `rea_macho_info`
@@ -1351,7 +1351,7 @@ Mach-O header (architecture + file type).
 
 - Input fields:
   - `path` (string, required)
-- outputSchema: present (fields: details, ok, summary, tool)
+- outputSchema: present (fields: `details`, `ok`, `summary`, `tool`)
 - annotations: present (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)
 
 ### `rea_macho_loads`
@@ -1360,7 +1360,7 @@ Mach-O load commands (segment/dylib).
 
 - Input fields:
   - `path` (string, required)
-- outputSchema: present (fields: details, ok, summary, tool)
+- outputSchema: present (fields: `details`, `ok`, `summary`, `tool`)
 - annotations: present (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)
 
 ### `rea_macho_objc`
@@ -1369,7 +1369,7 @@ ObjC class/category list (read-only).
 
 - Input fields:
   - `path` (string, required)
-- outputSchema: present (fields: details, ok, summary, tool)
+- outputSchema: present (fields: `details`, `ok`, `summary`, `tool`)
 - annotations: present (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)
 
 ### `rea_macho_otool`
@@ -1378,7 +1378,7 @@ otool output (honest error if missing).
 
 - Input fields:
   - `path` (string, required)
-- outputSchema: present (fields: details, ok, summary, tool)
+- outputSchema: present (fields: `details`, `ok`, `summary`, `tool`)
 - annotations: present (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)
 
 ### `rea_managed_compare`
@@ -1388,7 +1388,7 @@ Managed member diff.
 - Input fields:
   - `a` (string, required)
   - `b` (string, required)
-- outputSchema: present (fields: arac, detay, ok, ozet)
+- outputSchema: present (fields: `arac`, `detay`, `ok`, `ozet`)
 - annotations: present (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)
 
 ### `rea_managed_import`
@@ -1397,7 +1397,7 @@ Reconstruction import.
 
 - Input fields:
   - `path` (string, required)
-- outputSchema: present (fields: arac, detay, ok, ozet)
+- outputSchema: present (fields: `arac`, `detay`, `ok`, `ozet`)
 - annotations: present (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)
 
 ### `rea_managed_verify`
@@ -1407,7 +1407,7 @@ Native dependency verification.
 - Input fields:
   - `beklenen` (string, required)
   - `path` (string, required)
-- outputSchema: present (fields: arac, detay, ok, ozet)
+- outputSchema: present (fields: `arac`, `detay`, `ok`, `ozet`)
 - annotations: present (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)
 
 ### `rea_mips_funcs`
@@ -1416,7 +1416,7 @@ MIPS function pre-scan.
 
 - Input fields:
   - `b64` (string, required)
-- outputSchema: present (fields: details, ok, summary, tool)
+- outputSchema: present (fields: `details`, `ok`, `summary`, `tool`)
 - annotations: present (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)
 
 ### `rea_mips_psp_profile`
@@ -1425,7 +1425,7 @@ MIPS/PSP profili.
 
 - Input fields:
   - `b64` (string, required)
-- outputSchema: present (fields: details, ok, summary, tool)
+- outputSchema: present (fields: `details`, `ok`, `summary`, `tool`)
 - annotations: present (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)
 
 ### `rea_missing_reason`
@@ -1435,7 +1435,7 @@ Missing tool + install command.
 - Input fields:
   - `eksik` (string, required)
   - `platform` (string, optional)
-- outputSchema: present (fields: alternatif, eksik, kur, neden)
+- outputSchema: present (fields: `alternatif`, `eksik`, `kur`, `neden`)
 - annotations: present (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)
 
 ### `rea_net_capture`
@@ -1444,7 +1444,7 @@ Local network capture (HAR).
 
 - Input fields:
   - `url` (string, required)
-- outputSchema: present (fields: kayıt, ok, summary, tool)
+- outputSchema: present (fields: `kayıt`, `ok`, `summary`, `tool`)
 - annotations: present (destructiveHint=true, openWorldHint=true, readOnlyHint=false)
 
 ### `rea_obligation_advance`
@@ -1455,7 +1455,7 @@ Halka ilerletme.
   - `bulgu` (string, required)
   - `defter` (string, required)
   - `kod` (string, required)
-- outputSchema: present (fields: links)
+- outputSchema: present (fields: `links`)
 - annotations: present (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)
 
 ### `rea_obligation_close`
@@ -1464,7 +1464,7 @@ Seal the ledger.
 
 - Input fields:
   - `text` (string, required)
-- outputSchema: present (fields: kapatıldı, links)
+- outputSchema: present (fields: `kapatıldı`, `links`)
 - annotations: present (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)
 
 ### `rea_obligation_ledger`
@@ -1475,7 +1475,7 @@ Defter kurma.
   - `bulgular` (string[], required)
   - `evidence_digest` (string, required)
   - `tools_sha256` (string, required)
-- outputSchema: present (fields: evidence_digest, kapatıldı, ledger_id, links, tools_sha256)
+- outputSchema: present (fields: `evidence_digest`, `kapatıldı`, `ledger_id`, `links`, `tools_sha256`)
 - annotations: present (destructiveHint=false, idempotentHint=false, openWorldHint=false, readOnlyHint=true)
 
 ### `rea_obligation_verify`
@@ -1484,7 +1484,7 @@ Chain verification.
 
 - Input fields:
   - `text` (string, required)
-- outputSchema: present (fields: eksik, ok)
+- outputSchema: present (fields: `eksik`, `ok`)
 - annotations: present (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)
 
 ### `rea_pcap_oku`
@@ -1494,7 +1494,7 @@ PCAP stream reassembly + TLS keylog decrypt.
 - Input fields:
   - `keylog` (string, optional)
   - `path` (string, required)
-- outputSchema: present (fields: details, ok, summary, tool)
+- outputSchema: present (fields: `details`, `ok`, `summary`, `tool`)
 - annotations: present (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)
 
 ### `rea_pdb_indir`
@@ -1503,7 +1503,7 @@ Download a PDB from the Microsoft symbol server using the CodeView RSDS record i
 
 - Input fields:
   - `path` (string, required)
-- outputSchema: present (fields: arac, cache, dosya, guid, ok, pdb, url, yas, yol)
+- outputSchema: present (fields: `arac`, `cache`, `dosya`, `guid`, `ok`, `pdb`, `url`, `yas`, `yol`)
 - annotations: present (destructiveHint=true, openWorldHint=true, readOnlyHint=false)
 
 ### `rea_pdb_yolu`
@@ -1512,7 +1512,7 @@ PE debug dizininden PDB yolu.
 
 - Input fields:
   - `path` (string, required)
-- outputSchema: present (fields: arac, dosya, guid, ok, pdb, yas)
+- outputSchema: present (fields: `arac`, `dosya`, `guid`, `ok`, `pdb`, `yas`)
 - annotations: present (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)
 
 ### `rea_pe_imports`
@@ -1521,7 +1521,7 @@ PE import listesi.
 
 - Input fields:
   - `path` (string, required)
-- outputSchema: present (fields: arac, dlls, dosya, fonksiyonlar, not, ok, sayi)
+- outputSchema: present (fields: `arac`, `dlls`, `dosya`, `fonksiyonlar`, `not`, `ok`, `sayi`)
 - annotations: present (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)
 
 ### `rea_pe_info`
@@ -1530,7 +1530,7 @@ PE header info.
 
 - Input fields:
   - `path` (string, required)
-- outputSchema: present (fields: arac, bit, dosya, entry, entry_hex, machine, machine_hex, ok, section_sayisi)
+- outputSchema: present (fields: `arac`, `bit`, `dosya`, `entry`, `entry_hex`, `machine`, `machine_hex`, `ok`, `section_sayisi`)
 - annotations: present (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)
 
 ### `rea_pe_sections`
@@ -1539,7 +1539,7 @@ PE section tablosu.
 
 - Input fields:
   - `path` (string, required)
-- outputSchema: present (fields: arac, bolumler, dosya, ok, sayi)
+- outputSchema: present (fields: `arac`, `bolumler`, `dosya`, `ok`, `sayi`)
 - annotations: present (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)
 
 ### `rea_process_caps`
@@ -1547,7 +1547,7 @@ PE section tablosu.
 Process capability probe.
 
 - Input fields: none
-- outputSchema: present (fields: kayıt, ok, summary, tool)
+- outputSchema: present (fields: `kayıt`, `ok`, `summary`, `tool`)
 - annotations: present (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)
 
 ### `rea_process_compare`
@@ -1565,7 +1565,7 @@ Process-run recording.
 
 - Input fields:
   - `cmd` (string, required)
-- outputSchema: present (fields: kayıt, ok, summary, tool)
+- outputSchema: present (fields: `kayıt`, `ok`, `summary`, `tool`)
 - annotations: present (destructiveHint=true, openWorldHint=true, readOnlyHint=false)
 
 ### `rea_pwn_elf_layout`
@@ -1574,7 +1574,7 @@ ELF layout + mitigation.
 
 - Input fields:
   - `path` (string, required)
-- outputSchema: absent
+- outputSchema: present (fields: `details`, `ok`, `summary`, `tool`)
 - annotations: present (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)
 
 ### `rea_pwn_gadgets`
@@ -1583,7 +1583,7 @@ Gadget ipucu.
 
 - Input fields:
   - `text` (string, required)
-- outputSchema: present (fields: details, ok, summary, tool)
+- outputSchema: present (fields: `details`, `ok`, `summary`, `tool`)
 - annotations: present (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)
 
 ### `rea_r2_callgraph`
@@ -1592,7 +1592,7 @@ r2 function call graph.
 
 - Input fields:
   - `path` (string, required)
-- outputSchema: present (fields: arac, fonksiyonlar, hedef, ok)
+- outputSchema: present (fields: `arac`, `fonksiyonlar`, `hedef`, `ok`)
 - annotations: present (openWorldHint=true, readOnlyHint=false)
 
 ### `rea_r2_debug`
@@ -1602,7 +1602,7 @@ r2 toplu debug (bp+regs).
 - Input fields:
   - `addr` (string, required)
   - `path` (string, required)
-- outputSchema: present (fields: arac, bpAddr, cikti, hedef, not, ok)
+- outputSchema: present (fields: `arac`, `bpAddr`, `cikti`, `hedef`, `not`, `ok`)
 - annotations: present (destructiveHint=true, openWorldHint=true, readOnlyHint=false)
 
 ### `rea_r2_esil`
@@ -1612,7 +1612,7 @@ r2 ESIL emulation regs.
 - Input fields:
   - `addr` (string, required)
   - `path` (string, required)
-- outputSchema: present (fields: addr, adim, arac, hedef, ok, regs)
+- outputSchema: present (fields: `addr`, `adim`, `arac`, `hedef`, `ok`, `regs`)
 - annotations: present (openWorldHint=true, readOnlyHint=false)
 
 ### `rea_readiness`
@@ -1621,7 +1621,7 @@ Reconstruction readiness score.
 
 - Input fields:
   - `text` (string, required)
-- outputSchema: present (fields: arac, eksik, ok, seviye, skor)
+- outputSchema: present (fields: `arac`, `eksik`, `ok`, `seviye`, `skor`)
 - annotations: present (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)
 
 ### `rea_recon_funcs`
@@ -1630,7 +1630,7 @@ Pseudo-code fonksiyon listesi.
 
 - Input fields:
   - `text` (string, required)
-- outputSchema: present (fields: details, ok, summary, tool)
+- outputSchema: present (fields: `details`, `ok`, `summary`, `tool`)
 - annotations: present (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)
 
 ### `rea_recon_harness`
@@ -1639,7 +1639,7 @@ C harness iskeleti.
 
 - Input fields:
   - `text` (string, required)
-- outputSchema: present (fields: details, ok, summary, tool)
+- outputSchema: present (fields: `details`, `ok`, `summary`, `tool`)
 - annotations: present (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)
 
 ### `rea_recon_tag`
@@ -1647,7 +1647,7 @@ C harness iskeleti.
 Vaka etiketi.
 
 - Input fields: none
-- outputSchema: present (fields: details, ok, summary, tool)
+- outputSchema: present (fields: `details`, `ok`, `summary`, `tool`)
 - annotations: present (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)
 
 ### `rea_registry_izi`
@@ -1656,7 +1656,7 @@ Registry writes from API events.
 
 - Input fields:
   - `text` (string, required)
-- outputSchema: present (fields: details, ok, summary, tool)
+- outputSchema: present (fields: `details`, `ok`, `summary`, `tool`)
 - annotations: present (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)
 
 ### `rea_scan_repo`
@@ -1665,7 +1665,7 @@ Repo scan (type + plan).
 
 - Input fields:
   - `path` (string, required)
-- outputSchema: present (fields: details, ok, summary, tool)
+- outputSchema: present (fields: `details`, `ok`, `summary`, `tool`)
 - annotations: present (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)
 
 ### `rea_scan_repo_paralel`
@@ -1675,7 +1675,7 @@ Parallel repo scan (pool of 4, cancellable).
 - Input fields:
   - `eszamanlilik` (integer, optional)
   - `path` (string, required)
-- outputSchema: present (fields: details, iptalEdildi, ok, summary, tool)
+- outputSchema: present (fields: `details`, `iptalEdildi`, `ok`, `summary`, `tool`)
 - annotations: present (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)
 
 ### `rea_sniff`
@@ -1684,7 +1684,7 @@ File type + engine suggestion (magic-byte).
 
 - Input fields:
   - `b64dosya` (string, required)
-- outputSchema: present (fields: makine, motor, tip)
+- outputSchema: present (fields: `makine`, `motor`, `tip`)
 - annotations: present (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)
 
 ### `rea_storage_dump`
@@ -1693,7 +1693,7 @@ Cookies + localStorage.
 
 - Input fields:
   - `url` (string, required)
-- outputSchema: present (fields: details, ok, summary, tool)
+- outputSchema: present (fields: `details`, `ok`, `summary`, `tool`)
 - annotations: present (openWorldHint=true, readOnlyHint=false)
 
 ### `rea_typedef_oner`
@@ -1702,7 +1702,7 @@ Argument-name suggestion + spread.
 
 - Input fields:
   - `text` (string, required)
-- outputSchema: present (fields: arac, ok, oneriler, sayi)
+- outputSchema: present (fields: `arac`, `ok`, `oneriler`, `sayi`)
 - annotations: present (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)
 
 ### `rea_unpack_hunt`
@@ -1711,7 +1711,7 @@ Guided flow for an unknown packer.
 
 - Input fields:
   - `path` (string, required)
-- outputSchema: present (fields: adimlar, arac, karar, ok)
+- outputSchema: present (fields: `adimlar`, `arac`, `karar`, `ok`)
 - annotations: present (openWorldHint=true, readOnlyHint=false)
 
 ### `rea_unpack_try`
@@ -1720,7 +1720,7 @@ Automatic unpack routing.
 
 - Input fields:
   - `path` (string, required)
-- outputSchema: present (fields: sonuc, yontem)
+- outputSchema: present (fields: `sonuc`, `yontem`)
 - annotations: present (destructiveHint=true, openWorldHint=true, readOnlyHint=false)
 
 ### `rea_upx_info`
@@ -1729,7 +1729,7 @@ Whether the file is UPX-packed.
 
 - Input fields:
   - `path` (string, required)
-- outputSchema: present (fields: arac, cikti, dosya, not, ok, sikisik)
+- outputSchema: present (fields: `arac`, `cikti`, `dosya`, `not`, `ok`, `sikisik`)
 - annotations: present (openWorldHint=true, readOnlyHint=false)
 
 ### `rea_upx_unpack`
@@ -1739,7 +1739,7 @@ UPX unpack.
 - Input fields:
   - `out` (string, required)
   - `path` (string, required)
-- outputSchema: present (fields: arac, cikti, dosya, log, ok)
+- outputSchema: present (fields: `arac`, `cikti`, `dosya`, `log`, `ok`)
 - annotations: present (destructiveHint=true, openWorldHint=true, readOnlyHint=false)
 
 ### `rea_wasm_decode`
@@ -1748,7 +1748,7 @@ WASM/WAT decode (wabt).
 
 - Input fields:
   - `path` (string, required)
-- outputSchema: present (fields: details, ok, summary, tool)
+- outputSchema: present (fields: `details`, `ok`, `summary`, `tool`)
 - annotations: present (openWorldHint=true, readOnlyHint=false)
 
 ### `rea_wasm_exports`
@@ -1757,7 +1757,7 @@ WAT export listesi (offline).
 
 - Input fields:
   - `wat` (string, required)
-- outputSchema: present (fields: details, ok, summary, tool)
+- outputSchema: present (fields: `details`, `ok`, `summary`, `tool`)
 - annotations: present (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)
 
 ### `rea_wasm_imports`
@@ -1766,7 +1766,7 @@ WASM import listesi.
 
 - Input fields:
   - `b64` (string, required)
-- outputSchema: present (fields: details, ok, summary, tool)
+- outputSchema: present (fields: `details`, `ok`, `summary`, `tool`)
 - annotations: present (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)
 
 ### `rea_wasm_sections`
@@ -1775,7 +1775,7 @@ WASM section tablosu.
 
 - Input fields:
   - `b64` (string, required)
-- outputSchema: present (fields: details, ok, summary, tool)
+- outputSchema: present (fields: `details`, `ok`, `summary`, `tool`)
 - annotations: present (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)
 
 ### `rea_wasm_validate`
@@ -1784,7 +1784,7 @@ WASM validation (wasm-validate).
 
 - Input fields:
   - `path` (string, required)
-- outputSchema: present (fields: arac, detay, ok, ozet)
+- outputSchema: present (fields: `arac`, `detay`, `ok`, `ozet`)
 - annotations: present (openWorldHint=true, readOnlyHint=false)
 
 ### `session_close`
@@ -1793,7 +1793,7 @@ Drop an application session and its event buffer.
 
 - Input fields:
   - `session_id` (string, required) — Application session id. Not an MCP protocol session.
-- outputSchema: present (fields: closed, session_id)
+- outputSchema: present (fields: `closed`, `session_id`)
 - annotations: present (destructiveHint=true, openWorldHint=true, readOnlyHint=false)
 
 ### `session_list`
@@ -1801,7 +1801,7 @@ Drop an application session and its event buffer.
 List application sessions held in this process.
 
 - Input fields: none
-- outputSchema: present (fields: sessions)
+- outputSchema: present (fields: `sessions`)
 - annotations: present (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)
 
 ### `session_open`
@@ -1810,7 +1810,7 @@ Open an application session for an engine. Returns session_id for later tool arg
 
 - Input fields:
   - `engine` (enum, required)
-- outputSchema: present (fields: createdAt, engine, session_id)
+- outputSchema: present (fields: `createdAt`, `engine`, `session_id`)
 - annotations: present (destructiveHint=false, idempotentHint=false, openWorldHint=false, readOnlyHint=false)
 
 ### `static_info`
@@ -1819,7 +1819,7 @@ Report radare2 static-engine capabilities, r2 availability, and the open target 
 
 - Input fields:
   - `session_id` (string, required) — Application session id. Not an MCP protocol session.
-- outputSchema: present (fields: capabilities, engine, r2, session_id, target)
+- outputSchema: present (fields: `capabilities`, `engine`, `r2`, `session_id`, `target`)
 - annotations: present (openWorldHint=true, readOnlyHint=false)
 
 ### `strings`
@@ -1832,7 +1832,7 @@ Strings found in the binary (address, section, length, text).
   - `offset` (integer, optional) — Skip this many matches (default 0).
   - `section` (string, optional) — Only strings from this section, e.g. ".rodata".
   - `session_id` (string, required) — Application session id. Not an MCP protocol session.
-- outputSchema: present (fields: offset, session_id, strings, total)
+- outputSchema: present (fields: `offset`, `session_id`, `strings`, `total`)
 - annotations: present (openWorldHint=true, readOnlyHint=false)
 
 ### `xrefs`
@@ -1843,7 +1843,7 @@ Cross-references to and/or from an address (code and data).
   - `address` (string | number, required) — Target address as hex ("0x400200"), decimal, or flag name ("entry0").
   - `direction` (enum, optional)
   - `session_id` (string, required) — Application session id. Not an MCP protocol session.
-- outputSchema: present (fields: address, from, session_id, to)
+- outputSchema: present (fields: `address`, `from`, `session_id`, `to`)
 - annotations: present (openWorldHint=true, readOnlyHint=false)
 
 ## Resources

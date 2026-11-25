@@ -1,6 +1,6 @@
 # ROADMAP — ReaPlus roadmap
 
-> Status: v0.13.1 released (npm + MCP Registry + green CI). This document was
+> Status: v0.14.0 released (npm + MCP Registry + green CI). This document was
 > born from the findings of the first 2026-10-12 review and is synced with
 > what actually shipped at the end of every wave. v0.13.0 closed PE machine
 > identity (ARMNT/ARM64), ELF e_machine + Hexagon, type-aware lossless plist
@@ -17,7 +17,7 @@
 - `REA_TOOLSETS` profiles: `all` 191 (default), `minimal` 8, `static` 98, `android` 27, `dotnet` 20, `web` 26, `debug` 50; comma-separated union, unknown profile is a startup error. New tools land in `all` only (fail-closed).
 - `REA_WORKSPACE_ROOT`: `rea_*` + conduit paths + user-visible derived writes stay inside the root; operator temp/cache surfaces are a deliberate exception. Roots (legacy + modern MRTR) only narrows.
 - Tokenless HTTP: 44 read-only-tool allowlist (intersected with toolset) + `REA_AUDIT_LOG` (argument-free JSONL) + rate limit (120/min) + concurrency cap (16) + session TTL (30min).
-- Type base: 187 `outputSchema`s, 191 annotations (zero unannotated; 4 tools permanently schema-less).
+- Type base: 188 `outputSchema`s, 191 annotations (zero unannotated; 3 tools permanently schema-less).
 - Async jobs (5 tools, 177→192 surface) + session FIFO queue + full serialization + worker cache + progress generalization.
 - Engine hardening: Frida setup timeouts, cdb async pause+push, x64dbg provisioning, jadx `-cp` fix + live APK acceptance.
 - Static honesty: browser scenario, FLIRT, Wasm/DWARF, PE/PDB, Mach-O, IL2CPP/Go/Flutter, binary diff, PCAP/TLS, Android recipe.

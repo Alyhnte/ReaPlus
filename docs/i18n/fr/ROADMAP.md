@@ -1,6 +1,6 @@
 # FEUILLE DE ROUTE — Feuille de route ReaPlus
 
-> État : v0.13.1 publiée (npm + MCP Registry + CI au vert). Ce document est né des
+> État : v0.14.0 publiée (npm + MCP Registry + CI au vert). Ce document est né des
 > constats de la première revue du 2026-10-12, et a été synchronisé avec le réalisé à la fin
 > de chaque vague. v0.13.0 a clos l'identité de machine PE (ARMNT/ARM64),
 > ELF e_machine + Hexagon, les valeurs plist sans perte typées, la résolution JS

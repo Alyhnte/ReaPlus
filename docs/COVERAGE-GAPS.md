@@ -1,10 +1,11 @@
-# COVERAGE-GAPS — what is still missing after v0.13.0
+# COVERAGE-GAPS — what is still missing after v0.14.0
 
-v0.13.0 ships 191 tools, 187 `outputSchema`, 191 annotations, 2 resources, and 7 prompts. The tool count did not grow in that release. This note replaces the older claim that no tool can answer "which APIs does this process call, with what arguments."
+v0.14.0 ships 191 tools, 188 `outputSchema`, 191 annotations, 2 resources, and 7 prompts. The tool count did not grow. `rea_pwn_elf_layout` gained an output schema because it now returns a real object.
 
 ## Closed (do not list these as gaps)
 
-- **Frida API tracer.** `rea_frida_api` logs the function name, arguments, and return value. Live Frida VM approval is still an open gate; the tool itself is in the surface. Wave 16 (not done, other branch) removes the tracer's self-trigger of `GetTickCount` / `CreateFileW`.
+- **Frida API tracer.** `rea_frida_api` logs the function name, arguments, and return value. The injected script only attaches hooks and waits. Live Frida VM approval is still an open gate.
+- **ELF layout and gadgets.** `rea_pwn_elf_layout` reads the ELF program headers (PIE, NX, RELRO). `rea_pwn_gadgets` keeps instruction sequences that end in `ret`, `retn`, or `retf`.
 - **UPX.** `rea_upx_info` and `rea_upx_unpack`.
 - **C# decompile path.** `rea_ilspy_decompile` (ilspycmd when it is installed).
 - **Network capture.** `rea_net_capture` (local HAR).

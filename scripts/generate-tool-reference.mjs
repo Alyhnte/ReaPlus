@@ -214,7 +214,8 @@ export function renderReference(surface) {
     }
     if (t.outputSchema && typeof t.outputSchema === "object") {
       const outProps = t.outputSchema.properties ? Object.keys(t.outputSchema.properties).sort(sirala) : [];
-      L.push(`- outputSchema: present${outProps.length ? ` (fields: ${outProps.join(", ")})` : ""}`);
+      const alan = outProps.map((ad) => `\`${ad}\``).join(", ");
+      L.push(`- outputSchema: present${outProps.length ? ` (fields: ${alan})` : ""}`);
     } else L.push("- outputSchema: absent");
     if (t.annotations && typeof t.annotations === "object" && Object.keys(t.annotations).length) {
       const parcalar = Object.keys(t.annotations).sort(sirala).map((k) => `${k}=${JSON.stringify(t.annotations[k])}`);

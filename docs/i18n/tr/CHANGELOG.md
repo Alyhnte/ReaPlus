@@ -3,6 +3,21 @@
 Tüm önemli değişiklikler bu dosyada tutulur. Format: Keep a Changelog + SemVer.
 All notable changes are documented here (Türkçe özet + English detail).
 
+## [0.14.0] — 2026-11-25
+
+### Added
+
+- `rea_pwn_elf_layout` reads ELF program headers and reports PIE, NX, and RELRO. `rea_pwn_gadgets` keeps 1-5 instruction sequences that end in `ret`, `retn`, or `retf` (`0039bb3dbed5314c3485a4f04ac794e4706c4c14`).
+
+### Fixed
+
+- `rea_frida_api` no longer calls `GetTickCount`, `CreateFileW`, or `CloseHandle` inside the target. The script only attaches hooks and waits (`0039bb3dbed5314c3485a4f04ac794e4706c4c14`).
+- `sniff.test.mjs` runs in the default test lane. Live Frida and Ghidra files stay excluded (`0039bb3dbed5314c3485a4f04ac794e4706c4c14`).
+
+### Updated
+
+- `rea_pwn_elf_layout` now has an output schema. The surface is 191 tools, 188 output schemas, and 3 schema-less tools (`0039bb3dbed5314c3485a4f04ac794e4706c4c14`).
+
 ## [0.13.1] — 2026-11-25
 
 ### Added

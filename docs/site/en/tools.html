@@ -18,8 +18,8 @@
 <button id="tema-toggle" type="button" aria-pressed="false">Dark theme</button>
 </header>
 <section class="ozet reveal" aria-label="Surface summary">
-<p class="ozet-metin">Surface summary (real run, TOOLS.md): 191 tools · 187 outputSchema · 191 annotations · 2 resources · 7 prompts</p>
-<dl class="istatistik"><div><dt>tools</dt><dd><span class="sayi" data-sayi="191">191</span></dd></div><div><dt>outputSchema</dt><dd><span class="sayi" data-sayi="187">187</span></dd></div><div><dt>annotations</dt><dd><span class="sayi" data-sayi="191">191</span></dd></div><div><dt>resources</dt><dd><span class="sayi" data-sayi="2">2</span></dd></div><div><dt>prompts</dt><dd><span class="sayi" data-sayi="7">7</span></dd></div></dl>
+<p class="ozet-metin">Surface summary (real run, TOOLS.md): 191 tools · 188 outputSchema · 191 annotations · 2 resources · 7 prompts</p>
+<dl class="istatistik"><div><dt>tools</dt><dd><span class="sayi" data-sayi="191">191</span></dd></div><div><dt>outputSchema</dt><dd><span class="sayi" data-sayi="188">188</span></dd></div><div><dt>annotations</dt><dd><span class="sayi" data-sayi="191">191</span></dd></div><div><dt>resources</dt><dd><span class="sayi" data-sayi="2">2</span></dd></div><div><dt>prompts</dt><dd><span class="sayi" data-sayi="7">7</span></dd></div></dl>
 </section>
 <main id="icerik"><div class="reveal">
 <h1>Tool Reference</h1>
@@ -28,50 +28,50 @@
 surface of the compiled server (<code>dist/server.js</code>). To regenerate:
 <code>npm run build &amp;&amp; node scripts/generate-tool-reference.mjs</code></blockquote>
 <h2 id="summary">Summary</h2>
-<ul><li>Server: <code>rea-plus</code> 0.13.1</li><li>Total tools: 191</li><li>Total resources: 2</li><li>Total prompts: 7</li><li>Tools with outputSchema: 187</li><li>Tools with annotations: 191</li></ul>
+<ul><li>Server: <code>rea-plus</code> 0.14.0</li><li>Total tools: 191</li><li>Total resources: 2</li><li>Total prompts: 7</li><li>Tools with outputSchema: 188</li><li>Tools with annotations: 191</li></ul>
 <h2 id="tools">Tools</h2>
 <h3 id="close_target"><code>close_target</code></h3>
 <p>Release the binary target (and its radare2 process) held by a session.</p>
-<ul><li>Input fields:</li><li><code>session_id</code> (string, required) — Application session id. Not an MCP protocol session.</li><li>outputSchema: present (fields: closed, session_id)</li><li>annotations: present (destructiveHint=true, openWorldHint=true, readOnlyHint=false)</li></ul>
+<ul><li>Input fields:</li><li><code>session_id</code> (string, required) — Application session id. Not an MCP protocol session.</li><li>outputSchema: present (fields: <code>closed</code>, <code>session_id</code>)</li><li>annotations: present (destructiveHint=true, openWorldHint=true, readOnlyHint=false)</li></ul>
 <h3 id="debug_attach"><code>debug_attach</code></h3>
 <p>Attach by pid, or, on a frida session, connect to a listening Frida Gadget (gadget host:port) or a running mobile package on USB (usb + package). The target keeps running after debug_close.</p>
-<ul><li>Input fields:</li><li><code>auto_analyze</code> (boolean, optional) — Run x64dbg auto-analysis after attaching (slower).</li><li><code>break_on_entry</code> (boolean, optional) — Pause the debuggee right after attaching.</li><li><code>gadget</code> (string, optional) — Frida Gadget listen address host:port. For targets that cannot be attached by pid.</li><li><code>package</code> (string, optional) — Process or mobile package name. Defaults to Gadget. Required with usb.</li><li><code>pid</code> (integer, optional) — Live process id. Required unless gadget or usb is set.</li><li><code>session_id</code> (string, required) — Application session id. Not an MCP protocol session.</li><li><code>usb</code> (boolean, optional) — Use the USB Frida device (phone or tablet) instead of a host:port Gadget.</li><li>outputSchema: present (fields: architecture, attached, engine, entry_point, mode, module_base, module_entry, path, pid, session_id)</li><li>annotations: present (destructiveHint=true, openWorldHint=true, readOnlyHint=false)</li></ul>
+<ul><li>Input fields:</li><li><code>auto_analyze</code> (boolean, optional) — Run x64dbg auto-analysis after attaching (slower).</li><li><code>break_on_entry</code> (boolean, optional) — Pause the debuggee right after attaching.</li><li><code>gadget</code> (string, optional) — Frida Gadget listen address host:port. For targets that cannot be attached by pid.</li><li><code>package</code> (string, optional) — Process or mobile package name. Defaults to Gadget. Required with usb.</li><li><code>pid</code> (integer, optional) — Live process id. Required unless gadget or usb is set.</li><li><code>session_id</code> (string, required) — Application session id. Not an MCP protocol session.</li><li><code>usb</code> (boolean, optional) — Use the USB Frida device (phone or tablet) instead of a host:port Gadget.</li><li>outputSchema: present (fields: <code>architecture</code>, <code>attached</code>, <code>engine</code>, <code>entry_point</code>, <code>mode</code>, <code>module_base</code>, <code>module_entry</code>, <code>path</code>, <code>pid</code>, <code>session_id</code>)</li><li>annotations: present (destructiveHint=true, openWorldHint=true, readOnlyHint=false)</li></ul>
 <h3 id="debug_breakpoint"><code>debug_breakpoint</code></h3>
 <p>Set, remove, or list breakpoints. Address may be hex, a number, or an x64dbg expression.</p>
 <ul><li>Input fields:</li><li><code>action</code> (enum, optional)</li><li><code>address</code> (string | number, optional) — Required for set/remove; ignored for list.</li><li><code>condition</code> (string, optional) — Break condition expression (set only).</li><li><code>log_text</code> (string, optional) — Log text on hit (set only).</li><li><code>name</code> (string, optional) — Breakpoint name (set only).</li><li><code>session_id</code> (string, required) — Application session id. Not an MCP protocol session.</li><li><code>type</code> (enum, optional)</li><li>outputSchema: present</li><li>annotations: present (destructiveHint=true, openWorldHint=true, readOnlyHint=false)</li></ul>
 <h3 id="debug_callstack"><code>debug_callstack</code></h3>
 <p>Read the current thread's call stack (address, module, function per frame).</p>
-<ul><li>Input fields:</li><li><code>max_frames</code> (integer, optional) — Max frames returned (default 50).</li><li><code>session_id</code> (string, required) — Application session id. Not an MCP protocol session.</li><li>outputSchema: present (fields: frames, session_id, threadId)</li><li>annotations: present (openWorldHint=true, readOnlyHint=false)</li></ul>
+<ul><li>Input fields:</li><li><code>max_frames</code> (integer, optional) — Max frames returned (default 50).</li><li><code>session_id</code> (string, required) — Application session id. Not an MCP protocol session.</li><li>outputSchema: present (fields: <code>frames</code>, <code>session_id</code>, <code>threadId</code>)</li><li>annotations: present (openWorldHint=true, readOnlyHint=false)</li></ul>
 <h3 id="debug_close"><code>debug_close</code></h3>
 <p>Tear down the hidden x64dbg process held by a session. Launched targets are stopped; attached targets are detached and left running.</p>
-<ul><li>Input fields:</li><li><code>session_id</code> (string, required) — Application session id. Not an MCP protocol session.</li><li>outputSchema: present (fields: closed, session_id)</li><li>annotations: present (destructiveHint=true, openWorldHint=true, readOnlyHint=false)</li></ul>
+<ul><li>Input fields:</li><li><code>session_id</code> (string, required) — Application session id. Not an MCP protocol session.</li><li>outputSchema: present (fields: <code>closed</code>, <code>session_id</code>)</li><li>annotations: present (destructiveHint=true, openWorldHint=true, readOnlyHint=false)</li></ul>
 <h3 id="debug_code"><code>debug_code</code></h3>
 <p>Live code: disassemble at an address (default: the stopped instruction pointer), assemble one instruction, or run until an address. Requires confirm:true.</p>
 <ul><li>Input fields:</li><li><code>action</code> (enum, required)</li><li><code>address</code> (string | number, optional) — Address as hex (&quot;0x140001000&quot;), decimal, or an engine expression (&quot;cip&quot;).</li><li><code>confirm</code> (boolean, optional) — Must be true or the tool returns confirmation_required and does not touch the debuggee.</li><li><code>count</code> (integer, optional) — Instruction count for disassemble (default 12).</li><li><code>instruction</code> (string, optional) — Single instruction for assemble.</li><li><code>session_id</code> (string, required) — Application session id. Not an MCP protocol session.</li><li>outputSchema: present</li><li>annotations: present (destructiveHint=true, openWorldHint=true, readOnlyHint=false)</li></ul>
 <h3 id="debug_continue"><code>debug_continue</code></h3>
 <p>Resume the debuggee until the next breakpoint, single-step, or exit. The stop posts an event (debug.breakpoint_hit / debug.exited / debug.paused) retrievable via events_pull.</p>
-<ul><li>Input fields:</li><li><code>session_id</code> (string, required) — Application session id. Not an MCP protocol session.</li><li>outputSchema: present (fields: address, reason, session_id)</li><li>annotations: present (destructiveHint=true, openWorldHint=true, readOnlyHint=false)</li></ul>
+<ul><li>Input fields:</li><li><code>session_id</code> (string, required) — Application session id. Not an MCP protocol session.</li><li>outputSchema: present (fields: <code>address</code>, <code>reason</code>, <code>session_id</code>)</li><li>annotations: present (destructiveHint=true, openWorldHint=true, readOnlyHint=false)</li></ul>
 <h3 id="debug_memory"><code>debug_memory</code></h3>
 <p>Live process memory: read, search, or dump. Requires confirm:true. Without it the call returns confirmation_required and does not touch the debuggee.</p>
 <ul><li>Input fields:</li><li><code>action</code> (enum, required)</li><li><code>address</code> (string | number, optional) — Read/dump address.</li><li><code>confirm</code> (boolean, optional) — Must be true or the tool returns confirmation_required and does not touch the debuggee.</li><li><code>length</code> (integer, optional) — Search length in bytes (default 4096, or the main module).</li><li><code>max_results</code> (integer, optional)</li><li><code>pattern</code> (string, optional) — Search pattern. Hex bytes, or ascii when search_type is ascii.</li><li><code>search_type</code> (enum, optional)</li><li><code>session_id</code> (string, required) — Application session id. Not an MCP protocol session.</li><li><code>size</code> (integer, optional) — Byte count for read (default 64) or dump (default 256).</li><li><code>start_address</code> (string | number, optional) — Address as hex (&quot;0x140001000&quot;), decimal, or an engine expression (&quot;cip&quot;).</li><li>outputSchema: present</li><li>annotations: present (openWorldHint=true, readOnlyHint=false)</li></ul>
 <h3 id="debug_open"><code>debug_open</code></h3>
 <p>Open a PE target for live debugging on this session's debug engine. Auto-detects x86/x64 and leaves the debuggee paused. x64dbg breaks on entry; cdb stops at the initial loader breakpoint and reports the PE entry.</p>
-<ul><li>Input fields:</li><li><code>auto_analyze</code> (boolean, optional) — Run x64dbg auto-analysis after loading (slower).</li><li><code>break_on_entry</code> (boolean, optional) — Stop at the entry point after loading.</li><li><code>command_line_args</code> (string, optional) — Command line arguments for the debuggee.</li><li><code>path</code> (string, required) — Filesystem path of the PE binary to debug.</li><li><code>session_id</code> (string, required) — Application session id. Not an MCP protocol session.</li><li>outputSchema: present (fields: architecture, attached, engine, entry_point, mode, module_base, module_entry, opened, path, pid, session_id)</li><li>annotations: present (destructiveHint=true, openWorldHint=true, readOnlyHint=false)</li></ul>
+<ul><li>Input fields:</li><li><code>auto_analyze</code> (boolean, optional) — Run x64dbg auto-analysis after loading (slower).</li><li><code>break_on_entry</code> (boolean, optional) — Stop at the entry point after loading.</li><li><code>command_line_args</code> (string, optional) — Command line arguments for the debuggee.</li><li><code>path</code> (string, required) — Filesystem path of the PE binary to debug.</li><li><code>session_id</code> (string, required) — Application session id. Not an MCP protocol session.</li><li>outputSchema: present (fields: <code>architecture</code>, <code>attached</code>, <code>engine</code>, <code>entry_point</code>, <code>mode</code>, <code>module_base</code>, <code>module_entry</code>, <code>opened</code>, <code>path</code>, <code>pid</code>, <code>session_id</code>)</li><li>annotations: present (destructiveHint=true, openWorldHint=true, readOnlyHint=false)</li></ul>
 <h3 id="debug_pause"><code>debug_pause</code></h3>
 <p>Asynchronously break a running debuggee. Idempotent when already paused.</p>
-<ul><li>Input fields:</li><li><code>session_id</code> (string, required) — Application session id. Not an MCP protocol session.</li><li>outputSchema: present (fields: address, reason, session_id)</li><li>annotations: present (destructiveHint=true, openWorldHint=true, readOnlyHint=false)</li></ul>
+<ul><li>Input fields:</li><li><code>session_id</code> (string, required) — Application session id. Not an MCP protocol session.</li><li>outputSchema: present (fields: <code>address</code>, <code>reason</code>, <code>session_id</code>)</li><li>annotations: present (destructiveHint=true, openWorldHint=true, readOnlyHint=false)</li></ul>
 <h3 id="debug_plugin"><code>debug_plugin</code></h3>
 <p>x64dbg Scylla and ScyllaHide. status reports files on disk. dump and hide do not open a window: a missing headless plugin returns engine_unavailable with the plugins path. Requires confirm:true. cdb and frida return capability_unsupported.</p>
 <ul><li>Input fields:</li><li><code>action</code> (enum, required)</li><li><code>confirm</code> (boolean, optional) — Must be true or the tool returns confirmation_required and does not touch the debuggee.</li><li><code>session_id</code> (string, required) — Application session id. Not an MCP protocol session.</li><li>outputSchema: present</li><li>annotations: present (openWorldHint=true, readOnlyHint=false)</li></ul>
 <h3 id="debug_registers"><code>debug_registers</code></h3>
 <p>Read debuggee registers (general + flags; segment/debug optionally).</p>
-<ul><li>Input fields:</li><li><code>include_debug</code> (boolean, optional) — Include debug registers.</li><li><code>include_segment</code> (boolean, optional) — Include segment registers.</li><li><code>session_id</code> (string, required) — Application session id. Not an MCP protocol session.</li><li>outputSchema: present (fields: debug, flags, general, segment, session_id)</li><li>annotations: present (openWorldHint=true, readOnlyHint=false)</li></ul>
+<ul><li>Input fields:</li><li><code>include_debug</code> (boolean, optional) — Include debug registers.</li><li><code>include_segment</code> (boolean, optional) — Include segment registers.</li><li><code>session_id</code> (string, required) — Application session id. Not an MCP protocol session.</li><li>outputSchema: present (fields: <code>debug</code>, <code>flags</code>, <code>general</code>, <code>segment</code>, <code>session_id</code>)</li><li>annotations: present (openWorldHint=true, readOnlyHint=false)</li></ul>
 <h3 id="debug_state"><code>debug_state</code></h3>
 <p>Report live debug state (running/paused/terminated + pause reason) and the open target, if any.</p>
 <ul><li>Input fields:</li><li><code>session_id</code> (string, required) — Application session id. Not an MCP protocol session.</li><li>outputSchema: present</li><li>annotations: present (openWorldHint=true, readOnlyHint=false)</li></ul>
 <h3 id="debug_step"><code>debug_step</code></h3>
 <p>Single-step the debuggee (into or over calls) and report the new location.</p>
-<ul><li>Input fields:</li><li><code>count</code> (integer, optional) — Steps to take (default 1).</li><li><code>kind</code> (enum, optional)</li><li><code>session_id</code> (string, required) — Application session id. Not an MCP protocol session.</li><li>outputSchema: present (fields: address, disassembly, function, kind, module, registers, session_id)</li><li>annotations: present (destructiveHint=true, openWorldHint=true, readOnlyHint=false)</li></ul>
+<ul><li>Input fields:</li><li><code>count</code> (integer, optional) — Steps to take (default 1).</li><li><code>kind</code> (enum, optional)</li><li><code>session_id</code> (string, required) — Application session id. Not an MCP protocol session.</li><li>outputSchema: present (fields: <code>address</code>, <code>disassembly</code>, <code>function</code>, <code>kind</code>, <code>module</code>, <code>registers</code>, <code>session_id</code>)</li><li>annotations: present (destructiveHint=true, openWorldHint=true, readOnlyHint=false)</li></ul>
 <h3 id="debug_thread"><code>debug_thread</code></h3>
 <p>Live threads: list, select, freeze, thaw, or read one thread's context. The id is the value returned by list (cdb index, x64dbg/frida OS thread id). Requires confirm:true. Frida has no suspend or switch API.</p>
 <ul><li>Input fields:</li><li><code>action</code> (enum, required)</li><li><code>confirm</code> (boolean, optional) — Must be true or the tool returns confirmation_required and does not touch the debuggee.</li><li><code>session_id</code> (string, required) — Application session id. Not an MCP protocol session.</li><li><code>thread_id</code> (integer, optional)</li><li>outputSchema: present</li><li>annotations: present (destructiveHint=true, openWorldHint=true, readOnlyHint=false)</li></ul>
@@ -80,529 +80,529 @@ surface of the compiled server (<code>dist/server.js</code>). To regenerate:
 <ul><li>Input fields:</li><li><code>action</code> (enum, required)</li><li><code>checkpoint_id</code> (string, optional)</li><li><code>confirm</code> (boolean, optional) — Must be true or the tool returns confirmation_required and does not touch the debuggee.</li><li><code>memory_size</code> (integer, optional) — Bytes captured at the instruction pointer (default 64).</li><li><code>session_id</code> (string, required) — Application session id. Not an MCP protocol session.</li><li>outputSchema: present</li><li>annotations: present (destructiveHint=true, openWorldHint=true, readOnlyHint=false)</li></ul>
 <h3 id="disassemble"><code>disassemble</code></h3>
 <p>Disassemble instructions at an address (linear, <code>count</code> ops) or a whole function. Defaults to the entry function.</p>
-<ul><li>Input fields:</li><li><code>address</code> (string | number, optional) — Target address as hex (&quot;0x400200&quot;), decimal, or flag name (&quot;entry0&quot;).</li><li><code>count</code> (integer, optional) — Ops for address mode (default 32).</li><li><code>function</code> (string, optional) — Function name or address, e.g. &quot;entry0&quot;.</li><li><code>session_id</code> (string, required) — Application session id. Not an MCP protocol session.</li><li>outputSchema: present (fields: count, location, ops, session_id, text)</li><li>annotations: present (openWorldHint=true, readOnlyHint=false)</li></ul>
+<ul><li>Input fields:</li><li><code>address</code> (string | number, optional) — Target address as hex (&quot;0x400200&quot;), decimal, or flag name (&quot;entry0&quot;).</li><li><code>count</code> (integer, optional) — Ops for address mode (default 32).</li><li><code>function</code> (string, optional) — Function name or address, e.g. &quot;entry0&quot;.</li><li><code>session_id</code> (string, required) — Application session id. Not an MCP protocol session.</li><li>outputSchema: present (fields: <code>count</code>, <code>location</code>, <code>ops</code>, <code>session_id</code>, <code>text</code>)</li><li>annotations: present (openWorldHint=true, readOnlyHint=false)</li></ul>
 <h3 id="dump"><code>dump</code></h3>
 <p>Read raw bytes at an address as hexdump text or a JSON byte array.</p>
-<ul><li>Input fields:</li><li><code>address</code> (string | number, required) — Target address as hex (&quot;0x400200&quot;), decimal, or flag name (&quot;entry0&quot;).</li><li><code>format</code> (enum, optional)</li><li><code>length</code> (integer, optional) — Bytes to read (default 128).</li><li><code>session_id</code> (string, required) — Application session id. Not an MCP protocol session.</li><li>outputSchema: present (fields: address, bytes, format, length, session_id, text)</li><li>annotations: present (openWorldHint=true, readOnlyHint=false)</li></ul>
+<ul><li>Input fields:</li><li><code>address</code> (string | number, required) — Target address as hex (&quot;0x400200&quot;), decimal, or flag name (&quot;entry0&quot;).</li><li><code>format</code> (enum, optional)</li><li><code>length</code> (integer, optional) — Bytes to read (default 128).</li><li><code>session_id</code> (string, required) — Application session id. Not an MCP protocol session.</li><li>outputSchema: present (fields: <code>address</code>, <code>bytes</code>, <code>format</code>, <code>length</code>, <code>session_id</code>, <code>text</code>)</li><li>annotations: present (openWorldHint=true, readOnlyHint=false)</li></ul>
 <h3 id="events_pull"><code>events_pull</code></h3>
 <p>Pull events stored for one application session since a sequence number. This does not subscribe to push notifications.</p>
-<ul><li>Input fields:</li><li><code>after</code> (integer, optional) — Return events with seq greater than this.</li><li><code>limit</code> (integer, optional)</li><li><code>session_id</code> (string, required) — Application session id. Not an MCP protocol session.</li><li>outputSchema: present (fields: events, retainedFrom, session_id)</li><li>annotations: present (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
+<ul><li>Input fields:</li><li><code>after</code> (integer, optional) — Return events with seq greater than this.</li><li><code>limit</code> (integer, optional)</li><li><code>session_id</code> (string, required) — Application session id. Not an MCP protocol session.</li><li>outputSchema: present (fields: <code>events</code>, <code>retainedFrom</code>, <code>session_id</code>)</li><li>annotations: present (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
 <h3 id="explain"><code>explain</code></h3>
 <p>Short Turkish explanation of an assembly window: what the region does, where it jumps, and which calls notify the user or the system. Pass instructions already disassembled, or a session_id. A live debug session is read only when confirm is true. Call this when the user asks what the assembly means.</p>
-<ul><li>Input fields:</li><li><code>address</code> (string | number, optional) — Address to disassemble when instructions are omitted.</li><li><code>confirm</code> (boolean, optional) — Required only when explain itself disassembles a live debug session. Pasted instructions skip this.</li><li><code>count</code> (integer, optional) — How many instructions to read (default 16).</li><li><code>instructions</code> (object[], optional) — Already fetched ops. When set, the debugger is not called.</li><li><code>session_id</code> (string, optional) — Application session id. Not an MCP protocol session.</li><li>outputSchema: present (fields: atlamalar, bildirimler, cagrilar, dil, gosterilen, kaynak, komut_sayisi, ozet, satirlar)</li><li>annotations: present (openWorldHint=true, readOnlyHint=false)</li></ul>
+<ul><li>Input fields:</li><li><code>address</code> (string | number, optional) — Address to disassemble when instructions are omitted.</li><li><code>confirm</code> (boolean, optional) — Required only when explain itself disassembles a live debug session. Pasted instructions skip this.</li><li><code>count</code> (integer, optional) — How many instructions to read (default 16).</li><li><code>instructions</code> (object[], optional) — Already fetched ops. When set, the debugger is not called.</li><li><code>session_id</code> (string, optional) — Application session id. Not an MCP protocol session.</li><li>outputSchema: present (fields: <code>atlamalar</code>, <code>bildirimler</code>, <code>cagrilar</code>, <code>dil</code>, <code>gosterilen</code>, <code>kaynak</code>, <code>komut_sayisi</code>, <code>ozet</code>, <code>satirlar</code>)</li><li>annotations: present (openWorldHint=true, readOnlyHint=false)</li></ul>
 <h3 id="get_cfg"><code>get_cfg</code></h3>
 <p>Control-flow graph of a function as JSON and/or Graphviz DOT. Defaults to the entry function.</p>
-<ul><li>Input fields:</li><li><code>address</code> (string | number, optional) — Target address as hex (&quot;0x400200&quot;), decimal, or flag name (&quot;entry0&quot;).</li><li><code>format</code> (enum, optional)</li><li><code>function</code> (string, optional) — Function name or address, e.g. &quot;entry0&quot;.</li><li><code>session_id</code> (string, required) — Application session id. Not an MCP protocol session.</li><li>outputSchema: present (fields: dot, function, json, location, session_id)</li><li>annotations: present (openWorldHint=true, readOnlyHint=false)</li></ul>
+<ul><li>Input fields:</li><li><code>address</code> (string | number, optional) — Target address as hex (&quot;0x400200&quot;), decimal, or flag name (&quot;entry0&quot;).</li><li><code>format</code> (enum, optional)</li><li><code>function</code> (string, optional) — Function name or address, e.g. &quot;entry0&quot;.</li><li><code>session_id</code> (string, required) — Application session id. Not an MCP protocol session.</li><li>outputSchema: present (fields: <code>dot</code>, <code>function</code>, <code>json</code>, <code>location</code>, <code>session_id</code>)</li><li>annotations: present (openWorldHint=true, readOnlyHint=false)</li></ul>
 <h3 id="health"><code>health</code></h3>
 <p>Report bridge liveness. Does not touch a debugger engine.</p>
-<ul><li>Input fields: none</li><li>outputSchema: present (fields: name, protocol, sessions, status)</li><li>annotations: present (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
+<ul><li>Input fields: none</li><li>outputSchema: present (fields: <code>name</code>, <code>protocol</code>, <code>sessions</code>, <code>status</code>)</li><li>annotations: present (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
 <h3 id="open_target"><code>open_target</code></h3>
 <p>Open a binary target for static analysis in a radare2 session. Only mode 'static' is supported; anything else is a capability error. Requires r2 on PATH.</p>
-<ul><li>Input fields:</li><li><code>mode</code> (string, optional) — Analysis mode. Only &quot;static&quot; is supported.</li><li><code>path</code> (string, required) — Filesystem path of the binary to analyze.</li><li><code>session_id</code> (string, required) — Application session id. Not an MCP protocol session.</li><li>outputSchema: present (fields: engine, mode, opened, path, session_id)</li><li>annotations: present (destructiveHint=true, openWorldHint=true, readOnlyHint=false)</li></ul>
+<ul><li>Input fields:</li><li><code>mode</code> (string, optional) — Analysis mode. Only &quot;static&quot; is supported.</li><li><code>path</code> (string, required) — Filesystem path of the binary to analyze.</li><li><code>session_id</code> (string, required) — Application session id. Not an MCP protocol session.</li><li>outputSchema: present (fields: <code>engine</code>, <code>mode</code>, <code>opened</code>, <code>path</code>, <code>session_id</code>)</li><li>annotations: present (destructiveHint=true, openWorldHint=true, readOnlyHint=false)</li></ul>
 <h3 id="prerequisites"><code>prerequisites</code></h3>
 <p>Check the programs Conduit uses (radare2, x64dbg, cdb, Python, Frida, Graphviz, ScyllaHide). Missing ones include a download URL and where to put the files. The bridge does not download them. Call this when a tool is missing or before choosing an engine.</p>
-<ul><li>Input fields: none</li><li>outputSchema: present (fields: araclar, ozet)</li><li>annotations: present (destructiveHint=false, idempotentHint=true, openWorldHint=true, readOnlyHint=true)</li></ul>
+<ul><li>Input fields: none</li><li>outputSchema: present (fields: <code>araclar</code>, <code>ozet</code>)</li><li>annotations: present (destructiveHint=false, idempotentHint=true, openWorldHint=true, readOnlyHint=true)</li></ul>
 <h3 id="rea_adb_devices"><code>rea_adb_devices</code></h3>
 <p>List of connected devices.</p>
-<ul><li>Input fields: none</li><li>outputSchema: present (fields: arac, cihazlar, ok)</li><li>annotations: present (openWorldHint=true, readOnlyHint=false)</li></ul>
+<ul><li>Input fields: none</li><li>outputSchema: present (fields: <code>arac</code>, <code>cihazlar</code>, <code>ok</code>)</li><li>annotations: present (openWorldHint=true, readOnlyHint=false)</li></ul>
 <h3 id="rea_adb_install"><code>rea_adb_install</code></h3>
 <p>APK cihaza kurulum.</p>
-<ul><li>Input fields:</li><li><code>apk_path</code> (string, required)</li><li><code>seri</code> (string, optional)</li><li>outputSchema: present (fields: apk, arac, ok, sonuc)</li><li>annotations: present (destructiveHint=true, openWorldHint=true, readOnlyHint=false)</li></ul>
+<ul><li>Input fields:</li><li><code>apk_path</code> (string, required)</li><li><code>seri</code> (string, optional)</li><li>outputSchema: present (fields: <code>apk</code>, <code>arac</code>, <code>ok</code>, <code>sonuc</code>)</li><li>annotations: present (destructiveHint=true, openWorldHint=true, readOnlyHint=false)</li></ul>
 <h3 id="rea_adb_logcat"><code>rea_adb_logcat</code></h3>
 <p>Device logcat dump.</p>
-<ul><li>Input fields:</li><li><code>seri</code> (string, optional)</li><li>outputSchema: present (fields: arac, ok, satirlar, toplam_satir)</li><li>annotations: present (openWorldHint=true, readOnlyHint=false)</li></ul>
+<ul><li>Input fields:</li><li><code>seri</code> (string, optional)</li><li>outputSchema: present (fields: <code>arac</code>, <code>ok</code>, <code>satirlar</code>, <code>toplam_satir</code>)</li><li>annotations: present (openWorldHint=true, readOnlyHint=false)</li></ul>
 <h3 id="rea_adb_packages"><code>rea_adb_packages</code></h3>
 <p>List of installed packages.</p>
-<ul><li>Input fields:</li><li><code>filtre</code> (string, optional)</li><li><code>seri</code> (string, optional)</li><li>outputSchema: present (fields: arac, ok, paketler)</li><li>annotations: present (openWorldHint=true, readOnlyHint=false)</li></ul>
+<ul><li>Input fields:</li><li><code>filtre</code> (string, optional)</li><li><code>seri</code> (string, optional)</li><li>outputSchema: present (fields: <code>arac</code>, <code>ok</code>, <code>paketler</code>)</li><li>annotations: present (openWorldHint=true, readOnlyHint=false)</li></ul>
 <h3 id="rea_adb_screencap"><code>rea_adb_screencap</code></h3>
 <p>Device screenshot.</p>
-<ul><li>Input fields:</li><li><code>out</code> (string, required)</li><li><code>seri</code> (string, optional)</li><li>outputSchema: present (fields: arac, bayt, ok, yol)</li><li>annotations: present (destructiveHint=true, openWorldHint=true, readOnlyHint=false)</li></ul>
+<ul><li>Input fields:</li><li><code>out</code> (string, required)</li><li><code>seri</code> (string, optional)</li><li>outputSchema: present (fields: <code>arac</code>, <code>bayt</code>, <code>ok</code>, <code>yol</code>)</li><li>annotations: present (destructiveHint=true, openWorldHint=true, readOnlyHint=false)</li></ul>
 <h3 id="rea_android_dinamik_recete"><code>rea_android_dinamik_recete</code></h3>
 <p>Android dynamic-analysis recipe generation.</p>
-<ul><li>Input fields:</li><li><code>path</code> (string, required)</li><li>outputSchema: present (fields: arac, ok, recete)</li><li>annotations: present (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
+<ul><li>Input fields:</li><li><code>path</code> (string, required)</li><li>outputSchema: present (fields: <code>arac</code>, <code>ok</code>, <code>recete</code>)</li><li>annotations: present (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
 <h3 id="rea_android_recete_dogrula"><code>rea_android_recete_dogrula</code></h3>
 <p>Dry-run validation of a recipe.</p>
-<ul><li>Input fields:</li><li><code>text</code> (string, required)</li><li>outputSchema: present (fields: adim_sayisi, arac, ok)</li><li>annotations: present (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
+<ul><li>Input fields:</li><li><code>text</code> (string, required)</li><li>outputSchema: present (fields: <code>adim_sayisi</code>, <code>arac</code>, <code>ok</code>)</li><li>annotations: present (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
 <h3 id="rea_aot_detect"><code>rea_aot_detect</code></h3>
 <p>NativeAOT sinyali.</p>
-<ul><li>Input fields:</li><li><code>b64dosya</code> (string, required)</li><li><code>metin</code> (string, optional)</li><li>outputSchema: present (fields: details, ok, summary, tool)</li><li>annotations: present (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
+<ul><li>Input fields:</li><li><code>b64dosya</code> (string, required)</li><li><code>metin</code> (string, optional)</li><li>outputSchema: present (fields: <code>details</code>, <code>ok</code>, <code>summary</code>, <code>tool</code>)</li><li>annotations: present (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
 <h3 id="rea_aot_objc"><code>rea_aot_objc</code></h3>
 <p>ObjC dispatch izleri.</p>
-<ul><li>Input fields:</li><li><code>text</code> (string, required)</li><li>outputSchema: present (fields: details, ok, summary, tool)</li><li>annotations: present (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
+<ul><li>Input fields:</li><li><code>text</code> (string, required)</li><li>outputSchema: present (fields: <code>details</code>, <code>ok</code>, <code>summary</code>, <code>tool</code>)</li><li>annotations: present (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
 <h3 id="rea_aot_profile"><code>rea_aot_profile</code></h3>
 <p>AOT profili.</p>
-<ul><li>Input fields:</li><li><code>b64dosya</code> (string, required)</li><li><code>metin</code> (string, optional)</li><li>outputSchema: present (fields: details, ok, summary, tool)</li><li>annotations: present (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
+<ul><li>Input fields:</li><li><code>b64dosya</code> (string, required)</li><li><code>metin</code> (string, optional)</li><li>outputSchema: present (fields: <code>details</code>, <code>ok</code>, <code>summary</code>, <code>tool</code>)</li><li>annotations: present (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
 <h3 id="rea_aot_swift"><code>rea_aot_swift</code></h3>
 <p>Swift dispatch izleri.</p>
-<ul><li>Input fields:</li><li><code>text</code> (string, required)</li><li>outputSchema: present (fields: details, ok, summary, tool)</li><li>annotations: present (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
+<ul><li>Input fields:</li><li><code>text</code> (string, required)</li><li>outputSchema: present (fields: <code>details</code>, <code>ok</code>, <code>summary</code>, <code>tool</code>)</li><li>annotations: present (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
 <h3 id="rea_apktool_build"><code>rea_apktool_build</code></h3>
 <p>Decode dizinden APK rebuild.</p>
-<ul><li>Input fields:</li><li><code>dir</code> (string, required)</li><li><code>out</code> (string, required)</li><li>outputSchema: present (fields: arac, ciktiApk, ok, proje)</li><li>annotations: present (destructiveHint=true, openWorldHint=true, readOnlyHint=false)</li></ul>
+<ul><li>Input fields:</li><li><code>dir</code> (string, required)</li><li><code>out</code> (string, required)</li><li>outputSchema: present (fields: <code>arac</code>, <code>ciktiApk</code>, <code>ok</code>, <code>proje</code>)</li><li>annotations: present (destructiveHint=true, openWorldHint=true, readOnlyHint=false)</li></ul>
 <h3 id="rea_apktool_caps"><code>rea_apktool_caps</code></h3>
 <p>apktool capability probe.</p>
-<ul><li>Input fields: none</li><li>outputSchema: present (fields: aapt2, aapt2Tamam, apktool, arac, ok, surumGozlem)</li><li>annotations: present (openWorldHint=true, readOnlyHint=false)</li></ul>
+<ul><li>Input fields: none</li><li>outputSchema: present (fields: <code>aapt2</code>, <code>aapt2Tamam</code>, <code>apktool</code>, <code>arac</code>, <code>ok</code>, <code>surumGozlem</code>)</li><li>annotations: present (openWorldHint=true, readOnlyHint=false)</li></ul>
 <h3 id="rea_apktool_decode"><code>rea_apktool_decode</code></h3>
 <p>APK decode (resource).</p>
-<ul><li>Input fields:</li><li><code>apk_path</code> (string, required)</li><li><code>out</code> (string, required)</li><li>outputSchema: present (fields: apk, arac, ciktiDir, ok)</li><li>annotations: present (destructiveHint=true, openWorldHint=true, readOnlyHint=false)</li></ul>
+<ul><li>Input fields:</li><li><code>apk_path</code> (string, required)</li><li><code>out</code> (string, required)</li><li>outputSchema: present (fields: <code>apk</code>, <code>arac</code>, <code>ciktiDir</code>, <code>ok</code>)</li><li>annotations: present (destructiveHint=true, openWorldHint=true, readOnlyHint=false)</li></ul>
 <h3 id="rea_apktool_framework"><code>rea_apktool_framework</code></h3>
 <p>Framework APK kurulumu.</p>
-<ul><li>Input fields:</li><li><code>path</code> (string, required)</li><li>outputSchema: present (fields: apk, arac, ok)</li><li>annotations: present (destructiveHint=true, openWorldHint=true, readOnlyHint=false)</li></ul>
+<ul><li>Input fields:</li><li><code>path</code> (string, required)</li><li>outputSchema: present (fields: <code>apk</code>, <code>arac</code>, <code>ok</code>)</li><li>annotations: present (destructiveHint=true, openWorldHint=true, readOnlyHint=false)</li></ul>
 <h3 id="rea_apktool_info"><code>rea_apktool_info</code></h3>
 <p>apktool+aapt2 versions.</p>
-<ul><li>Input fields: none</li><li>outputSchema: present (fields: arac, ok, surum, surumGozlem)</li><li>annotations: present (openWorldHint=true, readOnlyHint=false)</li></ul>
+<ul><li>Input fields: none</li><li>outputSchema: present (fields: <code>arac</code>, <code>ok</code>, <code>surum</code>, <code>surumGozlem</code>)</li><li>annotations: present (openWorldHint=true, readOnlyHint=false)</li></ul>
 <h3 id="rea_apple_bundle"><code>rea_apple_bundle</code></h3>
 <p>Bundle anatomisi.</p>
-<ul><li>Input fields:</li><li><code>path</code> (string, required)</li><li>outputSchema: present (fields: details, ok, summary, tool)</li><li>annotations: present (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
+<ul><li>Input fields:</li><li><code>path</code> (string, required)</li><li>outputSchema: present (fields: <code>details</code>, <code>ok</code>, <code>summary</code>, <code>tool</code>)</li><li>annotations: present (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
 <h3 id="rea_apple_macho"><code>rea_apple_macho</code></h3>
 <p>Mach-O sihir + dyld listesi.</p>
-<ul><li>Input fields:</li><li><code>path</code> (string, required)</li><li>outputSchema: present (fields: details, ok, summary, tool)</li><li>annotations: present (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
+<ul><li>Input fields:</li><li><code>path</code> (string, required)</li><li>outputSchema: present (fields: <code>details</code>, <code>ok</code>, <code>summary</code>, <code>tool</code>)</li><li>annotations: present (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
 <h3 id="rea_apple_plist"><code>rea_apple_plist</code></h3>
 <p>Info.plist anahtar okuma.</p>
-<ul><li>Input fields:</li><li><code>path</code> (string, required)</li><li>outputSchema: present (fields: details, ok, summary, tool)</li><li>annotations: present (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
+<ul><li>Input fields:</li><li><code>path</code> (string, required)</li><li>outputSchema: present (fields: <code>details</code>, <code>ok</code>, <code>summary</code>, <code>tool</code>)</li><li>annotations: present (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
 <h3 id="rea_behavior_full"><code>rea_behavior_full</code></h3>
 <p>Behavior report in a single call.</p>
-<ul><li>Input fields:</li><li><code>api</code> (string, required)</li><li><code>net</code> (string, optional)</li><li>outputSchema: present (fields: bulgular, cizelge, ok, ozet, tool)</li><li>annotations: present (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
+<ul><li>Input fields:</li><li><code>api</code> (string, required)</li><li><code>net</code> (string, optional)</li><li>outputSchema: present (fields: <code>bulgular</code>, <code>cizelge</code>, <code>ok</code>, <code>ozet</code>, <code>tool</code>)</li><li>annotations: present (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
 <h3 id="rea_behavior_timeline"><code>rea_behavior_timeline</code></h3>
 <p>Event timeline + summary.</p>
-<ul><li>Input fields:</li><li><code>olaylar</code> (string, required)</li><li>outputSchema: present (fields: details, ok, summary, tool)</li><li>annotations: present (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
+<ul><li>Input fields:</li><li><code>olaylar</code> (string, required)</li><li>outputSchema: present (fields: <code>details</code>, <code>ok</code>, <code>summary</code>, <code>tool</code>)</li><li>annotations: present (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
 <h3 id="rea_best_motor"><code>rea_best_motor</code></h3>
 <p>Best engine for a target type (scored).</p>
 <ul><li>Input fields:</li><li><code>adaylar</code> (string[], required)</li><li><code>tip</code> (string, required)</li><li>outputSchema: absent</li><li>annotations: present (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
 <h3 id="rea_bindiff_fonksiyonlar"><code>rea_bindiff_fonksiyonlar</code></h3>
 <p>Binary fonksiyon listesi (ad/adres + hash).</p>
-<ul><li>Input fields:</li><li><code>path</code> (string, required)</li><li>outputSchema: present (fields: arac, bicim, dosya, fonksiyonlar, istatistik, ok, sayi, sembollu)</li><li>annotations: present (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
+<ul><li>Input fields:</li><li><code>path</code> (string, required)</li><li>outputSchema: present (fields: <code>arac</code>, <code>bicim</code>, <code>dosya</code>, <code>fonksiyonlar</code>, <code>istatistik</code>, <code>ok</code>, <code>sayi</code>, <code>sembollu</code>)</li><li>annotations: present (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
 <h3 id="rea_bindiff_karsilastir"><code>rea_bindiff_karsilastir</code></h3>
 <p>Function-level diff between two versions.</p>
-<ul><li>Input fields:</li><li><code>text</code> (string, required)</li><li>outputSchema: present (fields: arac, aynen, cikarilan, degisen, eklenen, eski, istatistik, ok, ozet, yeni)</li><li>annotations: present (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
+<ul><li>Input fields:</li><li><code>text</code> (string, required)</li><li>outputSchema: present (fields: <code>arac</code>, <code>aynen</code>, <code>cikarilan</code>, <code>degisen</code>, <code>eklenen</code>, <code>eski</code>, <code>istatistik</code>, <code>ok</code>, <code>ozet</code>, <code>yeni</code>)</li><li>annotations: present (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
 <h3 id="rea_browser_caps"><code>rea_browser_caps</code></h3>
 <p>Browser capability probe.</p>
-<ul><li>Input fields: none</li><li>outputSchema: present (fields: details, ok, summary, tool)</li><li>annotations: present (openWorldHint=true, readOnlyHint=false)</li></ul>
+<ul><li>Input fields: none</li><li>outputSchema: present (fields: <code>details</code>, <code>ok</code>, <code>summary</code>, <code>tool</code>)</li><li>annotations: present (openWorldHint=true, readOnlyHint=false)</li></ul>
 <h3 id="rea_browser_click"><code>rea_browser_click</code></h3>
 <p>Click + post-click state.</p>
-<ul><li>Input fields:</li><li><code>selector</code> (string, required)</li><li><code>url</code> (string, required)</li><li>outputSchema: present (fields: details, ok, summary, tool)</li><li>annotations: present (openWorldHint=true, readOnlyHint=false)</li></ul>
+<ul><li>Input fields:</li><li><code>selector</code> (string, required)</li><li><code>url</code> (string, required)</li><li>outputSchema: present (fields: <code>details</code>, <code>ok</code>, <code>summary</code>, <code>tool</code>)</li><li>annotations: present (openWorldHint=true, readOnlyHint=false)</li></ul>
 <h3 id="rea_browser_har_import"><code>rea_browser_har_import</code></h3>
 <p>HAR import.</p>
-<ul><li>Input fields:</li><li><code>path</code> (string, required)</li><li>outputSchema: present (fields: details, ok, summary, tool)</li><li>annotations: present (openWorldHint=true, readOnlyHint=false)</li></ul>
+<ul><li>Input fields:</li><li><code>path</code> (string, required)</li><li>outputSchema: present (fields: <code>details</code>, <code>ok</code>, <code>summary</code>, <code>tool</code>)</li><li>annotations: present (openWorldHint=true, readOnlyHint=false)</li></ul>
 <h3 id="rea_browser_nav"><code>rea_browser_nav</code></h3>
 <p>Open a page + title.</p>
-<ul><li>Input fields:</li><li><code>url</code> (string, required)</li><li>outputSchema: present (fields: details, ok, summary, tool)</li><li>annotations: present (openWorldHint=true, readOnlyHint=false)</li></ul>
+<ul><li>Input fields:</li><li><code>url</code> (string, required)</li><li>outputSchema: present (fields: <code>details</code>, <code>ok</code>, <code>summary</code>, <code>tool</code>)</li><li>annotations: present (openWorldHint=true, readOnlyHint=false)</li></ul>
 <h3 id="rea_browser_scenario"><code>rea_browser_scenario</code></h3>
 <p>Scenario recording.</p>
-<ul><li>Input fields:</li><li><code>text</code> (string, required)</li><li>outputSchema: present (fields: details, ok, summary, tool)</li><li>annotations: present (destructiveHint=true, openWorldHint=true, readOnlyHint=false)</li></ul>
+<ul><li>Input fields:</li><li><code>text</code> (string, required)</li><li>outputSchema: present (fields: <code>details</code>, <code>ok</code>, <code>summary</code>, <code>tool</code>)</li><li>annotations: present (destructiveHint=true, openWorldHint=true, readOnlyHint=false)</li></ul>
 <h3 id="rea_browser_shot"><code>rea_browser_shot</code></h3>
 <p>Full-page screenshot.</p>
-<ul><li>Input fields:</li><li><code>out</code> (string, required)</li><li><code>url</code> (string, required)</li><li>outputSchema: present (fields: details, ok, summary, tool)</li><li>annotations: present (destructiveHint=true, openWorldHint=true, readOnlyHint=false)</li></ul>
+<ul><li>Input fields:</li><li><code>out</code> (string, required)</li><li><code>url</code> (string, required)</li><li>outputSchema: present (fields: <code>details</code>, <code>ok</code>, <code>summary</code>, <code>tool</code>)</li><li>annotations: present (destructiveHint=true, openWorldHint=true, readOnlyHint=false)</li></ul>
 <h3 id="rea_config_suggest"><code>rea_config_suggest</code></h3>
 <p>MCP config snippet for the engines found.</p>
-<ul><li>Input fields:</li><li><code>bulunan</code> (string[], required)</li><li>outputSchema: present (fields: snippet)</li><li>annotations: present (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
+<ul><li>Input fields:</li><li><code>bulunan</code> (string[], required)</li><li>outputSchema: present (fields: <code>snippet</code>)</li><li>annotations: present (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
 <h3 id="rea_console_yakala"><code>rea_console_yakala</code></h3>
 <p>Console messages.</p>
-<ul><li>Input fields:</li><li><code>url</code> (string, required)</li><li>outputSchema: present (fields: details, ok, summary, tool)</li><li>annotations: present (openWorldHint=true, readOnlyHint=false)</li></ul>
+<ul><li>Input fields:</li><li><code>url</code> (string, required)</li><li>outputSchema: present (fields: <code>details</code>, <code>ok</code>, <code>summary</code>, <code>tool</code>)</li><li>annotations: present (openWorldHint=true, readOnlyHint=false)</li></ul>
 <h3 id="rea_coverage"><code>rea_coverage</code></h3>
 <p>Coverage ratio.</p>
-<ul><li>Input fields:</li><li><code>incelenen</code> (integer, required)</li><li><code>toplam</code> (integer, required)</li><li>outputSchema: present (fields: arac, kalan, ok, oran)</li><li>annotations: present (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
+<ul><li>Input fields:</li><li><code>incelenen</code> (integer, required)</li><li><code>toplam</code> (integer, required)</li><li>outputSchema: present (fields: <code>arac</code>, <code>kalan</code>, <code>ok</code>, <code>oran</code>)</li><li>annotations: present (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
 <h3 id="rea_crash_append"><code>rea_crash_append</code></h3>
 <p>Append a crash event.</p>
-<ul><li>Input fields:</li><li><code>olay</code> (string, required)</li><li><code>olaylar</code> (string, required)</li><li>outputSchema: present (fields: details, ok, summary, tool)</li><li>annotations: present (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
+<ul><li>Input fields:</li><li><code>olay</code> (string, required)</li><li><code>olaylar</code> (string, required)</li><li>outputSchema: present (fields: <code>details</code>, <code>ok</code>, <code>summary</code>, <code>tool</code>)</li><li>annotations: present (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
 <h3 id="rea_crash_hint"><code>rea_crash_hint</code></h3>
 <p>Crash ipucu.</p>
-<ul><li>Input fields:</li><li><code>olaylar</code> (string, required)</li><li>outputSchema: present (fields: details, ok, summary, tool)</li><li>annotations: present (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
+<ul><li>Input fields:</li><li><code>olaylar</code> (string, required)</li><li>outputSchema: present (fields: <code>details</code>, <code>ok</code>, <code>summary</code>, <code>tool</code>)</li><li>annotations: present (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
 <h3 id="rea_crash_kayit_parse"><code>rea_crash_kayit_parse</code></h3>
 <p>Crash notu parse.</p>
-<ul><li>Input fields:</li><li><code>text</code> (string, required)</li><li>outputSchema: present (fields: arac, ok, registerlar, sinyal, threadSayisi, threadler)</li><li>annotations: present (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
+<ul><li>Input fields:</li><li><code>text</code> (string, required)</li><li>outputSchema: present (fields: <code>arac</code>, <code>ok</code>, <code>registerlar</code>, <code>sinyal</code>, <code>threadSayisi</code>, <code>threadler</code>)</li><li>annotations: present (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
 <h3 id="rea_crash_ozet"><code>rea_crash_ozet</code></h3>
 <p>Crash summary.</p>
-<ul><li>Input fields:</li><li><code>text</code> (string, required)</li><li>outputSchema: present (fields: arac, ilkFrame, ok, registerSayisi, sinyal, threadSayisi)</li><li>annotations: present (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
+<ul><li>Input fields:</li><li><code>text</code> (string, required)</li><li>outputSchema: present (fields: <code>arac</code>, <code>ilkFrame</code>, <code>ok</code>, <code>registerSayisi</code>, <code>sinyal</code>, <code>threadSayisi</code>)</li><li>annotations: present (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
 <h3 id="rea_crash_timeline"><code>rea_crash_timeline</code></h3>
 <p>Crash timeline.</p>
-<ul><li>Input fields:</li><li><code>olaylar</code> (string, required)</li><li>outputSchema: present (fields: details, ok, summary, tool)</li><li>annotations: present (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
+<ul><li>Input fields:</li><li><code>olaylar</code> (string, required)</li><li>outputSchema: present (fields: <code>details</code>, <code>ok</code>, <code>summary</code>, <code>tool</code>)</li><li>annotations: present (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
 <h3 id="rea_cutter_caps"><code>rea_cutter_caps</code></h3>
 <p>Cutter/rizin capability probe.</p>
-<ul><li>Input fields: none</li><li>outputSchema: present (fields: arac, ok, pdc, surum)</li><li>annotations: present (openWorldHint=true, readOnlyHint=false)</li></ul>
+<ul><li>Input fields: none</li><li>outputSchema: present (fields: <code>arac</code>, <code>ok</code>, <code>pdc</code>, <code>surum</code>)</li><li>annotations: present (openWorldHint=true, readOnlyHint=false)</li></ul>
 <h3 id="rea_cutter_decompile"><code>rea_cutter_decompile</code></h3>
 <p>Cutter pseudo-decompilation.</p>
-<ul><li>Input fields:</li><li><code>addr</code> (string, required)</li><li><code>path</code> (string, required)</li><li>outputSchema: present (fields: addr, arac, hedef, kaynak, kod, not, ok)</li><li>annotations: present (openWorldHint=true, readOnlyHint=false)</li></ul>
+<ul><li>Input fields:</li><li><code>addr</code> (string, required)</li><li><code>path</code> (string, required)</li><li>outputSchema: present (fields: <code>addr</code>, <code>arac</code>, <code>hedef</code>, <code>kaynak</code>, <code>kod</code>, <code>not</code>, <code>ok</code>)</li><li>annotations: present (openWorldHint=true, readOnlyHint=false)</li></ul>
 <h3 id="rea_cutter_disasm"><code>rea_cutter_disasm</code></h3>
 <p>Cutter/rizin disassembly.</p>
-<ul><li>Input fields:</li><li><code>addr</code> (string, required)</li><li><code>path</code> (string, required)</li><li>outputSchema: present (fields: addr, arac, hedef, ok, ops)</li><li>annotations: present (openWorldHint=true, readOnlyHint=false)</li></ul>
+<ul><li>Input fields:</li><li><code>addr</code> (string, required)</li><li><code>path</code> (string, required)</li><li>outputSchema: present (fields: <code>addr</code>, <code>arac</code>, <code>hedef</code>, <code>ok</code>, <code>ops</code>)</li><li>annotations: present (openWorldHint=true, readOnlyHint=false)</li></ul>
 <h3 id="rea_cutter_funcs"><code>rea_cutter_funcs</code></h3>
 <p>Cutter/rizin fonksiyon listesi.</p>
-<ul><li>Input fields:</li><li><code>path</code> (string, required)</li><li>outputSchema: present (fields: arac, fonksiyonlar, hedef, ok)</li><li>annotations: present (openWorldHint=true, readOnlyHint=false)</li></ul>
+<ul><li>Input fields:</li><li><code>path</code> (string, required)</li><li>outputSchema: present (fields: <code>arac</code>, <code>fonksiyonlar</code>, <code>hedef</code>, <code>ok</code>)</li><li>annotations: present (openWorldHint=true, readOnlyHint=false)</li></ul>
 <h3 id="rea_cutter_strings"><code>rea_cutter_strings</code></h3>
 <p>Cutter/rizin string listesi.</p>
-<ul><li>Input fields:</li><li><code>path</code> (string, required)</li><li>outputSchema: present (fields: arac, hedef, ok, strings)</li><li>annotations: present (openWorldHint=true, readOnlyHint=false)</li></ul>
+<ul><li>Input fields:</li><li><code>path</code> (string, required)</li><li>outputSchema: present (fields: <code>arac</code>, <code>hedef</code>, <code>ok</code>, <code>strings</code>)</li><li>annotations: present (openWorldHint=true, readOnlyHint=false)</li></ul>
 <h3 id="rea_cutter_xrefs"><code>rea_cutter_xrefs</code></h3>
 <p>Cutter/rizin xref listesi.</p>
-<ul><li>Input fields:</li><li><code>addr</code> (string, required)</li><li><code>path</code> (string, required)</li><li>outputSchema: present (fields: addr, arac, hedef, ok, xrefs)</li><li>annotations: present (openWorldHint=true, readOnlyHint=false)</li></ul>
+<ul><li>Input fields:</li><li><code>addr</code> (string, required)</li><li><code>path</code> (string, required)</li><li>outputSchema: present (fields: <code>addr</code>, <code>arac</code>, <code>hedef</code>, <code>ok</code>, <code>xrefs</code>)</li><li>annotations: present (openWorldHint=true, readOnlyHint=false)</li></ul>
 <h3 id="rea_diff_match"><code>rea_diff_match</code></h3>
 <p>Function matching (JSON arrays).</p>
-<ul><li>Input fields:</li><li><code>a</code> (string, required)</li><li><code>b</code> (string, required)</li><li>outputSchema: present (fields: details, ok, summary, tool)</li><li>annotations: present (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
+<ul><li>Input fields:</li><li><code>a</code> (string, required)</li><li><code>b</code> (string, required)</li><li>outputSchema: present (fields: <code>details</code>, <code>ok</code>, <code>summary</code>, <code>tool</code>)</li><li>annotations: present (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
 <h3 id="rea_diff_summary"><code>rea_diff_summary</code></h3>
 <p>Added/removed summary.</p>
-<ul><li>Input fields:</li><li><code>a</code> (string, required)</li><li><code>b</code> (string, required)</li><li>outputSchema: present (fields: details, ok, summary, tool)</li><li>annotations: present (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
+<ul><li>Input fields:</li><li><code>a</code> (string, required)</li><li><code>b</code> (string, required)</li><li>outputSchema: present (fields: <code>details</code>, <code>ok</code>, <code>summary</code>, <code>tool</code>)</li><li>annotations: present (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
 <h3 id="rea_dos_com"><code>rea_dos_com</code></h3>
 <p>COM tespiti.</p>
-<ul><li>Input fields:</li><li><code>path</code> (string, required)</li><li>outputSchema: present (fields: details, ok, summary, tool)</li><li>annotations: present (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
+<ul><li>Input fields:</li><li><code>path</code> (string, required)</li><li>outputSchema: present (fields: <code>details</code>, <code>ok</code>, <code>summary</code>, <code>tool</code>)</li><li>annotations: present (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
 <h3 id="rea_dos_int21"><code>rea_dos_int21</code></h3>
 <p>INT21 call scan.</p>
-<ul><li>Input fields:</li><li><code>b64</code> (string, required)</li><li>outputSchema: present (fields: details, ok, summary, tool)</li><li>annotations: present (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
+<ul><li>Input fields:</li><li><code>b64</code> (string, required)</li><li>outputSchema: present (fields: <code>details</code>, <code>ok</code>, <code>summary</code>, <code>tool</code>)</li><li>annotations: present (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
 <h3 id="rea_dos_mz"><code>rea_dos_mz</code></h3>
 <p>MZ header check.</p>
-<ul><li>Input fields:</li><li><code>b64</code> (string, required)</li><li>outputSchema: present (fields: details, ok, summary, tool)</li><li>annotations: present (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
+<ul><li>Input fields:</li><li><code>b64</code> (string, required)</li><li>outputSchema: present (fields: <code>details</code>, <code>ok</code>, <code>summary</code>, <code>tool</code>)</li><li>annotations: present (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
 <h3 id="rea_dos_psp"><code>rea_dos_psp</code></h3>
 <p>PSP struct parse.</p>
-<ul><li>Input fields:</li><li><code>b64</code> (string, required)</li><li>outputSchema: present (fields: details, ok, summary, tool)</li><li>annotations: present (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
+<ul><li>Input fields:</li><li><code>b64</code> (string, required)</li><li>outputSchema: present (fields: <code>details</code>, <code>ok</code>, <code>summary</code>, <code>tool</code>)</li><li>annotations: present (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
 <h3 id="rea_dosya_izi"><code>rea_dosya_izi</code></h3>
 <p>File write/read from API events.</p>
-<ul><li>Input fields:</li><li><code>text</code> (string, required)</li><li>outputSchema: present (fields: details, ok, summary, tool)</li><li>annotations: present (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
+<ul><li>Input fields:</li><li><code>text</code> (string, required)</li><li>outputSchema: present (fields: <code>details</code>, <code>ok</code>, <code>summary</code>, <code>tool</code>)</li><li>annotations: present (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
 <h3 id="rea_dotnet_cil"><code>rea_dotnet_cil</code></h3>
 <p>CIL method dump (dnfile).</p>
-<ul><li>Input fields:</li><li><code>filtre</code> (string, optional)</li><li><code>path</code> (string, required)</li><li>outputSchema: present (fields: arac, assembly, dosya, filtre, method_sayisi, methods, not, ok)</li><li>annotations: present (openWorldHint=true, readOnlyHint=false)</li></ul>
+<ul><li>Input fields:</li><li><code>filtre</code> (string, optional)</li><li><code>path</code> (string, required)</li><li>outputSchema: present (fields: <code>arac</code>, <code>assembly</code>, <code>dosya</code>, <code>filtre</code>, <code>method_sayisi</code>, <code>methods</code>, <code>not</code>, <code>ok</code>)</li><li>annotations: present (openWorldHint=true, readOnlyHint=false)</li></ul>
 <h3 id="rea_dotnet_metadata"><code>rea_dotnet_metadata</code></h3>
 <p>Assembly metadata okuma.</p>
-<ul><li>Input fields:</li><li><code>path</code> (string, required)</li><li>outputSchema: present (fields: arac, clr, dosya, not, ok, okuyucu)</li><li>annotations: present (openWorldHint=true, readOnlyHint=false)</li></ul>
+<ul><li>Input fields:</li><li><code>path</code> (string, required)</li><li>outputSchema: present (fields: <code>arac</code>, <code>clr</code>, <code>dosya</code>, <code>not</code>, <code>ok</code>, <code>okuyucu</code>)</li><li>annotations: present (openWorldHint=true, readOnlyHint=false)</li></ul>
 <h3 id="rea_dwarf_ozet"><code>rea_dwarf_ozet</code></h3>
 <p>ELF DWARF summary.</p>
-<ul><li>Input fields:</li><li><code>path</code> (string, required)</li><li>outputSchema: present (fields: arac, dosya, fonksiyonAdlari, ok, subprogramSayisi, unitSayisi)</li><li>annotations: present (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
+<ul><li>Input fields:</li><li><code>path</code> (string, required)</li><li>outputSchema: present (fields: <code>arac</code>, <code>dosya</code>, <code>fonksiyonAdlari</code>, <code>ok</code>, <code>subprogramSayisi</code>, <code>unitSayisi</code>)</li><li>annotations: present (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
 <h3 id="rea_evidence_bundle"><code>rea_evidence_bundle</code></h3>
 <p>Assemble an evidence bundle.</p>
-<ul><li>Input fields:</li><li><code>ogeler</code> (string, required)</li><li><code>sakli</code> (string, required)</li><li>outputSchema: present (fields: digest, items, retained, tools_sha256)</li><li>annotations: present (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
+<ul><li>Input fields:</li><li><code>ogeler</code> (string, required)</li><li><code>sakli</code> (string, required)</li><li>outputSchema: present (fields: <code>digest</code>, <code>items</code>, <code>retained</code>, <code>tools_sha256</code>)</li><li>annotations: present (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
 <h3 id="rea_evidence_verify"><code>rea_evidence_verify</code></h3>
 <p>Verify an evidence bundle.</p>
-<ul><li>Input fields:</li><li><code>text</code> (string, required)</li><li>outputSchema: present (fields: ok)</li><li>annotations: present (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
+<ul><li>Input fields:</li><li><code>text</code> (string, required)</li><li>outputSchema: present (fields: <code>ok</code>)</li><li>annotations: present (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
 <h3 id="rea_evm_disasm"><code>rea_evm_disasm</code></h3>
 <p>EVM bytecode disassembly (offline).</p>
-<ul><li>Input fields:</li><li><code>hex</code> (string, required)</li><li>outputSchema: present (fields: arac, detay, ok, ozet)</li><li>annotations: present (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
+<ul><li>Input fields:</li><li><code>hex</code> (string, required)</li><li>outputSchema: present (fields: <code>arac</code>, <code>detay</code>, <code>ok</code>, <code>ozet</code>)</li><li>annotations: present (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
 <h3 id="rea_evm_selector"><code>rea_evm_selector</code></h3>
 <p>EVM 4-byte selector (keccak, offline).</p>
-<ul><li>Input fields:</li><li><code>sig</code> (string, required)</li><li>outputSchema: present (fields: details, ok, summary, tool)</li><li>annotations: present (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
+<ul><li>Input fields:</li><li><code>sig</code> (string, required)</li><li>outputSchema: present (fields: <code>details</code>, <code>ok</code>, <code>summary</code>, <code>tool</code>)</li><li>annotations: present (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
 <h3 id="rea_evm_selectors"><code>rea_evm_selectors</code></h3>
 <p>EVM selector candidates.</p>
-<ul><li>Input fields:</li><li><code>hex</code> (string, required)</li><li>outputSchema: present (fields: details, ok, summary, tool)</li><li>annotations: present (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
+<ul><li>Input fields:</li><li><code>hex</code> (string, required)</li><li>outputSchema: present (fields: <code>details</code>, <code>ok</code>, <code>summary</code>, <code>tool</code>)</li><li>annotations: present (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
 <h3 id="rea_evm_stats"><code>rea_evm_stats</code></h3>
 <p>EVM opcode statistics.</p>
-<ul><li>Input fields:</li><li><code>hex</code> (string, required)</li><li>outputSchema: present (fields: details, ok, summary, tool)</li><li>annotations: present (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
+<ul><li>Input fields:</li><li><code>hex</code> (string, required)</li><li>outputSchema: present (fields: <code>details</code>, <code>ok</code>, <code>summary</code>, <code>tool</code>)</li><li>annotations: present (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
 <h3 id="rea_fallback"><code>rea_fallback</code></h3>
 <p>Birincil yoksa yedek zincir.</p>
 <ul><li>Input fields:</li><li><code>birincil</code> (string, required)</li><li><code>mevcut</code> (string[], required)</li><li>outputSchema: absent</li><li>annotations: present (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
 <h3 id="rea_firmware_caps"><code>rea_firmware_caps</code></h3>
 <p>Firmware capability probe.</p>
-<ul><li>Input fields: none</li><li>outputSchema: present (fields: ok, summary, tool)</li><li>annotations: present (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
+<ul><li>Input fields: none</li><li>outputSchema: present (fields: <code>ok</code>, <code>summary</code>, <code>tool</code>)</li><li>annotations: present (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
 <h3 id="rea_firmware_extract"><code>rea_firmware_extract</code></h3>
 <p>Firmware extraction.</p>
-<ul><li>Input fields:</li><li><code>path</code> (string, required)</li><li>outputSchema: present (fields: ok, summary, tool)</li><li>annotations: present (destructiveHint=true, openWorldHint=true, readOnlyHint=false)</li></ul>
+<ul><li>Input fields:</li><li><code>path</code> (string, required)</li><li>outputSchema: present (fields: <code>ok</code>, <code>summary</code>, <code>tool</code>)</li><li>annotations: present (destructiveHint=true, openWorldHint=true, readOnlyHint=false)</li></ul>
 <h3 id="rea_firmware_handoff"><code>rea_firmware_handoff</code></h3>
 <p>Firmware handoff notu.</p>
-<ul><li>Input fields:</li><li><code>neden</code> (string, required)</li><li><code>path</code> (string, required)</li><li>outputSchema: present (fields: handoff, ok, summary, tool)</li><li>annotations: present (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
+<ul><li>Input fields:</li><li><code>neden</code> (string, required)</li><li><code>path</code> (string, required)</li><li>outputSchema: present (fields: <code>handoff</code>, <code>ok</code>, <code>summary</code>, <code>tool</code>)</li><li>annotations: present (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
 <h3 id="rea_flutter_blutter"><code>rea_flutter_blutter</code></h3>
 <p>Dart analysis via Blutter (honest error if missing).</p>
-<ul><li>Input fields:</li><li><code>path</code> (string, required)</li><li>outputSchema: present (fields: izler, ok, summary, tool)</li><li>annotations: present (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
+<ul><li>Input fields:</li><li><code>path</code> (string, required)</li><li>outputSchema: present (fields: <code>izler</code>, <code>ok</code>, <code>summary</code>, <code>tool</code>)</li><li>annotations: present (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
 <h3 id="rea_flutter_payload"><code>rea_flutter_payload</code></h3>
 <p>Flutter payload izleri.</p>
-<ul><li>Input fields:</li><li><code>path</code> (string, required)</li><li>outputSchema: present (fields: izler, ok, summary, tool)</li><li>annotations: present (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
+<ul><li>Input fields:</li><li><code>path</code> (string, required)</li><li>outputSchema: present (fields: <code>izler</code>, <code>ok</code>, <code>summary</code>, <code>tool</code>)</li><li>annotations: present (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
 <h3 id="rea_flutter_scan"><code>rea_flutter_scan</code></h3>
 <p>Flutter/Dart izi tarama.</p>
-<ul><li>Input fields:</li><li><code>path</code> (string, required)</li><li>outputSchema: present (fields: buildId, dartMi, motor, ok, summary, tool, tur)</li><li>annotations: present (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
+<ul><li>Input fields:</li><li><code>path</code> (string, required)</li><li>outputSchema: present (fields: <code>buildId</code>, <code>dartMi</code>, <code>motor</code>, <code>ok</code>, <code>summary</code>, <code>tool</code>, <code>tur</code>)</li><li>annotations: present (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
 <h3 id="rea_flutter_snapshot"><code>rea_flutter_snapshot</code></h3>
 <p>Flutter AOT snapshot info (Dart magic + version).</p>
-<ul><li>Input fields:</li><li><code>path</code> (string, required)</li><li>outputSchema: present (fields: dartMi, dartSurumu, izolasyon, magic, ok, summary, tool, tur)</li><li>annotations: present (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
+<ul><li>Input fields:</li><li><code>path</code> (string, required)</li><li>outputSchema: present (fields: <code>dartMi</code>, <code>dartSurumu</code>, <code>izolasyon</code>, <code>magic</code>, <code>ok</code>, <code>summary</code>, <code>tool</code>, <code>tur</code>)</li><li>annotations: present (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
 <h3 id="rea_frida_api"><code>rea_frida_api</code></h3>
 <p>API tracer (isim+args+retval).</p>
-<ul><li>Input fields:</li><li><code>desen</code> (string, optional)</li><li><code>pid</code> (integer, required)</li><li>outputSchema: present (fields: arac, cagrilar, ok, pid, sayi)</li><li>annotations: present (openWorldHint=true, readOnlyHint=false)</li></ul>
+<ul><li>Input fields:</li><li><code>desen</code> (string, optional)</li><li><code>pid</code> (integer, required)</li><li>outputSchema: present (fields: <code>arac</code>, <code>cagrilar</code>, <code>ok</code>, <code>pid</code>, <code>sayi</code>)</li><li>annotations: present (openWorldHint=true, readOnlyHint=false)</li></ul>
 <h3 id="rea_frida_cond"><code>rea_frida_cond</code></h3>
 <p>Conditional breakpoint.</p>
-<ul><li>Input fields:</li><li><code>adres</code> (string, required)</li><li><code>kosul</code> (string, required)</li><li><code>pid</code> (integer, required)</li><li>outputSchema: present (fields: adres, arac, hitSayisi, ok, pid, tuttu)</li><li>annotations: present (destructiveHint=true, openWorldHint=true, readOnlyHint=false)</li></ul>
+<ul><li>Input fields:</li><li><code>adres</code> (string, required)</li><li><code>kosul</code> (string, required)</li><li><code>pid</code> (integer, required)</li><li>outputSchema: present (fields: <code>adres</code>, <code>arac</code>, <code>hitSayisi</code>, <code>ok</code>, <code>pid</code>, <code>tuttu</code>)</li><li>annotations: present (destructiveHint=true, openWorldHint=true, readOnlyHint=false)</li></ul>
 <h3 id="rea_frida_pause"><code>rea_frida_pause</code></h3>
 <p>Suspend the target process (NtSuspend).</p>
-<ul><li>Input fields:</li><li><code>pid</code> (integer, required)</li><li>outputSchema: present (fields: arac, durum, ok, pid)</li><li>annotations: present (destructiveHint=true, openWorldHint=true, readOnlyHint=false)</li></ul>
+<ul><li>Input fields:</li><li><code>pid</code> (integer, required)</li><li>outputSchema: present (fields: <code>arac</code>, <code>durum</code>, <code>ok</code>, <code>pid</code>)</li><li>annotations: present (destructiveHint=true, openWorldHint=true, readOnlyHint=false)</li></ul>
 <h3 id="rea_frida_resume"><code>rea_frida_resume</code></h3>
 <p>Resume a suspended process.</p>
-<ul><li>Input fields:</li><li><code>pid</code> (integer, required)</li><li>outputSchema: present (fields: arac, durum, ok, pid)</li><li>annotations: present (destructiveHint=true, openWorldHint=true, readOnlyHint=false)</li></ul>
+<ul><li>Input fields:</li><li><code>pid</code> (integer, required)</li><li>outputSchema: present (fields: <code>arac</code>, <code>durum</code>, <code>ok</code>, <code>pid</code>)</li><li>annotations: present (destructiveHint=true, openWorldHint=true, readOnlyHint=false)</li></ul>
 <h3 id="rea_frida_stalker"><code>rea_frida_stalker</code></h3>
 <p>Stalker call tracing.</p>
-<ul><li>Input fields:</li><li><code>pid</code> (integer, required)</li><li><code>sure_ms</code> (integer, optional)</li><li>outputSchema: present (fields: arac, cagrilar, ok, pid, sayi)</li><li>annotations: present (openWorldHint=true, readOnlyHint=false)</li></ul>
+<ul><li>Input fields:</li><li><code>pid</code> (integer, required)</li><li><code>sure_ms</code> (integer, optional)</li><li>outputSchema: present (fields: <code>arac</code>, <code>cagrilar</code>, <code>ok</code>, <code>pid</code>, <code>sayi</code>)</li><li>annotations: present (openWorldHint=true, readOnlyHint=false)</li></ul>
 <h3 id="rea_frida_step"><code>rea_frida_step</code></h3>
 <p>Next-instruction emulation.</p>
-<ul><li>Input fields:</li><li><code>adres</code> (string, optional)</li><li><code>pid</code> (integer, required)</li><li>outputSchema: present (fields: adres, arac, ok, pid, sonraki, vurdu)</li><li>annotations: present (destructiveHint=true, openWorldHint=true, readOnlyHint=false)</li></ul>
+<ul><li>Input fields:</li><li><code>adres</code> (string, optional)</li><li><code>pid</code> (integer, required)</li><li>outputSchema: present (fields: <code>adres</code>, <code>arac</code>, <code>ok</code>, <code>pid</code>, <code>sonraki</code>, <code>vurdu</code>)</li><li>annotations: present (destructiveHint=true, openWorldHint=true, readOnlyHint=false)</li></ul>
 <h3 id="rea_fs_diff"><code>rea_fs_diff</code></h3>
 <p>Snapshot diff.</p>
-<ul><li>Input fields:</li><li><code>once</code> (string, required)</li><li><code>sonra</code> (string, required)</li><li>outputSchema: present (fields: kayıt, ok, summary, tool)</li><li>annotations: present (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
+<ul><li>Input fields:</li><li><code>once</code> (string, required)</li><li><code>sonra</code> (string, required)</li><li>outputSchema: present (fields: <code>kayıt</code>, <code>ok</code>, <code>summary</code>, <code>tool</code>)</li><li>annotations: present (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
 <h3 id="rea_fs_snapshot"><code>rea_fs_snapshot</code></h3>
 <p>Dizin snapshot.</p>
-<ul><li>Input fields:</li><li><code>path</code> (string, required)</li><li>outputSchema: present (fields: kayıt, ok, summary, tool)</li><li>annotations: present (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
+<ul><li>Input fields:</li><li><code>path</code> (string, required)</li><li>outputSchema: present (fields: <code>kayıt</code>, <code>ok</code>, <code>summary</code>, <code>tool</code>)</li><li>annotations: present (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
 <h3 id="rea_ghidra_analyze"><code>rea_ghidra_analyze</code></h3>
 <p>Ghidra headless import+analiz.</p>
-<ul><li>Input fields:</li><li><code>path</code> (string, required)</li><li>outputSchema: present (fields: arac, hedef, log, ok)</li><li>annotations: present (destructiveHint=true, openWorldHint=true, readOnlyHint=false)</li></ul>
+<ul><li>Input fields:</li><li><code>path</code> (string, required)</li><li>outputSchema: present (fields: <code>arac</code>, <code>hedef</code>, <code>log</code>, <code>ok</code>)</li><li>annotations: present (destructiveHint=true, openWorldHint=true, readOnlyHint=false)</li></ul>
 <h3 id="rea_ghidra_decompile"><code>rea_ghidra_decompile</code></h3>
 <p>Ghidra pseudo-code.</p>
-<ul><li>Input fields:</li><li><code>addr</code> (string, required)</li><li><code>path</code> (string, required)</li><li>outputSchema: present (fields: addr, arac, hedef, kod, ok)</li><li>annotations: present (openWorldHint=true, readOnlyHint=false)</li></ul>
+<ul><li>Input fields:</li><li><code>addr</code> (string, required)</li><li><code>path</code> (string, required)</li><li>outputSchema: present (fields: <code>addr</code>, <code>arac</code>, <code>hedef</code>, <code>kod</code>, <code>ok</code>)</li><li>annotations: present (openWorldHint=true, readOnlyHint=false)</li></ul>
 <h3 id="rea_ghidra_disasm"><code>rea_ghidra_disasm</code></h3>
 <p>Ghidra disassembly.</p>
-<ul><li>Input fields:</li><li><code>addr</code> (string, required)</li><li><code>path</code> (string, required)</li><li>outputSchema: present (fields: addr, arac, hedef, kod, ok, sayi, talimatlar)</li><li>annotations: present (openWorldHint=true, readOnlyHint=false)</li></ul>
+<ul><li>Input fields:</li><li><code>addr</code> (string, required)</li><li><code>path</code> (string, required)</li><li>outputSchema: present (fields: <code>addr</code>, <code>arac</code>, <code>hedef</code>, <code>kod</code>, <code>ok</code>, <code>sayi</code>, <code>talimatlar</code>)</li><li>annotations: present (openWorldHint=true, readOnlyHint=false)</li></ul>
 <h3 id="rea_ghidra_funcs"><code>rea_ghidra_funcs</code></h3>
 <p>Ghidra fonksiyon listesi.</p>
-<ul><li>Input fields:</li><li><code>path</code> (string, required)</li><li>outputSchema: present (fields: arac, fonksiyonlar, hedef, ok)</li><li>annotations: present (openWorldHint=true, readOnlyHint=false)</li></ul>
+<ul><li>Input fields:</li><li><code>path</code> (string, required)</li><li>outputSchema: present (fields: <code>arac</code>, <code>fonksiyonlar</code>, <code>hedef</code>, <code>ok</code>)</li><li>annotations: present (openWorldHint=true, readOnlyHint=false)</li></ul>
 <h3 id="rea_ghidra_strings"><code>rea_ghidra_strings</code></h3>
 <p>Ghidra string listesi.</p>
-<ul><li>Input fields:</li><li><code>path</code> (string, required)</li><li>outputSchema: present (fields: arac, hedef, ok, strings)</li><li>annotations: present (openWorldHint=true, readOnlyHint=false)</li></ul>
+<ul><li>Input fields:</li><li><code>path</code> (string, required)</li><li>outputSchema: present (fields: <code>arac</code>, <code>hedef</code>, <code>ok</code>, <code>strings</code>)</li><li>annotations: present (openWorldHint=true, readOnlyHint=false)</li></ul>
 <h3 id="rea_ghidra_trace"><code>rea_ghidra_trace</code></h3>
 <p>Snapshot -&gt; Ghidra Trace import.</p>
-<ul><li>Input fields:</li><li><code>kayit</code> (string, required)</li><li><code>path</code> (string, required)</li><li>outputSchema: present (fields: arac, hedef, ok, sonuc)</li><li>annotations: present (destructiveHint=true, openWorldHint=true, readOnlyHint=false)</li></ul>
+<ul><li>Input fields:</li><li><code>kayit</code> (string, required)</li><li><code>path</code> (string, required)</li><li>outputSchema: present (fields: <code>arac</code>, <code>hedef</code>, <code>ok</code>, <code>sonuc</code>)</li><li>annotations: present (destructiveHint=true, openWorldHint=true, readOnlyHint=false)</li></ul>
 <h3 id="rea_ghidra_vt"><code>rea_ghidra_vt</code></h3>
 <p>Function diff of two binaries (version tracking).</p>
-<ul><li>Input fields:</li><li><code>eski</code> (string, required)</li><li><code>yeni</code> (string, required)</li><li>outputSchema: present (fields: arac, degisen, eklenen, eski, ok, ozet, silinen, yeni)</li><li>annotations: present (openWorldHint=true, readOnlyHint=false)</li></ul>
+<ul><li>Input fields:</li><li><code>eski</code> (string, required)</li><li><code>yeni</code> (string, required)</li><li>outputSchema: present (fields: <code>arac</code>, <code>degisen</code>, <code>eklenen</code>, <code>eski</code>, <code>ok</code>, <code>ozet</code>, <code>silinen</code>, <code>yeni</code>)</li><li>annotations: present (openWorldHint=true, readOnlyHint=false)</li></ul>
 <h3 id="rea_ghidra_xrefs"><code>rea_ghidra_xrefs</code></h3>
 <p>Ghidra xref listesi.</p>
-<ul><li>Input fields:</li><li><code>addr</code> (string, required)</li><li><code>path</code> (string, required)</li><li>outputSchema: present (fields: addr, arac, hedef, ok, xrefs)</li><li>annotations: present (openWorldHint=true, readOnlyHint=false)</li></ul>
+<ul><li>Input fields:</li><li><code>addr</code> (string, required)</li><li><code>path</code> (string, required)</li><li>outputSchema: present (fields: <code>addr</code>, <code>arac</code>, <code>hedef</code>, <code>ok</code>, <code>xrefs</code>)</li><li>annotations: present (openWorldHint=true, readOnlyHint=false)</li></ul>
 <h3 id="rea_go_buildinfo"><code>rea_go_buildinfo</code></h3>
 <p>Go build-id + module dependencies.</p>
-<ul><li>Input fields:</li><li><code>path</code> (string, required)</li><li>outputSchema: present (fields: details, ok, summary, tool)</li><li>annotations: present (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
+<ul><li>Input fields:</li><li><code>path</code> (string, required)</li><li>outputSchema: present (fields: <code>details</code>, <code>ok</code>, <code>summary</code>, <code>tool</code>)</li><li>annotations: present (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
 <h3 id="rea_go_funclines"><code>rea_go_funclines</code></h3>
 <p>Go function + file:line map.</p>
-<ul><li>Input fields:</li><li><code>path</code> (string, required)</li><li>outputSchema: present (fields: details, ok, summary, tool)</li><li>annotations: present (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
+<ul><li>Input fields:</li><li><code>path</code> (string, required)</li><li>outputSchema: present (fields: <code>details</code>, <code>ok</code>, <code>summary</code>, <code>tool</code>)</li><li>annotations: present (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
 <h3 id="rea_go_goresym"><code>rea_go_goresym</code></h3>
 <p>GoReSym analysis (honest error if missing).</p>
-<ul><li>Input fields:</li><li><code>path</code> (string, required)</li><li>outputSchema: present (fields: details, ok, summary, tool)</li><li>annotations: present (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
+<ul><li>Input fields:</li><li><code>path</code> (string, required)</li><li>outputSchema: present (fields: <code>details</code>, <code>ok</code>, <code>summary</code>, <code>tool</code>)</li><li>annotations: present (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
 <h3 id="rea_go_module"><code>rea_go_module</code></h3>
 <p>Go module info.</p>
-<ul><li>Input fields:</li><li><code>text</code> (string, required)</li><li>outputSchema: present (fields: details, ok, summary, tool)</li><li>annotations: present (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
+<ul><li>Input fields:</li><li><code>text</code> (string, required)</li><li>outputSchema: present (fields: <code>details</code>, <code>ok</code>, <code>summary</code>, <code>tool</code>)</li><li>annotations: present (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
 <h3 id="rea_go_version"><code>rea_go_version</code></h3>
 <p>Go version fingerprint.</p>
-<ul><li>Input fields:</li><li><code>text</code> (string, required)</li><li>outputSchema: present (fields: details, ok, summary, tool)</li><li>annotations: present (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
+<ul><li>Input fields:</li><li><code>text</code> (string, required)</li><li>outputSchema: present (fields: <code>details</code>, <code>ok</code>, <code>summary</code>, <code>tool</code>)</li><li>annotations: present (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
 <h3 id="rea_hap_liste"><code>rea_hap_liste</code></h3>
 <p>HAP dosya listesi.</p>
-<ul><li>Input fields:</li><li><code>path</code> (string, required)</li><li>outputSchema: present (fields: arac, dosya, dosyalar, ok, sayi)</li><li>annotations: present (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
+<ul><li>Input fields:</li><li><code>path</code> (string, required)</li><li>outputSchema: present (fields: <code>arac</code>, <code>dosya</code>, <code>dosyalar</code>, <code>ok</code>, <code>sayi</code>)</li><li>annotations: present (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
 <h3 id="rea_hap_manifest"><code>rea_hap_manifest</code></h3>
 <p>HAP manifest (bundle/version).</p>
-<ul><li>Input fields:</li><li><code>path</code> (string, required)</li><li>outputSchema: present (fields: arac, bundleName, dosya, kaynak, ok, version)</li><li>annotations: present (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
+<ul><li>Input fields:</li><li><code>path</code> (string, required)</li><li>outputSchema: present (fields: <code>arac</code>, <code>bundleName</code>, <code>dosya</code>, <code>kaynak</code>, <code>ok</code>, <code>version</code>)</li><li>annotations: present (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
 <h3 id="rea_hopper_istek"><code>rea_hopper_istek</code></h3>
 <p>Hopper request-file generation.</p>
-<ul><li>Input fields:</li><li><code>path</code> (string, required)</li><li>outputSchema: present (fields: adresler, arac, hedef, hopper, istekDosyasi, ok)</li><li>annotations: present (destructiveHint=true, readOnlyHint=false)</li></ul>
+<ul><li>Input fields:</li><li><code>path</code> (string, required)</li><li>outputSchema: present (fields: <code>adresler</code>, <code>arac</code>, <code>hedef</code>, <code>hopper</code>, <code>istekDosyasi</code>, <code>ok</code>)</li><li>annotations: present (destructiveHint=true, readOnlyHint=false)</li></ul>
 <h3 id="rea_hopper_tara"><code>rea_hopper_tara</code></h3>
 <p>Dosyada string/regex tarama.</p>
-<ul><li>Input fields:</li><li><code>desen</code> (string, required)</li><li><code>path</code> (string, required)</li><li>outputSchema: present (fields: arac, desen, eslesmeler, hedef, ok, regex, sayi)</li><li>annotations: present (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
+<ul><li>Input fields:</li><li><code>desen</code> (string, required)</li><li><code>path</code> (string, required)</li><li>outputSchema: present (fields: <code>arac</code>, <code>desen</code>, <code>eslesmeler</code>, <code>hedef</code>, <code>ok</code>, <code>regex</code>, <code>sayi</code>)</li><li>annotations: present (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
 <h3 id="rea_ida_flirt"><code>rea_ida_flirt</code></h3>
 <p>String-based compiler/library guess (not a real FLIRT signature; if IDA is installed, validate with rea_ida_idb output applied as a signature in IDA).</p>
-<ul><li>Input fields:</li><li><code>path</code> (string, required)</li><li>outputSchema: present (fields: arac, eslesmeler, guven, hedef, idaMevcut, kutuphane, method, not, ok, sayi, surumler)</li><li>annotations: present (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
+<ul><li>Input fields:</li><li><code>path</code> (string, required)</li><li>outputSchema: present (fields: <code>arac</code>, <code>eslesmeler</code>, <code>guven</code>, <code>hedef</code>, <code>idaMevcut</code>, <code>kutuphane</code>, <code>method</code>, <code>not</code>, <code>ok</code>, <code>sayi</code>, <code>surumler</code>)</li><li>annotations: present (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
 <h3 id="rea_ida_idb"><code>rea_ida_idb</code></h3>
 <p>IDB batch generation (idat).</p>
-<ul><li>Input fields:</li><li><code>out</code> (string, required)</li><li><code>path</code> (string, required)</li><li>outputSchema: present (fields: arac, hedef, idat, idb, ok)</li><li>annotations: present (destructiveHint=true, openWorldHint=true, readOnlyHint=false)</li></ul>
+<ul><li>Input fields:</li><li><code>out</code> (string, required)</li><li><code>path</code> (string, required)</li><li>outputSchema: present (fields: <code>arac</code>, <code>hedef</code>, <code>idat</code>, <code>idb</code>, <code>ok</code>)</li><li>annotations: present (destructiveHint=true, openWorldHint=true, readOnlyHint=false)</li></ul>
 <h3 id="rea_il2cpp_dump"><code>rea_il2cpp_dump</code></h3>
 <p>Dump via Il2CppDumper (honest error if missing).</p>
-<ul><li>Input fields:</li><li><code>path</code> (string, required)</li><li>outputSchema: present (fields: arac, cikti, dosya, dosyaSayisi, log, ok, ozet)</li><li>annotations: present (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
+<ul><li>Input fields:</li><li><code>path</code> (string, required)</li><li>outputSchema: present (fields: <code>arac</code>, <code>cikti</code>, <code>dosya</code>, <code>dosyaSayisi</code>, <code>log</code>, <code>ok</code>, <code>ozet</code>)</li><li>annotations: present (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
 <h3 id="rea_il2cpp_metadata"><code>rea_il2cpp_metadata</code></h3>
 <p>IL2CPP global-metadata class/method counts.</p>
-<ul><li>Input fields:</li><li><code>path</code> (string, required)</li><li>outputSchema: present (fields: arac, assemblySayisi, dosya, goruntuSayisi, metodSayisi, not, ok, ozet, sinifSayisi, surum)</li><li>annotations: present (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
+<ul><li>Input fields:</li><li><code>path</code> (string, required)</li><li>outputSchema: present (fields: <code>arac</code>, <code>assemblySayisi</code>, <code>dosya</code>, <code>goruntuSayisi</code>, <code>metodSayisi</code>, <code>not</code>, <code>ok</code>, <code>ozet</code>, <code>sinifSayisi</code>, <code>surum</code>)</li><li>annotations: present (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
 <h3 id="rea_il2cpp_methods"><code>rea_il2cpp_methods</code></h3>
 <p>IL2CPP method signatures (honest flag when truncated).</p>
-<ul><li>Input fields:</li><li><code>path</code> (string, required)</li><li>outputSchema: present (fields: arac, dosya, imzaSayisi, imzalar, metodSayisi, not, ok, sinirli, surum)</li><li>annotations: present (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
+<ul><li>Input fields:</li><li><code>path</code> (string, required)</li><li>outputSchema: present (fields: <code>arac</code>, <code>dosya</code>, <code>imzaSayisi</code>, <code>imzalar</code>, <code>metodSayisi</code>, <code>not</code>, <code>ok</code>, <code>sinirli</code>, <code>surum</code>)</li><li>annotations: present (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
 <h3 id="rea_ilspy_decompile"><code>rea_ilspy_decompile</code></h3>
 <p>.NET C# decompile.</p>
-<ul><li>Input fields:</li><li><code>out</code> (string, required)</li><li><code>path</code> (string, required)</li><li>outputSchema: present (fields: arac, ciktiDir, cs_sayisi, dosya, not, ok)</li><li>annotations: present (destructiveHint=true, openWorldHint=true, readOnlyHint=false)</li></ul>
+<ul><li>Input fields:</li><li><code>out</code> (string, required)</li><li><code>path</code> (string, required)</li><li>outputSchema: present (fields: <code>arac</code>, <code>ciktiDir</code>, <code>cs_sayisi</code>, <code>dosya</code>, <code>not</code>, <code>ok</code>)</li><li>annotations: present (destructiveHint=true, openWorldHint=true, readOnlyHint=false)</li></ul>
 <h3 id="rea_investigate"><code>rea_investigate</code></h3>
 <p>Automatic investigation plan (sniff + score + fallbacks).</p>
-<ul><li>Input fields:</li><li><code>path</code> (string, required)</li><li><code>soru</code> (string, optional)</li><li>outputSchema: present (fields: arac, motor, ok, plan, skor, tip, yedekler)</li><li>annotations: present (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
+<ul><li>Input fields:</li><li><code>path</code> (string, required)</li><li><code>soru</code> (string, optional)</li><li>outputSchema: present (fields: <code>arac</code>, <code>motor</code>, <code>ok</code>, <code>plan</code>, <code>skor</code>, <code>tip</code>, <code>yedekler</code>)</li><li>annotations: present (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
 <h3 id="rea_jadx_classes"><code>rea_jadx_classes</code></h3>
 <p>APK class list.</p>
-<ul><li>Input fields:</li><li><code>apk_path</code> (string, required)</li><li>outputSchema: present (fields: arac, ok, siniflar, toplam_sinif)</li><li>annotations: present (openWorldHint=true, readOnlyHint=false)</li></ul>
+<ul><li>Input fields:</li><li><code>apk_path</code> (string, required)</li><li>outputSchema: present (fields: <code>arac</code>, <code>ok</code>, <code>siniflar</code>, <code>toplam_sinif</code>)</li><li>annotations: present (openWorldHint=true, readOnlyHint=false)</li></ul>
 <h3 id="rea_jadx_decompile"><code>rea_jadx_decompile</code></h3>
 <p>Decompile a single APK class.</p>
-<ul><li>Input fields:</li><li><code>apk_path</code> (string, required)</li><li><code>out</code> (string, required)</li><li><code>sinif</code> (string, required)</li><li>outputSchema: present (fields: arac, bayt, ciktiDir, dosya, ok, sinif)</li><li>annotations: present (destructiveHint=true, openWorldHint=true, readOnlyHint=false)</li></ul>
+<ul><li>Input fields:</li><li><code>apk_path</code> (string, required)</li><li><code>out</code> (string, required)</li><li><code>sinif</code> (string, required)</li><li>outputSchema: present (fields: <code>arac</code>, <code>bayt</code>, <code>ciktiDir</code>, <code>dosya</code>, <code>ok</code>, <code>sinif</code>)</li><li>annotations: present (destructiveHint=true, openWorldHint=true, readOnlyHint=false)</li></ul>
 <h3 id="rea_jadx_full"><code>rea_jadx_full</code></h3>
 <p>APK tam decompile.</p>
-<ul><li>Input fields:</li><li><code>apk_path</code> (string, required)</li><li><code>out</code> (string, required)</li><li>outputSchema: present (fields: arac, ciktiDir, java_dosya_sayisi, ok)</li><li>annotations: present (destructiveHint=true, openWorldHint=true, readOnlyHint=false)</li></ul>
+<ul><li>Input fields:</li><li><code>apk_path</code> (string, required)</li><li><code>out</code> (string, required)</li><li>outputSchema: present (fields: <code>arac</code>, <code>ciktiDir</code>, <code>java_dosya_sayisi</code>, <code>ok</code>)</li><li>annotations: present (destructiveHint=true, openWorldHint=true, readOnlyHint=false)</li></ul>
 <h3 id="rea_jadx_manifest"><code>rea_jadx_manifest</code></h3>
 <p>APK manifest summary.</p>
-<ul><li>Input fields:</li><li><code>apk_path</code> (string, required)</li><li>outputSchema: present (fields: aktiviteler, apk, arac, izinler, ok, paket)</li><li>annotations: present (openWorldHint=true, readOnlyHint=false)</li></ul>
+<ul><li>Input fields:</li><li><code>apk_path</code> (string, required)</li><li>outputSchema: present (fields: <code>aktiviteler</code>, <code>apk</code>, <code>arac</code>, <code>izinler</code>, <code>ok</code>, <code>paket</code>)</li><li>annotations: present (openWorldHint=true, readOnlyHint=false)</li></ul>
 <h3 id="rea_jadx_methods"><code>rea_jadx_methods</code></h3>
 <p>Method list from decompile output.</p>
-<ul><li>Input fields:</li><li><code>dir</code> (string, required)</li><li>outputSchema: present (fields: arac, methodlar, ok)</li><li>annotations: present (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
+<ul><li>Input fields:</li><li><code>dir</code> (string, required)</li><li>outputSchema: present (fields: <code>arac</code>, <code>methodlar</code>, <code>ok</code>)</li><li>annotations: present (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
 <h3 id="rea_jadx_read"><code>rea_jadx_read</code></h3>
 <p>Read a decompiled class (400 lines).</p>
-<ul><li>Input fields:</li><li><code>dir</code> (string, required)</li><li><code>sinif</code> (string, required)</li><li>outputSchema: present (fields: arac, dosya, ok, satirlar, toplam_satir)</li><li>annotations: present (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
+<ul><li>Input fields:</li><li><code>dir</code> (string, required)</li><li><code>sinif</code> (string, required)</li><li>outputSchema: present (fields: <code>arac</code>, <code>dosya</code>, <code>ok</code>, <code>satirlar</code>, <code>toplam_satir</code>)</li><li>annotations: present (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
 <h3 id="rea_jadx_xrefs"><code>rea_jadx_xrefs</code></h3>
 <p>Term search across decompile output.</p>
-<ul><li>Input fields:</li><li><code>dir</code> (string, required)</li><li><code>terim</code> (string, required)</li><li>outputSchema: present (fields: arac, kayitlar, ok)</li><li>annotations: present (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
+<ul><li>Input fields:</li><li><code>dir</code> (string, required)</li><li><code>terim</code> (string, required)</li><li>outputSchema: present (fields: <code>arac</code>, <code>kayitlar</code>, <code>ok</code>)</li><li>annotations: present (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
 <h3 id="rea_jeb_sorgu"><code>rea_jeb_sorgu</code></h3>
 <p>JEB MCP sorgusu.</p>
-<ul><li>Input fields:</li><li><code>govde</code> (string, optional)</li><li><code>url</code> (string, required)</li><li><code>yontem</code> (string, required)</li><li>outputSchema: present (fields: arac, durum, govde, ok, url, yontem)</li><li>annotations: present (openWorldHint=true, readOnlyHint=false)</li></ul>
+<ul><li>Input fields:</li><li><code>govde</code> (string, optional)</li><li><code>url</code> (string, required)</li><li><code>yontem</code> (string, required)</li><li>outputSchema: present (fields: <code>arac</code>, <code>durum</code>, <code>govde</code>, <code>ok</code>, <code>url</code>, <code>yontem</code>)</li><li>annotations: present (openWorldHint=true, readOnlyHint=false)</li></ul>
 <h3 id="rea_js_bundle"><code>rea_js_bundle</code></h3>
 <p>Bundle summary.</p>
-<ul><li>Input fields:</li><li><code>text</code> (string, required)</li><li>outputSchema: present (fields: ok, summary, tool)</li><li>annotations: present (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
+<ul><li>Input fields:</li><li><code>text</code> (string, required)</li><li>outputSchema: present (fields: <code>ok</code>, <code>summary</code>, <code>tool</code>)</li><li>annotations: present (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
 <h3 id="rea_js_export_shape"><code>rea_js_export_shape</code></h3>
 <p>Export shape.</p>
-<ul><li>Input fields:</li><li><code>path</code> (string, required)</li><li>outputSchema: present (fields: details, ok, summary, tool)</li><li>annotations: present (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
+<ul><li>Input fields:</li><li><code>path</code> (string, required)</li><li>outputSchema: present (fields: <code>details</code>, <code>ok</code>, <code>summary</code>, <code>tool</code>)</li><li>annotations: present (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
 <h3 id="rea_js_require"><code>rea_js_require</code></h3>
 <p>Require/import graph.</p>
-<ul><li>Input fields:</li><li><code>path</code> (string, required)</li><li>outputSchema: present (fields: details, ok, summary, tool)</li><li>annotations: present (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
+<ul><li>Input fields:</li><li><code>path</code> (string, required)</li><li>outputSchema: present (fields: <code>details</code>, <code>ok</code>, <code>summary</code>, <code>tool</code>)</li><li>annotations: present (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
 <h3 id="rea_js_sourcemap"><code>rea_js_sourcemap</code></h3>
 <p>Source-map resolution.</p>
-<ul><li>Input fields:</li><li><code>text</code> (string, required)</li><li>outputSchema: present (fields: ok, summary, tool)</li><li>annotations: present (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
+<ul><li>Input fields:</li><li><code>text</code> (string, required)</li><li>outputSchema: present (fields: <code>ok</code>, <code>summary</code>, <code>tool</code>)</li><li>annotations: present (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
 <h3 id="rea_macho_classdump"><code>rea_macho_classdump</code></h3>
 <p>class-dump output (honest error if missing).</p>
-<ul><li>Input fields:</li><li><code>path</code> (string, required)</li><li>outputSchema: present (fields: details, ok, summary, tool)</li><li>annotations: present (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
+<ul><li>Input fields:</li><li><code>path</code> (string, required)</li><li>outputSchema: present (fields: <code>details</code>, <code>ok</code>, <code>summary</code>, <code>tool</code>)</li><li>annotations: present (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
 <h3 id="rea_macho_info"><code>rea_macho_info</code></h3>
 <p>Mach-O header (architecture + file type).</p>
-<ul><li>Input fields:</li><li><code>path</code> (string, required)</li><li>outputSchema: present (fields: details, ok, summary, tool)</li><li>annotations: present (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
+<ul><li>Input fields:</li><li><code>path</code> (string, required)</li><li>outputSchema: present (fields: <code>details</code>, <code>ok</code>, <code>summary</code>, <code>tool</code>)</li><li>annotations: present (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
 <h3 id="rea_macho_loads"><code>rea_macho_loads</code></h3>
 <p>Mach-O load commands (segment/dylib).</p>
-<ul><li>Input fields:</li><li><code>path</code> (string, required)</li><li>outputSchema: present (fields: details, ok, summary, tool)</li><li>annotations: present (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
+<ul><li>Input fields:</li><li><code>path</code> (string, required)</li><li>outputSchema: present (fields: <code>details</code>, <code>ok</code>, <code>summary</code>, <code>tool</code>)</li><li>annotations: present (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
 <h3 id="rea_macho_objc"><code>rea_macho_objc</code></h3>
 <p>ObjC class/category list (read-only).</p>
-<ul><li>Input fields:</li><li><code>path</code> (string, required)</li><li>outputSchema: present (fields: details, ok, summary, tool)</li><li>annotations: present (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
+<ul><li>Input fields:</li><li><code>path</code> (string, required)</li><li>outputSchema: present (fields: <code>details</code>, <code>ok</code>, <code>summary</code>, <code>tool</code>)</li><li>annotations: present (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
 <h3 id="rea_macho_otool"><code>rea_macho_otool</code></h3>
 <p>otool output (honest error if missing).</p>
-<ul><li>Input fields:</li><li><code>path</code> (string, required)</li><li>outputSchema: present (fields: details, ok, summary, tool)</li><li>annotations: present (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
+<ul><li>Input fields:</li><li><code>path</code> (string, required)</li><li>outputSchema: present (fields: <code>details</code>, <code>ok</code>, <code>summary</code>, <code>tool</code>)</li><li>annotations: present (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
 <h3 id="rea_managed_compare"><code>rea_managed_compare</code></h3>
 <p>Managed member diff.</p>
-<ul><li>Input fields:</li><li><code>a</code> (string, required)</li><li><code>b</code> (string, required)</li><li>outputSchema: present (fields: arac, detay, ok, ozet)</li><li>annotations: present (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
+<ul><li>Input fields:</li><li><code>a</code> (string, required)</li><li><code>b</code> (string, required)</li><li>outputSchema: present (fields: <code>arac</code>, <code>detay</code>, <code>ok</code>, <code>ozet</code>)</li><li>annotations: present (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
 <h3 id="rea_managed_import"><code>rea_managed_import</code></h3>
 <p>Reconstruction import.</p>
-<ul><li>Input fields:</li><li><code>path</code> (string, required)</li><li>outputSchema: present (fields: arac, detay, ok, ozet)</li><li>annotations: present (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
+<ul><li>Input fields:</li><li><code>path</code> (string, required)</li><li>outputSchema: present (fields: <code>arac</code>, <code>detay</code>, <code>ok</code>, <code>ozet</code>)</li><li>annotations: present (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
 <h3 id="rea_managed_verify"><code>rea_managed_verify</code></h3>
 <p>Native dependency verification.</p>
-<ul><li>Input fields:</li><li><code>beklenen</code> (string, required)</li><li><code>path</code> (string, required)</li><li>outputSchema: present (fields: arac, detay, ok, ozet)</li><li>annotations: present (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
+<ul><li>Input fields:</li><li><code>beklenen</code> (string, required)</li><li><code>path</code> (string, required)</li><li>outputSchema: present (fields: <code>arac</code>, <code>detay</code>, <code>ok</code>, <code>ozet</code>)</li><li>annotations: present (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
 <h3 id="rea_mips_funcs"><code>rea_mips_funcs</code></h3>
 <p>MIPS function pre-scan.</p>
-<ul><li>Input fields:</li><li><code>b64</code> (string, required)</li><li>outputSchema: present (fields: details, ok, summary, tool)</li><li>annotations: present (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
+<ul><li>Input fields:</li><li><code>b64</code> (string, required)</li><li>outputSchema: present (fields: <code>details</code>, <code>ok</code>, <code>summary</code>, <code>tool</code>)</li><li>annotations: present (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
 <h3 id="rea_mips_psp_profile"><code>rea_mips_psp_profile</code></h3>
 <p>MIPS/PSP profili.</p>
-<ul><li>Input fields:</li><li><code>b64</code> (string, required)</li><li>outputSchema: present (fields: details, ok, summary, tool)</li><li>annotations: present (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
+<ul><li>Input fields:</li><li><code>b64</code> (string, required)</li><li>outputSchema: present (fields: <code>details</code>, <code>ok</code>, <code>summary</code>, <code>tool</code>)</li><li>annotations: present (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
 <h3 id="rea_missing_reason"><code>rea_missing_reason</code></h3>
 <p>Missing tool + install command.</p>
-<ul><li>Input fields:</li><li><code>eksik</code> (string, required)</li><li><code>platform</code> (string, optional)</li><li>outputSchema: present (fields: alternatif, eksik, kur, neden)</li><li>annotations: present (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
+<ul><li>Input fields:</li><li><code>eksik</code> (string, required)</li><li><code>platform</code> (string, optional)</li><li>outputSchema: present (fields: <code>alternatif</code>, <code>eksik</code>, <code>kur</code>, <code>neden</code>)</li><li>annotations: present (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
 <h3 id="rea_net_capture"><code>rea_net_capture</code></h3>
 <p>Local network capture (HAR).</p>
-<ul><li>Input fields:</li><li><code>url</code> (string, required)</li><li>outputSchema: present (fields: kayıt, ok, summary, tool)</li><li>annotations: present (destructiveHint=true, openWorldHint=true, readOnlyHint=false)</li></ul>
+<ul><li>Input fields:</li><li><code>url</code> (string, required)</li><li>outputSchema: present (fields: <code>kayıt</code>, <code>ok</code>, <code>summary</code>, <code>tool</code>)</li><li>annotations: present (destructiveHint=true, openWorldHint=true, readOnlyHint=false)</li></ul>
 <h3 id="rea_obligation_advance"><code>rea_obligation_advance</code></h3>
 <p>Halka ilerletme.</p>
-<ul><li>Input fields:</li><li><code>bulgu</code> (string, required)</li><li><code>defter</code> (string, required)</li><li><code>kod</code> (string, required)</li><li>outputSchema: present (fields: links)</li><li>annotations: present (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
+<ul><li>Input fields:</li><li><code>bulgu</code> (string, required)</li><li><code>defter</code> (string, required)</li><li><code>kod</code> (string, required)</li><li>outputSchema: present (fields: <code>links</code>)</li><li>annotations: present (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
 <h3 id="rea_obligation_close"><code>rea_obligation_close</code></h3>
 <p>Seal the ledger.</p>
-<ul><li>Input fields:</li><li><code>text</code> (string, required)</li><li>outputSchema: present (fields: kapatıldı, links)</li><li>annotations: present (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
+<ul><li>Input fields:</li><li><code>text</code> (string, required)</li><li>outputSchema: present (fields: <code>kapatıldı</code>, <code>links</code>)</li><li>annotations: present (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
 <h3 id="rea_obligation_ledger"><code>rea_obligation_ledger</code></h3>
 <p>Defter kurma.</p>
-<ul><li>Input fields:</li><li><code>bulgular</code> (string[], required)</li><li><code>evidence_digest</code> (string, required)</li><li><code>tools_sha256</code> (string, required)</li><li>outputSchema: present (fields: evidence_digest, kapatıldı, ledger_id, links, tools_sha256)</li><li>annotations: present (destructiveHint=false, idempotentHint=false, openWorldHint=false, readOnlyHint=true)</li></ul>
+<ul><li>Input fields:</li><li><code>bulgular</code> (string[], required)</li><li><code>evidence_digest</code> (string, required)</li><li><code>tools_sha256</code> (string, required)</li><li>outputSchema: present (fields: <code>evidence_digest</code>, <code>kapatıldı</code>, <code>ledger_id</code>, <code>links</code>, <code>tools_sha256</code>)</li><li>annotations: present (destructiveHint=false, idempotentHint=false, openWorldHint=false, readOnlyHint=true)</li></ul>
 <h3 id="rea_obligation_verify"><code>rea_obligation_verify</code></h3>
 <p>Chain verification.</p>
-<ul><li>Input fields:</li><li><code>text</code> (string, required)</li><li>outputSchema: present (fields: eksik, ok)</li><li>annotations: present (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
+<ul><li>Input fields:</li><li><code>text</code> (string, required)</li><li>outputSchema: present (fields: <code>eksik</code>, <code>ok</code>)</li><li>annotations: present (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
 <h3 id="rea_pcap_oku"><code>rea_pcap_oku</code></h3>
 <p>PCAP stream reassembly + TLS keylog decrypt.</p>
-<ul><li>Input fields:</li><li><code>keylog</code> (string, optional)</li><li><code>path</code> (string, required)</li><li>outputSchema: present (fields: details, ok, summary, tool)</li><li>annotations: present (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
+<ul><li>Input fields:</li><li><code>keylog</code> (string, optional)</li><li><code>path</code> (string, required)</li><li>outputSchema: present (fields: <code>details</code>, <code>ok</code>, <code>summary</code>, <code>tool</code>)</li><li>annotations: present (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
 <h3 id="rea_pdb_indir"><code>rea_pdb_indir</code></h3>
 <p>Download a PDB from the Microsoft symbol server using the CodeView RSDS record in the PE debug directory + integrity + cache.</p>
-<ul><li>Input fields:</li><li><code>path</code> (string, required)</li><li>outputSchema: present (fields: arac, cache, dosya, guid, ok, pdb, url, yas, yol)</li><li>annotations: present (destructiveHint=true, openWorldHint=true, readOnlyHint=false)</li></ul>
+<ul><li>Input fields:</li><li><code>path</code> (string, required)</li><li>outputSchema: present (fields: <code>arac</code>, <code>cache</code>, <code>dosya</code>, <code>guid</code>, <code>ok</code>, <code>pdb</code>, <code>url</code>, <code>yas</code>, <code>yol</code>)</li><li>annotations: present (destructiveHint=true, openWorldHint=true, readOnlyHint=false)</li></ul>
 <h3 id="rea_pdb_yolu"><code>rea_pdb_yolu</code></h3>
 <p>PE debug dizininden PDB yolu.</p>
-<ul><li>Input fields:</li><li><code>path</code> (string, required)</li><li>outputSchema: present (fields: arac, dosya, guid, ok, pdb, yas)</li><li>annotations: present (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
+<ul><li>Input fields:</li><li><code>path</code> (string, required)</li><li>outputSchema: present (fields: <code>arac</code>, <code>dosya</code>, <code>guid</code>, <code>ok</code>, <code>pdb</code>, <code>yas</code>)</li><li>annotations: present (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
 <h3 id="rea_pe_imports"><code>rea_pe_imports</code></h3>
 <p>PE import listesi.</p>
-<ul><li>Input fields:</li><li><code>path</code> (string, required)</li><li>outputSchema: present (fields: arac, dlls, dosya, fonksiyonlar, not, ok, sayi)</li><li>annotations: present (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
+<ul><li>Input fields:</li><li><code>path</code> (string, required)</li><li>outputSchema: present (fields: <code>arac</code>, <code>dlls</code>, <code>dosya</code>, <code>fonksiyonlar</code>, <code>not</code>, <code>ok</code>, <code>sayi</code>)</li><li>annotations: present (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
 <h3 id="rea_pe_info"><code>rea_pe_info</code></h3>
 <p>PE header info.</p>
-<ul><li>Input fields:</li><li><code>path</code> (string, required)</li><li>outputSchema: present (fields: arac, bit, dosya, entry, entry_hex, machine, machine_hex, ok, section_sayisi)</li><li>annotations: present (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
+<ul><li>Input fields:</li><li><code>path</code> (string, required)</li><li>outputSchema: present (fields: <code>arac</code>, <code>bit</code>, <code>dosya</code>, <code>entry</code>, <code>entry_hex</code>, <code>machine</code>, <code>machine_hex</code>, <code>ok</code>, <code>section_sayisi</code>)</li><li>annotations: present (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
 <h3 id="rea_pe_sections"><code>rea_pe_sections</code></h3>
 <p>PE section tablosu.</p>
-<ul><li>Input fields:</li><li><code>path</code> (string, required)</li><li>outputSchema: present (fields: arac, bolumler, dosya, ok, sayi)</li><li>annotations: present (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
+<ul><li>Input fields:</li><li><code>path</code> (string, required)</li><li>outputSchema: present (fields: <code>arac</code>, <code>bolumler</code>, <code>dosya</code>, <code>ok</code>, <code>sayi</code>)</li><li>annotations: present (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
 <h3 id="rea_process_caps"><code>rea_process_caps</code></h3>
 <p>Process capability probe.</p>
-<ul><li>Input fields: none</li><li>outputSchema: present (fields: kayıt, ok, summary, tool)</li><li>annotations: present (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
+<ul><li>Input fields: none</li><li>outputSchema: present (fields: <code>kayıt</code>, <code>ok</code>, <code>summary</code>, <code>tool</code>)</li><li>annotations: present (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
 <h3 id="rea_process_compare"><code>rea_process_compare</code></h3>
 <p>Pipe/PTY comparison.</p>
 <ul><li>Input fields:</li><li><code>cmd</code> (string, required)</li><li>outputSchema: absent</li><li>annotations: present (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
 <h3 id="rea_process_run"><code>rea_process_run</code></h3>
 <p>Process-run recording.</p>
-<ul><li>Input fields:</li><li><code>cmd</code> (string, required)</li><li>outputSchema: present (fields: kayıt, ok, summary, tool)</li><li>annotations: present (destructiveHint=true, openWorldHint=true, readOnlyHint=false)</li></ul>
+<ul><li>Input fields:</li><li><code>cmd</code> (string, required)</li><li>outputSchema: present (fields: <code>kayıt</code>, <code>ok</code>, <code>summary</code>, <code>tool</code>)</li><li>annotations: present (destructiveHint=true, openWorldHint=true, readOnlyHint=false)</li></ul>
 <h3 id="rea_pwn_elf_layout"><code>rea_pwn_elf_layout</code></h3>
 <p>ELF layout + mitigation.</p>
-<ul><li>Input fields:</li><li><code>path</code> (string, required)</li><li>outputSchema: absent</li><li>annotations: present (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
+<ul><li>Input fields:</li><li><code>path</code> (string, required)</li><li>outputSchema: present (fields: <code>details</code>, <code>ok</code>, <code>summary</code>, <code>tool</code>)</li><li>annotations: present (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
 <h3 id="rea_pwn_gadgets"><code>rea_pwn_gadgets</code></h3>
 <p>Gadget ipucu.</p>
-<ul><li>Input fields:</li><li><code>text</code> (string, required)</li><li>outputSchema: present (fields: details, ok, summary, tool)</li><li>annotations: present (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
+<ul><li>Input fields:</li><li><code>text</code> (string, required)</li><li>outputSchema: present (fields: <code>details</code>, <code>ok</code>, <code>summary</code>, <code>tool</code>)</li><li>annotations: present (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
 <h3 id="rea_r2_callgraph"><code>rea_r2_callgraph</code></h3>
 <p>r2 function call graph.</p>
-<ul><li>Input fields:</li><li><code>path</code> (string, required)</li><li>outputSchema: present (fields: arac, fonksiyonlar, hedef, ok)</li><li>annotations: present (openWorldHint=true, readOnlyHint=false)</li></ul>
+<ul><li>Input fields:</li><li><code>path</code> (string, required)</li><li>outputSchema: present (fields: <code>arac</code>, <code>fonksiyonlar</code>, <code>hedef</code>, <code>ok</code>)</li><li>annotations: present (openWorldHint=true, readOnlyHint=false)</li></ul>
 <h3 id="rea_r2_debug"><code>rea_r2_debug</code></h3>
 <p>r2 toplu debug (bp+regs).</p>
-<ul><li>Input fields:</li><li><code>addr</code> (string, required)</li><li><code>path</code> (string, required)</li><li>outputSchema: present (fields: arac, bpAddr, cikti, hedef, not, ok)</li><li>annotations: present (destructiveHint=true, openWorldHint=true, readOnlyHint=false)</li></ul>
+<ul><li>Input fields:</li><li><code>addr</code> (string, required)</li><li><code>path</code> (string, required)</li><li>outputSchema: present (fields: <code>arac</code>, <code>bpAddr</code>, <code>cikti</code>, <code>hedef</code>, <code>not</code>, <code>ok</code>)</li><li>annotations: present (destructiveHint=true, openWorldHint=true, readOnlyHint=false)</li></ul>
 <h3 id="rea_r2_esil"><code>rea_r2_esil</code></h3>
 <p>r2 ESIL emulation regs.</p>
-<ul><li>Input fields:</li><li><code>addr</code> (string, required)</li><li><code>path</code> (string, required)</li><li>outputSchema: present (fields: addr, adim, arac, hedef, ok, regs)</li><li>annotations: present (openWorldHint=true, readOnlyHint=false)</li></ul>
+<ul><li>Input fields:</li><li><code>addr</code> (string, required)</li><li><code>path</code> (string, required)</li><li>outputSchema: present (fields: <code>addr</code>, <code>adim</code>, <code>arac</code>, <code>hedef</code>, <code>ok</code>, <code>regs</code>)</li><li>annotations: present (openWorldHint=true, readOnlyHint=false)</li></ul>
 <h3 id="rea_readiness"><code>rea_readiness</code></h3>
 <p>Reconstruction readiness score.</p>
-<ul><li>Input fields:</li><li><code>text</code> (string, required)</li><li>outputSchema: present (fields: arac, eksik, ok, seviye, skor)</li><li>annotations: present (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
+<ul><li>Input fields:</li><li><code>text</code> (string, required)</li><li>outputSchema: present (fields: <code>arac</code>, <code>eksik</code>, <code>ok</code>, <code>seviye</code>, <code>skor</code>)</li><li>annotations: present (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
 <h3 id="rea_recon_funcs"><code>rea_recon_funcs</code></h3>
 <p>Pseudo-code fonksiyon listesi.</p>
-<ul><li>Input fields:</li><li><code>text</code> (string, required)</li><li>outputSchema: present (fields: details, ok, summary, tool)</li><li>annotations: present (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
+<ul><li>Input fields:</li><li><code>text</code> (string, required)</li><li>outputSchema: present (fields: <code>details</code>, <code>ok</code>, <code>summary</code>, <code>tool</code>)</li><li>annotations: present (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
 <h3 id="rea_recon_harness"><code>rea_recon_harness</code></h3>
 <p>C harness iskeleti.</p>
-<ul><li>Input fields:</li><li><code>text</code> (string, required)</li><li>outputSchema: present (fields: details, ok, summary, tool)</li><li>annotations: present (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
+<ul><li>Input fields:</li><li><code>text</code> (string, required)</li><li>outputSchema: present (fields: <code>details</code>, <code>ok</code>, <code>summary</code>, <code>tool</code>)</li><li>annotations: present (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
 <h3 id="rea_recon_tag"><code>rea_recon_tag</code></h3>
 <p>Vaka etiketi.</p>
-<ul><li>Input fields: none</li><li>outputSchema: present (fields: details, ok, summary, tool)</li><li>annotations: present (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
+<ul><li>Input fields: none</li><li>outputSchema: present (fields: <code>details</code>, <code>ok</code>, <code>summary</code>, <code>tool</code>)</li><li>annotations: present (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
 <h3 id="rea_registry_izi"><code>rea_registry_izi</code></h3>
 <p>Registry writes from API events.</p>
-<ul><li>Input fields:</li><li><code>text</code> (string, required)</li><li>outputSchema: present (fields: details, ok, summary, tool)</li><li>annotations: present (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
+<ul><li>Input fields:</li><li><code>text</code> (string, required)</li><li>outputSchema: present (fields: <code>details</code>, <code>ok</code>, <code>summary</code>, <code>tool</code>)</li><li>annotations: present (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
 <h3 id="rea_scan_repo"><code>rea_scan_repo</code></h3>
 <p>Repo scan (type + plan).</p>
-<ul><li>Input fields:</li><li><code>path</code> (string, required)</li><li>outputSchema: present (fields: details, ok, summary, tool)</li><li>annotations: present (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
+<ul><li>Input fields:</li><li><code>path</code> (string, required)</li><li>outputSchema: present (fields: <code>details</code>, <code>ok</code>, <code>summary</code>, <code>tool</code>)</li><li>annotations: present (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
 <h3 id="rea_scan_repo_paralel"><code>rea_scan_repo_paralel</code></h3>
 <p>Parallel repo scan (pool of 4, cancellable).</p>
-<ul><li>Input fields:</li><li><code>eszamanlilik</code> (integer, optional)</li><li><code>path</code> (string, required)</li><li>outputSchema: present (fields: details, iptalEdildi, ok, summary, tool)</li><li>annotations: present (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
+<ul><li>Input fields:</li><li><code>eszamanlilik</code> (integer, optional)</li><li><code>path</code> (string, required)</li><li>outputSchema: present (fields: <code>details</code>, <code>iptalEdildi</code>, <code>ok</code>, <code>summary</code>, <code>tool</code>)</li><li>annotations: present (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
 <h3 id="rea_sniff"><code>rea_sniff</code></h3>
 <p>File type + engine suggestion (magic-byte).</p>
-<ul><li>Input fields:</li><li><code>b64dosya</code> (string, required)</li><li>outputSchema: present (fields: makine, motor, tip)</li><li>annotations: present (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
+<ul><li>Input fields:</li><li><code>b64dosya</code> (string, required)</li><li>outputSchema: present (fields: <code>makine</code>, <code>motor</code>, <code>tip</code>)</li><li>annotations: present (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
 <h3 id="rea_storage_dump"><code>rea_storage_dump</code></h3>
 <p>Cookies + localStorage.</p>
-<ul><li>Input fields:</li><li><code>url</code> (string, required)</li><li>outputSchema: present (fields: details, ok, summary, tool)</li><li>annotations: present (openWorldHint=true, readOnlyHint=false)</li></ul>
+<ul><li>Input fields:</li><li><code>url</code> (string, required)</li><li>outputSchema: present (fields: <code>details</code>, <code>ok</code>, <code>summary</code>, <code>tool</code>)</li><li>annotations: present (openWorldHint=true, readOnlyHint=false)</li></ul>
 <h3 id="rea_typedef_oner"><code>rea_typedef_oner</code></h3>
 <p>Argument-name suggestion + spread.</p>
-<ul><li>Input fields:</li><li><code>text</code> (string, required)</li><li>outputSchema: present (fields: arac, ok, oneriler, sayi)</li><li>annotations: present (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
+<ul><li>Input fields:</li><li><code>text</code> (string, required)</li><li>outputSchema: present (fields: <code>arac</code>, <code>ok</code>, <code>oneriler</code>, <code>sayi</code>)</li><li>annotations: present (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
 <h3 id="rea_unpack_hunt"><code>rea_unpack_hunt</code></h3>
 <p>Guided flow for an unknown packer.</p>
-<ul><li>Input fields:</li><li><code>path</code> (string, required)</li><li>outputSchema: present (fields: adimlar, arac, karar, ok)</li><li>annotations: present (openWorldHint=true, readOnlyHint=false)</li></ul>
+<ul><li>Input fields:</li><li><code>path</code> (string, required)</li><li>outputSchema: present (fields: <code>adimlar</code>, <code>arac</code>, <code>karar</code>, <code>ok</code>)</li><li>annotations: present (openWorldHint=true, readOnlyHint=false)</li></ul>
 <h3 id="rea_unpack_try"><code>rea_unpack_try</code></h3>
 <p>Automatic unpack routing.</p>
-<ul><li>Input fields:</li><li><code>path</code> (string, required)</li><li>outputSchema: present (fields: sonuc, yontem)</li><li>annotations: present (destructiveHint=true, openWorldHint=true, readOnlyHint=false)</li></ul>
+<ul><li>Input fields:</li><li><code>path</code> (string, required)</li><li>outputSchema: present (fields: <code>sonuc</code>, <code>yontem</code>)</li><li>annotations: present (destructiveHint=true, openWorldHint=true, readOnlyHint=false)</li></ul>
 <h3 id="rea_upx_info"><code>rea_upx_info</code></h3>
 <p>Whether the file is UPX-packed.</p>
-<ul><li>Input fields:</li><li><code>path</code> (string, required)</li><li>outputSchema: present (fields: arac, cikti, dosya, not, ok, sikisik)</li><li>annotations: present (openWorldHint=true, readOnlyHint=false)</li></ul>
+<ul><li>Input fields:</li><li><code>path</code> (string, required)</li><li>outputSchema: present (fields: <code>arac</code>, <code>cikti</code>, <code>dosya</code>, <code>not</code>, <code>ok</code>, <code>sikisik</code>)</li><li>annotations: present (openWorldHint=true, readOnlyHint=false)</li></ul>
 <h3 id="rea_upx_unpack"><code>rea_upx_unpack</code></h3>
 <p>UPX unpack.</p>
-<ul><li>Input fields:</li><li><code>out</code> (string, required)</li><li><code>path</code> (string, required)</li><li>outputSchema: present (fields: arac, cikti, dosya, log, ok)</li><li>annotations: present (destructiveHint=true, openWorldHint=true, readOnlyHint=false)</li></ul>
+<ul><li>Input fields:</li><li><code>out</code> (string, required)</li><li><code>path</code> (string, required)</li><li>outputSchema: present (fields: <code>arac</code>, <code>cikti</code>, <code>dosya</code>, <code>log</code>, <code>ok</code>)</li><li>annotations: present (destructiveHint=true, openWorldHint=true, readOnlyHint=false)</li></ul>
 <h3 id="rea_wasm_decode"><code>rea_wasm_decode</code></h3>
 <p>WASM/WAT decode (wabt).</p>
-<ul><li>Input fields:</li><li><code>path</code> (string, required)</li><li>outputSchema: present (fields: details, ok, summary, tool)</li><li>annotations: present (openWorldHint=true, readOnlyHint=false)</li></ul>
+<ul><li>Input fields:</li><li><code>path</code> (string, required)</li><li>outputSchema: present (fields: <code>details</code>, <code>ok</code>, <code>summary</code>, <code>tool</code>)</li><li>annotations: present (openWorldHint=true, readOnlyHint=false)</li></ul>
 <h3 id="rea_wasm_exports"><code>rea_wasm_exports</code></h3>
 <p>WAT export listesi (offline).</p>
-<ul><li>Input fields:</li><li><code>wat</code> (string, required)</li><li>outputSchema: present (fields: details, ok, summary, tool)</li><li>annotations: present (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
+<ul><li>Input fields:</li><li><code>wat</code> (string, required)</li><li>outputSchema: present (fields: <code>details</code>, <code>ok</code>, <code>summary</code>, <code>tool</code>)</li><li>annotations: present (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
 <h3 id="rea_wasm_imports"><code>rea_wasm_imports</code></h3>
 <p>WASM import listesi.</p>
-<ul><li>Input fields:</li><li><code>b64</code> (string, required)</li><li>outputSchema: present (fields: details, ok, summary, tool)</li><li>annotations: present (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
+<ul><li>Input fields:</li><li><code>b64</code> (string, required)</li><li>outputSchema: present (fields: <code>details</code>, <code>ok</code>, <code>summary</code>, <code>tool</code>)</li><li>annotations: present (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
 <h3 id="rea_wasm_sections"><code>rea_wasm_sections</code></h3>
 <p>WASM section tablosu.</p>
-<ul><li>Input fields:</li><li><code>b64</code> (string, required)</li><li>outputSchema: present (fields: details, ok, summary, tool)</li><li>annotations: present (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
+<ul><li>Input fields:</li><li><code>b64</code> (string, required)</li><li>outputSchema: present (fields: <code>details</code>, <code>ok</code>, <code>summary</code>, <code>tool</code>)</li><li>annotations: present (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
 <h3 id="rea_wasm_validate"><code>rea_wasm_validate</code></h3>
 <p>WASM validation (wasm-validate).</p>
-<ul><li>Input fields:</li><li><code>path</code> (string, required)</li><li>outputSchema: present (fields: arac, detay, ok, ozet)</li><li>annotations: present (openWorldHint=true, readOnlyHint=false)</li></ul>
+<ul><li>Input fields:</li><li><code>path</code> (string, required)</li><li>outputSchema: present (fields: <code>arac</code>, <code>detay</code>, <code>ok</code>, <code>ozet</code>)</li><li>annotations: present (openWorldHint=true, readOnlyHint=false)</li></ul>
 <h3 id="session_close"><code>session_close</code></h3>
 <p>Drop an application session and its event buffer.</p>
-<ul><li>Input fields:</li><li><code>session_id</code> (string, required) — Application session id. Not an MCP protocol session.</li><li>outputSchema: present (fields: closed, session_id)</li><li>annotations: present (destructiveHint=true, openWorldHint=true, readOnlyHint=false)</li></ul>
+<ul><li>Input fields:</li><li><code>session_id</code> (string, required) — Application session id. Not an MCP protocol session.</li><li>outputSchema: present (fields: <code>closed</code>, <code>session_id</code>)</li><li>annotations: present (destructiveHint=true, openWorldHint=true, readOnlyHint=false)</li></ul>
 <h3 id="session_list"><code>session_list</code></h3>
 <p>List application sessions held in this process.</p>
-<ul><li>Input fields: none</li><li>outputSchema: present (fields: sessions)</li><li>annotations: present (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
+<ul><li>Input fields: none</li><li>outputSchema: present (fields: <code>sessions</code>)</li><li>annotations: present (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
 <h3 id="session_open"><code>session_open</code></h3>
 <p>Open an application session for an engine. Returns session_id for later tool arguments.</p>
-<ul><li>Input fields:</li><li><code>engine</code> (enum, required)</li><li>outputSchema: present (fields: createdAt, engine, session_id)</li><li>annotations: present (destructiveHint=false, idempotentHint=false, openWorldHint=false, readOnlyHint=false)</li></ul>
+<ul><li>Input fields:</li><li><code>engine</code> (enum, required)</li><li>outputSchema: present (fields: <code>createdAt</code>, <code>engine</code>, <code>session_id</code>)</li><li>annotations: present (destructiveHint=false, idempotentHint=false, openWorldHint=false, readOnlyHint=false)</li></ul>
 <h3 id="static_info"><code>static_info</code></h3>
 <p>Report radare2 static-engine capabilities, r2 availability, and the open target (if any).</p>
-<ul><li>Input fields:</li><li><code>session_id</code> (string, required) — Application session id. Not an MCP protocol session.</li><li>outputSchema: present (fields: capabilities, engine, r2, session_id, target)</li><li>annotations: present (openWorldHint=true, readOnlyHint=false)</li></ul>
+<ul><li>Input fields:</li><li><code>session_id</code> (string, required) — Application session id. Not an MCP protocol session.</li><li>outputSchema: present (fields: <code>capabilities</code>, <code>engine</code>, <code>r2</code>, <code>session_id</code>, <code>target</code>)</li><li>annotations: present (openWorldHint=true, readOnlyHint=false)</li></ul>
 <h3 id="strings"><code>strings</code></h3>
 <p>Strings found in the binary (address, section, length, text).</p>
-<ul><li>Input fields:</li><li><code>limit</code> (integer, optional) — Max strings returned (default 200).</li><li><code>min_length</code> (integer, optional) — Keep strings with length &gt;= this (default 0).</li><li><code>offset</code> (integer, optional) — Skip this many matches (default 0).</li><li><code>section</code> (string, optional) — Only strings from this section, e.g. &quot;.rodata&quot;.</li><li><code>session_id</code> (string, required) — Application session id. Not an MCP protocol session.</li><li>outputSchema: present (fields: offset, session_id, strings, total)</li><li>annotations: present (openWorldHint=true, readOnlyHint=false)</li></ul>
+<ul><li>Input fields:</li><li><code>limit</code> (integer, optional) — Max strings returned (default 200).</li><li><code>min_length</code> (integer, optional) — Keep strings with length &gt;= this (default 0).</li><li><code>offset</code> (integer, optional) — Skip this many matches (default 0).</li><li><code>section</code> (string, optional) — Only strings from this section, e.g. &quot;.rodata&quot;.</li><li><code>session_id</code> (string, required) — Application session id. Not an MCP protocol session.</li><li>outputSchema: present (fields: <code>offset</code>, <code>session_id</code>, <code>strings</code>, <code>total</code>)</li><li>annotations: present (openWorldHint=true, readOnlyHint=false)</li></ul>
 <h3 id="xrefs"><code>xrefs</code></h3>
 <p>Cross-references to and/or from an address (code and data).</p>
-<ul><li>Input fields:</li><li><code>address</code> (string | number, required) — Target address as hex (&quot;0x400200&quot;), decimal, or flag name (&quot;entry0&quot;).</li><li><code>direction</code> (enum, optional)</li><li><code>session_id</code> (string, required) — Application session id. Not an MCP protocol session.</li><li>outputSchema: present (fields: address, from, session_id, to)</li><li>annotations: present (openWorldHint=true, readOnlyHint=false)</li></ul>
+<ul><li>Input fields:</li><li><code>address</code> (string | number, required) — Target address as hex (&quot;0x400200&quot;), decimal, or flag name (&quot;entry0&quot;).</li><li><code>direction</code> (enum, optional)</li><li><code>session_id</code> (string, required) — Application session id. Not an MCP protocol session.</li><li>outputSchema: present (fields: <code>address</code>, <code>from</code>, <code>session_id</code>, <code>to</code>)</li><li>annotations: present (openWorldHint=true, readOnlyHint=false)</li></ul>
 <h2 id="resources">Resources</h2>
 <ul><li><code>rea-plus://capabilities-safety</code> — name: <code>capabilities-safety</code> — mimeType: <code>application/json</code> — Statik yetenek ve guvenlik kurallari ozeti (salt-okunur).</li><li><code>rea-plus://server-info</code> — name: <code>server-info</code> — mimeType: <code>application/json</code> — Statik sunucu kimligi ve yuzey ozeti (salt-okunur).</li></ul>
 <h2 id="prompts">Prompts</h2>
