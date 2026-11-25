@@ -63,7 +63,7 @@ export const HTTP_READ_ONLY_TOOLS: readonly string[] = [
   "rea_aot_profile",
   "rea_go_module",
   "rea_go_version",
-  "rea_pwn_gadgets", // metindeki "gadget:" satirlarini sayar; ELF okumaz
+  "rea_pwn_gadgets", // disassembly metninde ret ile biten gadget arar; ELF okumaz
   // JS/diff/recon: metin/JSON girdiden ozet ve iskelet metni uretir, yazmaz.
   "rea_js_sourcemap",
   "rea_js_bundle",

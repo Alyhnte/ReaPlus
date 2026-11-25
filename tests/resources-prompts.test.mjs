@@ -197,7 +197,13 @@ describe("prompt callback icerikleri", () => {
       "rea_investigate", "rea_pwn_elf_layout", "rea_dwarf_ozet", "rea_go_buildinfo",
       "rea_cutter_funcs", "rea_cutter_strings", "rea_pwn_gadgets",
     ]);
-    assert.match(t, /hicbir arac calistirmaz/);
+    assert.match(t, /does not run any tool/);
+    assert.match(t, /pie/);
+    assert.match(t, /\bnx\b/);
+    assert.match(t, /relro/);
+    assert.match(t, /disassembly text/);
+    assert.match(t, /capability_unsupported/);
+    assert.doesNotMatch(t, /segment\/kesit|mitigation \(NX\/PIE\/RELRO\/canary\)|Onceki adimlarin disassembly/);
     assert.match(t, /VM\/CI/);
   });
 

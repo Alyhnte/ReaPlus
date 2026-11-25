@@ -17,7 +17,6 @@ const TIMEOUT_MS = 90_000;
 const LIVE = new Set([
   "frida-api.test.mjs",
   "fridaplus.test.mjs",
-  "sniff.test.mjs",
   "browser2.test.mjs",
   "ghidra-full.test.mjs",
   "ghidra-prof2.test.mjs",

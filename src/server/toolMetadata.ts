@@ -6,9 +6,9 @@
 // readOnly isaretlenir. Dosya okusa da alt surec yoklayan araclar
 // (dotnet_metadata, browser_har_import) readOnly degil openWorld'dur. Yazan
 // araclar destructive, ag/browser/cihaz/surec ve harici arac calistiranlar
-// openWorld kumelerindedir. Her zaman kapidan donen sablonlar
-// (process_compare, pwn_elf_layout) etkisiz kapidir: annotations alir ama
-// ok:true uretmedigi icin outputSchema almaz. String/dizi donenler
+// openWorld kumelerindedir. Her zaman kapidan donen sablon (process_compare)
+// etkisiz kapidir: annotations alir ama ok:true uretmedigi icin outputSchema
+// almaz. pwn_elf_layout ELF okur ve outputSchema tasir. String/dizi donenler
 // (best_motor, fallback) nesne semasi alamaz.
 // Listede olmayan arac metadata almaz (tahmini siniflandirma yok).
 // NOT: annotations, httpPolicy.ts'nin tokensiz-HTTP allowlist'ini beslemez;
@@ -26,8 +26,8 @@ export interface ReaToolMetadata {
 // birebirdir; girdi yankisi ya da degisken alanlarda cekirdek alanlar sabitlenir,
 // sahte kesinlik (orn. her zaman dolu sandigimiz opsiyonel alan) yapilmaz.
 // String/dizi donen araca (rea_best_motor, rea_fallback) nesne semasi verilmez.
-// Hic ok:true uretmeyen kapi araci (rea_process_compare, rea_pwn_elf_layout)
-// basari sekli olmadigi icin sema almaz (dalga E/1 teyidi).
+// Hic ok:true uretmeyen kapi araci (rea_process_compare) basari sekli
+// olmadigi icin sema almaz. rea_pwn_elf_layout ELF okudugu icin sema alir.
 const OUTPUT_SCHEMAS: Readonly<Record<string, StandardSchemaWithJSON>> = {
   // Dalga 1 (pilot)
   rea_evm_selector: z.object({
@@ -170,7 +170,28 @@ const OUTPUT_SCHEMAS: Readonly<Record<string, StandardSchemaWithJSON>> = {
     ok: z.literal(true),
     tool: z.string(),
     summary: z.string(),
-    details: z.object({ n: z.number() }),
+    details: z.object({
+      n: z.number(),
+      gadgets: z.array(z.object({ text: z.string() })),
+    }),
+  }),
+  // ELF başlık + program başlığı. machine yalnız tanınan e_machine'de vardır.
+  // nx GNU_STACK yoksa null; relro DYNAMIC okunamazsa unknown.
+  rea_pwn_elf_layout: z.object({
+    ok: z.literal(true),
+    tool: z.string(),
+    summary: z.string(),
+    details: z.object({
+      class: z.union([z.literal(32), z.literal(64)]),
+      endian: z.enum(["little", "big"]),
+      e_type: z.enum(["ET_REL", "ET_EXEC", "ET_DYN", "ET_CORE", "unknown"]),
+      e_machine: z.number(),
+      machine: z.string().optional(),
+      pie: z.boolean(),
+      nx: z.boolean().nullable(),
+      relro: z.enum(["full", "partial", "none", "unknown"]),
+      loads: z.number(),
+    }),
   }),
   rea_aot_objc: z.object({
     ok: z.literal(true),
@@ -1155,12 +1176,9 @@ const READ_ONLY_TOOLS: ReadonlySet<string> = new Set([
   "rea_managed_import", // path argumani JSON metnidir, dosya okunmaz
   "rea_fs_diff", // iki snapshot JSON'unu karsilastirir, fs'e cikmaz
   "rea_behavior_full",
-  // Dalga E/1: her zaman kapidan donen sablonlar. process_compare girdiyi yok
-  // sayar, pwn_elf_layout dosyayi acmadan REA_PYTHON_BIN yoklamasiyla eler;
-  // ikisi de yazmaz/surec kosmaz/aga cikmaz (readOnly durusttur). ok:true
-  // uretmedikleri icin outputSchema almazlar (ustteki OUTPUT_SCHEMAS notu).
+  // process_compare girdiyi yok sayar; dosya acmaz. ok:true uretmedigi icin
+  // outputSchema almaz. pwn_elf_layout artik dosya okur (FILE_READ_ONLY).
   "rea_process_compare",
-  "rea_pwn_elf_layout",
 ]);
 
 // Salt dosya/dizin okuyan kume (dalga 3): handler yalniz readFile/readdir/
@@ -1196,6 +1214,7 @@ const FILE_READ_ONLY_TOOLS: ReadonlySet<string> = new Set([
   "rea_go_funclines",
   "rea_go_goresym",
   "rea_go_buildinfo",
+  "rea_pwn_elf_layout",
   "rea_bindiff_fonksiyonlar",
   "rea_bindiff_karsilastir",
   "rea_hap_liste",

@@ -140,16 +140,16 @@ export function buildPeCrashTriageText(path: string, focus?: string): string {
 
 export function buildElfLinuxTriageText(path: string, focus?: string): string {
   return [
-    `Hedef: ${path}`,
+    `Target: ${path}`,
     focusSatiri(focus),
-    "Gorev: ELF/Linux triage'i yap. Bu prompt tek basina hicbir arac calistirmaz; adimlari sirayla, her adimda sonucu degerlendirerek uygula ve ornegi asla calistirma.",
-    "1) rea_investigate(path) ile tip + sorusturma planini al.",
-    "2) rea_pwn_elf_layout(path) ile segment/kesit duzeni ve mitigation (NX/PIE/RELRO/canary) durumunu al.",
-    "3) rea_dwarf_ozet(path) ile DWARF sembollerini ozetle; sembol yoksa uydurma, eksigi acikca yaz.",
-    "4) Go ikili suphesi varsa rea_go_buildinfo(path) ve rea_go_funclines(path) ile surum + modul bilgisini dogrula; Go degilse bu adimi atla.",
-    "5) rea_cutter_funcs(path) ile fonksiyon listesi ve rea_cutter_strings(path) ile dikkat cekici stringleri al; Ghidra tercih ediliyorsa rea_ghidra_analyze(path) sonrasi rea_ghidra_funcs(path) ve rea_ghidra_strings(path) ile ayni adimi yap, iki motorun ciktilarini karistirma.",
-    "6) Onceki adimlarin disassembly metnine rea_pwn_gadgets(text) ile gadget adaylarini tara; odak bir zincir ise bu adima yogunlas, degilse ozeti gec.",
-    "Cikti: ELF tipi + mitigation durumu, sembol ve gadget kanitlari, guven duzeyi ve onerilen sonraki tek adim.",
+    "Task: ELF/Linux triage. This prompt does not run any tool by itself; apply the steps in order, judge each result, and never execute the sample.",
+    "1) rea_investigate(path) for the type and the investigation plan.",
+    "2) rea_pwn_elf_layout(path) reports class, endian, e_type, e_machine, pie (true only for ET_DYN), nx (true only when a PT_GNU_STACK segment exists and is non-executable; null when GNU_STACK is absent), relro (full, partial, none, or unknown), and the load-segment count.",
+    "3) rea_dwarf_ozet(path) summarizes DWARF symbols; if symbols are missing, say so instead of inventing them.",
+    "4) If the binary looks like Go, use rea_go_buildinfo(path) and rea_go_funclines(path) for the version and module info; otherwise skip this step.",
+    "5) rea_cutter_funcs(path) lists functions and rea_cutter_strings(path) lists notable strings. If Ghidra is preferred, run rea_ghidra_analyze(path), then rea_ghidra_funcs(path) and rea_ghidra_strings(path). Do not mix the two engines' output.",
+    "6) Pass disassembly text from the earlier steps to rea_pwn_gadgets(text). capability_unsupported means there is no gadget evidence, not that the file failed. If the focus is a chain, spend time here; otherwise keep the summary short.",
+    "Output: ELF type and mitigation state (pie, nx, relro), symbol and gadget evidence, confidence, and one recommended next step.",
     VM_RULE,
   ].join("\n");
 }

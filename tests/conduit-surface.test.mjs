@@ -354,11 +354,10 @@ describe("conduit yuzeyi (gercek protokol, InMemoryTransport)", () => {
     const selector = araclar.find((t) => t.name === "rea_evm_selector");
     assert.equal(selector.annotations?.readOnlyHint, true);
     assert.equal(selector.outputSchema?.type, "object");
-    // Dalga E/1: pwn_elf_layout rea tarafindan readOnly isaretlidir (etkisiz
-    // kapi); conduit sarmalayicisi ona sema/isaret EKLEMEZ (sema yoklugu aynidir).
+    // pwn_elf_layout dosya okur, readOnly kalir; outputSchema rea tarafindan gelir.
     const pe = araclar.find((t) => t.name === "rea_pwn_elf_layout");
     assert.equal(pe.annotations?.readOnlyHint, true, "rea_pwn_elf_layout rea readOnly isaretini korumali");
-    assert.equal(pe.outputSchema, undefined);
+    assert.equal(pe.outputSchema?.type, "object");
     const kapsama = await bag.gonder("tools/call", { name: "rea_coverage", arguments: { incelenen: 1, toplam: 4 } });
     assert.equal(ikiKanalAyni(kapsama, "rea_coverage").oran, 0.25);
   });

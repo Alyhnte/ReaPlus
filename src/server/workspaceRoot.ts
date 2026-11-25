@@ -34,7 +34,6 @@ export const WORKSPACE_SKIP_TOOLS: ReadonlySet<string> = new Set([
   "rea_managed_import",
   "rea_managed_verify",
   "rea_firmware_handoff",
-  "rea_pwn_elf_layout",
 ]);
 
 // Parametre -> sinif eslemesi; cmd/url/sinif gibi alanlar listede olmadigindan degismez.

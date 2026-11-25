@@ -92,6 +92,11 @@ describe("workspaceRoot parametre siniflari", () => {
     reddet(() => applyWorkspaceRoot("rea_ghidra_vt", { eski: join(kok, "sub", "ic.bin"), yeni: join(dis, "dis.bin") }, envKok(), kok));
   });
 
+  it("elf layout dosya okur: kok ici kabul, disi ret", () => {
+    assert.equal(applyWorkspaceRoot("rea_pwn_elf_layout", { path: join(kok, "sub", "ic.bin") }, envKok(), kok).path, gercek(join(kok, "sub", "ic.bin")));
+    reddet(() => applyWorkspaceRoot("rea_pwn_elf_layout", { path: join(dis, "dis.bin") }, envKok(), kok));
+  });
+
   it("dizin path araclari koku ve icini kabul eder, disi reddeder", () => {
     for (const arac of ["rea_apple_bundle", "rea_fs_snapshot", "rea_js_require", "rea_scan_repo"]) {
       assert.equal(applyWorkspaceRoot(arac, { path: kok }, envKok(), kok).path, gercek(kok), arac);
@@ -108,7 +113,7 @@ describe("workspaceRoot parametre siniflari", () => {
   });
 
   it("atlanan araclar ve cmd/url/sinif degismez", () => {
-    for (const arac of ["rea_managed_import", "rea_firmware_handoff", "rea_pwn_elf_layout"]) {
+    for (const arac of ["rea_managed_import", "rea_firmware_handoff"]) {
       assert.equal(applyWorkspaceRoot(arac, { path: join(dis, "dis.bin") }, envKok(), kok).path, join(dis, "dis.bin"), arac);
     }
     assert.equal(applyWorkspaceRoot("rea_managed_verify", { path: join(dis, "dis.bin"), beklenen: "x" }, envKok(), kok).path, join(dis, "dis.bin"));

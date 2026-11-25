@@ -10,7 +10,7 @@
 - Total tools: 191
 - Total resources: 2
 - Total prompts: 7
-- Tools with outputSchema: 187
+- Tools with outputSchema: 188
 - Tools with annotations: 191
 
 ## Tools
@@ -1574,7 +1574,7 @@ ELF layout + mitigation.
 
 - Input fields:
   - `path` (string, required)
-- outputSchema: absent
+- outputSchema: present (fields: details, ok, summary, tool)
 - annotations: present (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)
 
 ### `rea_pwn_gadgets`
