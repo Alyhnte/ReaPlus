@@ -1,6 +1,6 @@
 # ROADMAP — ReaPlus-Fahrplan
 
-> Stand: v0.13.0 released (npm + MCP Registry + CI grün). Dieses Dokument ist mit den
+> Stand: v0.13.1 released (npm + MCP Registry + CI grün). Dieses Dokument ist mit den
 > Befunden der ersten Prüfung vom 2026-10-12 geboren und wurde am Ende jeder Welle mit dem
 > Erreichten synchronisiert. v0.13.0 schloss PE-Maschinenidentität (ARMNT/ARM64),
 > ELF e_machine + Hexagon, typbewusste verlustfreie plist-Werte, JS-CJS/require-

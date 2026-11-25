@@ -3,6 +3,17 @@
 Tous les changements notables sont consignés dans ce fichier. Format : Keep a Changelog + SemVer.
 All notable changes are documented here (résumé en français + détail en anglais).
 
+## [0.13.1] — 2026-11-25
+
+### Added
+
+- `tests/docs-english.test.mjs` rejects Turkish prose on the GitHub-facing markdown allowlist (`e68f61beb643b2fa20440c55cf0ef93a985d67a9`).
+
+### Updated
+
+- GitHub-facing documentation is English, including the roadmap, coverage gaps, and the morluto comparison (`e68f61beb643b2fa20440c55cf0ef93a985d67a9`).
+- The roadmap table records the schema-budget CI step, the Pages deploy workflow, 7 prompts, and npm provenance (`e68f61beb643b2fa20440c55cf0ef93a985d67a9`).
+
 ## [0.13.0] — 2026-10-20
 
 Version 0.13.0 : dalga-13 + dalga-14 — identité de machine au sniff (PE
