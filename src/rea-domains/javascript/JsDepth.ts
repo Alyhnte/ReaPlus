@@ -28,8 +28,8 @@ function temizle(kod: string): string {
   return kod.replace(/\/\*[\s\S]*?\*\//g, "").replace(/(^|[^:"'`])\/\/.*$/gm, "$1");
 }
 
-// JS uzantıları: yalnız çalıştırılabilir kaynak taranır.
-const JS_UZANTI = new Set([".js", ".mjs", ".cjs"]);
+// JS uzantıları: çalıştırılabilir kaynak + TS ESM/CJS kaynakları (.mts/.cts).
+const JS_UZANTI = new Set([".js", ".mjs", ".cjs", ".mts", ".cts"]);
 
 // Recursive JS toplama: alt dizinlere iner, okunamayanı atlar.
 function jsTopla(cur: string, out: string[]): void {
@@ -83,14 +83,48 @@ function göreliÇöz(importerTam: string, spec: string): string | null {
   return null;
 }
 
-// Paket çözümü: yukarı doğru node_modules/<spec>/package.json ara; main -> main+.js/.json -> index.js.
+// exports adayı paket kökünün içinde kalan gerçek dosya mı?
+function paketİçiDosya(kok: string, rel: string): string | null {
+  if (typeof rel !== "string" || rel.length === 0) return null;
+  const tam = join(kok, rel);
+  const iç = relative(kok, tam);
+  if (!iç || iç.startsWith("..") || iç.startsWith("/") || /^[A-Za-z]:/.test(iç)) return null;
+  return dosyaMı(tam) ? tam : null;
+}
+
+// exports: düz dize, "." dizesi, ya da "." altında import sonra default.
+function exportsAdayları(exports: unknown): string[] {
+  if (typeof exports === "string") return [exports];
+  if (!exports || typeof exports !== "object" || Array.isArray(exports)) return [];
+  const kök = (exports as Record<string, unknown>)["."];
+  if (typeof kök === "string") return [kök];
+  if (!kök || typeof kök !== "object" || Array.isArray(kök)) return [];
+  const o = kök as Record<string, unknown>;
+  const aday: string[] = [];
+  if (typeof o.import === "string") aday.push(o.import);
+  if (typeof o.default === "string") aday.push(o.default);
+  return aday;
+}
+
+// İlk var olan exports dosyası. Yoksa çağıran main/index'e düşer.
+function exportsÇöz(kok: string, exports: unknown): string | null {
+  for (const rel of exportsAdayları(exports)) {
+    const dosya = paketİçiDosya(kok, rel);
+    if (dosya) return dosya;
+  }
+  return null;
+}
+
+// Paket çözümü: exports, sonra main, sonra index.js. Yukarı doğru node_modules aranır.
 function paketÇöz(importerTam: string, spec: string): string | null {
   let dizin = dirname(importerTam);
   for (;;) {
     const kok = join(dizin, "node_modules", spec);
     if (dosyaMı(join(kok, "package.json"))) {
       try {
-        const j = JSON.parse(readFileSync(join(kok, "package.json"), "utf8")) as { main?: unknown };
+        const j = JSON.parse(readFileSync(join(kok, "package.json"), "utf8")) as { main?: unknown; exports?: unknown };
+        const dışa = exportsÇöz(kok, j.exports);
+        if (dışa) return dışa;
         if (typeof j.main === "string") {
           const m = join(kok, j.main);
           if (dosyaMı(m)) return m;

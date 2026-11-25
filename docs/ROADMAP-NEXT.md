@@ -89,9 +89,9 @@ English GitHub docs, the stale roadmap table, and English pages. Other languages
 
 `rea_pwn_elf_layout` reads ELF program headers (PIE, NX, RELRO). `rea_pwn_gadgets` keeps sequences that end in `ret`, `retn`, or `retf`. The Frida API script only attaches hooks and waits. `sniff.test.mjs` runs in the default test lane.
 
-### Wave 17 — not done
+### Wave 17 — closed in v0.15.0
 
-The native-windows addon must not return a fake `ok`. Today, without `REA_NATIVE_PREBUILD=1`, it returns `ok: true` with `iskelet: true`. The aot/mips profiles must expose `iskelet: true`. The JS walk includes `.mts`/`.cts`. The package `exports` field is read.
+`addon.ts` reads the live Win32 process, token integrity, and a directory snapshot. It does not return a skeleton `ok`. `rea_aot_profile` and `rea_mips_psp_profile` set `details.iskelet: true`. The JS walk includes `.mts`/`.cts` and reads package `exports` before `main`.
 
 ### Wave 18 — not done
 
@@ -101,4 +101,4 @@ Electron fuses plus BrowserWindow constants, split-APK, adb pull with fake adb o
 
 Real angr/Triton, AFL++, LLDB, and WinDbg TTD integrations. They return `capability_unsupported` when the dependency is absent, and they work when the dependency is present.
 
-Still open across these waves, and not closed by wave 15: Frida live VM approval, the self-hosted Windows runner, the SEA single-file exe, Trusted Publisher account setup, asciinema, LLDB, WinDbg TTD, angr, AFL++, Electron fuses, split-APK, adb file transfer, SQLite snapshot, the scoped package `exports` field, the `.mts`/`.cts` walk, visual sessions, and automatic TOOL-COVERAGE.
+Still open across these waves, and not closed by wave 15: Frida live VM approval, the self-hosted Windows runner, the SEA single-file exe, Trusted Publisher account setup, asciinema, LLDB, WinDbg TTD, angr, AFL++, Electron fuses, split-APK, adb file transfer, SQLite snapshot, visual sessions, and automatic TOOL-COVERAGE.

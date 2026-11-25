@@ -3,17 +3,17 @@
 // tüm outputSchema JSON baytı bütçeli. Bütçe aşımı testi kırar (sessiz şişme biter).
 // Koş: npm run build sonrası `node --test tests/schema-budget.test.mjs` (veya npm test).
 //
-// ÖLÇÜM (2026-11-25, win32, dalga-16/honesty, node scripts/olcut-semabutce.mjs):
+// ÖLÇÜM (2026-11-25, win32, dalga-17/skeletons, node scripts/olcut-semabutce.mjs):
 //   araç=191, şemalı=188, şemasız=3 (rea_best_motor, rea_fallback,
 //   rea_process_compare — nesne dönmedikleri için şemasız; rea_pwn_elf_layout semalı),
-//   listeBayt=178543 (~174.4KB), şemaToplam=94356 (~92.1KB),
-//   girdiToplam=44962, ortalama=494.0 bayt/araç, şemalı-ort=501.9 bayt.
+//   listeBayt=178647 (~174.5KB), şemaToplam=94460 (~92.2KB),
+//   girdiToplam=44962, ortalama=494.6 bayt/araç, şemalı-ort=502.4 bayt.
 //   Tekrar ölçümde birebir aynı (tek sayfa, sayfalama yok, bayt deterministik).
 //
 // BÜTÇELER (keyfi değil; ölçümün üstüne cömert pay — bayt deterministik, CI flake'i yok):
-//   LISTE_BUTCE = 200*1024 = 204800  (ölçüm 178543 → %14.7 pay)
-//   SEMA_BUTCE  = 110*1024 = 112640  (ölçüm 94356 → %19.4 pay)
-//   ORT_BUTCE   = 600 bayt            (ölçüm 494.0 → %21.5 pay)
+//   LISTE_BUTCE = 200*1024 = 204800  (ölçüm 178647 → %14.6 pay)
+//   SEMA_BUTCE  = 110*1024 = 112640  (ölçüm 94460 → %19.2 pay)
+//   ORT_BUTCE   = 600 bayt            (ölçüm 494.6 → %21.3 pay)
 // YÖNTEM (flake karşıtı): before() bir kez ölçer (süreç-içi InMemoryTransport,
 // timersız); it() blokları yalnız assert eder. Süreç after()'da değil, ölçüm
 // sonunda kapatılır (ölçü fonksiyonu açtığını kapatır); asılı timer/süreç yok.

@@ -55,5 +55,5 @@ export function rea_mips_psp_profile(buf: Uint8Array): ReaDosMipsResult {  const
   if (!dos.ok && !mips.ok) {
     return { ok: false, code: "capability_unsupported", reason: "DOS+MIPS sinyali yok" };
   }
-  return { ok: true, tool: "rea_mips_psp_profile", summary: "DOS/MIPS profil iskeleti", details: { dos, mips } };
+  return { ok: true, tool: "rea_mips_psp_profile", summary: "DOS/MIPS profil iskeleti", details: { dos, mips, iskelet: true } };
 }

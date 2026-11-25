@@ -1,36 +1,25 @@
-# native-windows — prebuild roadmap
+# native-windows — Win32 reads
 
-> WP5, medium term: a Win32 prebuild binary plan for `process` / `authority` / `filesystem`.
-> The TypeScript surface is fixed in `addon.ts`. A real Win32 read exists only in the prebuild binary.
+> The TypeScript surface in `addon.ts` is not an MCP tool. On win32 it reads the live process, token integrity, and a directory tree. It does not return a skeleton `ok: true`.
 
-Current code fact: if the host is not win32, every call returns `capability_unsupported`. If `REA_NATIVE_PREBUILD` is not `1`, `prebuildKapısı` returns `{ ok: true, tool, summary, veri: { iskelet: true } }`. That is a skeleton success, not a process, token, or directory read. Wave 17 (not done) stops this addon from returning that fake `ok`.
+Current code fact: if the host is not win32, every call returns `capability_unsupported`. There is no `REA_NATIVE_PREBUILD` success path. A missing or invalid pid, an unreadable token, an empty directory string, or a depth outside 0-5 also returns `capability_unsupported` with the real error.
 
 ## Scope
 
-| Surface | TypeScript function | Win32 counterpart (only inside the prebuild) |
+| Surface | TypeScript function | Win32 read |
 |---|---|---|
-| process | `rea_native_process_info(pid)` | CreateToolhelp32Snapshot + NtQueryInformationProcess |
-| authority | `rea_native_authority_check(pid)` | OpenProcessToken + GetTokenInformation |
-| filesystem | `rea_native_fs_snapshot(dir)` | USN journal / directory walk (depth ≤ 5) |
+| process | `rea_native_process_info(pid)` | `Get-CimInstance Win32_Process` (`Name`, `CommandLine`) |
+| authority | `rea_native_authority_check(pid)` | `OpenProcessToken` + `GetTokenInformation` integrity RID |
+| filesystem | `rea_native_fs_snapshot(dir, depth)` | Directory walk, depth 0-5, sha256, 200-file cap |
+| caps | `rea_native_caps()` | Whether those commands actually run |
 
 ## Gates
 
-- A host other than `win32` returns `capability_unsupported`, with a handoff for a Linux/macOS agent.
-- Without `REA_NATIVE_PREBUILD=1` the binary is not touched, and the skeleton object above is what comes back (`iskelet: true`).
-- `rea_native_caps()` returns the `win32` × `prebuild` matrix in one look. `prebuild` is false unless the env flag is `1`.
+- A host other than `win32` returns `capability_unsupported`.
+- `rea_native_caps()` reports `komutlar.process`, `komutlar.authority`, and `komutlar.fs` from live probes. It does not report a prebuild flag.
+- Process name and command line come from CIM. Integrity `elevated` is derived from the token RID (`high`, `system`, `protected`).
+- The snapshot returns sorted relative paths and content sha256. It does not queue a fake job.
 
-## Prebuild steps (not done; the binary is not in the tree)
+## Prebuild binary
 
-1. `npm i -D prebuildify node-gyp` — install the build chain.
-2. Add a `src/native-windows/binding.cc` target to `binding.gyp`.
-3. Wrap the three entries with `Napi::`: `processInfo`, `authorityCheck`, `fsSnapshot`.
-4. Put the `npx prebuildify --napi --strip` output under `prebuilds/win32-x64/`.
-5. `addon.ts` loads from `../prebuilds` when `REA_NATIVE_PREBUILD=1`.
-6. Signature: each prebuild is sealed with `SHA256SUMS` and recorded beside `tools_sha256` inside `evidenceBundle`.
-
-## Tests
-
-- `rea_native_caps()` expects `prebuild: false` in skeleton mode.
-- `rea_native_process_info(0)` returns `capability_unsupported` (invalid pid) only after the prebuild gate has passed. Before that, pid 0 still hits the skeleton `ok: true`.
-- `rea_native_fs_snapshot("", 2)` returns `capability_unsupported` (empty directory) only after the prebuild gate has passed.
-- A live read is verified on a Win32 runner where the prebuild is installed. CI today is `ubuntu-latest` only, so that live read does not run there.
+A native `binding.cc` prebuild is still not in the tree. The functions above do the read in-process with PowerShell and Node `fs`, so callers do not need `REA_NATIVE_PREBUILD=1`.

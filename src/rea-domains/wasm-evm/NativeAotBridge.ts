@@ -56,5 +56,5 @@ export function rea_aot_profile(buf: Uint8Array, text: string): ReaAotResult {
   const swift = rea_aot_swift(text);
   // Üçü de kapalıysa profil çıkarılamaz.
   if (!aot.ok && !objc.ok && !swift.ok) return { ok: false, code: "capability_unsupported", reason: "AOT/ObjC/Swift sinyali yok" };
-  return { ok: true, tool: "rea_aot_profile", summary: "AOT dispatch profil iskeleti", details: { aot, objc, swift } };
+  return { ok: true, tool: "rea_aot_profile", summary: "AOT dispatch profil iskeleti", details: { aot, objc, swift, iskelet: true } };
 }

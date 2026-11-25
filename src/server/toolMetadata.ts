@@ -352,6 +352,7 @@ const OUTPUT_SCHEMAS: Readonly<Record<string, StandardSchemaWithJSON>> = {
     details: z.object({
       dos: z.looseObject({ ok: z.boolean() }),
       mips: z.looseObject({ ok: z.boolean() }),
+      iskelet: z.literal(true),
     }),
   }),
   rea_aot_detect: z.object({
@@ -368,6 +369,7 @@ const OUTPUT_SCHEMAS: Readonly<Record<string, StandardSchemaWithJSON>> = {
       aot: z.looseObject({ ok: z.boolean() }),
       objc: z.looseObject({ ok: z.boolean() }),
       swift: z.looseObject({ ok: z.boolean() }),
+      iskelet: z.literal(true),
     }),
   }),
   rea_firmware_handoff: z.object({

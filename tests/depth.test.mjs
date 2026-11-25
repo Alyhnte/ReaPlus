@@ -349,6 +349,69 @@ describe("rea_js_export_shape (sahte dosya)", () => {
   });
 });
 
+// .mts/.cts yürüyüşü: grafta kaynak olarak dururlar, yalnız .js sayılmazlar.
+function mtsSahnesi() {
+  const dir = tazeKlasör("mts");
+  writeFileSync(join(dir, "giris.mts"), 'import "./yan.cts";\nexport const a = 1;\n');
+  writeFileSync(join(dir, "yan.cts"), "export const b = 2;\n");
+  return dir;
+}
+
+// Yalnız exports girişi: main ve index.js yok; "." import/default de dosyaya bağlanır.
+function exportsSahnesi() {
+  const dir = tazeKlasör("exports");
+  writeFileSync(join(dir, "app.js"), 'require("yalniz");\nrequire("kosullu");\nrequire("sadece");\n');
+  const yalniz = join(dir, "node_modules", "yalniz");
+  mkdirSync(yalniz, { recursive: true });
+  writeFileSync(
+    join(yalniz, "package.json"),
+    JSON.stringify({ name: "yalniz", exports: "./giris.mjs", main: "yanlis.js" }),
+  );
+  writeFileSync(join(yalniz, "giris.mjs"), "export const x = 1;\n");
+  writeFileSync(join(yalniz, "yanlis.js"), "module.exports = 0;\n");
+  const kosullu = join(dir, "node_modules", "kosullu");
+  mkdirSync(kosullu, { recursive: true });
+  writeFileSync(
+    join(kosullu, "package.json"),
+    JSON.stringify({ name: "kosullu", exports: { ".": { import: "./esm.mjs", default: "./def.cjs" } } }),
+  );
+  writeFileSync(join(kosullu, "esm.mjs"), "export const e = 1;\n");
+  writeFileSync(join(kosullu, "def.cjs"), "module.exports = 1;\n");
+  const sadece = join(dir, "node_modules", "sadece");
+  mkdirSync(sadece, { recursive: true });
+  writeFileSync(
+    join(sadece, "package.json"),
+    JSON.stringify({ name: "sadece", exports: { ".": { default: "./tek.js" } } }),
+  );
+  writeFileSync(join(sadece, "tek.js"), "module.exports = 1;\n");
+  return dir;
+}
+
+describe("rea_js_require .mts/.cts ve exports", () => {
+  it(".mts ve .cts dosyaları graftadır", () => {
+    const dir = mtsSahnesi();
+    try {
+      const r = rea_js_require(dir);
+      assert.equal(r.ok, true);
+      assert.ok(r.details.graf["giris.mts"], ".mts grafta olmalı");
+      assert.ok(r.details.graf["yan.cts"], ".cts grafta olmalı");
+      assert.deepEqual(r.details.graf["giris.mts"], ["./yan.cts"]);
+    } finally { rmSync(dir, { recursive: true, force: true }); }
+  });
+
+  it("package.json exports alanını main'den önce çözer", () => {
+    const dir = exportsSahnesi();
+    try {
+      const r = rea_js_require(dir);
+      assert.equal(r.ok, true);
+      const c = r.details.cozumleme["app.js"];
+      assert.deepEqual(c.yalniz, { tur: "bare", cozum: "node_modules/yalniz/giris.mjs" });
+      assert.deepEqual(c.kosullu, { tur: "bare", cozum: "node_modules/kosullu/esm.mjs" });
+      assert.deepEqual(c.sadece, { tur: "bare", cozum: "node_modules/sadece/tek.js" });
+    } finally { rmSync(dir, { recursive: true, force: true }); }
+  });
+});
+
 describe("rea_js_export_shape CJS (sahte dosya)", () => {
   // exports/module.exports/defineProperty adları sıralı+tekilleşik ayrı alanda toplanır.
   it("CJS dışa aktarım adlarını toplar", () => {

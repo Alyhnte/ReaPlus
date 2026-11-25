@@ -577,9 +577,9 @@ describe("sdk yuzeyi (stdio JSON-RPC)", () => {
     // rea_dwarf_ozet, rea_dotnet_metadata, rea_browser_har_import.
     const cagrilar = [
       ["rea_crash_append", { olaylar: JSON.stringify([olay]), olay: JSON.stringify(olay) }, (s) => assert.equal(s.details.count, 2)],
-      ["rea_mips_psp_profile", { b64: dosMips.toString("base64") }, (s) => { assert.equal(s.details.dos.ok, true); assert.equal(s.details.mips.details.jal, 1); }],
+      ["rea_mips_psp_profile", { b64: dosMips.toString("base64") }, (s) => { assert.equal(s.details.dos.ok, true); assert.equal(s.details.mips.details.jal, 1); assert.equal(s.details.iskelet, true); }],
       ["rea_aot_detect", { b64dosya: mz128.toString("base64"), metin: "NativeAOT" }, (s) => assert.deepEqual(s.details.hit, ["NativeAOT"])],
-      ["rea_aot_profile", { b64dosya: mz128.toString("base64"), metin: "NativeAOT + [Foo bar] $s4main3fooyyF" }, (s) => { assert.equal(s.details.aot.ok, true); assert.equal(s.details.swift.ok, true); }],
+      ["rea_aot_profile", { b64dosya: mz128.toString("base64"), metin: "NativeAOT + [Foo bar] $s4main3fooyyF" }, (s) => { assert.equal(s.details.aot.ok, true); assert.equal(s.details.swift.ok, true); assert.equal(s.details.iskelet, true); }],
       ["rea_firmware_handoff", { path: "fw.bin", neden: "linux gerekir" }, (s) => assert.equal(s.handoff, "fw.bin")],
       ["rea_process_caps", {}, (s) => { assert.equal(s["kayıt"].kanal, "pipe"); assert.equal(s["kayıt"].komut, "caps"); }],
       ["rea_evidence_bundle", { ogeler: JSON.stringify([{ ad: "x", inline: "1" }]), sakli: JSON.stringify([{ id: "ev_abc", sha256: "s", bytes: 1, mime: "text/plain" }]) }, (s) => { assert.equal(s.digest.length, 64); assert.deepEqual(s.items, [{ ad: "x", inline: "1" }]); }],

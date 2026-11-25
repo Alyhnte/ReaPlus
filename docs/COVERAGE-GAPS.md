@@ -1,11 +1,13 @@
-# COVERAGE-GAPS — what is still missing after v0.14.0
+# COVERAGE-GAPS — what is still missing after v0.15.0
 
-v0.14.0 ships 191 tools, 188 `outputSchema`, 191 annotations, 2 resources, and 7 prompts. The tool count did not grow. `rea_pwn_elf_layout` gained an output schema because it now returns a real object.
+v0.15.0 ships 191 tools, 188 `outputSchema`, 191 annotations, 2 resources, and 7 prompts. The tool count did not grow. `details.iskelet` is now declared on the AOT and MIPS profile schemas.
 
 ## Closed (do not list these as gaps)
 
 - **Frida API tracer.** `rea_frida_api` logs the function name, arguments, and return value. The injected script only attaches hooks and waits. Live Frida VM approval is still an open gate.
 - **ELF layout and gadgets.** `rea_pwn_elf_layout` reads the ELF program headers (PIE, NX, RELRO). `rea_pwn_gadgets` keeps instruction sequences that end in `ret`, `retn`, or `retf`.
+- **JS package entry.** The walk includes `.mts` and `.cts`. `package.json` `exports` is read before `main`.
+- **Windows process reads.** `src/native-windows/addon.ts` reads the live process name, token integrity, and a directory snapshot. It is not an MCP tool.
 - **UPX.** `rea_upx_info` and `rea_upx_unpack`.
 - **C# decompile path.** `rea_ilspy_decompile` (ilspycmd when it is installed).
 - **Network capture.** `rea_net_capture` (local HAR).
@@ -19,8 +21,6 @@ v0.14.0 ships 191 tools, 188 `outputSchema`, 191 annotations, 2 resources, and 7
 - split-APK.
 - adb file transfer (`adb pull`). Devices and package listing exist; pull does not.
 - SQLite snapshot inspection.
-- Scoped package `exports` field. CJS require resolution (relative and `node_modules`) shipped earlier; the `exports` field did not.
-- A `.mts` / `.cts` walk.
 - Visual sessions (asciinema or GIF). Text transcripts exist; the recording does not.
 - Automatic TOOL-COVERAGE. `docs/TOOL-COVERAGE.md` is still hand-maintained.
 - AFL++. A Node fuzz harness exists (`docs/FUZZ.md`). AFL++ itself is not wired. Wave 19 (not done) is the real integration, returning `capability_unsupported` when the dependency is absent.
