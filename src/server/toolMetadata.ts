@@ -1149,6 +1149,29 @@ const OUTPUT_SCHEMAS: Readonly<Record<string, StandardSchemaWithJSON>> = {
     sayfaBoyutu: z.number(),
     tablolar: z.array(z.string()),
   }),
+  // Dalga 19: stdout sozlesmesi. Basarisiz surec bu sekli uretmez.
+  rea_angr_explore: z.object({
+    ok: z.literal(true),
+    arac: z.string(),
+    paths: z.number(),
+    constraints: z.number(),
+  }),
+  rea_afl_fuzz: z.object({
+    ok: z.literal(true),
+    arac: z.string(),
+    version: z.string(),
+    execs_done: z.number(),
+  }),
+  rea_lldb_script: z.object({
+    ok: z.literal(true),
+    arac: z.string(),
+    stop_reason: z.string(),
+  }),
+  rea_ttd_info: z.object({
+    ok: z.literal(true),
+    arac: z.string(),
+    module_count: z.number(),
+  }),
 };
 
 // Salt-okunur kume: saf, surec-icinde hesap; dosya okumaz/yazmaz, surec
@@ -1224,6 +1247,13 @@ const READ_ONLY_TOOLS: ReadonlySet<string> = new Set([
   // process_compare girdiyi yok sayar; dosya acmaz. ok:true uretmedigi icin
   // outputSchema almaz. pwn_elf_layout artik dosya okur (FILE_READ_ONLY).
   "rea_process_compare",
+  // Dalga 19: dis ikili yalniz belgelenmis no-op argv ile yoklanir
+  // (--explore yolunu yazmaz; afl/lldb/ttd --version). Hedefe yazmaz,
+  // kampanya/attach/time-travel acmaz. readOnlyHint bu yuzden true.
+  "rea_angr_explore",
+  "rea_afl_fuzz",
+  "rea_lldb_script",
+  "rea_ttd_info",
 ]);
 
 // Salt dosya/dizin okuyan kume (dalga 3): handler yalniz readFile/readdir/

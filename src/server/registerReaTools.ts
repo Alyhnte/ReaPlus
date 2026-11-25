@@ -20,6 +20,7 @@ import { rea_apk_splits } from "../rea-domains/android/ApkSplits.js";
 import { rea_electron_fuses } from "../rea-domains/electron/ElectronFuses.js";
 import { rea_electron_window } from "../rea-domains/electron/ElectronWindow.js";
 import { rea_sqlite_snapshot } from "../rea-domains/sqlite/SqliteSnapshot.js";
+import { rea_angr_explore, rea_afl_fuzz, rea_lldb_script, rea_ttd_info } from "../rea-domains/research/ResearchProbes.js";
 import { rea_dotnet_metadata, rea_dotnet_cil, rea_il2cpp_metadata, rea_il2cpp_dump, rea_il2cpp_methods } from "../rea-domains/dotnet/ManagedInspector.js";
 import { rea_r2_callgraph, rea_r2_esil, rea_r2_debug } from "../rea-domains/r2plus/R2Plus.js";
 import { rea_frida_pause, rea_frida_resume, rea_frida_step, rea_frida_cond, rea_frida_stalker } from "../rea-domains/frida-plus/FridaPlus.js";
@@ -510,6 +511,10 @@ const R: Array<[string, string, any, H]> = [
   ["rea_apk_splits", "Read split APK roles and zip entry counts from a directory. Does not run apktool.", P, (a) => rea_apk_splits(a.path)],
   ["rea_adb_pull", "Run adb pull into a local file (REA_ADB_BIN or adb on PATH).", z.object({ remote: z.string().min(1), out: z.string().min(1), seri: z.string().min(1).optional() }), (a) => rea_adb_pull(a.remote, a.out, a.seri)],
   ["rea_sqlite_snapshot", "Read the SQLite header and schema table names from a database file.", P, (a) => rea_sqlite_snapshot(a.path)],
+  ["rea_angr_explore", "Run REA_ANGR_BIN (or python on PATH) as `<bin> --explore <path>` and parse one JSON line {ok,paths,constraints}. Missing binary, non-JSON stdout, or a non-zero exit is capability_unsupported. Does not invent a path count.", P, (a) => rea_angr_explore(a.path)],
+  ["rea_afl_fuzz", "Run REA_AFL_BIN --version and parse the afl-fuzz++ version plus execs_done. Does not start a fuzz campaign and does not pass a target. Missing binary or no execs_done line is capability_unsupported.", O, () => rea_afl_fuzz()],
+  ["rea_lldb_script", "Run REA_LLDB_BIN --version and parse `stop reason = …`. Does not attach or open a live debug session. Missing binary or no stop reason is capability_unsupported.", O, () => rea_lldb_script()],
+  ["rea_ttd_info", "Run REA_TTD_BIN --version and parse ModuleCount. Does not open a time-travel session. Missing binary or no ModuleCount is capability_unsupported.", O, () => rea_ttd_info()],
 ];
 
 export function registerReaTools(server: McpServer): void {

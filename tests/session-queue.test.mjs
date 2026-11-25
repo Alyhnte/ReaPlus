@@ -398,9 +398,9 @@ describe("stdio: (e) kuyruk devre disiyken mevcut davranis degismez", () => {
   before(async () => { istemci = await stdioIstemci(temizEnv({})).baslat(); });
   after(async () => { await istemci.kapat(); });
 
-  it("arac sayisi 196 kalir, status araci yoktur", async () => {
+  it("arac sayisi 200 kalir, status araci yoktur", async () => {
     const sayfa = await istemci.istek("tools/list", {}).soz;
-    assert.equal(sayfa.tools.length, 196);
+    assert.equal(sayfa.tools.length, 200);
     assert.ok(!sayfa.tools.some((t) => t.name === "session_queue_status"), "devre disiyken status araci olmamali");
   });
 

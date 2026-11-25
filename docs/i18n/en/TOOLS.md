@@ -7,11 +7,11 @@
 ## Summary
 
 - Server: `rea-plus` 0.16.0
-- Total tools: 196
+- Total tools: 200
 - Total resources: 2
 - Total prompts: 7
-- Tools with outputSchema: 193
-- Tools with annotations: 196
+- Tools with outputSchema: 197
+- Tools with annotations: 200
 
 ## Tools
 
@@ -348,6 +348,14 @@ Device screenshot.
 - outputSchema: present (fields: `arac`, `bayt`, `ok`, `yol`)
 - annotations: present (destructiveHint=true, openWorldHint=true, readOnlyHint=false)
 
+### `rea_afl_fuzz`
+
+Run REA_AFL_BIN --version and parse the afl-fuzz++ version plus execs_done. Does not start a fuzz campaign and does not pass a target. Missing binary or no execs_done line is capability_unsupported.
+
+- Input fields: none
+- outputSchema: present (fields: `arac`, `execs_done`, `ok`, `version`)
+- annotations: present (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)
+
 ### `rea_android_dinamik_recete`
 
 Android dynamic-analysis recipe generation.
@@ -364,6 +372,15 @@ Dry-run validation of a recipe.
 - Input fields:
   - `text` (string, required)
 - outputSchema: present (fields: `adim_sayisi`, `arac`, `ok`)
+- annotations: present (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)
+
+### `rea_angr_explore`
+
+Run REA_ANGR_BIN (or python on PATH) as `<bin> --explore <path>` and parse one JSON line {ok,paths,constraints}. Missing binary, non-JSON stdout, or a non-zero exit is capability_unsupported. Does not invent a path count.
+
+- Input fields:
+  - `path` (string, required)
+- outputSchema: present (fields: `arac`, `constraints`, `ok`, `paths`)
 - annotations: present (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)
 
 ### `rea_aot_detect`
@@ -1374,6 +1391,14 @@ Source-map resolution.
 - outputSchema: present (fields: `ok`, `summary`, `tool`)
 - annotations: present (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)
 
+### `rea_lldb_script`
+
+Run REA_LLDB_BIN --version and parse `stop reason = …`. Does not attach or open a live debug session. Missing binary or no stop reason is capability_unsupported.
+
+- Input fields: none
+- outputSchema: present (fields: `arac`, `ok`, `stop_reason`)
+- annotations: present (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)
+
 ### `rea_macho_classdump`
 
 class-dump output (honest error if missing).
@@ -1742,6 +1767,14 @@ Cookies + localStorage.
   - `url` (string, required)
 - outputSchema: present (fields: `details`, `ok`, `summary`, `tool`)
 - annotations: present (openWorldHint=true, readOnlyHint=false)
+
+### `rea_ttd_info`
+
+Run REA_TTD_BIN --version and parse ModuleCount. Does not open a time-travel session. Missing binary or no ModuleCount is capability_unsupported.
+
+- Input fields: none
+- outputSchema: present (fields: `arac`, `module_count`, `ok`)
+- annotations: present (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)
 
 ### `rea_typedef_oner`
 

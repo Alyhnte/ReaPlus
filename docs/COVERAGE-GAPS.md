@@ -1,6 +1,6 @@
-# COVERAGE-GAPS — what is still missing after v0.16.0
+# COVERAGE-GAPS — what is still missing after v0.17.0
 
-v0.16.0 ships 196 tools, 193 `outputSchema`, 196 annotations, 2 resources, and 7 prompts. Five tools were added and registered only on the `all` profile.
+v0.17.0 ships 200 tools, 197 `outputSchema`, 200 annotations, 2 resources, and 7 prompts. Four research probes were added on the `all` profile only.
 
 ## Closed (do not list these as gaps)
 
@@ -12,6 +12,7 @@ v0.16.0 ships 196 tools, 193 `outputSchema`, 196 annotations, 2 resources, and 7
 - **split-APK.** `rea_apk_splits` reads each APK zip in a directory and separates `base.apk` from `split_*.apk`.
 - **adb pull.** `rea_adb_pull` runs `adb pull`. A missing `adb` returns `capability_unsupported`.
 - **SQLite snapshot.** `rea_sqlite_snapshot` reads the database header and schema table names from the file.
+- **Research probes.** `rea_angr_explore`, `rea_afl_fuzz`, `rea_lldb_script`, and `rea_ttd_info` parse the external program's stdout. A missing program returns `capability_unsupported`. They do not start a fuzz campaign or a time-travel session.
 - **UPX.** `rea_upx_info` and `rea_upx_unpack`.
 - **C# decompile path.** `rea_ilspy_decompile` (ilspycmd when it is installed).
 - **Network capture.** `rea_net_capture` (local HAR).
@@ -23,8 +24,7 @@ v0.16.0 ships 196 tools, 193 `outputSchema`, 196 annotations, 2 resources, and 7
 
 - Visual sessions (asciinema or GIF). Text transcripts exist; the recording does not.
 - Automatic TOOL-COVERAGE. `docs/TOOL-COVERAGE.md` is still hand-maintained.
-- AFL++. A Node fuzz harness exists (`docs/FUZZ.md`). AFL++ itself is not wired. Wave 19 (not done) is the real integration, returning `capability_unsupported` when the dependency is absent.
-- angr / Triton, LLDB, and WinDbg TTD. No engine for them is in the tree. Same wave-19 rule: unsupported when the dependency is absent, working when it is present. That behavior is not implemented yet.
+- AFL++ campaign. `rea_afl_fuzz` reads `afl-fuzz --version` output. It does not drive a fuzz campaign.
 - Frida live VM approval.
 - A self-hosted Windows runner. CI is `ubuntu-latest` only.
 - Trusted Publisher account setup. `publish.yml` already runs `npm publish --provenance`.

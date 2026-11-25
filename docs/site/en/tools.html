@@ -18,8 +18,8 @@
 <button id="tema-toggle" type="button" aria-pressed="false">Dark theme</button>
 </header>
 <section class="ozet reveal" aria-label="Surface summary">
-<p class="ozet-metin">Surface summary (real run, TOOLS.md): 196 tools · 193 outputSchema · 196 annotations · 2 resources · 7 prompts</p>
-<dl class="istatistik"><div><dt>tools</dt><dd><span class="sayi" data-sayi="196">196</span></dd></div><div><dt>outputSchema</dt><dd><span class="sayi" data-sayi="193">193</span></dd></div><div><dt>annotations</dt><dd><span class="sayi" data-sayi="196">196</span></dd></div><div><dt>resources</dt><dd><span class="sayi" data-sayi="2">2</span></dd></div><div><dt>prompts</dt><dd><span class="sayi" data-sayi="7">7</span></dd></div></dl>
+<p class="ozet-metin">Surface summary (real run, TOOLS.md): 200 tools · 197 outputSchema · 200 annotations · 2 resources · 7 prompts</p>
+<dl class="istatistik"><div><dt>tools</dt><dd><span class="sayi" data-sayi="200">200</span></dd></div><div><dt>outputSchema</dt><dd><span class="sayi" data-sayi="197">197</span></dd></div><div><dt>annotations</dt><dd><span class="sayi" data-sayi="200">200</span></dd></div><div><dt>resources</dt><dd><span class="sayi" data-sayi="2">2</span></dd></div><div><dt>prompts</dt><dd><span class="sayi" data-sayi="7">7</span></dd></div></dl>
 </section>
 <main id="icerik"><div class="reveal">
 <h1>Tool Reference</h1>
@@ -28,7 +28,7 @@
 surface of the compiled server (<code>dist/server.js</code>). To regenerate:
 <code>npm run build &amp;&amp; node scripts/generate-tool-reference.mjs</code></blockquote>
 <h2 id="summary">Summary</h2>
-<ul><li>Server: <code>rea-plus</code> 0.16.0</li><li>Total tools: 196</li><li>Total resources: 2</li><li>Total prompts: 7</li><li>Tools with outputSchema: 193</li><li>Tools with annotations: 196</li></ul>
+<ul><li>Server: <code>rea-plus</code> 0.16.0</li><li>Total tools: 200</li><li>Total resources: 2</li><li>Total prompts: 7</li><li>Tools with outputSchema: 197</li><li>Tools with annotations: 200</li></ul>
 <h2 id="tools">Tools</h2>
 <h3 id="close_target"><code>close_target</code></h3>
 <p>Release the binary target (and its radare2 process) held by a session.</p>
@@ -120,12 +120,18 @@ surface of the compiled server (<code>dist/server.js</code>). To regenerate:
 <h3 id="rea_adb_screencap"><code>rea_adb_screencap</code></h3>
 <p>Device screenshot.</p>
 <ul><li>Input fields:</li><li><code>out</code> (string, required)</li><li><code>seri</code> (string, optional)</li><li>outputSchema: present (fields: <code>arac</code>, <code>bayt</code>, <code>ok</code>, <code>yol</code>)</li><li>annotations: present (destructiveHint=true, openWorldHint=true, readOnlyHint=false)</li></ul>
+<h3 id="rea_afl_fuzz"><code>rea_afl_fuzz</code></h3>
+<p>Run REA_AFL_BIN --version and parse the afl-fuzz++ version plus execs_done. Does not start a fuzz campaign and does not pass a target. Missing binary or no execs_done line is capability_unsupported.</p>
+<ul><li>Input fields: none</li><li>outputSchema: present (fields: <code>arac</code>, <code>execs_done</code>, <code>ok</code>, <code>version</code>)</li><li>annotations: present (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
 <h3 id="rea_android_dinamik_recete"><code>rea_android_dinamik_recete</code></h3>
 <p>Android dynamic-analysis recipe generation.</p>
 <ul><li>Input fields:</li><li><code>path</code> (string, required)</li><li>outputSchema: present (fields: <code>arac</code>, <code>ok</code>, <code>recete</code>)</li><li>annotations: present (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
 <h3 id="rea_android_recete_dogrula"><code>rea_android_recete_dogrula</code></h3>
 <p>Dry-run validation of a recipe.</p>
 <ul><li>Input fields:</li><li><code>text</code> (string, required)</li><li>outputSchema: present (fields: <code>adim_sayisi</code>, <code>arac</code>, <code>ok</code>)</li><li>annotations: present (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
+<h3 id="rea_angr_explore"><code>rea_angr_explore</code></h3>
+<p>Run REA_ANGR_BIN (or python on PATH) as <code>&lt;bin&gt; --explore &lt;path&gt;</code> and parse one JSON line {ok,paths,constraints}. Missing binary, non-JSON stdout, or a non-zero exit is capability_unsupported. Does not invent a path count.</p>
+<ul><li>Input fields:</li><li><code>path</code> (string, required)</li><li>outputSchema: present (fields: <code>arac</code>, <code>constraints</code>, <code>ok</code>, <code>paths</code>)</li><li>annotations: present (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
 <h3 id="rea_aot_detect"><code>rea_aot_detect</code></h3>
 <p>NativeAOT sinyali.</p>
 <ul><li>Input fields:</li><li><code>b64dosya</code> (string, required)</li><li><code>metin</code> (string, optional)</li><li>outputSchema: present (fields: <code>details</code>, <code>ok</code>, <code>summary</code>, <code>tool</code>)</li><li>annotations: present (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
@@ -450,6 +456,9 @@ surface of the compiled server (<code>dist/server.js</code>). To regenerate:
 <h3 id="rea_js_sourcemap"><code>rea_js_sourcemap</code></h3>
 <p>Source-map resolution.</p>
 <ul><li>Input fields:</li><li><code>text</code> (string, required)</li><li>outputSchema: present (fields: <code>ok</code>, <code>summary</code>, <code>tool</code>)</li><li>annotations: present (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
+<h3 id="rea_lldb_script"><code>rea_lldb_script</code></h3>
+<p>Run REA_LLDB_BIN --version and parse <code>stop reason = …</code>. Does not attach or open a live debug session. Missing binary or no stop reason is capability_unsupported.</p>
+<ul><li>Input fields: none</li><li>outputSchema: present (fields: <code>arac</code>, <code>ok</code>, <code>stop_reason</code>)</li><li>annotations: present (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
 <h3 id="rea_macho_classdump"><code>rea_macho_classdump</code></h3>
 <p>class-dump output (honest error if missing).</p>
 <ul><li>Input fields:</li><li><code>path</code> (string, required)</li><li>outputSchema: present (fields: <code>details</code>, <code>ok</code>, <code>summary</code>, <code>tool</code>)</li><li>annotations: present (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
@@ -570,6 +579,9 @@ surface of the compiled server (<code>dist/server.js</code>). To regenerate:
 <h3 id="rea_storage_dump"><code>rea_storage_dump</code></h3>
 <p>Cookies + localStorage.</p>
 <ul><li>Input fields:</li><li><code>url</code> (string, required)</li><li>outputSchema: present (fields: <code>details</code>, <code>ok</code>, <code>summary</code>, <code>tool</code>)</li><li>annotations: present (openWorldHint=true, readOnlyHint=false)</li></ul>
+<h3 id="rea_ttd_info"><code>rea_ttd_info</code></h3>
+<p>Run REA_TTD_BIN --version and parse ModuleCount. Does not open a time-travel session. Missing binary or no ModuleCount is capability_unsupported.</p>
+<ul><li>Input fields: none</li><li>outputSchema: present (fields: <code>arac</code>, <code>module_count</code>, <code>ok</code>)</li><li>annotations: present (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
 <h3 id="rea_typedef_oner"><code>rea_typedef_oner</code></h3>
 <p>Argument-name suggestion + spread.</p>
 <ul><li>Input fields:</li><li><code>text</code> (string, required)</li><li>outputSchema: present (fields: <code>arac</code>, <code>ok</code>, <code>oneriler</code>, <code>sayi</code>)</li><li>annotations: present (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>

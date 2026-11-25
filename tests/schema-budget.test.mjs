@@ -3,11 +3,11 @@
 // tüm outputSchema JSON baytı bütçeli. Bütçe aşımı testi kırar (sessiz şişme biter).
 // Koş: npm run build sonrası `node --test tests/schema-budget.test.mjs` (veya npm test).
 //
-// ÖLÇÜM (2026-11-25, win32, wave-18/ports, node scripts/olcut-semabutce.mjs):
-//   araç=196, şemalı=193, şemasız=3 (rea_best_motor, rea_fallback,
+// ÖLÇÜM (2026-11-25, win32, wave-19/research, node scripts/olcut-semabutce.mjs):
+//   araç=200, şemalı=197, şemasız=3 (rea_best_motor, rea_fallback,
 //   rea_process_compare — nesne dönmedikleri için şemasız; rea_pwn_elf_layout semalı),
-//   listeBayt=182952 (~178.7KB), şemaToplam=96700 (~94.4KB),
-//   girdiToplam=45789, ortalama=493.4 bayt/araç.
+//   listeBayt=185884 (~181.5KB), şemaToplam=97776 (~95.5KB),
+//   girdiToplam=46207, ortalama=488.9 bayt/araç.
 //   Tekrar ölçümde birebir aynı (tek sayfa, sayfalama yok, bayt deterministik).
 //
 // BÜTÇELER (keyfi değil; ölçümün üstüne cömert pay — bayt deterministik, CI flake'i yok):
@@ -42,8 +42,8 @@ describe("şema bütçeleri (saf, InMemory tools/list)", () => {
   });
 
   it("(a) tools/list yanıt baytı bütçe altında", () => {
-    assert.equal(olcum.aracSayisi, 196, "araç sayısı 196 olmalı (gerçek değer)");
-    assert.equal(olcum.semaSayisi, 193, "şemalı araç 193 olmalı (gerçek değer)");
+    assert.equal(olcum.aracSayisi, 200, "araç sayısı 200 olmalı (gerçek değer)");
+    assert.equal(olcum.semaSayisi, 197, "şemalı araç 197 olmalı (gerçek değer)");
     assert.ok(
       olcum.listeBayt < BUTCE.listeBayt,
       `tools/list ${olcum.listeBayt}B bütçe ${BUTCE.listeBayt}B üstünde`,

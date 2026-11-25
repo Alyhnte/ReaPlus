@@ -97,8 +97,8 @@ English GitHub docs, the stale roadmap table, and English pages. Other languages
 
 `rea_electron_fuses`, `rea_electron_window`, `rea_apk_splits`, `rea_adb_pull`, and `rea_sqlite_snapshot` are on the `all` profile only. The surface is 196 tools and 193 output schemas.
 
-### Wave 19 — not done
+### Wave 19 — closed in v0.17.0
 
-Real angr/Triton, AFL++, LLDB, and WinDbg TTD integrations. They return `capability_unsupported` when the dependency is absent, and they work when the dependency is present.
+`rea_angr_explore`, `rea_afl_fuzz`, `rea_lldb_script`, and `rea_ttd_info` parse the external program's stdout. A missing program returns `capability_unsupported`. They are on the `all` profile only. The surface is 200 tools and 197 output schemas.
 
-Still open after wave 18: Frida live VM approval, the self-hosted Windows runner, the SEA single-file exe, Trusted Publisher account setup, asciinema, LLDB, WinDbg TTD, angr, AFL++, visual sessions, and automatic TOOL-COVERAGE.
+Still open: Frida live VM approval, the self-hosted Windows runner, the SEA single-file exe, Trusted Publisher account setup, asciinema, a full AFL++ campaign, visual sessions, and automatic TOOL-COVERAGE. de/fr/es/tr body translation is the remaining documentation pass.

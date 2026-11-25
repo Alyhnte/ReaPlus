@@ -1,11 +1,11 @@
 // sdk-surface.test.mjs: derlenmis sunucu uzerinde gercek stdio JSON-RPC yuzeyi.
 // Kos: npm run build sonrasi `node --test tests/sdk-surface.test.mjs`.
-// Kapsam: initialize, tools/list (196), outputSchema dalga 1+2+3+4+D/2+E/1
-// (166 rea + 30 conduit = 196; semasiz yalniz 3 rea araci: string/dizi donen
+// Kapsam: initialize, tools/list (200), outputSchema dalga 1+2+3+4+D/2+E/1
+// (170 rea + 30 conduit = 200; semasiz yalniz 3 rea araci: string/dizi donen
 // best_motor + fallback ve hic ok:true uretmeyen process_compare) +
 // acik annotations kumeleri (rea: 81 readOnly, 24
 // destructive, 59 openWorld; conduit: 4 readOnly, 13 destructive, 26
-// openWorld; annotations tasiyan toplam 196/196), tools/call'da
+// openWorld; annotations tasiyan toplam 200/200), tools/call'da
 // structuredContent == text JSON. Yalniz deterministik/offline
 // araclar cagrilir; dosya gerektiren cagrilar tests/corpus fixture'larini
 // salt-okunur kullanir. Canli arac, ag, alt surec yoklamasi ve dosya yazma
@@ -97,7 +97,7 @@ describe("sdk yuzeyi (stdio JSON-RPC)", () => {
   before(async () => {
     const env = { ...process.env };
     delete env.REA_WORKSPACE_ROOT; // yol korumasi bu testin konusu degil
-    delete env.REA_TOOLSETS; // tam 196 arac yuzeyi bu testin konusu
+    delete env.REA_TOOLSETS; // tam 200 arac yuzeyi bu testin konusu
     cocuk = spawn(process.execPath, [join(kok, "dist", "server.js")], {
       cwd: kok,
       env,
@@ -135,9 +135,9 @@ describe("sdk yuzeyi (stdio JSON-RPC)", () => {
     }
   });
 
-  it("tools/list 196 arac dondurur", () => {
-    assert.equal(araclar.length, 196, `beklenen 196, gelen ${araclar.length}`);
-    assert.equal(new Set(araclar.map((a) => a.name)).size, 196, "arac adlari benzersiz olmali");
+  it("tools/list 200 arac dondurur", () => {
+    assert.equal(araclar.length, 200, `beklenen 200, gelen ${araclar.length}`);
+    assert.equal(new Set(araclar.map((a) => a.name)).size, 200, "arac adlari benzersiz olmali");
   });
 
   it("pilot araclar outputSchema ve readOnly annotations tasir", () => {
@@ -203,8 +203,8 @@ describe("sdk yuzeyi (stdio JSON-RPC)", () => {
       assert.equal(a.annotations?.openWorldHint, false, `${ad} openWorldHint false olmali`);
     }
     // Toplamlar dalga E/1 sonrasi degerlerdir; ayrinti dalga-4, dalga-D/2 ve dalga-E/1 testlerinde.
-    assert.equal(araclar.filter((a) => a.outputSchema).length, 193, "toplam outputSchema 193 olmali (163 rea + 30 conduit)");
-    assert.equal(araclar.filter((a) => a.annotations?.readOnlyHint === true).length, 108, "toplam readOnly 108 olmali (104 rea + 4 conduit)");
+    assert.equal(araclar.filter((a) => a.outputSchema).length, 197, "toplam outputSchema 197 olmali (167 rea + 30 conduit)");
+    assert.equal(araclar.filter((a) => a.annotations?.readOnlyHint === true).length, 112, "toplam readOnly 112 olmali (108 rea + 4 conduit)");
     assert.equal(araclar.filter((a) => a.annotations?.destructiveHint === true).length, 39, "toplam destructive 39 olmali (26 rea + 13 conduit)");
     assert.equal(araclar.filter((a) => a.annotations?.openWorldHint === true).length, 87, "toplam openWorld 87 olmali (61 rea + 26 conduit)");
   });
@@ -258,7 +258,7 @@ describe("sdk yuzeyi (stdio JSON-RPC)", () => {
     // annotations'siz arac kalmamistir (sema disi 4 rea araci da isaretlidir).
     const isaretsiz = araclar.filter((a) => a.name.startsWith("rea_") && !a.annotations).map((a) => a.name).sort();
     assert.deepEqual(isaretsiz, []);
-    assert.equal(araclar.filter((a) => a.annotations).length, 196, "annotations tasiyan toplam 196 olmali (166 rea + 30 conduit)");
+    assert.equal(araclar.filter((a) => a.annotations).length, 200, "annotations tasiyan toplam 200 olmali (170 rea + 30 conduit)");
     {
       const ad = "rea_process_compare";
       const a = araclar.find((t) => t.name === ad);
@@ -298,8 +298,8 @@ describe("sdk yuzeyi (stdio JSON-RPC)", () => {
       assert.equal(a.annotations?.readOnlyHint, false, `${ad} harici arac/surec, readOnly olmamali`);
       assert.equal(a.annotations?.openWorldHint, true, `${ad} openWorld olmali`);
     }
-    assert.equal(araclar.filter((a) => a.outputSchema).length, 193, "toplam outputSchema 193 olmali (163 rea + 30 conduit)");
-    assert.equal(araclar.filter((a) => a.annotations).length, 196, "annotations toplami 196 olmali");
+    assert.equal(araclar.filter((a) => a.outputSchema).length, 197, "toplam outputSchema 197 olmali (167 rea + 30 conduit)");
+    assert.equal(araclar.filter((a) => a.annotations).length, 200, "annotations toplami 200 olmali");
   });
 
   it("dalga-D/2 kopru araclari outputSchema tasir; annotations kumeleri degismez", () => {
@@ -349,8 +349,8 @@ describe("sdk yuzeyi (stdio JSON-RPC)", () => {
       assert.equal(araclar.find((t) => t.name === ad)?.outputSchema, undefined, `${ad} outputSchema almamali`);
     }
     assert.equal(araclar.find((t) => t.name === "rea_pwn_elf_layout")?.outputSchema?.type, "object");
-    assert.equal(araclar.filter((a) => a.outputSchema).length, 193, "toplam outputSchema 193 olmali (163 rea + 30 conduit)");
-    assert.equal(araclar.filter((a) => a.annotations).length, 196, "annotations toplami 196 olmali");
+    assert.equal(araclar.filter((a) => a.outputSchema).length, 197, "toplam outputSchema 197 olmali (167 rea + 30 conduit)");
+    assert.equal(araclar.filter((a) => a.annotations).length, 200, "annotations toplami 200 olmali");
   });
 
   it("dalga-E/1 conduit motor araclari outputSchema tasir; toplam 187 olur", () => {
@@ -419,8 +419,8 @@ describe("sdk yuzeyi (stdio JSON-RPC)", () => {
       assert.equal(araclar.find((t) => t.name === ad)?.outputSchema, undefined, `${ad} outputSchema almamali`);
     }
     assert.equal(araclar.find((t) => t.name === "rea_pwn_elf_layout")?.outputSchema?.type, "object");
-    assert.equal(araclar.filter((a) => a.outputSchema).length, 193, "toplam outputSchema 193 olmali (163 rea + 30 conduit)");
-    assert.equal(araclar.filter((a) => a.annotations).length, 196, "annotations toplami 196 olmali (166 rea + 30 conduit)");
+    assert.equal(araclar.filter((a) => a.outputSchema).length, 197, "toplam outputSchema 197 olmali (167 rea + 30 conduit)");
+    assert.equal(araclar.filter((a) => a.annotations).length, 200, "annotations toplami 200 olmali (170 rea + 30 conduit)");
   });
 
   it("yazanlar destructive, ag/cihaz/surec/harici araclar openWorld isaretli", () => {
