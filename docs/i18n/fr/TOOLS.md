@@ -6,7 +6,7 @@
 
 ## Résumé
 
-- Serveur : `rea-plus` 0.17.0
+- Serveur : `rea-plus` 0.17.1
 - Total outils : 200
 - Total resources : 2
 - Total prompts : 7

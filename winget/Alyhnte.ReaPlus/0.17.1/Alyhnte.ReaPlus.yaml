@@ -1,0 +1,7 @@
+# winget/Alyhnte.ReaPlus/0.17.1/Alyhnte.ReaPlus.yaml — version manifest.
+# Version source: package.json (0.17.1). Store submission was not run.
+PackageIdentifier: Alyhnte.ReaPlus
+PackageVersion: 0.17.1
+DefaultLocale: en-US
+ManifestType: version
+ManifestVersion: 1.6.0

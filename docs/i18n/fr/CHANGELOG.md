@@ -3,6 +3,16 @@
 Tous les changements notables sont consignés dans ce fichier. Format : Keep a Changelog + SemVer.
 All notable changes are documented here (résumé en français + détail en anglais).
 
+## [0.17.1] — 2026-11-25
+
+### Corrigé
+
+- `rea_angr_explore`, `rea_afl_fuzz`, `rea_lldb_script` et `rea_ttd_info` exécutent REAVM, REAFZ, REALDB et REATD. Ils ne lisent plus une ligne de version (`94c721033953033f0d0221ec8ce380fdc605f04f`).
+
+### Mis à jour
+
+- `rea_aot_profile` lit un en-tête COR20 quand le PE en a un. `rea_mips_psp_profile` lit un en-tête ELF32 MIPS. `iskelet` reste true (`94c721033953033f0d0221ec8ce380fdc605f04f`).
+
 ## [0.17.0] — 2026-11-25
 
 ### Ajouté

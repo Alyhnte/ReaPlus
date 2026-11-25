@@ -26,34 +26,39 @@
 <h1 id="changelog--rea-plus">Changelog — rea-plus</h1>
 <p>Todos los cambios notables se guardan en este archivo. Formato: Keep a Changelog + SemVer.
 All notable changes are documented here (resumen en español + English detail).</p>
+<h2 id="0171--2026-11-25">[0.17.1] — 2026-11-25</h2>
+<h3 id="corregido">Corregido</h3>
+<ul><li><code>rea_angr_explore</code>, <code>rea_afl_fuzz</code>, <code>rea_lldb_script</code> y <code>rea_ttd_info</code> ejecutan REAVM, REAFZ, REALDB y REATD. Ya no leen una línea de versión (<code>94c721033953033f0d0221ec8ce380fdc605f04f</code>).</li></ul>
+<h3 id="actualizado">Actualizado</h3>
+<ul><li><code>rea_aot_profile</code> lee una cabecera COR20 cuando el PE la tiene. <code>rea_mips_psp_profile</code> lee una cabecera ELF32 MIPS. <code>iskelet</code> sigue en true (<code>94c721033953033f0d0221ec8ce380fdc605f04f</code>).</li></ul>
 <h2 id="0170--2026-11-25">[0.17.0] — 2026-11-25</h2>
 <h3 id="añadido">Añadido</h3>
 <ul><li><code>rea_angr_explore</code>, <code>rea_afl_fuzz</code>, <code>rea_lldb_script</code> y <code>rea_ttd_info</code> analizan la stdout del programa externo. Un programa ausente devuelve <code>capability_unsupported</code> (<code>3ab174f64ea1ba3f10ad050bedadc31a4d3a542a</code>).</li></ul>
-<h3 id="actualizado">Actualizado</h3>
+<h3 id="actualizado-1">Actualizado</h3>
 <ul><li>Las cuatro sondas están solo en el perfil <code>all</code>. La superficie es de 200 herramientas y 197 outputSchema (<code>3ab174f64ea1ba3f10ad050bedadc31a4d3a542a</code>).</li></ul>
 <h2 id="0160--2026-11-25">[0.16.0] — 2026-11-25</h2>
 <h3 id="añadido-1">Añadido</h3>
 <ul><li><code>rea_electron_fuses</code> lee el sentinel de fuse de Electron y el wire. <code>rea_electron_window</code> clasifica las claves de opciones de BrowserWindow. <code>rea_apk_splits</code> separa los APK base y los split. <code>rea_adb_pull</code> ejecuta adb pull. <code>rea_sqlite_snapshot</code> lee la cabecera de la base y los nombres de tablas del esquema (<code>90701d6e6d5496a9b0d9bf3f2a61b3f27c9f8b3f</code>).</li></ul>
-<h3 id="actualizado-1">Actualizado</h3>
+<h3 id="actualizado-2">Actualizado</h3>
 <ul><li>Las cinco herramientas están solo en el perfil <code>all</code>. La superficie es de 196 herramientas y 193 outputSchema (<code>90701d6e6d5496a9b0d9bf3f2a61b3f27c9f8b3f</code>).</li></ul>
 <h2 id="0150--2026-11-25">[0.15.0] — 2026-11-25</h2>
 <h3 id="añadido-2">Añadido</h3>
 <ul><li>El recorrido JS incluye <code>.mts</code> y <code>.cts</code>. La resolución de paquetes lee <code>exports</code> antes de <code>main</code> (<code>1be78a491a3a4b961f74ad7762b977c0c15acbe2</code>).</li></ul>
-<h3 id="corregido">Corregido</h3>
+<h3 id="corregido-1">Corregido</h3>
 <ul><li><code>src/native-windows/addon.ts</code> lee el nombre del proceso Win32 en vivo, la integridad del token y una instantánea de directorio. Ya no devuelve un éxito iskelet (<code>1be78a491a3a4b961f74ad7762b977c0c15acbe2</code>).</li></ul>
-<h3 id="actualizado-2">Actualizado</h3>
+<h3 id="actualizado-3">Actualizado</h3>
 <ul><li><code>rea_aot_profile</code> y <code>rea_mips_psp_profile</code> declaran <code>details.iskelet: true</code>. La superficie sigue en 191 herramientas y 188 outputSchema (<code>1be78a491a3a4b961f74ad7762b977c0c15acbe2</code>).</li></ul>
 <h2 id="0140--2026-11-25">[0.14.0] — 2026-11-25</h2>
 <h3 id="añadido-3">Añadido</h3>
 <ul><li><code>rea_pwn_elf_layout</code> lee las cabeceras de programa ELF e informa PIE, NX y RELRO. <code>rea_pwn_gadgets</code> conserva secuencias de 1 a 5 instrucciones que terminan en <code>ret</code>, <code>retn</code> o <code>retf</code> (<code>0039bb3dbed5314c3485a4f04ac794e4706c4c14</code>).</li></ul>
-<h3 id="corregido-1">Corregido</h3>
+<h3 id="corregido-2">Corregido</h3>
 <ul><li><code>rea_frida_api</code> ya no llama a <code>GetTickCount</code>, <code>CreateFileW</code> ni <code>CloseHandle</code> dentro del objetivo. El script solo engancha hooks y espera (<code>0039bb3dbed5314c3485a4f04ac794e4706c4c14</code>).</li><li><code>sniff.test.mjs</code> corre en el carril de pruebas por defecto. Los archivos Frida y Ghidra en vivo siguen excluidos (<code>0039bb3dbed5314c3485a4f04ac794e4706c4c14</code>).</li></ul>
-<h3 id="actualizado-3">Actualizado</h3>
+<h3 id="actualizado-4">Actualizado</h3>
 <ul><li><code>rea_pwn_elf_layout</code> ahora tiene un outputSchema. La superficie es de 191 herramientas, 188 outputSchema y 3 herramientas sin esquema (<code>0039bb3dbed5314c3485a4f04ac794e4706c4c14</code>).</li></ul>
 <h2 id="0131--2026-11-25">[0.13.1] — 2026-11-25</h2>
 <h3 id="añadido-4">Añadido</h3>
 <ul><li><code>tests/docs-english.test.mjs</code> rechaza la prosa turca en la allowlist de markdown orientada a GitHub (<code>e68f61beb643b2fa20440c55cf0ef93a985d67a9</code>).</li></ul>
-<h3 id="actualizado-4">Actualizado</h3>
+<h3 id="actualizado-5">Actualizado</h3>
 <ul><li>La documentación orientada a GitHub está en inglés, incluida la hoja de ruta, las lagunas de cobertura y la comparación morluto (<code>e68f61beb643b2fa20440c55cf0ef93a985d67a9</code>).</li><li>La tabla de la hoja de ruta registra el paso de CI del presupuesto de esquema, el workflow de despliegue de Pages, 7 prompts y la procedencia npm (<code>e68f61beb643b2fa20440c55cf0ef93a985d67a9</code>).</li></ul>
 <h2 id="0130--2026-10-20">[0.13.0] — 2026-10-20</h2>
 <p>Versión 0.13.0: dalga-13 + dalga-14 — identidad de máquina en sniff (PE

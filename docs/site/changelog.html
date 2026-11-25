@@ -26,34 +26,39 @@
 <h1 id="changelog--rea-plus">Changelog — rea-plus</h1>
 <p>Tüm önemli değişiklikler bu dosyada tutulur. Format: Keep a Changelog + SemVer.
 All notable changes are documented here (Türkçe özet + English detail).</p>
+<h2 id="0171--2026-11-25">[0.17.1] — 2026-11-25</h2>
+<h3 id="düzeltildi">Düzeltildi</h3>
+<ul><li><code>rea_angr_explore</code>, <code>rea_afl_fuzz</code>, <code>rea_lldb_script</code> ve <code>rea_ttd_info</code> REAVM, REAFZ, REALDB ve REATD yürütür. Sürüm satırı okumaz (<code>94c721033953033f0d0221ec8ce380fdc605f04f</code>).</li></ul>
+<h3 id="güncellendi">Güncellendi</h3>
+<ul><li><code>rea_aot_profile</code> PE içinde varsa COR20 başlığını okur. <code>rea_mips_psp_profile</code> ELF32 MIPS başlığını okur. <code>iskelet</code> true kalır (<code>94c721033953033f0d0221ec8ce380fdc605f04f</code>).</li></ul>
 <h2 id="0170--2026-11-25">[0.17.0] — 2026-11-25</h2>
 <h3 id="eklendi">Eklendi</h3>
 <ul><li><code>rea_angr_explore</code>, <code>rea_afl_fuzz</code>, <code>rea_lldb_script</code> ve <code>rea_ttd_info</code> dış programın stdout çıktısını ayrıştırır. Program yoksa <code>capability_unsupported</code> döner (<code>3ab174f64ea1ba3f10ad050bedadc31a4d3a542a</code>).</li></ul>
-<h3 id="güncellendi">Güncellendi</h3>
+<h3 id="güncellendi-1">Güncellendi</h3>
 <ul><li>Dört sonda yalnız <code>all</code> profilindedir. Yüzey 200 araç ve 197 outputSchema (<code>3ab174f64ea1ba3f10ad050bedadc31a4d3a542a</code>).</li></ul>
 <h2 id="0160--2026-11-25">[0.16.0] — 2026-11-25</h2>
 <h3 id="eklendi-1">Eklendi</h3>
 <ul><li><code>rea_electron_fuses</code> Electron fuse sentinel'ini ve wire'ı okur. <code>rea_electron_window</code> BrowserWindow seçenek anahtarlarını sınıflar. <code>rea_apk_splits</code> taban ve split APK'ları ayırır. <code>rea_adb_pull</code> adb pull çalıştırır. <code>rea_sqlite_snapshot</code> veritabanı başlığını ve şema tablo adlarını okur (<code>90701d6e6d5496a9b0d9bf3f2a61b3f27c9f8b3f</code>).</li></ul>
-<h3 id="güncellendi-1">Güncellendi</h3>
+<h3 id="güncellendi-2">Güncellendi</h3>
 <ul><li>Beş araç yalnız <code>all</code> profilindedir. Yüzey 196 araç ve 193 outputSchema (<code>90701d6e6d5496a9b0d9bf3f2a61b3f27c9f8b3f</code>).</li></ul>
 <h2 id="0150--2026-11-25">[0.15.0] — 2026-11-25</h2>
 <h3 id="eklendi-2">Eklendi</h3>
 <ul><li>JS yürüyüşü <code>.mts</code> ve <code>.cts</code> içerir. Paket çözümlemesi <code>main</code> öncesinde <code>exports</code> okur (<code>1be78a491a3a4b961f74ad7762b977c0c15acbe2</code>).</li></ul>
-<h3 id="düzeltildi">Düzeltildi</h3>
+<h3 id="düzeltildi-1">Düzeltildi</h3>
 <ul><li><code>src/native-windows/addon.ts</code> canlı Win32 süreç adını, token bütünlüğünü ve bir dizin anlık görüntüsünü okur. Artık iskelet başarı döndürmez (<code>1be78a491a3a4b961f74ad7762b977c0c15acbe2</code>).</li></ul>
-<h3 id="güncellendi-2">Güncellendi</h3>
+<h3 id="güncellendi-3">Güncellendi</h3>
 <ul><li><code>rea_aot_profile</code> ve <code>rea_mips_psp_profile</code> <code>details.iskelet: true</code> bildirir. Yüzey 191 araç ve 188 outputSchema olarak kalır (<code>1be78a491a3a4b961f74ad7762b977c0c15acbe2</code>).</li></ul>
 <h2 id="0140--2026-11-25">[0.14.0] — 2026-11-25</h2>
 <h3 id="eklendi-3">Eklendi</h3>
 <ul><li><code>rea_pwn_elf_layout</code> ELF program başlıklarını okur ve PIE, NX ve RELRO bildirir. <code>rea_pwn_gadgets</code> <code>ret</code>, <code>retn</code> veya <code>retf</code> ile biten 1-5 komutluk dizileri tutar (<code>0039bb3dbed5314c3485a4f04ac794e4706c4c14</code>).</li></ul>
-<h3 id="düzeltildi-1">Düzeltildi</h3>
+<h3 id="düzeltildi-2">Düzeltildi</h3>
 <ul><li><code>rea_frida_api</code> hedef içinde artık <code>GetTickCount</code>, <code>CreateFileW</code> veya <code>CloseHandle</code> çağırmaz. Betik yalnız kancaları takar ve bekler (<code>0039bb3dbed5314c3485a4f04ac794e4706c4c14</code>).</li><li><code>sniff.test.mjs</code> varsayılan test şeridinde koşar. Canlı Frida ve Ghidra dosyaları dışarıda kalır (<code>0039bb3dbed5314c3485a4f04ac794e4706c4c14</code>).</li></ul>
-<h3 id="güncellendi-3">Güncellendi</h3>
+<h3 id="güncellendi-4">Güncellendi</h3>
 <ul><li><code>rea_pwn_elf_layout</code> artık bir outputSchema taşır. Yüzey 191 araç, 188 outputSchema ve 3 şemasız araçtır (<code>0039bb3dbed5314c3485a4f04ac794e4706c4c14</code>).</li></ul>
 <h2 id="0131--2026-11-25">[0.13.1] — 2026-11-25</h2>
 <h3 id="eklendi-4">Eklendi</h3>
 <ul><li><code>tests/docs-english.test.mjs</code> GitHub'a bakan markdown allowlist'inde Türkçe düzyazıyı reddeder (<code>e68f61beb643b2fa20440c55cf0ef93a985d67a9</code>).</li></ul>
-<h3 id="güncellendi-4">Güncellendi</h3>
+<h3 id="güncellendi-5">Güncellendi</h3>
 <ul><li>GitHub'a bakan belgeler İngilizcedir; yol haritası, kapsam boşlukları ve morluto karşılaştırması buna dahildir (<code>e68f61beb643b2fa20440c55cf0ef93a985d67a9</code>).</li><li>Yol haritası tablosu şema bütçesi CI adımını, Pages dağıtım iş akışını, 7 prompt'u ve npm provenance'ı kaydeder (<code>e68f61beb643b2fa20440c55cf0ef93a985d67a9</code>).</li></ul>
 <h2 id="0130--2026-10-20">[0.13.0] — 2026-10-20</h2>
 <p>Sürüm 0.13.0: dalga-13 + dalga-14 — sniff makine kimliği (PE ARMNT/ARM64,

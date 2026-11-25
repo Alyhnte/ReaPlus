@@ -6,7 +6,7 @@
 
 ## Resumen
 
-- Servidor: `rea-plus` 0.17.0
+- Servidor: `rea-plus` 0.17.1
 - Herramientas totales: 200
 - Recursos totales: 2
 - Prompts totales: 7

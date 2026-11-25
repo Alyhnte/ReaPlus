@@ -2,6 +2,16 @@
 
 All notable changes are kept in this file. Format: Keep a Changelog + SemVer.
 
+## [0.17.1] — 2026-11-25
+
+### Fixed
+
+- `rea_angr_explore`, `rea_afl_fuzz`, `rea_lldb_script`, and `rea_ttd_info` execute REAVM, REAFZ, REALDB, and REATD. They no longer parse a version line (`94c721033953033f0d0221ec8ce380fdc605f04f`).
+
+### Updated
+
+- `rea_aot_profile` reads a COR20 header when the PE has one. `rea_mips_psp_profile` reads an ELF32 MIPS header. `iskelet` stays true. English counts are 200 tools, 170 `rea_*` tools, 197 schemas, and 200 annotations (`94c721033953033f0d0221ec8ce380fdc605f04f`).
+
 ## [0.17.0] — 2026-11-25
 
 ### Added

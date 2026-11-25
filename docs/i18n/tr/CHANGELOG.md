@@ -3,6 +3,16 @@
 Tüm önemli değişiklikler bu dosyada tutulur. Format: Keep a Changelog + SemVer.
 All notable changes are documented here (Türkçe özet + English detail).
 
+## [0.17.1] — 2026-11-25
+
+### Düzeltildi
+
+- `rea_angr_explore`, `rea_afl_fuzz`, `rea_lldb_script` ve `rea_ttd_info` REAVM, REAFZ, REALDB ve REATD yürütür. Sürüm satırı okumaz (`94c721033953033f0d0221ec8ce380fdc605f04f`).
+
+### Güncellendi
+
+- `rea_aot_profile` PE içinde varsa COR20 başlığını okur. `rea_mips_psp_profile` ELF32 MIPS başlığını okur. `iskelet` true kalır (`94c721033953033f0d0221ec8ce380fdc605f04f`).
+
 ## [0.17.0] — 2026-11-25
 
 ### Eklendi

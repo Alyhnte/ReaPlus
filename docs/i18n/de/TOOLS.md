@@ -6,7 +6,7 @@
 
 ## Zusammenfassung
 
-- Server: `rea-plus` 0.17.0
+- Server: `rea-plus` 0.17.1
 - Werkzeuge gesamt: 200
 - Ressourcen gesamt: 2
 - Prompts gesamt: 7

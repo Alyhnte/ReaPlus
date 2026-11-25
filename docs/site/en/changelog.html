@@ -25,34 +25,39 @@
 <h1>Changelog</h1>
 <h1 id="changelog--rea-plus">Changelog — rea-plus</h1>
 <p>All notable changes are kept in this file. Format: Keep a Changelog + SemVer.</p>
+<h2 id="0171--2026-11-25">[0.17.1] — 2026-11-25</h2>
+<h3 id="fixed">Fixed</h3>
+<ul><li><code>rea_angr_explore</code>, <code>rea_afl_fuzz</code>, <code>rea_lldb_script</code>, and <code>rea_ttd_info</code> execute REAVM, REAFZ, REALDB, and REATD. They no longer parse a version line (<code>94c721033953033f0d0221ec8ce380fdc605f04f</code>).</li></ul>
+<h3 id="updated">Updated</h3>
+<ul><li><code>rea_aot_profile</code> reads a COR20 header when the PE has one. <code>rea_mips_psp_profile</code> reads an ELF32 MIPS header. <code>iskelet</code> stays true. English counts are 200 tools, 170 <code>rea_*</code> tools, 197 schemas, and 200 annotations (<code>94c721033953033f0d0221ec8ce380fdc605f04f</code>).</li></ul>
 <h2 id="0170--2026-11-25">[0.17.0] — 2026-11-25</h2>
 <h3 id="added">Added</h3>
 <ul><li><code>rea_angr_explore</code>, <code>rea_afl_fuzz</code>, <code>rea_lldb_script</code>, and <code>rea_ttd_info</code> parse the external program stdout. A missing program returns <code>capability_unsupported</code> (<code>3ab174f64ea1ba3f10ad050bedadc31a4d3a542a</code>).</li></ul>
-<h3 id="updated">Updated</h3>
+<h3 id="updated-1">Updated</h3>
 <ul><li>The four probes are on the <code>all</code> profile only. The surface is 200 tools and 197 output schemas (<code>3ab174f64ea1ba3f10ad050bedadc31a4d3a542a</code>).</li></ul>
 <h2 id="0160--2026-11-25">[0.16.0] — 2026-11-25</h2>
 <h3 id="added-1">Added</h3>
 <ul><li><code>rea_electron_fuses</code> reads the Electron fuse sentinel and wire. <code>rea_electron_window</code> classifies BrowserWindow option keys. <code>rea_apk_splits</code> separates base and split APKs. <code>rea_adb_pull</code> runs adb pull. <code>rea_sqlite_snapshot</code> reads the database header and schema table names (<code>90701d6e6d5496a9b0d9bf3f2a61b3f27c9f8b3f</code>).</li></ul>
-<h3 id="updated-1">Updated</h3>
+<h3 id="updated-2">Updated</h3>
 <ul><li>The five tools are on the <code>all</code> profile only. The surface is 196 tools and 193 output schemas (<code>90701d6e6d5496a9b0d9bf3f2a61b3f27c9f8b3f</code>).</li></ul>
 <h2 id="0150--2026-11-25">[0.15.0] — 2026-11-25</h2>
 <h3 id="added-2">Added</h3>
 <ul><li>The JS walk includes <code>.mts</code> and <code>.cts</code>. Package resolution reads <code>exports</code> before <code>main</code> (<code>1be78a491a3a4b961f74ad7762b977c0c15acbe2</code>).</li></ul>
-<h3 id="fixed">Fixed</h3>
+<h3 id="fixed-1">Fixed</h3>
 <ul><li><code>src/native-windows/addon.ts</code> reads the live Win32 process name, token integrity, and a directory snapshot. It no longer returns a skeleton success (<code>1be78a491a3a4b961f74ad7762b977c0c15acbe2</code>).</li></ul>
-<h3 id="updated-2">Updated</h3>
+<h3 id="updated-3">Updated</h3>
 <ul><li><code>rea_aot_profile</code> and <code>rea_mips_psp_profile</code> declare <code>details.iskelet: true</code>. The surface stays 191 tools and 188 output schemas (<code>1be78a491a3a4b961f74ad7762b977c0c15acbe2</code>).</li></ul>
 <h2 id="0140--2026-11-25">[0.14.0] — 2026-11-25</h2>
 <h3 id="added-3">Added</h3>
 <ul><li><code>rea_pwn_elf_layout</code> reads ELF program headers and reports PIE, NX, and RELRO. <code>rea_pwn_gadgets</code> keeps 1-5 instruction sequences that end in <code>ret</code>, <code>retn</code>, or <code>retf</code> (<code>0039bb3dbed5314c3485a4f04ac794e4706c4c14</code>).</li></ul>
-<h3 id="fixed-1">Fixed</h3>
+<h3 id="fixed-2">Fixed</h3>
 <ul><li><code>rea_frida_api</code> no longer calls <code>GetTickCount</code>, <code>CreateFileW</code>, or <code>CloseHandle</code> inside the target. The script only attaches hooks and waits (<code>0039bb3dbed5314c3485a4f04ac794e4706c4c14</code>).</li><li><code>sniff.test.mjs</code> runs in the default test lane. Live Frida and Ghidra files stay excluded (<code>0039bb3dbed5314c3485a4f04ac794e4706c4c14</code>).</li></ul>
-<h3 id="updated-3">Updated</h3>
+<h3 id="updated-4">Updated</h3>
 <ul><li><code>rea_pwn_elf_layout</code> now has an output schema. The surface is 191 tools, 188 output schemas, and 3 schema-less tools (<code>0039bb3dbed5314c3485a4f04ac794e4706c4c14</code>).</li></ul>
 <h2 id="0131--2026-11-25">[0.13.1] — 2026-11-25</h2>
 <h3 id="added-4">Added</h3>
 <ul><li><code>tests/docs-english.test.mjs</code> rejects Turkish prose on the GitHub-facing markdown allowlist (<code>e68f61beb643b2fa20440c55cf0ef93a985d67a9</code>).</li></ul>
-<h3 id="updated-4">Updated</h3>
+<h3 id="updated-5">Updated</h3>
 <ul><li>GitHub-facing documentation is English, including the roadmap, coverage gaps, and the morluto comparison (<code>e68f61beb643b2fa20440c55cf0ef93a985d67a9</code>).</li><li>The roadmap table records the schema-budget CI step, the Pages deploy workflow, 7 prompts, and npm provenance (<code>e68f61beb643b2fa20440c55cf0ef93a985d67a9</code>).</li></ul>
 <h2 id="0130--2026-10-20">[0.13.0] — 2026-10-20</h2>
 <p>Release 0.13.0: dalga-13 + dalga-14 — sniff machine identity (PE ARMNT/ARM64,
@@ -63,7 +68,7 @@ unchanged (191 tools · 187 outputSchema · 2 resources · 7 prompts, 6 language
 107/107 tests green.</p>
 <h3 id="added-5">Added</h3>
 <ul><li><code>rea_sniff</code>: PE <code>makine</code> now reports ARMNT (<code>0x01c4</code>) and ARM64 (<code>0xaa64</code>);</li><li>  x86/x64 and legacy ARM/Thumb/ARM64EC are deliberately out of scope. ELF</li><li>  <code>e_machine</code> (LE/BE, ≥20B) maps to 14 names, including Hexagon (164).</li><li><code>rea_apple_plist</code>: type-aware lossless value reading (integer/real raw</li><li>  strings preserved, XML entities decoded) + <code>details.anahtarTipleri</code>.</li><li><code>rea_js_require</code> / <code>rea_js_export_shape</code>: relative + node_modules</li><li>  resolution, CJS export shape; <code>rea_js_bundle_diff</code> optional <code>mapA</code>/<code>mapB</code></li><li>  adds <code>details.iliskiler {paylasilanKaynaklar, yalnizA, yalnizB}</code></li><li>  (deterministic).</li><li><code>rea_apktool_info</code> / <code>rea_apktool_caps</code>: optional `surumGozlem {ham,</li><li>  sayisal?}` — observation only, not evidence; absent on unparseable lines.</li><li>Ghidra raw m68k language profile (<code>GhidraRawProfil</code>, pure surface-external</li><li>  module).</li></ul>
-<h3 id="fixed-2">Fixed</h3>
+<h3 id="fixed-3">Fixed</h3>
 <ul><li><code>analyze-js</code> CLI directory-vs-file guard: a directory is no longer treated</li><li>  as <code>index.js</code> and silently walked; clear error + exit code.</li><li>Version carriers: README, i18n, site, CHANGELOG and dist manifests are now</li><li>  covered by version-sync (9 checks); stale 0.8.2/0.9.0/0.10.1 values removed.</li><li>Status lines in README/TOOLS/ROADMAP updated to v0.13.0 in 6 languages;</li><li>  historical records intentionally untouched.</li></ul>
 <h3 id="internal">Internal</h3>
 <ul><li>Waves 13–14 in isolated worktrees + TDD; 4/4 branches merged; full suite</li></ul>
@@ -75,7 +80,7 @@ fix + docs/site/tool-reference sync (191 tools · 187 outputSchema ·
 191 annotations · 2 resources · 7 prompts, 6 languages). 103/103 tests green.</p>
 <h3 id="added-6">Added</h3>
 <ul><li>4 task-template prompts: <code>packer-triage</code>, <code>dotnet-malware-triage</code>,</li><li>  <code>android-triage</code>, <code>pe-crash-triage</code> (7 prompts total; <code>docs/PROMPTS.md</code></li><li>  has 10 numbered sections, each with purpose + example call + expected</li><li>  output).</li><li>Golden corpus: 5 real gcc binaries (PE32+/DLL/COFF obj) +</li><li>  <code>tests/corpus/HASHES.json</code> + deterministic rebuild script + 16 new</li><li>  sdk-surface tests (fs 14, scan_repo 10/pe5).</li><li>Portable node bundle: <code>scripts/portable-paketle.mjs</code> (node-less</li><li>  distribution; prod-dependency closure, frida binding carried as a file,</li><li>  MANIFEST + smoke) + 7 tests; <code>publish.yml</code> release-artifacts step</li><li>  uploads the portable zip as a GitHub Release asset (linux bundle; CI</li><li>  runs ubuntu).</li><li><code>generate-tool-reference.mjs</code> CLI guard realpath fix: junction vs</li><li>  real path no longer a silent no-op (exit 0, no output) +</li><li>  <code>tests/generate-tool-reference-cli.test.mjs</code>.</li></ul>
-<h3 id="fixed-3">Fixed</h3>
+<h3 id="fixed-4">Fixed</h3>
 <ul><li>Current summary lines now say 7 prompts across 6 languages</li><li>  (TR/EN/DE/FR/ES + root): README, EXAMPLES, PROMPTS, ROADMAP;</li><li>  historical v0.10.0/CERRADO lines intentionally untouched (true then).</li><li>TOOLS.md re-matched to the real surface (191/2/7) + site regen</li><li>  (5 languages × 7 pages).</li></ul>
 <h2 id="0110--2026-10-18">[0.11.0] — 2026-10-18</h2>
 <p>Release 0.11.0: 5-language i18n site + premium theme + sample sessions +
@@ -91,13 +96,13 @@ research notes. Tool surface unchanged (191 tools + 2 resources +
 3 prompts). 96/96 default tests green.</p>
 <h3 id="added-8">Added</h3>
 <ul><li>Pages deploy workflow (<code>pages.yml</code>: main push → site-uret → deploy).</li><li>Schema-budget CI step (200KB list / 110KB schema / 600B avg).</li><li>Targeted fuzz harness (<code>scripts/fuzz-harness.mjs</code>: classification + report</li><li><code>docs/FUZZ.md</code>; first run 0 crashes).</li><li>Portable node bundle (<code>scripts/sea-portable.mjs</code> + <code>docs/SEA-DAGITIM.md</code>;</li><li>  no single-exe SEA due to 3 blockers).</li><li>P3 feasibility notes (<code>docs/ARASTIRMA-*</code>: LLDB/TTD/angr WAIT, commercial DON'T).</li><li>Contribution funnel (CONTRIBUTING expansion + good-first-issue form).</li></ul>
-<h3 id="fixed-4">Fixed</h3>
+<h3 id="fixed-5">Fixed</h3>
 <ul><li><code>rea_macho_objc</code> fat-binary slice resolution (<code>arch</code> parameter + honesty</li><li>  ladder); IL2CPP v31+ keeps limited mode since it can't be verified offline.</li><li>ROADMAP v0.10.1 sync (P1 closures processed).</li></ul>
 <h2 id="0101--2026-10-16">[0.10.1] — 2026-10-16</h2>
 <p>Release 0.10.1: P1 code items closed — dead-facade cleanup +
 golden DEX fixture. Tool surface unchanged (191 tools + 2 resources +
 3 prompts). 92/92 default tests green.</p>
-<h3 id="fixed-5">Fixed</h3>
+<h3 id="fixed-6">Fixed</h3>
 <ul><li>Dead facade removed: <code>probeCache</code>/<code>parallelProbe</code> behavior moved</li><li>  into <code>workerCache</code> (<code>ResultCache</code> TTL + <code>runProbes</code>);</li><li>  <code>tests/probe.test.mjs</code> moved under <code>worker-cache.test.mjs</code>.</li><li>Golden DEX fixture: <code>tests/corpus/mini.dex</code> (synthetic minimal DEX</li><li>  v035, deterministic generation via <code>scripts/dex-fixture-uret.mjs</code>) +</li><li>  <code>dex-golden</code> 7 tests + HASHES entry.</li><li>Added <code>RepoScan</code> <code>.dex → dex/jadx</code> mapping.</li></ul>
 <h2 id="0100--2026-10-16">[0.10.0] — 2026-10-16</h2>
 <p>Release 0.10.0: 4 new tools (187→191), serialization queue, worker-cache
@@ -106,7 +111,7 @@ lasting quality (schema budget, docs site, prompt library, ObjC/IL2CPP/Go
 depth). 187 <code>outputSchema</code>, 191 annotations. 91/91 default tests green.</p>
 <h3 id="added-9">Added</h3>
 <ul><li><code>rea_macho_objc/classdump</code>, <code>rea_il2cpp_methods</code>, <code>rea_go_buildinfo</code>.</li><li>Full serialization (<code>REA_SESSION_SERIALIZE=1</code>, timestamp-evidenced).</li><li>Live worker-cache wiring (reposcan path, counter-evidenced).</li><li>SEA feasibility report + pilot script; winget/scoop/homebrew manifests.</li><li>SBOM (CycloneDX) + <code>docs/SANDBOX.md</code> (Hyper-V/VirtualBox).</li><li>Schema budget (measured thresholds), docs site (7 pages), <code>docs/PROMPTS.md</code>.</li></ul>
-<h3 id="fixed-6">Fixed</h3>
+<h3 id="fixed-7">Fixed</h3>
 <ul><li>POSIX jadx discovery (PATH scan + X_OK).</li><li>Hopper POSIX similarity gate.</li><li>cdb-async CI-Linux compatibility; corpus normalized.</li></ul>
 <h3 id="not-yet-done">Not yet done</h3>
 <ul><li>Live Frida VM approval; self-hosted Windows runner.</li><li>Dead-facade removal (probe-test dependency); P3 research.</li></ul>
@@ -118,7 +123,7 @@ by default, performance budgets, sample sessions + CONTRIBUTING) landed.
 86/86 default tests green.</p>
 <h3 id="added-10">Added</h3>
 <ul><li>15 new tools (172→187): <code>rea_go_funclines</code>, <code>rea_go_goresym</code>,</li><li>  <code>rea_il2cpp_metadata</code>, <code>rea_il2cpp_dump</code>, <code>rea_bindiff_fonksiyonlar</code>,</li><li>  <code>rea_bindiff_karsilastir</code>, <code>rea_flutter_snapshot</code>, <code>rea_flutter_blutter</code>,</li><li>  <code>rea_macho_info</code>, <code>rea_macho_loads</code>, <code>rea_macho_otool</code>, <code>rea_pcap_oku</code>,</li><li>  <code>rea_scan_repo_paralel</code>, <code>rea_android_dinamik_recete</code>,</li><li>  <code>rea_android_recete_dogrula</code>.</li><li>The <code>rea-plus-cli setup</code> wizard (client detection + config writing) and</li><li>  <code>doctor --fix</code> (approved install suggestion/execution).</li><li>Parser fuzz smoke (<code>scripts/fuzz-parsers.mjs</code> + <code>parser-fuzz.test.mjs</code>;</li><li>  seeds from the read-only corpus, writes to tmpdir only).</li><li>HTTP e2e moved into the default lane (<code>tests/e2e.http.mjs</code>).</li><li>Performance budgets (<code>perf-budget.test.mjs</code>: tools/list + startup).</li><li>Sample sessions (<code>docs/EXAMPLES.md</code> + <code>docs-examples.test.mjs</code>) and</li><li>  <code>CONTRIBUTING.md</code> (including corpus rules).</li></ul>
-<h3 id="fixed-7">Fixed</h3>
+<h3 id="fixed-8">Fixed</h3>
 <ul><li>Hopper POSIX similarity gate: a fake file that doesn't look like an</li><li>  executable bit/size doesn't count as Hopper, honestly returns</li><li>  <code>capability_unsupported</code>.</li><li>The cdb async CI-Linux branch and corpus line-ending normalization (fixes</li><li>  carried over from 0.8.2) are locked in with regression tests on the</li></ul>
 <p>  187-tool surface.</p>
 <h3 id="not-yet-done-1">Not yet done</h3>
@@ -131,7 +136,7 @@ by default, performance budgets, sample sessions + CONTRIBUTING) landed.
 <p>(177), queue +1 (173). 72/72 default tests green (including CI).</p>
 <h3 id="added-11">Added</h3>
 <ul><li>20 conduit + <code>rea_pdb_indir</code> <code>outputSchema</code> (168 total); annotations 172/172.</li><li><code>rea_pdb_indir</code> registration (Microsoft symbol server, integrity-checked,</li><li>  cached, <code>all</code> profile only).</li><li>Session TTL (<code>REA_SESSION_TTL_MS</code>, default 30min, 0=off).</li><li>Modern Roots MRTR (<code>inputRequired</code>/<code>inputResponses</code>); <code>list_changed</code> stays legacy.</li><li>Progress stage helpers in 2 more tools; async whitelist at 3.</li></ul>
-<h3 id="fixed-8">Fixed</h3>
+<h3 id="fixed-9">Fixed</h3>
 <ul><li>cdb-async test CI-Linux compatibility (the <code>engine_unavailable</code> branch is accepted).</li><li>Corpus hash line-ending normalization; <code>ornek.js</code> HASHES fix.</li></ul>
 <h3 id="not-yet-done-2">Not yet done</h3>
 <ul><li>Live Frida VM approval; self-hosted Windows runner; permanent DEX corpus.</li><li>P2 distribution ease; analysis depth; P3 research.</li></ul>
@@ -144,7 +149,7 @@ generalization). Default surface held at 171 tools; every addition is opt-in
 or an honest-error improvement. 70/70 default tests green.</p>
 <h3 id="added-12">Added</h3>
 <ul><li>Session FIFO queue (<code>REA_SESSION_QUEUE=1</code> opt-in, depth 32,</li><li>  <code>session_queue_status</code> tool; default 171 surface unchanged).</li><li>Frida setup timeouts (attach 15s/script 10s/load 15s, env-overridable,</li><li>  <code>engine_timeout</code> with unload/detach cleanup on timeout).</li><li>cdb async pause + push events (event loop never blocked, <code>pauseAsync</code> opt-in).</li><li>x64dbg provisioning (<code>reaX64dbgDoctor</code> + <code>reaX64dbgSetup</code>, idempotent, hash-verified).</li><li>Real browser-scenario runs (step-evidenced, dry-run mode,</li><li>  <code>capability_unsupported</code> without a backend).</li><li>Syscall number matrix + CreateFileW/RegSet profiles.</li><li>Single-call behavior run (<code>BehaviorRun</code>: spawn+trace+capture, mandatory</li><li>  timeout, crash honesty).</li><li>Worker cache (LRU-100, hash-keyed, <code>REA_CACHE=0</code> bypass).</li><li>Golden corpus manifest (<code>tests/corpus/HASHES.json</code> + <code>verify-corpus.mjs</code>).</li><li>Progress generalization helpers (<code>createStageProgress</code>, <code>onAbort</code>).</li><li>27 new <code>outputSchema</code> (147 total: 137 rea + 10 conduit).</li></ul>
-<h3 id="fixed-9">Fixed</h3>
+<h3 id="fixed-10">Fixed</h3>
 <ul><li>jadx <code>-jar</code> hang: switched to the <code>-cp jadx.cli.JadxCLI</code> form; live APK</li><li>  acceptance passed (<code>com.zb.test</code>, 7 permissions, 5 classes, 2.2s).</li><li>FLIRT misnomer: description and result carry <code>string-heuristic</code> + confidence score.</li><li>WasmInfo multi-byte LEB + DWARF v5/abbrev_offset/multiple FORMs (negative</li><li>  sizes and fake empty summaries gone).</li><li>PE <code>SizeOfOptionalHeader</code> + PeReader/PdbReader duplicated code merged; PDB</li><li>  download (cached, integrity-checked).</li></ul>
 <h3 id="not-yet-done-3">Not yet done</h3>
 <ul><li>Live Frida VM approval; permanent DEX corpus (in-repo fixture); self-hosted Windows runner.</li><li>Remaining 24 schema-less tools; progress generalization (sync handlers);</li><li>  trusted-publisher OIDC + provenance.</li></ul>
@@ -162,7 +167,7 @@ release; external gates in &quot;Not yet done&quot; remain open.</p>
 that locked consumers out is fixed. README rewritten from scratch (one-click
 installs, architecture diagram, client matrix); the full roadmap is in
 <code>docs/ROADMAP.md</code>.</p>
-<h3 id="fixed-10">Fixed</h3>
+<h3 id="fixed-11">Fixed</h3>
 <ul><li>Playwright is now optional and lazily loaded. Previously, while it sat in</li><li>  <code>devDependencies</code>, product code statically imported it: everyone installing</li><li>  the package got <code>ERR_MODULE_NOT_FOUND</code> at startup. The server starts without</li><li>  Playwright; browser tools return <code>capability_unsupported</code>. For browsers:</li><li>  <code>npm i playwright &amp;&amp; npx playwright install chromium</code>.</li></ul>
 <h3 id="added-14">Added</h3>
 <ul><li>The <code>prepare</code> script: git installs (<code>npx -y github:Alyhnte/ReaPlus</code>) build</li><li>  dist automatically.</li><li>One-click install links (Cursor, VS Code) + client config samples: Claude</li><li>  Desktop/Code, Cursor, VS Code, Windsurf, Codex, opencode (<code>configs/</code>).</li><li><code>Dockerfile</code> + GHCR workflow: releases push the <code>ghcr.io/alyhnte/reaplus</code> image.</li><li><code>smithery.yaml</code> registry metadata; personal paths scrubbed from config samples.</li><li>Visual README (badges, Mermaid architecture, env table, security model) and</li><li>  <code>docs/ROADMAP.md</code> (9 themes, prioritized full table).</li></ul>
@@ -171,7 +176,7 @@ installs, architecture diagram, client matrix); the full roadmap is in
 machine too (clean Ubuntu CI, Node 20+22). The same generalization was applied
 to product code: tool discovery uses only env + PATH, no machine-specific
 hardcoded path remains.</p>
-<h3 id="fixed-11">Fixed</h3>
+<h3 id="fixed-12">Fixed</h3>
 <ul><li>Test fixtures read the tracked in-repo corpus (<code>tests/corpus</code>, relative to</li><li>  <code>import.meta.url</code>) instead of personal Temp paths; <code>korpus-kur</code> refreshes</li><li>  only via the <code>REA_KORPUS_ELF</code>/<code>REA_KORPUS_PE</code> env.</li><li>Presence probes account for <code>spawnSync</code> not throwing (<code>r.error</code>/status): on</li><li>  machines without mitmdump, product and tests now see the gate correctly (the</li></ul>
 <p>  13s fake proxy wait is gone too).</p>
 <ul><li>Without tools, tests behave principledly: no wabt/upx/ilspy/dnfile/Chromium</li><li>  means a <code>capability_unsupported</code> assert or an honest skip; the UPX version is</li><li>  no longer pinned to 5.2.1.</li><li>Product tool discovery generalized: <code>REA_UPX_BIN</code>, <code>REA_WABT_BIN</code>,</li><li>  <code>REA_AAPT2_BIN</code> + PATH; personal WinGet/<code>C:\tools</code> paths removed. .NET CIL</li><li>  python lookup tries <code>python</code>/<code>python3</code>/<code>py</code> in order (on Linux usually only</li><li>  python3 exists).</li><li>Ghidra project dir under <code>os.tmpdir()</code> instead of a personal path; Ghidra</li><li>  tests assume no default install path (<code>REA_GHIDRA_DIR</code> required, live lane).</li><li>CLI tests invoke node via <code>process.execPath</code>, not from PATH.</li><li>The test runner prints a longer error tail for CI diagnosis.</li></ul>
@@ -181,7 +186,7 @@ hardcoded path remains.</p>
 <p>Comprehensive review fixes: broken entry/publish paths, error envelope,
 injection surfaces, fake <code>ok</code> results, and engine hardening. For interim
 releases (0.2.0–0.7.1) see the <code>docs/release-v*.md</code> files.</p>
-<h3 id="fixed-12">Fixed</h3>
+<h3 id="fixed-13">Fixed</h3>
 <ul><li><code>npm start</code> now runs the real entry (<code>dist/server.js</code>); the previous target</li><li>  (<code>dist/facade/createReaPlusServer.js</code>) was a transport-less factory — the</li><li>  server never started.</li><li><code>npm test</code> runs <code>scripts/run-tests.mjs</code> instead of the old script pointing</li><li>  outside the repo; CI now really runs the default set (43 files).</li><li>Error envelope: <code>ok:false</code> results and thrown errors from rea tools now reach</li><li>  MCP with <code>isError: true</code>; no more reporting as success.</li><li>Build also copies runtime files (<code>frida-agent.js</code>, Ghidra <code>.py</code> scripts); the</li><li>  Frida engine no longer returns <code>engine_unavailable</code> in the published package.</li><li>  <code>prepublishOnly</code> added.</li><li>Version collapsed to a single truth: <code>package.json</code>, <code>server.json</code>, <code>server.ts</code></li><li>  all read 0.7.2.</li><li>The Cutter <code>decompile</code> fallback ran analysis-free <code>pdf</code> and returned an empty</li><li>  <code>ok</code>; now it runs <code>aaa;pdf</code>, and empty output means <code>capability_unsupported</code>.</li><li><code>korpus-kur</code> preserves the tracked corpus when personal Temp sources are absent</li><li>  (won't crash CI); the idempotency test measures on the second run.</li></ul>
 <h3 id="security">Security</h3>
 <ul><li>Address inputs are validated in schemas and bridges (hex/number/symbol); r2/rizin</li><li>  command injection (<code>;</code>, <code>!</code> escaping) is closed.</li><li>The radare2 cmd.exe path rejects meta characters; shutdown kills the process</li><li>  tree (no orphaned r2 grandchildren).</li><li><code>rea_jeb_sorgu</code> POSTs to loopback only by default; remote targets require</li><li>  <code>REA_JEB_ALLOW_REMOTE=1</code>, and link-local/metadata hosts are blocked in all cases.</li><li>When the HTTP token is unset, the server warns loudly at startup (auth disabled).</li></ul>
