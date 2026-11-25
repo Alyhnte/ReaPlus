@@ -28,7 +28,7 @@ if (args[0] === "pull" && args[2]) writeFileSync(args[2], ${JSON.stringify(yaz)}
     return yol;
   }
   const yol = join(kok, "adb");
-  writeFileSync(yol, `#!/bin/sh\nexec node "${js.replace(/\\/g, "/")}" "$@"\n`);
+  writeFileSync(yol, `#!/bin/sh\nexec "${node}" "${js.replace(/\\/g, "/")}" "$@"\n`);
   chmodSync(yol, 0o755);
   return yol;
 }
