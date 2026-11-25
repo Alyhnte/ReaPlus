@@ -1,6 +1,6 @@
 # ROADMAP — ReaPlus roadmap
 
-> Status: v0.17.1. Research tools execute REAVM, REAFZ, REALDB, and REATD. The npm upload runs from the `v0.17.1` tag. Hashes stay `bilinmiyor` until the tarball is measured. Numbers below are the compiled surface in [`TOOLS.md`](TOOLS.md).
+> Status: v0.17.1. Research tools execute REAVM, REAFZ, REALDB, and REATD. npm has `rea-plus@0.17.1`. Scoop and Homebrew use the measured tarball sha256. The winget installer hash is the measured tag archive. Numbers below are the compiled surface in [`TOOLS.md`](TOOLS.md).
 >
 > **Scales:** Impact = contribution to user/agent value · Effort = S (days) / M (1-2 weeks) / L (month+) · Priority = P0 (outer gate) → P3 (long term).
 

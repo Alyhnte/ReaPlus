@@ -83,7 +83,7 @@ Any stdio MCP client can launch it straight from the npm registry:
 }
 ```
 
-> **Publishing status:** this tree is `rea-plus@0.17.1`. The npm upload runs when the `v0.17.1` tag's publish job succeeds. Scoop and Homebrew hashes stay `bilinmiyor` until that tarball is measured. Supported install paths remain `npx -y rea-plus` and GHCR (see [Docker](#-docker)).
+> **Publishing status:** this tree is `rea-plus@0.17.1`. The npm upload runs when the `v0.17.1` tag's publish job succeeds. Scoop and Homebrew hashes are the measured npm tarball sha256. Supported install paths remain `npx -y rea-plus` and GHCR (see [Docker](#-docker)).
 
 ### Clone & build
 

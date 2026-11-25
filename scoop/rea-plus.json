@@ -4,8 +4,8 @@
   "homepage": "https://github.com/Alyhnte/ReaPlus",
   "license": "MIT",
   "url": "https://registry.npmjs.org/rea-plus/-/rea-plus-0.17.1.tgz",
-  "hash": "bilinmiyor",
-  "_hashNotu": "npm registry tarball hash is measured after publish (0.17.1). No invented hash. Store submission was not run.",
+  "hash": "a9c76d623e9c2d28ec81624ad7f8984967013f259237299e6246bb17bdd2c78b",
+  "_hashNotu": "sha256 of https://registry.npmjs.org/rea-plus/-/rea-plus-0.17.1.tgz measured after publish. Store submission was not run.",
   "bin": [
     "dist/cli/index.js"
   ],

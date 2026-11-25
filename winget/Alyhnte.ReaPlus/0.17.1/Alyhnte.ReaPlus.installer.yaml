@@ -1,7 +1,6 @@
 # winget/Alyhnte.ReaPlus/0.17.1/Alyhnte.ReaPlus.installer.yaml — installer manifest.
 # Version source: package.json (0.17.1). Store submission was not run.
-# InstallerSha256 is not measured until the v0.17.1 tag archive exists.
-# "bilinmiyor" is the honest placeholder. No invented hash.
+# InstallerSha256 is the sha256 of the v0.17.1 tag archive. No invented hash.
 PackageIdentifier: Alyhnte.ReaPlus
 PackageVersion: 0.17.1
 InstallerType: zip
@@ -11,7 +10,7 @@ InstallModes:
 Installers:
   - Architecture: x64
     InstallerUrl: https://github.com/Alyhnte/ReaPlus/archive/refs/tags/v0.17.1.tar.gz
-    InstallerSha256: bilinmiyor
+    InstallerSha256: c5e4227fc25831fa35dd80d47b3e71cf7a120f8f392dd58a0336933b6cec2948
     Scope: user
 ManifestType: installer
 ManifestVersion: 1.6.0
