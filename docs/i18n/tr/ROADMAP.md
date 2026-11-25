@@ -6,8 +6,7 @@
 > senkronlanmıştır. v0.13.0 dalgaları kapattı: PE makine kimliği (ARMNT/ARM64),
 > ELF e_machine + Hexagon, plist tip-duyarlı kayıpsız değerler, JS CJS/require
 > çözümleme + cross-bundle ilişkiler, apktool sürüm gözlemi (advisory), raw m68k
-> Ghidra profili, sürüm taşıyıcı senkronu (9 kontrol). Araç yüzeyi değişmedi
-> (191 araç).
+> Ghidra profili, sürüm taşıyıcı senkronu (9 kontrol). v0.17.0 yüzeyi 200 araç, 197 outputSchema, 200 annotations, 2 resource ve 7 prompttur. Yeni sondalar `rea_angr_explore`, `rea_afl_fuzz`, `rea_lldb_script`, `rea_ttd_info`.
 > Sayılar derlenmiş sunucunun gerçek yüzeyindendir
 > ([`TOOLS.md`](TOOLS.md) üretim çıktısı).
 >

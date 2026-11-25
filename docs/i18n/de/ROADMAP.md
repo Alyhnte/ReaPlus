@@ -6,7 +6,7 @@
 > ELF e_machine + Hexagon, typbewusste verlustfreie plist-Werte, JS-CJS/require-
 > Auflösung + Cross-Bundle-Beziehungen, apktool-Versionsbeobachtung (advisory),
 > ein rohes m68k-Ghidra-Profil und die Versions-Träger-Synchronisierung (9 Prüfungen).
-> Die Werkzeugoberfläche änderte sich nicht (191 Werkzeuge). Zahlen stammen von der echten Oberfläche des kompilierten Servers
+> Die Oberfläche von v0.17.0 umfasst 200 Werkzeuge, 197 outputSchema, 200 Annotations, 2 Ressourcen und 7 Prompts. Die neuen Sonden sind `rea_angr_explore`, `rea_afl_fuzz`, `rea_lldb_script`, `rea_ttd_info`. Zahlen stammen von der echten Oberfläche des kompilierten Servers
 > ([`TOOLS.md`](TOOLS.md)-Erzeugungsausgabe).
 >
 > **Maßstäbe:** Wirkung = Beitrag zum Nutzer-/Agentenwert · Aufwand = S (Tage) / M (1–2 Wochen) / L (Monat+)

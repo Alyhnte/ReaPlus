@@ -5,63 +5,63 @@ All notable changes are documented here (resumen en español + English detail).
 
 ## [0.17.0] — 2026-11-25
 
-### Added
+### Añadido
 
-- `rea_angr_explore`, `rea_afl_fuzz`, `rea_lldb_script`, and `rea_ttd_info` parse the external program stdout. A missing program returns `capability_unsupported` (`3ab174f64ea1ba3f10ad050bedadc31a4d3a542a`).
+- `rea_angr_explore`, `rea_afl_fuzz`, `rea_lldb_script` y `rea_ttd_info` analizan la stdout del programa externo. Un programa ausente devuelve `capability_unsupported` (`3ab174f64ea1ba3f10ad050bedadc31a4d3a542a`).
 
-### Updated
+### Actualizado
 
-- The four probes are on the `all` profile only. The surface is 200 tools and 197 output schemas (`3ab174f64ea1ba3f10ad050bedadc31a4d3a542a`).
+- Las cuatro sondas están solo en el perfil `all`. La superficie es de 200 herramientas y 197 outputSchema (`3ab174f64ea1ba3f10ad050bedadc31a4d3a542a`).
 
 ## [0.16.0] — 2026-11-25
 
-### Added
+### Añadido
 
-- `rea_electron_fuses` reads the Electron fuse sentinel and wire. `rea_electron_window` classifies BrowserWindow option keys. `rea_apk_splits` separates base and split APKs. `rea_adb_pull` runs adb pull. `rea_sqlite_snapshot` reads the database header and schema table names (`90701d6e6d5496a9b0d9bf3f2a61b3f27c9f8b3f`).
+- `rea_electron_fuses` lee el sentinel de fuse de Electron y el wire. `rea_electron_window` clasifica las claves de opciones de BrowserWindow. `rea_apk_splits` separa los APK base y los split. `rea_adb_pull` ejecuta adb pull. `rea_sqlite_snapshot` lee la cabecera de la base y los nombres de tablas del esquema (`90701d6e6d5496a9b0d9bf3f2a61b3f27c9f8b3f`).
 
-### Updated
+### Actualizado
 
-- The five tools are on the `all` profile only. The surface is 196 tools and 193 output schemas (`90701d6e6d5496a9b0d9bf3f2a61b3f27c9f8b3f`).
+- Las cinco herramientas están solo en el perfil `all`. La superficie es de 196 herramientas y 193 outputSchema (`90701d6e6d5496a9b0d9bf3f2a61b3f27c9f8b3f`).
 
 ## [0.15.0] — 2026-11-25
 
-### Added
+### Añadido
 
-- The JS walk includes `.mts` and `.cts`. Package resolution reads `exports` before `main` (`1be78a491a3a4b961f74ad7762b977c0c15acbe2`).
+- El recorrido JS incluye `.mts` y `.cts`. La resolución de paquetes lee `exports` antes de `main` (`1be78a491a3a4b961f74ad7762b977c0c15acbe2`).
 
-### Fixed
+### Corregido
 
-- `src/native-windows/addon.ts` reads the live Win32 process name, token integrity, and a directory snapshot. It no longer returns a skeleton success (`1be78a491a3a4b961f74ad7762b977c0c15acbe2`).
+- `src/native-windows/addon.ts` lee el nombre del proceso Win32 en vivo, la integridad del token y una instantánea de directorio. Ya no devuelve un éxito iskelet (`1be78a491a3a4b961f74ad7762b977c0c15acbe2`).
 
-### Updated
+### Actualizado
 
-- `rea_aot_profile` and `rea_mips_psp_profile` declare `details.iskelet: true`. The surface stays 191 tools and 188 output schemas (`1be78a491a3a4b961f74ad7762b977c0c15acbe2`).
+- `rea_aot_profile` y `rea_mips_psp_profile` declaran `details.iskelet: true`. La superficie sigue en 191 herramientas y 188 outputSchema (`1be78a491a3a4b961f74ad7762b977c0c15acbe2`).
 
 ## [0.14.0] — 2026-11-25
 
-### Added
+### Añadido
 
-- `rea_pwn_elf_layout` reads ELF program headers and reports PIE, NX, and RELRO. `rea_pwn_gadgets` keeps 1-5 instruction sequences that end in `ret`, `retn`, or `retf` (`0039bb3dbed5314c3485a4f04ac794e4706c4c14`).
+- `rea_pwn_elf_layout` lee las cabeceras de programa ELF e informa PIE, NX y RELRO. `rea_pwn_gadgets` conserva secuencias de 1 a 5 instrucciones que terminan en `ret`, `retn` o `retf` (`0039bb3dbed5314c3485a4f04ac794e4706c4c14`).
 
-### Fixed
+### Corregido
 
-- `rea_frida_api` no longer calls `GetTickCount`, `CreateFileW`, or `CloseHandle` inside the target. The script only attaches hooks and waits (`0039bb3dbed5314c3485a4f04ac794e4706c4c14`).
-- `sniff.test.mjs` runs in the default test lane. Live Frida and Ghidra files stay excluded (`0039bb3dbed5314c3485a4f04ac794e4706c4c14`).
+- `rea_frida_api` ya no llama a `GetTickCount`, `CreateFileW` ni `CloseHandle` dentro del objetivo. El script solo engancha hooks y espera (`0039bb3dbed5314c3485a4f04ac794e4706c4c14`).
+- `sniff.test.mjs` corre en el carril de pruebas por defecto. Los archivos Frida y Ghidra en vivo siguen excluidos (`0039bb3dbed5314c3485a4f04ac794e4706c4c14`).
 
-### Updated
+### Actualizado
 
-- `rea_pwn_elf_layout` now has an output schema. The surface is 191 tools, 188 output schemas, and 3 schema-less tools (`0039bb3dbed5314c3485a4f04ac794e4706c4c14`).
+- `rea_pwn_elf_layout` ahora tiene un outputSchema. La superficie es de 191 herramientas, 188 outputSchema y 3 herramientas sin esquema (`0039bb3dbed5314c3485a4f04ac794e4706c4c14`).
 
 ## [0.13.1] — 2026-11-25
 
-### Added
+### Añadido
 
-- `tests/docs-english.test.mjs` rejects Turkish prose on the GitHub-facing markdown allowlist (`e68f61beb643b2fa20440c55cf0ef93a985d67a9`).
+- `tests/docs-english.test.mjs` rechaza la prosa turca en la allowlist de markdown orientada a GitHub (`e68f61beb643b2fa20440c55cf0ef93a985d67a9`).
 
-### Updated
+### Actualizado
 
-- GitHub-facing documentation is English, including the roadmap, coverage gaps, and the morluto comparison (`e68f61beb643b2fa20440c55cf0ef93a985d67a9`).
-- The roadmap table records the schema-budget CI step, the Pages deploy workflow, 7 prompts, and npm provenance (`e68f61beb643b2fa20440c55cf0ef93a985d67a9`).
+- La documentación orientada a GitHub está en inglés, incluida la hoja de ruta, las lagunas de cobertura y la comparación morluto (`e68f61beb643b2fa20440c55cf0ef93a985d67a9`).
+- La tabla de la hoja de ruta registra el paso de CI del presupuesto de esquema, el workflow de despliegue de Pages, 7 prompts y la procedencia npm (`e68f61beb643b2fa20440c55cf0ef93a985d67a9`).
 
 ## [0.13.0] — 2026-10-20
 

@@ -7,11 +7,11 @@
 ## Zusammenfassung
 
 - Server: `rea-plus` 0.17.0
-- Werkzeuge gesamt: 191
+- Werkzeuge gesamt: 200
 - Ressourcen gesamt: 2
-- Prompts gesamt: 3
-- Werkzeuge mit outputSchema: 187
-- Werkzeuge mit annotations: 191
+- Prompts gesamt: 7
+- Werkzeuge mit outputSchema: 197
+- Werkzeuge mit annotations: 200
 
 ## Werkzeuge
 
@@ -327,6 +327,17 @@ Liste installierter Pakete.
 - outputSchema: vorhanden (Felder: arac, ok, paketler)
 - annotations: vorhanden (openWorldHint=true, readOnlyHint=false)
 
+### `rea_adb_pull`
+
+adb pull in eine lokale Datei ausführen (REA_ADB_BIN oder adb im PATH).
+
+- Eingabefelder:
+  - `out` (string, erforderlich)
+  - `remote` (string, erforderlich)
+  - `seri` (string, optional)
+- outputSchema: vorhanden (Felder: `arac`, `bayt`, `cikis`, `ok`, `uzak`, `yerel`)
+- annotations: vorhanden (destructiveHint=true, openWorldHint=true, readOnlyHint=false)
+
 ### `rea_adb_screencap`
 
 Geräte-Screenshot.
@@ -336,6 +347,14 @@ Geräte-Screenshot.
   - `seri` (string, optional)
 - outputSchema: vorhanden (Felder: arac, bayt, ok, yol)
 - annotations: vorhanden (destructiveHint=true, openWorldHint=true, readOnlyHint=false)
+
+### `rea_afl_fuzz`
+
+REA_AFL_BIN --version ausführen und die afl-fuzz++-Version sowie execs_done parsen. Startet keine Fuzz-Kampagne und übergibt kein Ziel. Fehlende Binärdatei oder keine execs_done-Zeile ist capability_unsupported.
+
+- Eingabefelder: keine
+- outputSchema: vorhanden (Felder: `arac`, `execs_done`, `ok`, `version`)
+- annotations: vorhanden (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)
 
 ### `rea_android_dinamik_recete`
 
@@ -353,6 +372,15 @@ Trocken-Validierung einer Rezeptur.
 - Eingabefelder:
   - `text` (string, erforderlich)
 - outputSchema: vorhanden (Felder: adim_sayisi, arac, ok)
+- annotations: vorhanden (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)
+
+### `rea_angr_explore`
+
+REA_ANGR_BIN (oder python im PATH) als `<bin> --explore <path>` ausführen und eine JSON-Zeile {ok,paths,constraints} parsen. Fehlende Binärdatei, Nicht-JSON-stdout oder ein Exit ungleich null ist capability_unsupported. Erfindet keine Pfadanzahl.
+
+- Eingabefelder:
+  - `path` (string, erforderlich)
+- outputSchema: vorhanden (Felder: `arac`, `constraints`, `ok`, `paths`)
 - annotations: vorhanden (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)
 
 ### `rea_aot_detect`
@@ -391,6 +419,15 @@ Swift-Dispatch-Spuren.
 - Eingabefelder:
   - `text` (string, erforderlich)
 - outputSchema: vorhanden (Felder: details, ok, summary, tool)
+- annotations: vorhanden (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)
+
+### `rea_apk_splits`
+
+Split-APK-Rollen und Zip-Eintragszahlen aus einem Verzeichnis lesen. Führt apktool nicht aus.
+
+- Eingabefelder:
+  - `path` (string, erforderlich)
+- outputSchema: vorhanden (Felder: `apkler`, `arac`, `dizin`, `ok`)
 - annotations: vorhanden (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)
 
 ### `rea_apktool_build`
@@ -788,6 +825,24 @@ ELF-DWARF-Zusammenfassung.
 - Eingabefelder:
   - `path` (string, erforderlich)
 - outputSchema: vorhanden (Felder: arac, dosya, fonksiyonAdlari, ok, subprogramSayisi, unitSayisi)
+- annotations: vorhanden (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)
+
+### `rea_electron_fuses`
+
+Electron-Fuse-Wire-Bytes nach dem Fuse-Sentinel lesen. Startet Electron nicht.
+
+- Eingabefelder:
+  - `path` (string, erforderlich)
+- outputSchema: vorhanden (Felder: `arac`, `dosya`, `fuses`, `ok`, `surum`)
+- annotations: vorhanden (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)
+
+### `rea_electron_window`
+
+BrowserWindow-Konstruktor-Optionsschlüssel klassifizieren. Öffnet kein Fenster.
+
+- Eingabefelder:
+  - `text` (string, erforderlich)
+- outputSchema: vorhanden (Felder: `arac`, `bilinen`, `bilinmeyen`, `calisiyor`, `ok`)
 - annotations: vorhanden (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)
 
 ### `rea_evidence_bundle`
@@ -1336,6 +1391,14 @@ Source-Map-Auflösung.
 - outputSchema: vorhanden (Felder: ok, summary, tool)
 - annotations: vorhanden (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)
 
+### `rea_lldb_script`
+
+REA_LLDB_BIN --version ausführen und `stop reason = …` parsen. Hängt sich nicht an und öffnet keine Live-Debug-Sitzung. Fehlende Binärdatei oder kein Stop-Grund ist capability_unsupported.
+
+- Eingabefelder: keine
+- outputSchema: vorhanden (Felder: `arac`, `ok`, `stop_reason`)
+- annotations: vorhanden (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)
+
 ### `rea_macho_classdump`
 
 class-dump-Ausgabe (ehrlicher Fehler, falls nicht vorhanden).
@@ -1687,6 +1750,15 @@ Dateityp- + Engine-Empfehlung (Magic-Byte).
 - outputSchema: vorhanden (Felder: motor, tip)
 - annotations: vorhanden (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)
 
+### `rea_sqlite_snapshot`
+
+SQLite-Kopf und Schema-Tabellennamen aus einer Datenbankdatei lesen.
+
+- Eingabefelder:
+  - `path` (string, erforderlich)
+- outputSchema: vorhanden (Felder: `arac`, `dosya`, `ok`, `sayfaBoyutu`, `tablolar`)
+- annotations: vorhanden (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)
+
 ### `rea_storage_dump`
 
 Cookies + localStorage.
@@ -1695,6 +1767,14 @@ Cookies + localStorage.
   - `url` (string, erforderlich)
 - outputSchema: vorhanden (Felder: details, ok, summary, tool)
 - annotations: vorhanden (openWorldHint=true, readOnlyHint=false)
+
+### `rea_ttd_info`
+
+REA_TTD_BIN --version ausführen und ModuleCount parsen. Öffnet keine Time-Travel-Sitzung. Fehlende Binärdatei oder kein ModuleCount ist capability_unsupported.
+
+- Eingabefelder: keine
+- outputSchema: vorhanden (Felder: `arac`, `module_count`, `ok`)
+- annotations: vorhanden (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)
 
 ### `rea_typedef_oner`
 
@@ -1854,5 +1934,9 @@ Querverweise zu und von einer Adresse (Code und Daten).
 ## Prompts
 
 - `android-triage` — Argumente: `focus` (optional), `path` (erforderlich) — Statischer jadx-basierter Triage-Ablauf für APKs (nebeneffektfreier Prompt).
+- `binary-diff` — Argumente: `eski` (erforderlich), `focus` (optional), `yeni` (erforderlich) — Funktions-Diff und Patch-Review zwischen zwei Versionen (nebeneffektfreier Prompt).
 - `dotnet-malware-triage` — Argumente: `focus` (optional), `path` (erforderlich) — Statischer Malware-Triage-Ablauf für .NET-Samples (nebeneffektfreier Prompt).
+- `elf-linux-triage` — Argumente: `focus` (optional), `path` (erforderlich) — Statischer Ablauf Layout → Symbol → Gadget für ein ELF-Ziel (nebeneffektfreier Prompt).
+- `evidence-report` — Argumente: `focus` (optional), `path` (erforderlich) — Ablauf, der ein Evidenzpaket in einen geprüften Bericht überführt (nebeneffektfreier Prompt).
 - `packer-triage` — Argumente: `focus` (optional), `path` (erforderlich) — Sequenzieller, statik-priorisierter rea-Ablauf zur Packer-/Schutzerkennung (nebeneffektfreier Prompt).
+- `pe-crash-triage` — Argumente: `focus` (optional), `path` (erforderlich) — Ablauf Triage → statisch → Crash → Verhalten für ein PE-Ziel (nebeneffektfreier Prompt).

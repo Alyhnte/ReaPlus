@@ -28,7 +28,7 @@
 surface MCP réelle du serveur compilé (<code>dist/server.js</code>). Pour le régénérer :
 <code>npm run build &amp;&amp; node scripts/generate-tool-reference.mjs</code></blockquote>
 <h2 id="résumé">Résumé</h2>
-<ul><li>Serveur : <code>rea-plus</code> 0.17.0</li><li>Total outils : 191</li><li>Total resources : 2</li><li>Total prompts : 3</li><li>Outils avec outputSchema : 187</li><li>Outils avec annotations : 191</li></ul>
+<ul><li>Serveur : <code>rea-plus</code> 0.17.0</li><li>Total outils : 200</li><li>Total resources : 2</li><li>Total prompts : 7</li><li>Outils avec outputSchema : 197</li><li>Outils avec annotations : 200</li></ul>
 <h2 id="outils">Outils</h2>
 <h3 id="close_target"><code>close_target</code></h3>
 <p>Libère la cible binaire (et son processus radare2) détenue par une session.</p>
@@ -114,15 +114,24 @@ surface MCP réelle du serveur compilé (<code>dist/server.js</code>). Pour le r
 <h3 id="rea_adb_packages"><code>rea_adb_packages</code></h3>
 <p>Liste des paquets installés.</p>
 <ul><li>Champs d'entrée :</li><li><code>filtre</code> (string, optionnel)</li><li><code>seri</code> (string, optionnel)</li><li>outputSchema : présent (champs : arac, ok, paketler)</li><li>annotations : présentes (openWorldHint=true, readOnlyHint=false)</li></ul>
+<h3 id="rea_adb_pull"><code>rea_adb_pull</code></h3>
+<p>Exécuter adb pull vers un fichier local (REA_ADB_BIN ou adb sur le PATH).</p>
+<ul><li>Champs d'entrée:</li><li><code>out</code> (string, requis)</li><li><code>remote</code> (string, requis)</li><li><code>seri</code> (string, optionnel)</li><li>outputSchema : présent (champs : <code>arac</code>, <code>bayt</code>, <code>cikis</code>, <code>ok</code>, <code>uzak</code>, <code>yerel</code>)</li><li>annotations : présentes (destructiveHint=true, openWorldHint=true, readOnlyHint=false)</li></ul>
 <h3 id="rea_adb_screencap"><code>rea_adb_screencap</code></h3>
 <p>Capture d'écran de l'appareil.</p>
 <ul><li>Champs d'entrée :</li><li><code>out</code> (string, requis)</li><li><code>seri</code> (string, optionnel)</li><li>outputSchema : présent (champs : arac, bayt, ok, yol)</li><li>annotations : présentes (destructiveHint=true, openWorldHint=true, readOnlyHint=false)</li></ul>
+<h3 id="rea_afl_fuzz"><code>rea_afl_fuzz</code></h3>
+<p>Exécuter REA_AFL_BIN --version et analyser la version afl-fuzz++ ainsi que execs_done. Ne démarre pas de campagne de fuzz et ne passe pas de cible. Binaire absent ou ligne execs_done absente : capability_unsupported.</p>
+<ul><li>Champs d'entrée: aucun</li><li>outputSchema : présent (champs : <code>arac</code>, <code>execs_done</code>, <code>ok</code>, <code>version</code>)</li><li>annotations : présentes (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
 <h3 id="rea_android_dinamik_recete"><code>rea_android_dinamik_recete</code></h3>
 <p>Production d'une recette d'analyse dynamique Android.</p>
 <ul><li>Champs d'entrée :</li><li><code>path</code> (string, requis)</li><li>outputSchema : présent (champs : arac, ok, recete)</li><li>annotations : présentes (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
 <h3 id="rea_android_recete_dogrula"><code>rea_android_recete_dogrula</code></h3>
 <p>Validation à sec d'une recette.</p>
 <ul><li>Champs d'entrée :</li><li><code>text</code> (string, requis)</li><li>outputSchema : présent (champs : adim_sayisi, arac, ok)</li><li>annotations : présentes (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
+<h3 id="rea_angr_explore"><code>rea_angr_explore</code></h3>
+<p>Exécuter REA_ANGR_BIN (ou python sur le PATH) comme <code>&lt;bin&gt; --explore &lt;path&gt;</code> et analyser une ligne JSON {ok,paths,constraints}. Binaire absent, stdout non JSON ou sortie non nulle : capability_unsupported. N'invente pas un nombre de chemins.</p>
+<ul><li>Champs d'entrée:</li><li><code>path</code> (string, requis)</li><li>outputSchema : présent (champs : <code>arac</code>, <code>constraints</code>, <code>ok</code>, <code>paths</code>)</li><li>annotations : présentes (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
 <h3 id="rea_aot_detect"><code>rea_aot_detect</code></h3>
 <p>Signal NativeAOT.</p>
 <ul><li>Champs d'entrée :</li><li><code>b64dosya</code> (string, requis)</li><li><code>metin</code> (string, optionnel)</li><li>outputSchema : présent (champs : details, ok, summary, tool)</li><li>annotations : présentes (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
@@ -135,6 +144,9 @@ surface MCP réelle du serveur compilé (<code>dist/server.js</code>). Pour le r
 <h3 id="rea_aot_swift"><code>rea_aot_swift</code></h3>
 <p>Traces de dispatch Swift.</p>
 <ul><li>Champs d'entrée :</li><li><code>text</code> (string, requis)</li><li>outputSchema : présent (champs : details, ok, summary, tool)</li><li>annotations : présentes (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
+<h3 id="rea_apk_splits"><code>rea_apk_splits</code></h3>
+<p>Lire les rôles des split APK et le nombre d'entrées zip d'un répertoire. N'exécute pas apktool.</p>
+<ul><li>Champs d'entrée:</li><li><code>path</code> (string, requis)</li><li>outputSchema : présent (champs : <code>apkler</code>, <code>arac</code>, <code>dizin</code>, <code>ok</code>)</li><li>annotations : présentes (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
 <h3 id="rea_apktool_build"><code>rea_apktool_build</code></h3>
 <p>Reconstruction d'un APK depuis un répertoire décodé.</p>
 <ul><li>Champs d'entrée :</li><li><code>dir</code> (string, requis)</li><li><code>out</code> (string, requis)</li><li>outputSchema : présent (champs : arac, ciktiApk, ok, proje)</li><li>annotations : présentes (destructiveHint=true, openWorldHint=true, readOnlyHint=false)</li></ul>
@@ -264,6 +276,12 @@ surface MCP réelle du serveur compilé (<code>dist/server.js</code>). Pour le r
 <h3 id="rea_dwarf_ozet"><code>rea_dwarf_ozet</code></h3>
 <p>Résumé DWARF d'ELF.</p>
 <ul><li>Champs d'entrée :</li><li><code>path</code> (string, requis)</li><li>outputSchema : présent (champs : arac, dosya, fonksiyonAdlari, ok, subprogramSayisi, unitSayisi)</li><li>annotations : présentes (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
+<h3 id="rea_electron_fuses"><code>rea_electron_fuses</code></h3>
+<p>Lire les octets du wire de fuse Electron après le sentinel de fuse. Ne lance pas Electron.</p>
+<ul><li>Champs d'entrée:</li><li><code>path</code> (string, requis)</li><li>outputSchema : présent (champs : <code>arac</code>, <code>dosya</code>, <code>fuses</code>, <code>ok</code>, <code>surum</code>)</li><li>annotations : présentes (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
+<h3 id="rea_electron_window"><code>rea_electron_window</code></h3>
+<p>Classer les clés d'options du constructeur BrowserWindow. N'ouvre pas de fenêtre.</p>
+<ul><li>Champs d'entrée:</li><li><code>text</code> (string, requis)</li><li>outputSchema : présent (champs : <code>arac</code>, <code>bilinen</code>, <code>bilinmeyen</code>, <code>calisiyor</code>, <code>ok</code>)</li><li>annotations : présentes (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
 <h3 id="rea_evidence_bundle"><code>rea_evidence_bundle</code></h3>
 <p>Assemblage d'un paquet de preuves.</p>
 <ul><li>Champs d'entrée :</li><li><code>ogeler</code> (string, requis)</li><li><code>sakli</code> (string, requis)</li><li>outputSchema : présent (champs : digest, items, retained, tools_sha256)</li><li>annotations : présentes (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
@@ -438,6 +456,9 @@ surface MCP réelle du serveur compilé (<code>dist/server.js</code>). Pour le r
 <h3 id="rea_js_sourcemap"><code>rea_js_sourcemap</code></h3>
 <p>Résolution de source-map.</p>
 <ul><li>Champs d'entrée :</li><li><code>text</code> (string, requis)</li><li>outputSchema : présent (champs : ok, summary, tool)</li><li>annotations : présentes (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
+<h3 id="rea_lldb_script"><code>rea_lldb_script</code></h3>
+<p>Exécuter REA_LLDB_BIN --version et analyser <code>stop reason = …</code>. Ne s'attache pas et n'ouvre pas de session de débogage live. Binaire absent ou stop reason absent : capability_unsupported.</p>
+<ul><li>Champs d'entrée: aucun</li><li>outputSchema : présent (champs : <code>arac</code>, <code>ok</code>, <code>stop_reason</code>)</li><li>annotations : présentes (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
 <h3 id="rea_macho_classdump"><code>rea_macho_classdump</code></h3>
 <p>Sortie class-dump (erreur honnête si absent).</p>
 <ul><li>Champs d'entrée :</li><li><code>path</code> (string, requis)</li><li>outputSchema : présent (champs : details, ok, summary, tool)</li><li>annotations : présentes (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
@@ -552,9 +573,15 @@ surface MCP réelle du serveur compilé (<code>dist/server.js</code>). Pour le r
 <h3 id="rea_sniff"><code>rea_sniff</code></h3>
 <p>Type de fichier + moteur suggéré (octets magiques).</p>
 <ul><li>Champs d'entrée :</li><li><code>b64dosya</code> (string, requis)</li><li>outputSchema : présent (champs : motor, tip)</li><li>annotations : présentes (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
+<h3 id="rea_sqlite_snapshot"><code>rea_sqlite_snapshot</code></h3>
+<p>Lire l'en-tête SQLite et les noms de tables du schéma dans un fichier de base.</p>
+<ul><li>Champs d'entrée:</li><li><code>path</code> (string, requis)</li><li>outputSchema : présent (champs : <code>arac</code>, <code>dosya</code>, <code>ok</code>, <code>sayfaBoyutu</code>, <code>tablolar</code>)</li><li>annotations : présentes (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
 <h3 id="rea_storage_dump"><code>rea_storage_dump</code></h3>
 <p>Cookies + localStorage.</p>
 <ul><li>Champs d'entrée :</li><li><code>url</code> (string, requis)</li><li>outputSchema : présent (champs : details, ok, summary, tool)</li><li>annotations : présentes (openWorldHint=true, readOnlyHint=false)</li></ul>
+<h3 id="rea_ttd_info"><code>rea_ttd_info</code></h3>
+<p>Exécuter REA_TTD_BIN --version et analyser ModuleCount. N'ouvre pas de session time-travel. Binaire absent ou ModuleCount absent : capability_unsupported.</p>
+<ul><li>Champs d'entrée: aucun</li><li>outputSchema : présent (champs : <code>arac</code>, <code>module_count</code>, <code>ok</code>)</li><li>annotations : présentes (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
 <h3 id="rea_typedef_oner"><code>rea_typedef_oner</code></h3>
 <p>Suggestion de noms d'arguments + propagation.</p>
 <ul><li>Champs d'entrée :</li><li><code>text</code> (string, requis)</li><li>outputSchema : présent (champs : arac, ok, oneriler, sayi)</li><li>annotations : présentes (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
@@ -606,7 +633,7 @@ surface MCP réelle du serveur compilé (<code>dist/server.js</code>). Pour le r
 <h2 id="ressources">Ressources</h2>
 <ul><li><code>rea-plus://capabilities-safety</code> — nom : <code>capabilities-safety</code> — mimeType : <code>application/json</code> — Résumé statique des capacités et des règles de sécurité (lecture seule).</li><li><code>rea-plus://server-info</code> — nom : <code>server-info</code> — mimeType : <code>application/json</code> — Identité statique du serveur et résumé de surface (lecture seule).</li></ul>
 <h2 id="prompts">Prompts</h2>
-<ul><li><code>android-triage</code> — arguments : <code>focus</code> (optionnel), <code>path</code> (requis) — Flux de triage statique basé sur jadx pour APK (prompt sans effets secondaires).</li><li><code>dotnet-malware-triage</code> — arguments : <code>focus</code> (optionnel), <code>path</code> (requis) — Flux de triage statique de logiciels malveillants pour échantillon .NET (prompt sans effets secondaires).</li><li><code>packer-triage</code> — arguments : <code>focus</code> (optionnel), <code>path</code> (requis) — Flux rea ordonné, statique d'abord, pour la détection de packers/protections (prompt sans effets secondaires).</li></ul>
+<ul><li><code>android-triage</code> — arguments : <code>focus</code> (optionnel), <code>path</code> (requis) — Flux de triage statique basé sur jadx pour APK (prompt sans effets secondaires).</li><li><code>binary-diff</code> — arguments : <code>eski</code> (requis), <code>focus</code> (optionnel), <code>yeni</code> (requis) — Flux de diff de fonctions et de revue de correctif entre deux versions (prompt sans effets secondaires).</li><li><code>dotnet-malware-triage</code> — arguments : <code>focus</code> (optionnel), <code>path</code> (requis) — Flux de triage statique de logiciels malveillants pour échantillon .NET (prompt sans effets secondaires).</li><li><code>elf-linux-triage</code> — arguments : <code>focus</code> (optionnel), <code>path</code> (requis) — Flux statique layout → symbole → gadget pour une cible ELF (prompt sans effets secondaires).</li><li><code>evidence-report</code> — arguments : <code>focus</code> (optionnel), <code>path</code> (requis) — Flux qui transforme un paquet de preuves en rapport vérifié (prompt sans effets secondaires).</li><li><code>packer-triage</code> — arguments : <code>focus</code> (optionnel), <code>path</code> (requis) — Flux rea ordonné, statique d'abord, pour la détection de packers/protections (prompt sans effets secondaires).</li><li><code>pe-crash-triage</code> — arguments : <code>focus</code> (optionnel), <code>path</code> (requis) — Flux triage → statique → crash → comportement pour une cible PE (prompt sans effets secondaires).</li></ul>
 </div></main>
 <footer class="altbilgi"><p>ReaPlus Docs — site statique. Production : <code>node scripts/site-uret.mjs</code> · Nombres du résumé docs/i18n/tr/TOOLS.md (exécution réelle).</p></footer>
 </div>

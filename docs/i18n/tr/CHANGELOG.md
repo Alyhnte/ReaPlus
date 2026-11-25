@@ -5,63 +5,63 @@ All notable changes are documented here (Türkçe özet + English detail).
 
 ## [0.17.0] — 2026-11-25
 
-### Added
+### Eklendi
 
-- `rea_angr_explore`, `rea_afl_fuzz`, `rea_lldb_script`, and `rea_ttd_info` parse the external program stdout. A missing program returns `capability_unsupported` (`3ab174f64ea1ba3f10ad050bedadc31a4d3a542a`).
+- `rea_angr_explore`, `rea_afl_fuzz`, `rea_lldb_script` ve `rea_ttd_info` dış programın stdout çıktısını ayrıştırır. Program yoksa `capability_unsupported` döner (`3ab174f64ea1ba3f10ad050bedadc31a4d3a542a`).
 
-### Updated
+### Güncellendi
 
-- The four probes are on the `all` profile only. The surface is 200 tools and 197 output schemas (`3ab174f64ea1ba3f10ad050bedadc31a4d3a542a`).
+- Dört sonda yalnız `all` profilindedir. Yüzey 200 araç ve 197 outputSchema (`3ab174f64ea1ba3f10ad050bedadc31a4d3a542a`).
 
 ## [0.16.0] — 2026-11-25
 
-### Added
+### Eklendi
 
-- `rea_electron_fuses` reads the Electron fuse sentinel and wire. `rea_electron_window` classifies BrowserWindow option keys. `rea_apk_splits` separates base and split APKs. `rea_adb_pull` runs adb pull. `rea_sqlite_snapshot` reads the database header and schema table names (`90701d6e6d5496a9b0d9bf3f2a61b3f27c9f8b3f`).
+- `rea_electron_fuses` Electron fuse sentinel'ini ve wire'ı okur. `rea_electron_window` BrowserWindow seçenek anahtarlarını sınıflar. `rea_apk_splits` taban ve split APK'ları ayırır. `rea_adb_pull` adb pull çalıştırır. `rea_sqlite_snapshot` veritabanı başlığını ve şema tablo adlarını okur (`90701d6e6d5496a9b0d9bf3f2a61b3f27c9f8b3f`).
 
-### Updated
+### Güncellendi
 
-- The five tools are on the `all` profile only. The surface is 196 tools and 193 output schemas (`90701d6e6d5496a9b0d9bf3f2a61b3f27c9f8b3f`).
+- Beş araç yalnız `all` profilindedir. Yüzey 196 araç ve 193 outputSchema (`90701d6e6d5496a9b0d9bf3f2a61b3f27c9f8b3f`).
 
 ## [0.15.0] — 2026-11-25
 
-### Added
+### Eklendi
 
-- The JS walk includes `.mts` and `.cts`. Package resolution reads `exports` before `main` (`1be78a491a3a4b961f74ad7762b977c0c15acbe2`).
+- JS yürüyüşü `.mts` ve `.cts` içerir. Paket çözümlemesi `main` öncesinde `exports` okur (`1be78a491a3a4b961f74ad7762b977c0c15acbe2`).
 
-### Fixed
+### Düzeltildi
 
-- `src/native-windows/addon.ts` reads the live Win32 process name, token integrity, and a directory snapshot. It no longer returns a skeleton success (`1be78a491a3a4b961f74ad7762b977c0c15acbe2`).
+- `src/native-windows/addon.ts` canlı Win32 süreç adını, token bütünlüğünü ve bir dizin anlık görüntüsünü okur. Artık iskelet başarı döndürmez (`1be78a491a3a4b961f74ad7762b977c0c15acbe2`).
 
-### Updated
+### Güncellendi
 
-- `rea_aot_profile` and `rea_mips_psp_profile` declare `details.iskelet: true`. The surface stays 191 tools and 188 output schemas (`1be78a491a3a4b961f74ad7762b977c0c15acbe2`).
+- `rea_aot_profile` ve `rea_mips_psp_profile` `details.iskelet: true` bildirir. Yüzey 191 araç ve 188 outputSchema olarak kalır (`1be78a491a3a4b961f74ad7762b977c0c15acbe2`).
 
 ## [0.14.0] — 2026-11-25
 
-### Added
+### Eklendi
 
-- `rea_pwn_elf_layout` reads ELF program headers and reports PIE, NX, and RELRO. `rea_pwn_gadgets` keeps 1-5 instruction sequences that end in `ret`, `retn`, or `retf` (`0039bb3dbed5314c3485a4f04ac794e4706c4c14`).
+- `rea_pwn_elf_layout` ELF program başlıklarını okur ve PIE, NX ve RELRO bildirir. `rea_pwn_gadgets` `ret`, `retn` veya `retf` ile biten 1-5 komutluk dizileri tutar (`0039bb3dbed5314c3485a4f04ac794e4706c4c14`).
 
-### Fixed
+### Düzeltildi
 
-- `rea_frida_api` no longer calls `GetTickCount`, `CreateFileW`, or `CloseHandle` inside the target. The script only attaches hooks and waits (`0039bb3dbed5314c3485a4f04ac794e4706c4c14`).
-- `sniff.test.mjs` runs in the default test lane. Live Frida and Ghidra files stay excluded (`0039bb3dbed5314c3485a4f04ac794e4706c4c14`).
+- `rea_frida_api` hedef içinde artık `GetTickCount`, `CreateFileW` veya `CloseHandle` çağırmaz. Betik yalnız kancaları takar ve bekler (`0039bb3dbed5314c3485a4f04ac794e4706c4c14`).
+- `sniff.test.mjs` varsayılan test şeridinde koşar. Canlı Frida ve Ghidra dosyaları dışarıda kalır (`0039bb3dbed5314c3485a4f04ac794e4706c4c14`).
 
-### Updated
+### Güncellendi
 
-- `rea_pwn_elf_layout` now has an output schema. The surface is 191 tools, 188 output schemas, and 3 schema-less tools (`0039bb3dbed5314c3485a4f04ac794e4706c4c14`).
+- `rea_pwn_elf_layout` artık bir outputSchema taşır. Yüzey 191 araç, 188 outputSchema ve 3 şemasız araçtır (`0039bb3dbed5314c3485a4f04ac794e4706c4c14`).
 
 ## [0.13.1] — 2026-11-25
 
-### Added
+### Eklendi
 
-- `tests/docs-english.test.mjs` rejects Turkish prose on the GitHub-facing markdown allowlist (`e68f61beb643b2fa20440c55cf0ef93a985d67a9`).
+- `tests/docs-english.test.mjs` GitHub'a bakan markdown allowlist'inde Türkçe düzyazıyı reddeder (`e68f61beb643b2fa20440c55cf0ef93a985d67a9`).
 
-### Updated
+### Güncellendi
 
-- GitHub-facing documentation is English, including the roadmap, coverage gaps, and the morluto comparison (`e68f61beb643b2fa20440c55cf0ef93a985d67a9`).
-- The roadmap table records the schema-budget CI step, the Pages deploy workflow, 7 prompts, and npm provenance (`e68f61beb643b2fa20440c55cf0ef93a985d67a9`).
+- GitHub'a bakan belgeler İngilizcedir; yol haritası, kapsam boşlukları ve morluto karşılaştırması buna dahildir (`e68f61beb643b2fa20440c55cf0ef93a985d67a9`).
+- Yol haritası tablosu şema bütçesi CI adımını, Pages dağıtım iş akışını, 7 prompt'u ve npm provenance'ı kaydeder (`e68f61beb643b2fa20440c55cf0ef93a985d67a9`).
 
 ## [0.13.0] — 2026-10-20
 

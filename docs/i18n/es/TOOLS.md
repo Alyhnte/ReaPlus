@@ -7,11 +7,11 @@
 ## Resumen
 
 - Servidor: `rea-plus` 0.17.0
-- Herramientas totales: 191
+- Herramientas totales: 200
 - Recursos totales: 2
-- Prompts totales: 3
-- Herramientas con outputSchema: 187
-- Herramientas con annotations: 191
+- Prompts totales: 7
+- Herramientas con outputSchema: 197
+- Herramientas con annotations: 200
 
 ## Herramientas
 
@@ -327,6 +327,17 @@ Lista de paquetes instalados.
 - outputSchema: sí (campos: arac, ok, paketler)
 - annotations: sí (openWorldHint=true, readOnlyHint=false)
 
+### `rea_adb_pull`
+
+Ejecutar adb pull hacia un archivo local (REA_ADB_BIN o adb en PATH).
+
+- Campos de entrada:
+  - `out` (string, obligatorio)
+  - `remote` (string, obligatorio)
+  - `seri` (string, opcional)
+- outputSchema: sí (campos: `arac`, `bayt`, `cikis`, `ok`, `uzak`, `yerel`)
+- annotations: sí (destructiveHint=true, openWorldHint=true, readOnlyHint=false)
+
 ### `rea_adb_screencap`
 
 Captura de pantalla del dispositivo.
@@ -336,6 +347,14 @@ Captura de pantalla del dispositivo.
   - `seri` (string, opcional)
 - outputSchema: sí (campos: arac, bayt, ok, yol)
 - annotations: sí (destructiveHint=true, openWorldHint=true, readOnlyHint=false)
+
+### `rea_afl_fuzz`
+
+Ejecutar REA_AFL_BIN --version y analizar la versión de afl-fuzz++ y execs_done. No inicia una campaña de fuzz ni pasa un objetivo. Binario ausente o sin línea execs_done: capability_unsupported.
+
+- Campos de entrada: ninguno
+- outputSchema: sí (campos: `arac`, `execs_done`, `ok`, `version`)
+- annotations: sí (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)
 
 ### `rea_android_dinamik_recete`
 
@@ -353,6 +372,15 @@ Validación en seco de la receta.
 - Campos de entrada:
   - `text` (string, obligatorio)
 - outputSchema: sí (campos: adim_sayisi, arac, ok)
+- annotations: sí (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)
+
+### `rea_angr_explore`
+
+Ejecutar REA_ANGR_BIN (o python en PATH) como `<bin> --explore <path>` y analizar una línea JSON {ok,paths,constraints}. Binario ausente, stdout no JSON o salida distinta de cero: capability_unsupported. No inventa un recuento de rutas.
+
+- Campos de entrada:
+  - `path` (string, obligatorio)
+- outputSchema: sí (campos: `arac`, `constraints`, `ok`, `paths`)
 - annotations: sí (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)
 
 ### `rea_aot_detect`
@@ -391,6 +419,15 @@ Trazas de dispatch Swift.
 - Campos de entrada:
   - `text` (string, obligatorio)
 - outputSchema: sí (campos: details, ok, summary, tool)
+- annotations: sí (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)
+
+### `rea_apk_splits`
+
+Leer roles de split APK y recuentos de entradas zip de un directorio. No ejecuta apktool.
+
+- Campos de entrada:
+  - `path` (string, obligatorio)
+- outputSchema: sí (campos: `apkler`, `arac`, `dizin`, `ok`)
 - annotations: sí (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)
 
 ### `rea_apktool_build`
@@ -788,6 +825,24 @@ Resumen DWARF de ELF.
 - Campos de entrada:
   - `path` (string, obligatorio)
 - outputSchema: sí (campos: arac, dosya, fonksiyonAdlari, ok, subprogramSayisi, unitSayisi)
+- annotations: sí (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)
+
+### `rea_electron_fuses`
+
+Leer los bytes del wire de fuse de Electron tras el sentinel de fuse. No lanza Electron.
+
+- Campos de entrada:
+  - `path` (string, obligatorio)
+- outputSchema: sí (campos: `arac`, `dosya`, `fuses`, `ok`, `surum`)
+- annotations: sí (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)
+
+### `rea_electron_window`
+
+Clasificar las claves de opciones del constructor BrowserWindow. No abre una ventana.
+
+- Campos de entrada:
+  - `text` (string, obligatorio)
+- outputSchema: sí (campos: `arac`, `bilinen`, `bilinmeyen`, `calisiyor`, `ok`)
 - annotations: sí (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)
 
 ### `rea_evidence_bundle`
@@ -1336,6 +1391,14 @@ Resolución de source-map.
 - outputSchema: sí (campos: ok, summary, tool)
 - annotations: sí (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)
 
+### `rea_lldb_script`
+
+Ejecutar REA_LLDB_BIN --version y analizar `stop reason = …`. No se adjunta ni abre una sesión de depuración en vivo. Binario ausente o sin stop reason: capability_unsupported.
+
+- Campos de entrada: ninguno
+- outputSchema: sí (campos: `arac`, `ok`, `stop_reason`)
+- annotations: sí (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)
+
 ### `rea_macho_classdump`
 
 Salida class-dump (error honesto si falta).
@@ -1687,6 +1750,15 @@ Tipo de archivo + sugerencia de motor (bytes mágicos).
 - outputSchema: sí (campos: motor, tip)
 - annotations: sí (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)
 
+### `rea_sqlite_snapshot`
+
+Leer la cabecera SQLite y los nombres de tablas del esquema de un archivo de base.
+
+- Campos de entrada:
+  - `path` (string, obligatorio)
+- outputSchema: sí (campos: `arac`, `dosya`, `ok`, `sayfaBoyutu`, `tablolar`)
+- annotations: sí (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)
+
 ### `rea_storage_dump`
 
 Cookies + localStorage.
@@ -1695,6 +1767,14 @@ Cookies + localStorage.
   - `url` (string, obligatorio)
 - outputSchema: sí (campos: details, ok, summary, tool)
 - annotations: sí (openWorldHint=true, readOnlyHint=false)
+
+### `rea_ttd_info`
+
+Ejecutar REA_TTD_BIN --version y analizar ModuleCount. No abre una sesión time-travel. Binario ausente o sin ModuleCount: capability_unsupported.
+
+- Campos de entrada: ninguno
+- outputSchema: sí (campos: `arac`, `module_count`, `ok`)
+- annotations: sí (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)
 
 ### `rea_typedef_oner`
 
@@ -1854,5 +1934,9 @@ Referencias cruzadas hacia y/o desde una dirección (código y datos).
 ## Prompts
 
 - `android-triage` — argumentos: `focus` (opcional), `path` (obligatorio) — Flujo de triage estático del APK basado en jadx (prompt sin efectos secundarios).
+- `binary-diff` — argumentos: `eski` (obligatorio), `focus` (opcional), `yeni` (obligatorio) — Flujo de diff de funciones y revisión de parche entre dos versiones (prompt sin efectos secundarios).
 - `dotnet-malware-triage` — argumentos: `focus` (opcional), `path` (obligatorio) — Flujo de triage de malware estático para muestra .NET (prompt sin efectos secundarios).
+- `elf-linux-triage` — argumentos: `focus` (opcional), `path` (obligatorio) — Flujo estático layout → símbolo → gadget para un objetivo ELF (prompt sin efectos secundarios).
+- `evidence-report` — argumentos: `focus` (opcional), `path` (obligatorio) — Flujo que convierte un paquete de evidencia en un informe verificado (prompt sin efectos secundarios).
 - `packer-triage` — argumentos: `focus` (opcional), `path` (obligatorio) — Flujo rea ordenado con prioridad estática para detección de packer/protección (prompt sin efectos secundarios).
+- `pe-crash-triage` — argumentos: `focus` (opcional), `path` (obligatorio) — Flujo triage → estático → crash → comportamiento para un objetivo PE (prompt sin efectos secundarios).

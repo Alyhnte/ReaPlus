@@ -329,6 +329,17 @@ Yüklü paket listesi.
 - outputSchema: var (alanlar: arac, ok, paketler)
 - annotations: var (openWorldHint=true, readOnlyHint=false)
 
+### `rea_adb_pull`
+
+adb pull ile yerel bir dosyaya çek (REA_ADB_BIN veya PATH üzerindeki adb).
+
+- Girdi alanları:
+  - `out` (string, zorunlu)
+  - `remote` (string, zorunlu)
+  - `seri` (string, opsiyonel)
+- outputSchema: var (alanlar: `arac`, `bayt`, `cikis`, `ok`, `uzak`, `yerel`)
+- annotations: var (destructiveHint=true, openWorldHint=true, readOnlyHint=false)
+
 ### `rea_adb_screencap`
 
 Cihaz ekran görüntüsü.
@@ -338,6 +349,14 @@ Cihaz ekran görüntüsü.
   - `seri` (string, opsiyonel)
 - outputSchema: var (alanlar: arac, bayt, ok, yol)
 - annotations: var (destructiveHint=true, openWorldHint=true, readOnlyHint=false)
+
+### `rea_afl_fuzz`
+
+REA_AFL_BIN --version çalıştır ve afl-fuzz++ sürümü ile execs_done satırını ayrıştır. Fuzz kampanyası başlatmaz ve hedef geçmez. İkili yoksa veya execs_done satırı yoksa capability_unsupported.
+
+- Girdi alanları: yok
+- outputSchema: var (alanlar: `arac`, `execs_done`, `ok`, `version`)
+- annotations: var (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)
 
 ### `rea_android_dinamik_recete`
 
@@ -355,6 +374,15 @@ Reçete kuru-doğrulaması.
 - Girdi alanları:
   - `text` (string, zorunlu)
 - outputSchema: var (alanlar: adim_sayisi, arac, ok)
+- annotations: var (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)
+
+### `rea_angr_explore`
+
+REA_ANGR_BIN (veya PATH üzerindeki python) komutunu `<bin> --explore <path>` olarak çalıştır ve tek JSON satırını {ok,paths,constraints} ayrıştır. İkili yoksa, stdout JSON değilse veya çıkış sıfır değilse capability_unsupported. Yol sayısı uydurmaz.
+
+- Girdi alanları:
+  - `path` (string, zorunlu)
+- outputSchema: var (alanlar: `arac`, `constraints`, `ok`, `paths`)
 - annotations: var (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)
 
 ### `rea_aot_detect`
@@ -393,6 +421,15 @@ Swift dispatch izleri.
 - Girdi alanları:
   - `text` (string, zorunlu)
 - outputSchema: var (alanlar: details, ok, summary, tool)
+- annotations: var (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)
+
+### `rea_apk_splits`
+
+Bir dizindeki split APK rollerini ve zip girdi sayılarını oku. apktool çalıştırmaz.
+
+- Girdi alanları:
+  - `path` (string, zorunlu)
+- outputSchema: var (alanlar: `apkler`, `arac`, `dizin`, `ok`)
 - annotations: var (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)
 
 ### `rea_apktool_build`
@@ -790,6 +827,24 @@ ELF DWARF özeti.
 - Girdi alanları:
   - `path` (string, zorunlu)
 - outputSchema: var (alanlar: arac, dosya, fonksiyonAdlari, ok, subprogramSayisi, unitSayisi)
+- annotations: var (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)
+
+### `rea_electron_fuses`
+
+Fuse sentinel sonrasındaki Electron fuse wire baytlarını oku. Electron başlatmaz.
+
+- Girdi alanları:
+  - `path` (string, zorunlu)
+- outputSchema: var (alanlar: `arac`, `dosya`, `fuses`, `ok`, `surum`)
+- annotations: var (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)
+
+### `rea_electron_window`
+
+BrowserWindow kurucu seçenek anahtarlarını sınıfla. Pencere açmaz.
+
+- Girdi alanları:
+  - `text` (string, zorunlu)
+- outputSchema: var (alanlar: `arac`, `bilinen`, `bilinmeyen`, `calisiyor`, `ok`)
 - annotations: var (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)
 
 ### `rea_evidence_bundle`
@@ -1338,6 +1393,14 @@ Source-map çözümleme.
 - outputSchema: var (alanlar: ok, summary, tool)
 - annotations: var (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)
 
+### `rea_lldb_script`
+
+REA_LLDB_BIN --version çalıştır ve `stop reason = …` satırını ayrıştır. Bağlanmaz ve canlı hata ayıklama oturumu açmaz. İkili yoksa veya stop reason yoksa capability_unsupported.
+
+- Girdi alanları: yok
+- outputSchema: var (alanlar: `arac`, `ok`, `stop_reason`)
+- annotations: var (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)
+
 ### `rea_macho_classdump`
 
 class-dump çıktısı (yoksa dürüst hata).
@@ -1689,6 +1752,15 @@ Dosya tip + motor önerisi (magic-byte).
 - outputSchema: var (alanlar: motor, tip)
 - annotations: var (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)
 
+### `rea_sqlite_snapshot`
+
+Bir veritabanı dosyasından SQLite başlığını ve şema tablo adlarını oku.
+
+- Girdi alanları:
+  - `path` (string, zorunlu)
+- outputSchema: var (alanlar: `arac`, `dosya`, `ok`, `sayfaBoyutu`, `tablolar`)
+- annotations: var (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)
+
 ### `rea_storage_dump`
 
 Cookies + localStorage.
@@ -1697,6 +1769,14 @@ Cookies + localStorage.
   - `url` (string, zorunlu)
 - outputSchema: var (alanlar: details, ok, summary, tool)
 - annotations: var (openWorldHint=true, readOnlyHint=false)
+
+### `rea_ttd_info`
+
+REA_TTD_BIN --version çalıştır ve ModuleCount değerini ayrıştır. Time-travel oturumu açmaz. İkili yoksa veya ModuleCount yoksa capability_unsupported.
+
+- Girdi alanları: yok
+- outputSchema: var (alanlar: `arac`, `module_count`, `ok`)
+- annotations: var (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)
 
 ### `rea_typedef_oner`
 

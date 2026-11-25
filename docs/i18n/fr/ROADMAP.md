@@ -6,7 +6,7 @@
 > ELF e_machine + Hexagon, les valeurs plist sans perte typées, la résolution JS
 > CJS/require + les relations cross-bundle, l'observation de version apktool
 > (advisory), le profil Ghidra raw m68k et la synchronisation des porteurs de
-> version (9 contrôles). La surface d'outils est inchangée (191 outils). Les nombres
+> version (9 contrôles). La surface de v0.17.0 compte 200 outils, 197 outputSchema, 200 annotations, 2 resources et 7 prompts. Les nouvelles sondes sont `rea_angr_explore`, `rea_afl_fuzz`, `rea_lldb_script`, `rea_ttd_info`. Les nombres
 > proviennent de la surface réelle du serveur compilé (sortie de production de [`TOOLS.md`](TOOLS.md)).
 >
 > **Mesures :** Impact = contribution à la valeur utilisateur/agent · Effort = S (jours) / M (1-2 semaines) / L (mois+)

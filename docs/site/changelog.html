@@ -27,34 +27,34 @@
 <p>Tüm önemli değişiklikler bu dosyada tutulur. Format: Keep a Changelog + SemVer.
 All notable changes are documented here (Türkçe özet + English detail).</p>
 <h2 id="0170--2026-11-25">[0.17.0] — 2026-11-25</h2>
-<h3 id="added">Added</h3>
-<ul><li><code>rea_angr_explore</code>, <code>rea_afl_fuzz</code>, <code>rea_lldb_script</code>, and <code>rea_ttd_info</code> parse the external program stdout. A missing program returns <code>capability_unsupported</code> (<code>3ab174f64ea1ba3f10ad050bedadc31a4d3a542a</code>).</li></ul>
-<h3 id="updated">Updated</h3>
-<ul><li>The four probes are on the <code>all</code> profile only. The surface is 200 tools and 197 output schemas (<code>3ab174f64ea1ba3f10ad050bedadc31a4d3a542a</code>).</li></ul>
+<h3 id="eklendi">Eklendi</h3>
+<ul><li><code>rea_angr_explore</code>, <code>rea_afl_fuzz</code>, <code>rea_lldb_script</code> ve <code>rea_ttd_info</code> dış programın stdout çıktısını ayrıştırır. Program yoksa <code>capability_unsupported</code> döner (<code>3ab174f64ea1ba3f10ad050bedadc31a4d3a542a</code>).</li></ul>
+<h3 id="güncellendi">Güncellendi</h3>
+<ul><li>Dört sonda yalnız <code>all</code> profilindedir. Yüzey 200 araç ve 197 outputSchema (<code>3ab174f64ea1ba3f10ad050bedadc31a4d3a542a</code>).</li></ul>
 <h2 id="0160--2026-11-25">[0.16.0] — 2026-11-25</h2>
-<h3 id="added-1">Added</h3>
-<ul><li><code>rea_electron_fuses</code> reads the Electron fuse sentinel and wire. <code>rea_electron_window</code> classifies BrowserWindow option keys. <code>rea_apk_splits</code> separates base and split APKs. <code>rea_adb_pull</code> runs adb pull. <code>rea_sqlite_snapshot</code> reads the database header and schema table names (<code>90701d6e6d5496a9b0d9bf3f2a61b3f27c9f8b3f</code>).</li></ul>
-<h3 id="updated-1">Updated</h3>
-<ul><li>The five tools are on the <code>all</code> profile only. The surface is 196 tools and 193 output schemas (<code>90701d6e6d5496a9b0d9bf3f2a61b3f27c9f8b3f</code>).</li></ul>
+<h3 id="eklendi-1">Eklendi</h3>
+<ul><li><code>rea_electron_fuses</code> Electron fuse sentinel'ini ve wire'ı okur. <code>rea_electron_window</code> BrowserWindow seçenek anahtarlarını sınıflar. <code>rea_apk_splits</code> taban ve split APK'ları ayırır. <code>rea_adb_pull</code> adb pull çalıştırır. <code>rea_sqlite_snapshot</code> veritabanı başlığını ve şema tablo adlarını okur (<code>90701d6e6d5496a9b0d9bf3f2a61b3f27c9f8b3f</code>).</li></ul>
+<h3 id="güncellendi-1">Güncellendi</h3>
+<ul><li>Beş araç yalnız <code>all</code> profilindedir. Yüzey 196 araç ve 193 outputSchema (<code>90701d6e6d5496a9b0d9bf3f2a61b3f27c9f8b3f</code>).</li></ul>
 <h2 id="0150--2026-11-25">[0.15.0] — 2026-11-25</h2>
-<h3 id="added-2">Added</h3>
-<ul><li>The JS walk includes <code>.mts</code> and <code>.cts</code>. Package resolution reads <code>exports</code> before <code>main</code> (<code>1be78a491a3a4b961f74ad7762b977c0c15acbe2</code>).</li></ul>
-<h3 id="fixed">Fixed</h3>
-<ul><li><code>src/native-windows/addon.ts</code> reads the live Win32 process name, token integrity, and a directory snapshot. It no longer returns a skeleton success (<code>1be78a491a3a4b961f74ad7762b977c0c15acbe2</code>).</li></ul>
-<h3 id="updated-2">Updated</h3>
-<ul><li><code>rea_aot_profile</code> and <code>rea_mips_psp_profile</code> declare <code>details.iskelet: true</code>. The surface stays 191 tools and 188 output schemas (<code>1be78a491a3a4b961f74ad7762b977c0c15acbe2</code>).</li></ul>
+<h3 id="eklendi-2">Eklendi</h3>
+<ul><li>JS yürüyüşü <code>.mts</code> ve <code>.cts</code> içerir. Paket çözümlemesi <code>main</code> öncesinde <code>exports</code> okur (<code>1be78a491a3a4b961f74ad7762b977c0c15acbe2</code>).</li></ul>
+<h3 id="düzeltildi">Düzeltildi</h3>
+<ul><li><code>src/native-windows/addon.ts</code> canlı Win32 süreç adını, token bütünlüğünü ve bir dizin anlık görüntüsünü okur. Artık iskelet başarı döndürmez (<code>1be78a491a3a4b961f74ad7762b977c0c15acbe2</code>).</li></ul>
+<h3 id="güncellendi-2">Güncellendi</h3>
+<ul><li><code>rea_aot_profile</code> ve <code>rea_mips_psp_profile</code> <code>details.iskelet: true</code> bildirir. Yüzey 191 araç ve 188 outputSchema olarak kalır (<code>1be78a491a3a4b961f74ad7762b977c0c15acbe2</code>).</li></ul>
 <h2 id="0140--2026-11-25">[0.14.0] — 2026-11-25</h2>
-<h3 id="added-3">Added</h3>
-<ul><li><code>rea_pwn_elf_layout</code> reads ELF program headers and reports PIE, NX, and RELRO. <code>rea_pwn_gadgets</code> keeps 1-5 instruction sequences that end in <code>ret</code>, <code>retn</code>, or <code>retf</code> (<code>0039bb3dbed5314c3485a4f04ac794e4706c4c14</code>).</li></ul>
-<h3 id="fixed-1">Fixed</h3>
-<ul><li><code>rea_frida_api</code> no longer calls <code>GetTickCount</code>, <code>CreateFileW</code>, or <code>CloseHandle</code> inside the target. The script only attaches hooks and waits (<code>0039bb3dbed5314c3485a4f04ac794e4706c4c14</code>).</li><li><code>sniff.test.mjs</code> runs in the default test lane. Live Frida and Ghidra files stay excluded (<code>0039bb3dbed5314c3485a4f04ac794e4706c4c14</code>).</li></ul>
-<h3 id="updated-3">Updated</h3>
-<ul><li><code>rea_pwn_elf_layout</code> now has an output schema. The surface is 191 tools, 188 output schemas, and 3 schema-less tools (<code>0039bb3dbed5314c3485a4f04ac794e4706c4c14</code>).</li></ul>
+<h3 id="eklendi-3">Eklendi</h3>
+<ul><li><code>rea_pwn_elf_layout</code> ELF program başlıklarını okur ve PIE, NX ve RELRO bildirir. <code>rea_pwn_gadgets</code> <code>ret</code>, <code>retn</code> veya <code>retf</code> ile biten 1-5 komutluk dizileri tutar (<code>0039bb3dbed5314c3485a4f04ac794e4706c4c14</code>).</li></ul>
+<h3 id="düzeltildi-1">Düzeltildi</h3>
+<ul><li><code>rea_frida_api</code> hedef içinde artık <code>GetTickCount</code>, <code>CreateFileW</code> veya <code>CloseHandle</code> çağırmaz. Betik yalnız kancaları takar ve bekler (<code>0039bb3dbed5314c3485a4f04ac794e4706c4c14</code>).</li><li><code>sniff.test.mjs</code> varsayılan test şeridinde koşar. Canlı Frida ve Ghidra dosyaları dışarıda kalır (<code>0039bb3dbed5314c3485a4f04ac794e4706c4c14</code>).</li></ul>
+<h3 id="güncellendi-3">Güncellendi</h3>
+<ul><li><code>rea_pwn_elf_layout</code> artık bir outputSchema taşır. Yüzey 191 araç, 188 outputSchema ve 3 şemasız araçtır (<code>0039bb3dbed5314c3485a4f04ac794e4706c4c14</code>).</li></ul>
 <h2 id="0131--2026-11-25">[0.13.1] — 2026-11-25</h2>
-<h3 id="added-4">Added</h3>
-<ul><li><code>tests/docs-english.test.mjs</code> rejects Turkish prose on the GitHub-facing markdown allowlist (<code>e68f61beb643b2fa20440c55cf0ef93a985d67a9</code>).</li></ul>
-<h3 id="updated-4">Updated</h3>
-<ul><li>GitHub-facing documentation is English, including the roadmap, coverage gaps, and the morluto comparison (<code>e68f61beb643b2fa20440c55cf0ef93a985d67a9</code>).</li><li>The roadmap table records the schema-budget CI step, the Pages deploy workflow, 7 prompts, and npm provenance (<code>e68f61beb643b2fa20440c55cf0ef93a985d67a9</code>).</li></ul>
+<h3 id="eklendi-4">Eklendi</h3>
+<ul><li><code>tests/docs-english.test.mjs</code> GitHub'a bakan markdown allowlist'inde Türkçe düzyazıyı reddeder (<code>e68f61beb643b2fa20440c55cf0ef93a985d67a9</code>).</li></ul>
+<h3 id="güncellendi-4">Güncellendi</h3>
+<ul><li>GitHub'a bakan belgeler İngilizcedir; yol haritası, kapsam boşlukları ve morluto karşılaştırması buna dahildir (<code>e68f61beb643b2fa20440c55cf0ef93a985d67a9</code>).</li><li>Yol haritası tablosu şema bütçesi CI adımını, Pages dağıtım iş akışını, 7 prompt'u ve npm provenance'ı kaydeder (<code>e68f61beb643b2fa20440c55cf0ef93a985d67a9</code>).</li></ul>
 <h2 id="0130--2026-10-20">[0.13.0] — 2026-10-20</h2>
 <p>Sürüm 0.13.0: dalga-13 + dalga-14 — sniff makine kimliği (PE ARMNT/ARM64,
 ELF e_machine + Hexagon), plist tip-duyarlı kayıpsız değerler, JS CJS/require

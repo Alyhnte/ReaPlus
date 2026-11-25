@@ -28,7 +28,7 @@
 (<code>dist/server.js</code>). Para regenerar:
 <code>npm run build &amp;&amp; node scripts/generate-tool-reference.mjs</code></blockquote>
 <h2 id="resumen">Resumen</h2>
-<ul><li>Servidor: <code>rea-plus</code> 0.17.0</li><li>Herramientas totales: 191</li><li>Recursos totales: 2</li><li>Prompts totales: 3</li><li>Herramientas con outputSchema: 187</li><li>Herramientas con annotations: 191</li></ul>
+<ul><li>Servidor: <code>rea-plus</code> 0.17.0</li><li>Herramientas totales: 200</li><li>Recursos totales: 2</li><li>Prompts totales: 7</li><li>Herramientas con outputSchema: 197</li><li>Herramientas con annotations: 200</li></ul>
 <h2 id="herramientas">Herramientas</h2>
 <h3 id="close_target"><code>close_target</code></h3>
 <p>Libera el objetivo binario (y su proceso radare2) retenido por una sesión.</p>
@@ -114,15 +114,24 @@
 <h3 id="rea_adb_packages"><code>rea_adb_packages</code></h3>
 <p>Lista de paquetes instalados.</p>
 <ul><li>Campos de entrada:</li><li><code>filtre</code> (string, opcional)</li><li><code>seri</code> (string, opcional)</li><li>outputSchema: sí (campos: arac, ok, paketler)</li><li>annotations: sí (openWorldHint=true, readOnlyHint=false)</li></ul>
+<h3 id="rea_adb_pull"><code>rea_adb_pull</code></h3>
+<p>Ejecutar adb pull hacia un archivo local (REA_ADB_BIN o adb en PATH).</p>
+<ul><li>Campos de entrada:</li><li><code>out</code> (string, obligatorio)</li><li><code>remote</code> (string, obligatorio)</li><li><code>seri</code> (string, opcional)</li><li>outputSchema: sí (campos: <code>arac</code>, <code>bayt</code>, <code>cikis</code>, <code>ok</code>, <code>uzak</code>, <code>yerel</code>)</li><li>annotations: sí (destructiveHint=true, openWorldHint=true, readOnlyHint=false)</li></ul>
 <h3 id="rea_adb_screencap"><code>rea_adb_screencap</code></h3>
 <p>Captura de pantalla del dispositivo.</p>
 <ul><li>Campos de entrada:</li><li><code>out</code> (string, obligatorio)</li><li><code>seri</code> (string, opcional)</li><li>outputSchema: sí (campos: arac, bayt, ok, yol)</li><li>annotations: sí (destructiveHint=true, openWorldHint=true, readOnlyHint=false)</li></ul>
+<h3 id="rea_afl_fuzz"><code>rea_afl_fuzz</code></h3>
+<p>Ejecutar REA_AFL_BIN --version y analizar la versión de afl-fuzz++ y execs_done. No inicia una campaña de fuzz ni pasa un objetivo. Binario ausente o sin línea execs_done: capability_unsupported.</p>
+<ul><li>Campos de entrada: ninguno</li><li>outputSchema: sí (campos: <code>arac</code>, <code>execs_done</code>, <code>ok</code>, <code>version</code>)</li><li>annotations: sí (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
 <h3 id="rea_android_dinamik_recete"><code>rea_android_dinamik_recete</code></h3>
 <p>Generación de receta de análisis dinámico Android.</p>
 <ul><li>Campos de entrada:</li><li><code>path</code> (string, obligatorio)</li><li>outputSchema: sí (campos: arac, ok, recete)</li><li>annotations: sí (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
 <h3 id="rea_android_recete_dogrula"><code>rea_android_recete_dogrula</code></h3>
 <p>Validación en seco de la receta.</p>
 <ul><li>Campos de entrada:</li><li><code>text</code> (string, obligatorio)</li><li>outputSchema: sí (campos: adim_sayisi, arac, ok)</li><li>annotations: sí (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
+<h3 id="rea_angr_explore"><code>rea_angr_explore</code></h3>
+<p>Ejecutar REA_ANGR_BIN (o python en PATH) como <code>&lt;bin&gt; --explore &lt;path&gt;</code> y analizar una línea JSON {ok,paths,constraints}. Binario ausente, stdout no JSON o salida distinta de cero: capability_unsupported. No inventa un recuento de rutas.</p>
+<ul><li>Campos de entrada:</li><li><code>path</code> (string, obligatorio)</li><li>outputSchema: sí (campos: <code>arac</code>, <code>constraints</code>, <code>ok</code>, <code>paths</code>)</li><li>annotations: sí (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
 <h3 id="rea_aot_detect"><code>rea_aot_detect</code></h3>
 <p>Señal NativeAOT.</p>
 <ul><li>Campos de entrada:</li><li><code>b64dosya</code> (string, obligatorio)</li><li><code>metin</code> (string, opcional)</li><li>outputSchema: sí (campos: details, ok, summary, tool)</li><li>annotations: sí (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
@@ -135,6 +144,9 @@
 <h3 id="rea_aot_swift"><code>rea_aot_swift</code></h3>
 <p>Trazas de dispatch Swift.</p>
 <ul><li>Campos de entrada:</li><li><code>text</code> (string, obligatorio)</li><li>outputSchema: sí (campos: details, ok, summary, tool)</li><li>annotations: sí (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
+<h3 id="rea_apk_splits"><code>rea_apk_splits</code></h3>
+<p>Leer roles de split APK y recuentos de entradas zip de un directorio. No ejecuta apktool.</p>
+<ul><li>Campos de entrada:</li><li><code>path</code> (string, obligatorio)</li><li>outputSchema: sí (campos: <code>apkler</code>, <code>arac</code>, <code>dizin</code>, <code>ok</code>)</li><li>annotations: sí (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
 <h3 id="rea_apktool_build"><code>rea_apktool_build</code></h3>
 <p>Reconstrucción de APK desde el dir decodificado.</p>
 <ul><li>Campos de entrada:</li><li><code>dir</code> (string, obligatorio)</li><li><code>out</code> (string, obligatorio)</li><li>outputSchema: sí (campos: arac, ciktiApk, ok, proje)</li><li>annotations: sí (destructiveHint=true, openWorldHint=true, readOnlyHint=false)</li></ul>
@@ -264,6 +276,12 @@
 <h3 id="rea_dwarf_ozet"><code>rea_dwarf_ozet</code></h3>
 <p>Resumen DWARF de ELF.</p>
 <ul><li>Campos de entrada:</li><li><code>path</code> (string, obligatorio)</li><li>outputSchema: sí (campos: arac, dosya, fonksiyonAdlari, ok, subprogramSayisi, unitSayisi)</li><li>annotations: sí (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
+<h3 id="rea_electron_fuses"><code>rea_electron_fuses</code></h3>
+<p>Leer los bytes del wire de fuse de Electron tras el sentinel de fuse. No lanza Electron.</p>
+<ul><li>Campos de entrada:</li><li><code>path</code> (string, obligatorio)</li><li>outputSchema: sí (campos: <code>arac</code>, <code>dosya</code>, <code>fuses</code>, <code>ok</code>, <code>surum</code>)</li><li>annotations: sí (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
+<h3 id="rea_electron_window"><code>rea_electron_window</code></h3>
+<p>Clasificar las claves de opciones del constructor BrowserWindow. No abre una ventana.</p>
+<ul><li>Campos de entrada:</li><li><code>text</code> (string, obligatorio)</li><li>outputSchema: sí (campos: <code>arac</code>, <code>bilinen</code>, <code>bilinmeyen</code>, <code>calisiyor</code>, <code>ok</code>)</li><li>annotations: sí (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
 <h3 id="rea_evidence_bundle"><code>rea_evidence_bundle</code></h3>
 <p>Construcción del paquete de evidencias.</p>
 <ul><li>Campos de entrada:</li><li><code>ogeler</code> (string, obligatorio)</li><li><code>sakli</code> (string, obligatorio)</li><li>outputSchema: sí (campos: digest, items, retained, tools_sha256)</li><li>annotations: sí (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
@@ -438,6 +456,9 @@
 <h3 id="rea_js_sourcemap"><code>rea_js_sourcemap</code></h3>
 <p>Resolución de source-map.</p>
 <ul><li>Campos de entrada:</li><li><code>text</code> (string, obligatorio)</li><li>outputSchema: sí (campos: ok, summary, tool)</li><li>annotations: sí (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
+<h3 id="rea_lldb_script"><code>rea_lldb_script</code></h3>
+<p>Ejecutar REA_LLDB_BIN --version y analizar <code>stop reason = …</code>. No se adjunta ni abre una sesión de depuración en vivo. Binario ausente o sin stop reason: capability_unsupported.</p>
+<ul><li>Campos de entrada: ninguno</li><li>outputSchema: sí (campos: <code>arac</code>, <code>ok</code>, <code>stop_reason</code>)</li><li>annotations: sí (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
 <h3 id="rea_macho_classdump"><code>rea_macho_classdump</code></h3>
 <p>Salida class-dump (error honesto si falta).</p>
 <ul><li>Campos de entrada:</li><li><code>path</code> (string, obligatorio)</li><li>outputSchema: sí (campos: details, ok, summary, tool)</li><li>annotations: sí (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
@@ -552,9 +573,15 @@
 <h3 id="rea_sniff"><code>rea_sniff</code></h3>
 <p>Tipo de archivo + sugerencia de motor (bytes mágicos).</p>
 <ul><li>Campos de entrada:</li><li><code>b64dosya</code> (string, obligatorio)</li><li>outputSchema: sí (campos: motor, tip)</li><li>annotations: sí (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
+<h3 id="rea_sqlite_snapshot"><code>rea_sqlite_snapshot</code></h3>
+<p>Leer la cabecera SQLite y los nombres de tablas del esquema de un archivo de base.</p>
+<ul><li>Campos de entrada:</li><li><code>path</code> (string, obligatorio)</li><li>outputSchema: sí (campos: <code>arac</code>, <code>dosya</code>, <code>ok</code>, <code>sayfaBoyutu</code>, <code>tablolar</code>)</li><li>annotations: sí (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
 <h3 id="rea_storage_dump"><code>rea_storage_dump</code></h3>
 <p>Cookies + localStorage.</p>
 <ul><li>Campos de entrada:</li><li><code>url</code> (string, obligatorio)</li><li>outputSchema: sí (campos: details, ok, summary, tool)</li><li>annotations: sí (openWorldHint=true, readOnlyHint=false)</li></ul>
+<h3 id="rea_ttd_info"><code>rea_ttd_info</code></h3>
+<p>Ejecutar REA_TTD_BIN --version y analizar ModuleCount. No abre una sesión time-travel. Binario ausente o sin ModuleCount: capability_unsupported.</p>
+<ul><li>Campos de entrada: ninguno</li><li>outputSchema: sí (campos: <code>arac</code>, <code>module_count</code>, <code>ok</code>)</li><li>annotations: sí (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
 <h3 id="rea_typedef_oner"><code>rea_typedef_oner</code></h3>
 <p>Sugerencia de nombre de argumento + propagación.</p>
 <ul><li>Campos de entrada:</li><li><code>text</code> (string, obligatorio)</li><li>outputSchema: sí (campos: arac, ok, oneriler, sayi)</li><li>annotations: sí (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
@@ -606,7 +633,7 @@
 <h2 id="recursos">Recursos</h2>
 <ul><li><code>rea-plus://capabilities-safety</code> — nombre: <code>capabilities-safety</code> — mimeType: <code>application/json</code> — Resumen de capacidades estáticas y reglas de seguridad (solo lectura).</li><li><code>rea-plus://server-info</code> — nombre: <code>server-info</code> — mimeType: <code>application/json</code> — Identidad estática del servidor y resumen de superficie (solo lectura).</li></ul>
 <h2 id="prompts">Prompts</h2>
-<ul><li><code>android-triage</code> — argumentos: <code>focus</code> (opcional), <code>path</code> (obligatorio) — Flujo de triage estático del APK basado en jadx (prompt sin efectos secundarios).</li><li><code>dotnet-malware-triage</code> — argumentos: <code>focus</code> (opcional), <code>path</code> (obligatorio) — Flujo de triage de malware estático para muestra .NET (prompt sin efectos secundarios).</li><li><code>packer-triage</code> — argumentos: <code>focus</code> (opcional), <code>path</code> (obligatorio) — Flujo rea ordenado con prioridad estática para detección de packer/protección (prompt sin efectos secundarios).</li></ul>
+<ul><li><code>android-triage</code> — argumentos: <code>focus</code> (opcional), <code>path</code> (obligatorio) — Flujo de triage estático del APK basado en jadx (prompt sin efectos secundarios).</li><li><code>binary-diff</code> — argumentos: <code>eski</code> (obligatorio), <code>focus</code> (opcional), <code>yeni</code> (obligatorio) — Flujo de diff de funciones y revisión de parche entre dos versiones (prompt sin efectos secundarios).</li><li><code>dotnet-malware-triage</code> — argumentos: <code>focus</code> (opcional), <code>path</code> (obligatorio) — Flujo de triage de malware estático para muestra .NET (prompt sin efectos secundarios).</li><li><code>elf-linux-triage</code> — argumentos: <code>focus</code> (opcional), <code>path</code> (obligatorio) — Flujo estático layout → símbolo → gadget para un objetivo ELF (prompt sin efectos secundarios).</li><li><code>evidence-report</code> — argumentos: <code>focus</code> (opcional), <code>path</code> (obligatorio) — Flujo que convierte un paquete de evidencia en un informe verificado (prompt sin efectos secundarios).</li><li><code>packer-triage</code> — argumentos: <code>focus</code> (opcional), <code>path</code> (obligatorio) — Flujo rea ordenado con prioridad estática para detección de packer/protección (prompt sin efectos secundarios).</li><li><code>pe-crash-triage</code> — argumentos: <code>focus</code> (opcional), <code>path</code> (obligatorio) — Flujo triage → estático → crash → comportamiento para un objetivo PE (prompt sin efectos secundarios).</li></ul>
 </div></main>
 <footer class="altbilgi"><p>ReaPlus Docs — sitio estático. Generación: <code>node scripts/site-uret.mjs</code> · Números del resumen docs/i18n/tr/TOOLS.md (ejecución real).</p></footer>
 </div>

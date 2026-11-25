@@ -116,15 +116,24 @@ yazar. Sayılar gerçek koşudan gelir:
 <h3 id="rea_adb_packages"><code>rea_adb_packages</code></h3>
 <p>Yüklü paket listesi.</p>
 <ul><li>Girdi alanları:</li><li><code>filtre</code> (string, opsiyonel)</li><li><code>seri</code> (string, opsiyonel)</li><li>outputSchema: var (alanlar: arac, ok, paketler)</li><li>annotations: var (openWorldHint=true, readOnlyHint=false)</li></ul>
+<h3 id="rea_adb_pull"><code>rea_adb_pull</code></h3>
+<p>adb pull ile yerel bir dosyaya çek (REA_ADB_BIN veya PATH üzerindeki adb).</p>
+<ul><li>Girdi alanları:</li><li><code>out</code> (string, zorunlu)</li><li><code>remote</code> (string, zorunlu)</li><li><code>seri</code> (string, opsiyonel)</li><li>outputSchema: var (alanlar: <code>arac</code>, <code>bayt</code>, <code>cikis</code>, <code>ok</code>, <code>uzak</code>, <code>yerel</code>)</li><li>annotations: var (destructiveHint=true, openWorldHint=true, readOnlyHint=false)</li></ul>
 <h3 id="rea_adb_screencap"><code>rea_adb_screencap</code></h3>
 <p>Cihaz ekran görüntüsü.</p>
 <ul><li>Girdi alanları:</li><li><code>out</code> (string, zorunlu)</li><li><code>seri</code> (string, opsiyonel)</li><li>outputSchema: var (alanlar: arac, bayt, ok, yol)</li><li>annotations: var (destructiveHint=true, openWorldHint=true, readOnlyHint=false)</li></ul>
+<h3 id="rea_afl_fuzz"><code>rea_afl_fuzz</code></h3>
+<p>REA_AFL_BIN --version çalıştır ve afl-fuzz++ sürümü ile execs_done satırını ayrıştır. Fuzz kampanyası başlatmaz ve hedef geçmez. İkili yoksa veya execs_done satırı yoksa capability_unsupported.</p>
+<ul><li>Girdi alanları: yok</li><li>outputSchema: var (alanlar: <code>arac</code>, <code>execs_done</code>, <code>ok</code>, <code>version</code>)</li><li>annotations: var (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
 <h3 id="rea_android_dinamik_recete"><code>rea_android_dinamik_recete</code></h3>
 <p>Android dinamik analiz reçetesi üretimi.</p>
 <ul><li>Girdi alanları:</li><li><code>path</code> (string, zorunlu)</li><li>outputSchema: var (alanlar: arac, ok, recete)</li><li>annotations: var (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
 <h3 id="rea_android_recete_dogrula"><code>rea_android_recete_dogrula</code></h3>
 <p>Reçete kuru-doğrulaması.</p>
 <ul><li>Girdi alanları:</li><li><code>text</code> (string, zorunlu)</li><li>outputSchema: var (alanlar: adim_sayisi, arac, ok)</li><li>annotations: var (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
+<h3 id="rea_angr_explore"><code>rea_angr_explore</code></h3>
+<p>REA_ANGR_BIN (veya PATH üzerindeki python) komutunu <code>&lt;bin&gt; --explore &lt;path&gt;</code> olarak çalıştır ve tek JSON satırını {ok,paths,constraints} ayrıştır. İkili yoksa, stdout JSON değilse veya çıkış sıfır değilse capability_unsupported. Yol sayısı uydurmaz.</p>
+<ul><li>Girdi alanları:</li><li><code>path</code> (string, zorunlu)</li><li>outputSchema: var (alanlar: <code>arac</code>, <code>constraints</code>, <code>ok</code>, <code>paths</code>)</li><li>annotations: var (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
 <h3 id="rea_aot_detect"><code>rea_aot_detect</code></h3>
 <p>NativeAOT sinyali.</p>
 <ul><li>Girdi alanları:</li><li><code>b64dosya</code> (string, zorunlu)</li><li><code>metin</code> (string, opsiyonel)</li><li>outputSchema: var (alanlar: details, ok, summary, tool)</li><li>annotations: var (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
@@ -137,6 +146,9 @@ yazar. Sayılar gerçek koşudan gelir:
 <h3 id="rea_aot_swift"><code>rea_aot_swift</code></h3>
 <p>Swift dispatch izleri.</p>
 <ul><li>Girdi alanları:</li><li><code>text</code> (string, zorunlu)</li><li>outputSchema: var (alanlar: details, ok, summary, tool)</li><li>annotations: var (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
+<h3 id="rea_apk_splits"><code>rea_apk_splits</code></h3>
+<p>Bir dizindeki split APK rollerini ve zip girdi sayılarını oku. apktool çalıştırmaz.</p>
+<ul><li>Girdi alanları:</li><li><code>path</code> (string, zorunlu)</li><li>outputSchema: var (alanlar: <code>apkler</code>, <code>arac</code>, <code>dizin</code>, <code>ok</code>)</li><li>annotations: var (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
 <h3 id="rea_apktool_build"><code>rea_apktool_build</code></h3>
 <p>Decode dizinden APK rebuild.</p>
 <ul><li>Girdi alanları:</li><li><code>dir</code> (string, zorunlu)</li><li><code>out</code> (string, zorunlu)</li><li>outputSchema: var (alanlar: arac, ciktiApk, ok, proje)</li><li>annotations: var (destructiveHint=true, openWorldHint=true, readOnlyHint=false)</li></ul>
@@ -266,6 +278,12 @@ yazar. Sayılar gerçek koşudan gelir:
 <h3 id="rea_dwarf_ozet"><code>rea_dwarf_ozet</code></h3>
 <p>ELF DWARF özeti.</p>
 <ul><li>Girdi alanları:</li><li><code>path</code> (string, zorunlu)</li><li>outputSchema: var (alanlar: arac, dosya, fonksiyonAdlari, ok, subprogramSayisi, unitSayisi)</li><li>annotations: var (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
+<h3 id="rea_electron_fuses"><code>rea_electron_fuses</code></h3>
+<p>Fuse sentinel sonrasındaki Electron fuse wire baytlarını oku. Electron başlatmaz.</p>
+<ul><li>Girdi alanları:</li><li><code>path</code> (string, zorunlu)</li><li>outputSchema: var (alanlar: <code>arac</code>, <code>dosya</code>, <code>fuses</code>, <code>ok</code>, <code>surum</code>)</li><li>annotations: var (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
+<h3 id="rea_electron_window"><code>rea_electron_window</code></h3>
+<p>BrowserWindow kurucu seçenek anahtarlarını sınıfla. Pencere açmaz.</p>
+<ul><li>Girdi alanları:</li><li><code>text</code> (string, zorunlu)</li><li>outputSchema: var (alanlar: <code>arac</code>, <code>bilinen</code>, <code>bilinmeyen</code>, <code>calisiyor</code>, <code>ok</code>)</li><li>annotations: var (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
 <h3 id="rea_evidence_bundle"><code>rea_evidence_bundle</code></h3>
 <p>Kanıt paketi derleme.</p>
 <ul><li>Girdi alanları:</li><li><code>ogeler</code> (string, zorunlu)</li><li><code>sakli</code> (string, zorunlu)</li><li>outputSchema: var (alanlar: digest, items, retained, tools_sha256)</li><li>annotations: var (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
@@ -440,6 +458,9 @@ yazar. Sayılar gerçek koşudan gelir:
 <h3 id="rea_js_sourcemap"><code>rea_js_sourcemap</code></h3>
 <p>Source-map çözümleme.</p>
 <ul><li>Girdi alanları:</li><li><code>text</code> (string, zorunlu)</li><li>outputSchema: var (alanlar: ok, summary, tool)</li><li>annotations: var (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
+<h3 id="rea_lldb_script"><code>rea_lldb_script</code></h3>
+<p>REA_LLDB_BIN --version çalıştır ve <code>stop reason = …</code> satırını ayrıştır. Bağlanmaz ve canlı hata ayıklama oturumu açmaz. İkili yoksa veya stop reason yoksa capability_unsupported.</p>
+<ul><li>Girdi alanları: yok</li><li>outputSchema: var (alanlar: <code>arac</code>, <code>ok</code>, <code>stop_reason</code>)</li><li>annotations: var (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
 <h3 id="rea_macho_classdump"><code>rea_macho_classdump</code></h3>
 <p>class-dump çıktısı (yoksa dürüst hata).</p>
 <ul><li>Girdi alanları:</li><li><code>path</code> (string, zorunlu)</li><li>outputSchema: var (alanlar: details, ok, summary, tool)</li><li>annotations: var (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
@@ -554,9 +575,15 @@ yazar. Sayılar gerçek koşudan gelir:
 <h3 id="rea_sniff"><code>rea_sniff</code></h3>
 <p>Dosya tip + motor önerisi (magic-byte).</p>
 <ul><li>Girdi alanları:</li><li><code>b64dosya</code> (string, zorunlu)</li><li>outputSchema: var (alanlar: motor, tip)</li><li>annotations: var (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
+<h3 id="rea_sqlite_snapshot"><code>rea_sqlite_snapshot</code></h3>
+<p>Bir veritabanı dosyasından SQLite başlığını ve şema tablo adlarını oku.</p>
+<ul><li>Girdi alanları:</li><li><code>path</code> (string, zorunlu)</li><li>outputSchema: var (alanlar: <code>arac</code>, <code>dosya</code>, <code>ok</code>, <code>sayfaBoyutu</code>, <code>tablolar</code>)</li><li>annotations: var (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
 <h3 id="rea_storage_dump"><code>rea_storage_dump</code></h3>
 <p>Cookies + localStorage.</p>
 <ul><li>Girdi alanları:</li><li><code>url</code> (string, zorunlu)</li><li>outputSchema: var (alanlar: details, ok, summary, tool)</li><li>annotations: var (openWorldHint=true, readOnlyHint=false)</li></ul>
+<h3 id="rea_ttd_info"><code>rea_ttd_info</code></h3>
+<p>REA_TTD_BIN --version çalıştır ve ModuleCount değerini ayrıştır. Time-travel oturumu açmaz. İkili yoksa veya ModuleCount yoksa capability_unsupported.</p>
+<ul><li>Girdi alanları: yok</li><li>outputSchema: var (alanlar: <code>arac</code>, <code>module_count</code>, <code>ok</code>)</li><li>annotations: var (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
 <h3 id="rea_typedef_oner"><code>rea_typedef_oner</code></h3>
 <p>Argüman adı önerisi + yayılım.</p>
 <ul><li>Girdi alanları:</li><li><code>text</code> (string, zorunlu)</li><li>outputSchema: var (alanlar: arac, ok, oneriler, sayi)</li><li>annotations: var (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>

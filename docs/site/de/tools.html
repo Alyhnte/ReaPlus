@@ -28,7 +28,7 @@
 echte MCP-Oberfläche des kompilierten Servers (<code>dist/server.js</code>). Zur Neuerzeugung:
 <code>npm run build &amp;&amp; node scripts/generate-tool-reference.mjs</code></blockquote>
 <h2 id="zusammenfassung">Zusammenfassung</h2>
-<ul><li>Server: <code>rea-plus</code> 0.17.0</li><li>Werkzeuge gesamt: 191</li><li>Ressourcen gesamt: 2</li><li>Prompts gesamt: 3</li><li>Werkzeuge mit outputSchema: 187</li><li>Werkzeuge mit annotations: 191</li></ul>
+<ul><li>Server: <code>rea-plus</code> 0.17.0</li><li>Werkzeuge gesamt: 200</li><li>Ressourcen gesamt: 2</li><li>Prompts gesamt: 7</li><li>Werkzeuge mit outputSchema: 197</li><li>Werkzeuge mit annotations: 200</li></ul>
 <h2 id="werkzeuge">Werkzeuge</h2>
 <h3 id="close_target"><code>close_target</code></h3>
 <p>Gibt das binäre Ziel (samt zugehörigem radare2-Prozess) frei, das von einer Sitzung gehalten wird.</p>
@@ -114,15 +114,24 @@ echte MCP-Oberfläche des kompilierten Servers (<code>dist/server.js</code>). Zu
 <h3 id="rea_adb_packages"><code>rea_adb_packages</code></h3>
 <p>Liste installierter Pakete.</p>
 <ul><li>Eingabefelder:</li><li><code>filtre</code> (string, optional)</li><li><code>seri</code> (string, optional)</li><li>outputSchema: vorhanden (Felder: arac, ok, paketler)</li><li>annotations: vorhanden (openWorldHint=true, readOnlyHint=false)</li></ul>
+<h3 id="rea_adb_pull"><code>rea_adb_pull</code></h3>
+<p>adb pull in eine lokale Datei ausführen (REA_ADB_BIN oder adb im PATH).</p>
+<ul><li>Eingabefelder:</li><li><code>out</code> (string, erforderlich)</li><li><code>remote</code> (string, erforderlich)</li><li><code>seri</code> (string, optional)</li><li>outputSchema: vorhanden (Felder: <code>arac</code>, <code>bayt</code>, <code>cikis</code>, <code>ok</code>, <code>uzak</code>, <code>yerel</code>)</li><li>annotations: vorhanden (destructiveHint=true, openWorldHint=true, readOnlyHint=false)</li></ul>
 <h3 id="rea_adb_screencap"><code>rea_adb_screencap</code></h3>
 <p>Geräte-Screenshot.</p>
 <ul><li>Eingabefelder:</li><li><code>out</code> (string, erforderlich)</li><li><code>seri</code> (string, optional)</li><li>outputSchema: vorhanden (Felder: arac, bayt, ok, yol)</li><li>annotations: vorhanden (destructiveHint=true, openWorldHint=true, readOnlyHint=false)</li></ul>
+<h3 id="rea_afl_fuzz"><code>rea_afl_fuzz</code></h3>
+<p>REA_AFL_BIN --version ausführen und die afl-fuzz++-Version sowie execs_done parsen. Startet keine Fuzz-Kampagne und übergibt kein Ziel. Fehlende Binärdatei oder keine execs_done-Zeile ist capability_unsupported.</p>
+<ul><li>Eingabefelder: keine</li><li>outputSchema: vorhanden (Felder: <code>arac</code>, <code>execs_done</code>, <code>ok</code>, <code>version</code>)</li><li>annotations: vorhanden (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
 <h3 id="rea_android_dinamik_recete"><code>rea_android_dinamik_recete</code></h3>
 <p>Erzeugung einer dynamischen Android-Analyse-Rezeptur.</p>
 <ul><li>Eingabefelder:</li><li><code>path</code> (string, erforderlich)</li><li>outputSchema: vorhanden (Felder: arac, ok, recete)</li><li>annotations: vorhanden (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
 <h3 id="rea_android_recete_dogrula"><code>rea_android_recete_dogrula</code></h3>
 <p>Trocken-Validierung einer Rezeptur.</p>
 <ul><li>Eingabefelder:</li><li><code>text</code> (string, erforderlich)</li><li>outputSchema: vorhanden (Felder: adim_sayisi, arac, ok)</li><li>annotations: vorhanden (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
+<h3 id="rea_angr_explore"><code>rea_angr_explore</code></h3>
+<p>REA_ANGR_BIN (oder python im PATH) als <code>&lt;bin&gt; --explore &lt;path&gt;</code> ausführen und eine JSON-Zeile {ok,paths,constraints} parsen. Fehlende Binärdatei, Nicht-JSON-stdout oder ein Exit ungleich null ist capability_unsupported. Erfindet keine Pfadanzahl.</p>
+<ul><li>Eingabefelder:</li><li><code>path</code> (string, erforderlich)</li><li>outputSchema: vorhanden (Felder: <code>arac</code>, <code>constraints</code>, <code>ok</code>, <code>paths</code>)</li><li>annotations: vorhanden (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
 <h3 id="rea_aot_detect"><code>rea_aot_detect</code></h3>
 <p>NativeAOT-Signal.</p>
 <ul><li>Eingabefelder:</li><li><code>b64dosya</code> (string, erforderlich)</li><li><code>metin</code> (string, optional)</li><li>outputSchema: vorhanden (Felder: details, ok, summary, tool)</li><li>annotations: vorhanden (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
@@ -135,6 +144,9 @@ echte MCP-Oberfläche des kompilierten Servers (<code>dist/server.js</code>). Zu
 <h3 id="rea_aot_swift"><code>rea_aot_swift</code></h3>
 <p>Swift-Dispatch-Spuren.</p>
 <ul><li>Eingabefelder:</li><li><code>text</code> (string, erforderlich)</li><li>outputSchema: vorhanden (Felder: details, ok, summary, tool)</li><li>annotations: vorhanden (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
+<h3 id="rea_apk_splits"><code>rea_apk_splits</code></h3>
+<p>Split-APK-Rollen und Zip-Eintragszahlen aus einem Verzeichnis lesen. Führt apktool nicht aus.</p>
+<ul><li>Eingabefelder:</li><li><code>path</code> (string, erforderlich)</li><li>outputSchema: vorhanden (Felder: <code>apkler</code>, <code>arac</code>, <code>dizin</code>, <code>ok</code>)</li><li>annotations: vorhanden (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
 <h3 id="rea_apktool_build"><code>rea_apktool_build</code></h3>
 <p>APK-Rebuild aus dem Decode-Verzeichnis.</p>
 <ul><li>Eingabefelder:</li><li><code>dir</code> (string, erforderlich)</li><li><code>out</code> (string, erforderlich)</li><li>outputSchema: vorhanden (Felder: arac, ciktiApk, ok, proje)</li><li>annotations: vorhanden (destructiveHint=true, openWorldHint=true, readOnlyHint=false)</li></ul>
@@ -264,6 +276,12 @@ echte MCP-Oberfläche des kompilierten Servers (<code>dist/server.js</code>). Zu
 <h3 id="rea_dwarf_ozet"><code>rea_dwarf_ozet</code></h3>
 <p>ELF-DWARF-Zusammenfassung.</p>
 <ul><li>Eingabefelder:</li><li><code>path</code> (string, erforderlich)</li><li>outputSchema: vorhanden (Felder: arac, dosya, fonksiyonAdlari, ok, subprogramSayisi, unitSayisi)</li><li>annotations: vorhanden (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
+<h3 id="rea_electron_fuses"><code>rea_electron_fuses</code></h3>
+<p>Electron-Fuse-Wire-Bytes nach dem Fuse-Sentinel lesen. Startet Electron nicht.</p>
+<ul><li>Eingabefelder:</li><li><code>path</code> (string, erforderlich)</li><li>outputSchema: vorhanden (Felder: <code>arac</code>, <code>dosya</code>, <code>fuses</code>, <code>ok</code>, <code>surum</code>)</li><li>annotations: vorhanden (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
+<h3 id="rea_electron_window"><code>rea_electron_window</code></h3>
+<p>BrowserWindow-Konstruktor-Optionsschlüssel klassifizieren. Öffnet kein Fenster.</p>
+<ul><li>Eingabefelder:</li><li><code>text</code> (string, erforderlich)</li><li>outputSchema: vorhanden (Felder: <code>arac</code>, <code>bilinen</code>, <code>bilinmeyen</code>, <code>calisiyor</code>, <code>ok</code>)</li><li>annotations: vorhanden (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
 <h3 id="rea_evidence_bundle"><code>rea_evidence_bundle</code></h3>
 <p>Zusammenstellen eines Evidenzpakets.</p>
 <ul><li>Eingabefelder:</li><li><code>ogeler</code> (string, erforderlich)</li><li><code>sakli</code> (string, erforderlich)</li><li>outputSchema: vorhanden (Felder: digest, items, retained, tools_sha256)</li><li>annotations: vorhanden (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
@@ -438,6 +456,9 @@ echte MCP-Oberfläche des kompilierten Servers (<code>dist/server.js</code>). Zu
 <h3 id="rea_js_sourcemap"><code>rea_js_sourcemap</code></h3>
 <p>Source-Map-Auflösung.</p>
 <ul><li>Eingabefelder:</li><li><code>text</code> (string, erforderlich)</li><li>outputSchema: vorhanden (Felder: ok, summary, tool)</li><li>annotations: vorhanden (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
+<h3 id="rea_lldb_script"><code>rea_lldb_script</code></h3>
+<p>REA_LLDB_BIN --version ausführen und <code>stop reason = …</code> parsen. Hängt sich nicht an und öffnet keine Live-Debug-Sitzung. Fehlende Binärdatei oder kein Stop-Grund ist capability_unsupported.</p>
+<ul><li>Eingabefelder: keine</li><li>outputSchema: vorhanden (Felder: <code>arac</code>, <code>ok</code>, <code>stop_reason</code>)</li><li>annotations: vorhanden (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
 <h3 id="rea_macho_classdump"><code>rea_macho_classdump</code></h3>
 <p>class-dump-Ausgabe (ehrlicher Fehler, falls nicht vorhanden).</p>
 <ul><li>Eingabefelder:</li><li><code>path</code> (string, erforderlich)</li><li>outputSchema: vorhanden (Felder: details, ok, summary, tool)</li><li>annotations: vorhanden (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
@@ -552,9 +573,15 @@ echte MCP-Oberfläche des kompilierten Servers (<code>dist/server.js</code>). Zu
 <h3 id="rea_sniff"><code>rea_sniff</code></h3>
 <p>Dateityp- + Engine-Empfehlung (Magic-Byte).</p>
 <ul><li>Eingabefelder:</li><li><code>b64dosya</code> (string, erforderlich)</li><li>outputSchema: vorhanden (Felder: motor, tip)</li><li>annotations: vorhanden (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
+<h3 id="rea_sqlite_snapshot"><code>rea_sqlite_snapshot</code></h3>
+<p>SQLite-Kopf und Schema-Tabellennamen aus einer Datenbankdatei lesen.</p>
+<ul><li>Eingabefelder:</li><li><code>path</code> (string, erforderlich)</li><li>outputSchema: vorhanden (Felder: <code>arac</code>, <code>dosya</code>, <code>ok</code>, <code>sayfaBoyutu</code>, <code>tablolar</code>)</li><li>annotations: vorhanden (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
 <h3 id="rea_storage_dump"><code>rea_storage_dump</code></h3>
 <p>Cookies + localStorage.</p>
 <ul><li>Eingabefelder:</li><li><code>url</code> (string, erforderlich)</li><li>outputSchema: vorhanden (Felder: details, ok, summary, tool)</li><li>annotations: vorhanden (openWorldHint=true, readOnlyHint=false)</li></ul>
+<h3 id="rea_ttd_info"><code>rea_ttd_info</code></h3>
+<p>REA_TTD_BIN --version ausführen und ModuleCount parsen. Öffnet keine Time-Travel-Sitzung. Fehlende Binärdatei oder kein ModuleCount ist capability_unsupported.</p>
+<ul><li>Eingabefelder: keine</li><li>outputSchema: vorhanden (Felder: <code>arac</code>, <code>module_count</code>, <code>ok</code>)</li><li>annotations: vorhanden (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
 <h3 id="rea_typedef_oner"><code>rea_typedef_oner</code></h3>
 <p>Argumentnamenvorschlag + Propagation.</p>
 <ul><li>Eingabefelder:</li><li><code>text</code> (string, erforderlich)</li><li>outputSchema: vorhanden (Felder: arac, ok, oneriler, sayi)</li><li>annotations: vorhanden (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
@@ -606,7 +633,7 @@ echte MCP-Oberfläche des kompilierten Servers (<code>dist/server.js</code>). Zu
 <h2 id="resources">Resources</h2>
 <ul><li><code>rea-plus://capabilities-safety</code> — Name: <code>capabilities-safety</code> — mimeType: <code>application/json</code> — Statische Zusammenfassung der Fähigkeiten und Sicherheitsregeln (schreibgeschützt).</li><li><code>rea-plus://server-info</code> — Name: <code>server-info</code> — mimeType: <code>application/json</code> — Statische Server-Identität und Oberflächenzusammenfassung (schreibgeschützt).</li></ul>
 <h2 id="prompts">Prompts</h2>
-<ul><li><code>android-triage</code> — Argumente: <code>focus</code> (optional), <code>path</code> (erforderlich) — Statischer jadx-basierter Triage-Ablauf für APKs (nebeneffektfreier Prompt).</li><li><code>dotnet-malware-triage</code> — Argumente: <code>focus</code> (optional), <code>path</code> (erforderlich) — Statischer Malware-Triage-Ablauf für .NET-Samples (nebeneffektfreier Prompt).</li><li><code>packer-triage</code> — Argumente: <code>focus</code> (optional), <code>path</code> (erforderlich) — Sequenzieller, statik-priorisierter rea-Ablauf zur Packer-/Schutzerkennung (nebeneffektfreier Prompt).</li></ul>
+<ul><li><code>android-triage</code> — Argumente: <code>focus</code> (optional), <code>path</code> (erforderlich) — Statischer jadx-basierter Triage-Ablauf für APKs (nebeneffektfreier Prompt).</li><li><code>binary-diff</code> — Argumente: <code>eski</code> (erforderlich), <code>focus</code> (optional), <code>yeni</code> (erforderlich) — Funktions-Diff und Patch-Review zwischen zwei Versionen (nebeneffektfreier Prompt).</li><li><code>dotnet-malware-triage</code> — Argumente: <code>focus</code> (optional), <code>path</code> (erforderlich) — Statischer Malware-Triage-Ablauf für .NET-Samples (nebeneffektfreier Prompt).</li><li><code>elf-linux-triage</code> — Argumente: <code>focus</code> (optional), <code>path</code> (erforderlich) — Statischer Ablauf Layout → Symbol → Gadget für ein ELF-Ziel (nebeneffektfreier Prompt).</li><li><code>evidence-report</code> — Argumente: <code>focus</code> (optional), <code>path</code> (erforderlich) — Ablauf, der ein Evidenzpaket in einen geprüften Bericht überführt (nebeneffektfreier Prompt).</li><li><code>packer-triage</code> — Argumente: <code>focus</code> (optional), <code>path</code> (erforderlich) — Sequenzieller, statik-priorisierter rea-Ablauf zur Packer-/Schutzerkennung (nebeneffektfreier Prompt).</li><li><code>pe-crash-triage</code> — Argumente: <code>focus</code> (optional), <code>path</code> (erforderlich) — Ablauf Triage → statisch → Crash → Verhalten für ein PE-Ziel (nebeneffektfreier Prompt).</li></ul>
 </div></main>
 <footer class="altbilgi"><p>ReaPlus Docs — statische Site. Erzeugung: <code>node scripts/site-uret.mjs</code> · Zahlen aus der docs/i18n/tr/TOOLS.md-Zusammenfassung (echter Lauf).</p></footer>
 </div>

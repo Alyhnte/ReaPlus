@@ -10,7 +10,7 @@ Tu agente hace las preguntas; rea-plus inspecciona el binario y responde con evi
 
 [![CI](https://github.com/Alyhnte/ReaPlus/actions/workflows/ci.yml)](https://github.com/Alyhnte/ReaPlus/actions/workflows/ci.yml)
 [![Release](https://img.shields.io/github/v/release/Alyhnte/ReaPlus?style=flat-square)](https://github.com/Alyhnte/ReaPlus/releases)
-[![Tools](https://img.shields.io/badge/MCP%20tools-191-blue?style=flat-square)](#-features)
+[![Tools](https://img.shields.io/badge/MCP%20tools-200-blue?style=flat-square)](#-features)
 [![Tests](https://img.shields.io/badge/tests-912%20its%20%2B%20e2e-green?style=flat-square)](#-tests)
 [![Node](https://img.shields.io/badge/node-%3E%3D20-339933?style=flat-square)](https://nodejs.org)
 [![License: MIT](https://img.shields.io/badge/license-MIT-yellow?style=flat-square)](LICENSE)
@@ -26,7 +26,7 @@ Tu agente hace las preguntas; rea-plus inspecciona el binario y responde con evi
 - 🐞 **Depuración real, no capturas** — motores x64dbg, cdb (WinDbg) y Frida tras un núcleo congelado de 30 herramientas: puntos de interrupción, paso a paso, registros, memoria, pilas de llamadas, puntos de control con viaje en el tiempo.
 - 🧩 **157 herramientas estáticas** — Ghidra headless, rizin/radare2, CIL .NET (dnfile) e ILSpy, jadx/apktool/adb, WASM + EVM, firmware, navegador/HAR, UPX, lectores PE/ELF/Mach-O y más.
 - 🤝 **Honesto por diseño** — un backend faltante responde `capability_unsupported` con pista de instalación. Nada finge un resultado, los errores vuelven como `isError` MCP propio, y las llamadas mutantes de depuración en vivo exigen `confirm:true`.
-- 🧩 **191 herramientas, 2 recursos, 7 prompts** — el catálogo completo generado vive en [`docs/TOOLS.md`](docs/TOOLS.md); `REA_TOOLSETS` deja que los clientes pequeños carguen solo un perfil (ver [Configuración](#-configuration)). Sin token HTTP, solo se registra una allowlist de solo lectura de 44 herramientas en lugar de la superficie completa.
+- 🧩 **v0.17.0: 200 herramientas, 197 outputSchema, 200 annotations, 2 recursos, 7 prompts** — sondas nuevas `rea_angr_explore`, `rea_afl_fuzz`, `rea_lldb_script`, `rea_ttd_info`. El catálogo completo generado vive en [`docs/TOOLS.md`](docs/TOOLS.md); `REA_TOOLSETS` deja que los clientes pequeños carguen solo un perfil (ver [Configuración](#-configuration)). Sin token HTTP, solo se registra una allowlist de solo lectura de 44 herramientas en lugar de la superficie completa.
 - 🔌 **Dos transportes** — stdio para agentes locales, HTTP streamable (`/mcp` + `/health`, token bearer, validación Host/Origin de localhost) para setups compartidos.
 - 🧪 **Probado, no prometido** — un carril de pruebas por defecto de 91 archivos, Ubuntu CI para la línea publicada y pruebas de protocolo que manejan el servidor compilado real.
 
@@ -204,7 +204,7 @@ estático, el CLI y ambos transportes funcionan.
 
 ## 🧰 Características
 
-La referencia completa generada — **191 herramientas + 2 recursos (`rea-plus://server-info`, `rea-plus://capabilities-safety`) + 7 prompts (`packer-triage`, `dotnet-malware-triage`, `android-triage`, `pe-crash-triage`, `elf-linux-triage`, `binary-diff`, `evidence-report`)** — está en [`docs/TOOLS.md`](docs/TOOLS.md). La tabla de abajo es solo un resumen por dominio.
+La referencia completa generada — **v0.17.0: 200 herramientas, 197 outputSchema, 200 annotations, 2 recursos (`rea-plus://server-info`, `rea-plus://capabilities-safety`), 7 prompts (`packer-triage`, `dotnet-malware-triage`, `android-triage`, `pe-crash-triage`, `elf-linux-triage`, `binary-diff`, `evidence-report`); sondas nuevas `rea_angr_explore`, `rea_afl_fuzz`, `rea_lldb_script`, `rea_ttd_info`** — está en [`docs/TOOLS.md`](docs/TOOLS.md). La tabla de abajo es solo un resumen por dominio.
 
 | Dominio | Qué obtienes | Motor / backend |
 |---|---|---|
@@ -246,11 +246,11 @@ flowchart LR
 - **Puertas de confirmación.** Las operaciones en vivo que mutan un objetivo exigen `confirm:true`; si no, recibes `confirmation_required`, nunca un efecto secundario silencioso.
 - **Un catálogo.** `mergedCatalog()` (8 entradas conduit + 16 rea de requisitos) es la única fuente que `doctor` lee para versiones y enlaces de descarga.
 - **Recursos + prompts.** Dos recursos estáticos de solo lectura (`rea-plus://server-info`, `rea-plus://capabilities-safety`) y tres prompts sin efectos secundarios (`packer-triage`, `dotnet-malware-triage`, `android-triage`) se registran junto a las herramientas; los prompts solo devuelven texto y nunca ejecutan una herramienta.
-- **Salidas tipadas (parcial).** `structuredContent` refleja el JSON de texto, y la cobertura es deliberadamente parcial: 187 herramientas declaran un `outputSchema` y 187 llevan annotations. Herramientas fuera del conjunto de esquema devuelven JSON de texto sin esquema declarado — ver estado por herramienta en [`docs/TOOLS.md`](docs/TOOLS.md).
+- **Salidas tipadas (parcial).** `structuredContent` refleja el JSON de texto, y la cobertura es deliberadamente parcial: 197 herramientas declaran un `outputSchema` y 200 llevan annotations. Herramientas fuera del conjunto de esquema devuelven JSON de texto sin esquema declarado — ver estado por herramienta en [`docs/TOOLS.md`](docs/TOOLS.md).
 - **Perfiles toolset.** `REA_TOOLSETS` filtra el registro a un perfil (unión con comas; nombres desconocidos fallan el arranque en lugar de caer en silencio a `all`). Resources y prompts no se filtran. Herramientas nuevas caen solo en `all` (fail-closed).
 - **Raíces (legacy + modern).** Con `REA_ROOTS=1` en la ruta stdio legacy, las raíces del cliente solo pueden estrechar `REA_WORKSPACE_ROOT`; nunca ensancharlo. Roots de protocolo moderno usa el flujo multi-round-trip del SDK (`inputRequired` + `inputResponses`); `notifications/roots/list_changed` solo existe pre-2026, así el refresco ocurre en el siguiente round-trip MRTR.
 - **Progreso (generalizado).** Ayudantes de etapa (`createStageProgress`/`onAbort`) acompasan notificaciones (~20/s) y limpian al cancelar; piloto `rea_process_run` sin cambios, `rea_scan_repo` + `rea_jadx_full` con etapas. Los demás handlers síncronos quedan fuera de alcance.
-- **Jobs asíncronos (opt-in).** Con `REA_ASYNC_JOBS=1`, cinco herramientas job (`rea_job_start/status/result/cancel/list`) ejecutan herramientas de la whitelist (`rea_process_run`, `rea_scan_repo`, `rea_behavior_run`) en una cola acotada en memoria (2 concurrentes). La superficie por defecto sigue en 191 herramientas; la superficie opt-in es 196.
+- **Jobs asíncronos (opt-in).** Con `REA_ASYNC_JOBS=1`, cinco herramientas job (`rea_job_start/status/result/cancel/list`) ejecutan herramientas de la whitelist (`rea_process_run`, `rea_scan_repo`, `rea_behavior_run`) en una cola acotada en memoria (2 concurrentes). La superficie por defecto sigue en 200 herramientas; la superficie opt-in es 205.
 
 ## 💻 CLI
 
@@ -281,7 +281,7 @@ Toda la configuración son variables de entorno — sin archivos de config que e
 | `REA_CORELIB_DLL` | DLL de runtime .NET preferida para inspección CIL |
 | `REA_WORKSPACE_ROOT` | Raíz/raíces de workspace, separadas por delimitador de ruta. Cuando se define, argumentos de ruta `rea_*`, rutas conduit `open_target`/`debug_open` y escrituras derivadas visibles al usuario (`.unpacked`, `.extracted`, salida HAR) deben resolverse dentro de la raíz; sin definir = sin restricción. Superficies temp/caché del operador quedan fuera por diseño (dir de artefactos del navegador, dirs tmp de proyecto/entrada Ghidra, archivo tmp de solicitud hopper, caché framework apktool) |
 | `REA_ROOTS` | Poner exactamente a `1` para activar el piloto Roots legacy-stdio. Las raíces `file://` del cliente intersectan con `REA_WORKSPACE_ROOT` y solo pueden estrecharlo; Roots de protocolo moderno no lo activa este flag |
-| `REA_TOOLSETS` | Perfiles de herramientas a registrar, separados por comas: `all` (por defecto, 191), `minimal` (8), `static` (98), `android` (27), `dotnet` (20), `web` (26), `debug` (50). Perfiles combinados por unión; un nombre desconocido o vacío falla el arranque. Resources/prompts no se afectan |
+| `REA_TOOLSETS` | Perfiles de herramientas a registrar, separados por comas: `all` (por defecto, 200), `minimal` (8), `static` (98), `android` (27), `dotnet` (20), `web` (26), `debug` (50). Perfiles combinados por unión; un nombre desconocido o vacío falla el arranque. Resources/prompts no se afectan |
 | `REA_ASYNC_JOBS` | Poner exactamente a `1` para registrar las 5 herramientas job asíncronas (superficie 192 herramientas). Los jobs son solo en memoria, como máximo 2 concurrentes, y la whitelist es `rea_process_run` + `rea_scan_repo` + `rea_behavior_run` |
 | `REA_AUDIT_LOG` | Ruta de un registro de auditoría JSONL (ambos transportes). Cada línea lleva solo `ts`, `transport`, `tool`, `durationMs`, `isError` — nunca argumentos, tokens, rutas ni contenido objetivo. Un error de escritura advierte una vez y desactiva la auditoría en lugar de tumbar el servidor |
 | `REA_HTTP_RATE_LIMIT_PER_MIN` | Solicitudes HTTP por IP cliente por minuto (por defecto 120); el exceso recibe `429`. Un valor no entero positivo falla el arranque |
@@ -294,7 +294,7 @@ Herramientas externas se descubren solo desde estas variables y PATH — sin rut
 rea-plus es un depurador: por diseño puede lanzar, adjuntar e instrumentar procesos locales. Trata su acceso como acceso shell.
 
 - **stdio primero.** El transporte por defecto nunca abre un puerto.
-- **HTTP blindado.** Token bearer (comparación en tiempo constante), validación Host/Origin de localhost contra DNS-rebinding/CSRF, límites de tasa y concurrencia por IP (`REA_HTTP_RATE_LIMIT_PER_MIN`, `REA_HTTP_MAX_CONCURRENT`) y — al arrancar sin token — una advertencia alta más una superficie reducida de 44 herramientas allowlist de solo lectura sin rutas (intersectada con `REA_TOOLSETS`) en lugar de las 187.
+- **HTTP blindado.** Token bearer (comparación en tiempo constante), validación Host/Origin de localhost contra DNS-rebinding/CSRF, límites de tasa y concurrencia por IP (`REA_HTTP_RATE_LIMIT_PER_MIN`, `REA_HTTP_MAX_CONCURRENT`) y — al arrancar sin token — una advertencia alta más una superficie reducida de 44 herramientas allowlist de solo lectura sin rutas (intersectada con `REA_TOOLSETS`) en lugar de las 200.
 - **Límite de workspace (opt-in).** Con `REA_WORKSPACE_ROOT` definido, argumentos de ruta `rea_*`, rutas conduit `open_target`/`debug_open` y escrituras derivadas visibles al usuario deben quedarse dentro de la raíz (verificado con realpath, así los escapes por junction/symlink fallan). Superficies temp/caché del operador (artefactos del navegador, dirs tmp Ghidra, archivo tmp de solicitud hopper, caché framework apktool) son una excepción documentada y no se fuerzan dentro de la raíz.
 - **Auditoría sin contenido.** `REA_AUDIT_LOG` registra una línea JSONL por llamada con solo hora, transporte, nombre de herramienta, duración e `isError` — nunca argumentos, tokens, rutas ni contenido objetivo.
 - **Entradas validadas.** Las direcciones que llegan a lenguajes de comandos backend se restringen a forma hex/decimal/símbolo — sin inyección de comandos a r2/rizin con `;`/`!`.
@@ -320,7 +320,7 @@ Detalles: [`docs/VERIFY.md`](docs/VERIFY.md) · [`docs/MCP-CONTRACTS.md`](docs/M
 Al tope de la lista — la tabla completa priorizada vive en [`docs/ROADMAP.md`](docs/ROADMAP.md):
 
 - npm + MCP Registry en vivo (`rea-plus@0.17.0`, `io.github.Alyhnte/rea-plus`) — installs soportadas: `npx -y rea-plus` y GHCR
-- Superficie tipada cerrada: 183 herramientas llevan `outputSchema` (4 permanentemente sin esquema) y 187 llevan annotations; whitelist asíncrona de 3 herramientas, ayudantes de progress cubren las herramientas con etapas
+- Superficie tipada cerrada: 197 herramientas llevan `outputSchema` (3 permanentemente sin esquema) y 200 llevan annotations; whitelist asíncrona de 3 herramientas, ayudantes de progress cubren las herramientas con etapas
 - Completando el corpus dorado de binarios (hashes de salida esperada por proveedor) — incluidos el pendiente check Frida en VM en vivo y la prueba de aceptación DEX dorada del APK
 - Releases firmados + SBOM, y un perfil VM documentado para trabajo en vivo
 

@@ -6,7 +6,7 @@
 > ELF e_machine + Hexagon, valores plist sin pérdida con tipos, resolución JS
 > CJS/require + relaciones cross-bundle, observación de versión de apktool
 > (advisory), perfil Ghidra raw m68k y sincronía de portadores de versión
-> (9 comprobaciones). La superficie de herramientas no cambió (191 herramientas).
+> (9 comprobaciones). La superficie de v0.17.0 es de 200 herramientas, 197 outputSchema, 200 annotations, 2 recursos y 7 prompts. Las sondas nuevas son `rea_angr_explore`, `rea_afl_fuzz`, `rea_lldb_script`, `rea_ttd_info`.
 > Los números provienen de la superficie real del servidor compilado (salida de producción de [`TOOLS.md`](TOOLS.md)).
 >
 > **Métricas:** Impacto = contribución al valor de usuario/agente · Esfuerzo = S (días) / M (1-2 semanas) / L (mes+) · Prioridad = P0 (puerta externa) → P3 (largo plazo).
