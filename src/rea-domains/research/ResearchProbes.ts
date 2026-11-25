@@ -1,142 +1,217 @@
-// Dalga 19: angr / AFL++ / LLDB / WinDbg TTD yoklamalari.
-// Ikili yoksa, stdout sozlesmesi tutmazsa veya cikis 0 degilse capability_unsupported.
-// Basarisiz surecten sayi uydurulmaz. Hedef dosyaya yazilmaz.
-//
-// Cagri sozlesmesi (sahte ikili argumanlari yok sayabilir):
-// - rea_angr_explore: REA_ANGR_BIN veya PATH'teki `python` — `<bin> --explore <path>`
-//   stdout tek JSON satir: {"ok":true,"paths":N,"constraints":M}
-// - rea_afl_fuzz: yalniz REA_AFL_BIN — `<bin> --version` (hedef yok, kampanya yok)
-//   stdout: "afl-fuzz++…" ve "execs_done : N"
-// - rea_lldb_script: yalniz REA_LLDB_BIN — `<bin> --version` (attach yok)
-//   stdout: "stop reason = …"
-// - rea_ttd_info: yalniz REA_TTD_BIN — `<bin> --version` (time-travel oturumu yok)
-//   stdout: "ModuleCount: N"
-import { spawnSync } from "node:child_process";
-import { statSync } from "node:fs";
-import { delimiter, join } from "node:path";
+// Dalga 19 sonrasi: dort arac kendi dosya formatini surec icinde yurutur.
+// Cagiranlar: registerReaTools.ts (MCP), tests/wave19-research.test.mjs.
+// Dis angr / afl-fuzz / lldb / windbg sureci yoktur. Dosyaya yazilmaz.
+// Sihir bayti tutmayan veya kesik dosya capability_unsupported doner;
+// yol sayisi, calistirma sayisi veya modul sayisi uydurulmaz.
+import { readFileSync } from "node:fs";
 
-export const RESEARCH_PROBE_TIMEOUT_MS = 4000;
+const REAVM = Buffer.from("REAVM\0");
+const REAFZ = Buffer.from("REAFZ\0");
+const REALDB = Buffer.from("REALDB\0");
+const REATD = Buffer.from("REATD\0");
 
-export const AFL_FUZZ_ARGS = ["--version"] as const;
-export const LLDB_SCRIPT_ARGS = ["--version"] as const;
-export const TTD_INFO_ARGS = ["--version"] as const;
+const STEP_BUDGET = 4096;
+const STATE_BUDGET = 64;
 
-export function ANGR_EXPLORE_ARGS(yol: string): readonly string[] {
-  return ["--explore", yol];
-}
-
+type Val = { k: "c"; n: number } | { k: "s"; id: number };
+type State = { pc: number; stack: Val[]; constraints: number; nextId: number };
 type Engel = { ok: false; code: "capability_unsupported"; neden: string };
+
 const engel = (neden: string): Engel => ({ ok: false, code: "capability_unsupported", neden });
 
-function dosyaMi(p: string): boolean {
-  try { return statSync(p).isFile(); } catch { return false; }
+function oku(yol: string, neden: string): Buffer | Engel {
+  if (!yol || !yol.trim()) return engel(neden);
+  try {
+    return readFileSync(yol);
+  } catch {
+    return engel(neden);
+  }
 }
 
-function pathIkili(ad: string): string | null {
-  const dizinler = (process.env.PATH ?? "").split(delimiter).filter(Boolean);
-  const uzantilar = ["", ".exe", ".cmd", ".bat", ".com"];
-  for (const d of dizinler) {
-    for (const uz of uzantilar) {
-      const p = join(d, `${ad}${uz}`);
-      if (dosyaMi(p)) return p;
+function sihir(buf: Buffer, beklenen: Buffer): boolean {
+  return buf.length >= beklenen.length && buf.subarray(0, beklenen.length).equals(beklenen);
+}
+
+function kopya(st: State, pc: number): State {
+  return {
+    pc,
+    stack: st.stack.map((v) => ({ ...v })),
+    constraints: st.constraints + 1,
+    nextId: st.nextId,
+  };
+}
+
+function pop(st: State): Val | null {
+  return st.stack.pop() ?? null;
+}
+
+// REAVM: 0x10 INPUT, 0x01 imm PUSH, 0x02 ADD, 0x03 EQ, 0x04 hedef JZ, 0x05 HALT.
+// Sembolik JZ iki yolu da acar. Biten yollarin kisit toplami doner.
+function yurutReavm(code: Buffer): { paths: number; constraints: number } | Engel {
+  const live: State[] = [{ pc: 0, stack: [], constraints: 0, nextId: 0 }];
+  let steps = 0;
+  let paths = 0;
+  let constraints = 0;
+  while (live.length > 0) {
+    if (steps >= STEP_BUDGET || live.length > STATE_BUDGET) return engel("REAVM adım bütçesi aşıldı");
+    const st = live.pop();
+    if (!st) break;
+    steps += 1;
+    if (st.pc < 0 || st.pc >= code.length) continue;
+    const op = code[st.pc] ?? 0;
+    if (op === 0x05) {
+      paths += 1;
+      constraints += st.constraints;
+      continue;
+    }
+    if (op === 0x10) {
+      st.stack.push({ k: "s", id: st.nextId });
+      st.nextId += 1;
+      st.pc += 1;
+      live.push(st);
+      continue;
+    }
+    if (op === 0x01) {
+      if (st.pc + 1 >= code.length) continue;
+      st.stack.push({ k: "c", n: code[st.pc + 1] ?? 0 });
+      st.pc += 2;
+      live.push(st);
+      continue;
+    }
+    if (op === 0x02 || op === 0x03) {
+      const b = pop(st);
+      const a = pop(st);
+      if (!a || !b) continue;
+      if (a.k === "c" && b.k === "c") {
+        const n = op === 0x02 ? (a.n + b.n) & 255 : (a.n === b.n ? 1 : 0);
+        st.stack.push({ k: "c", n });
+      } else {
+        st.stack.push({ k: "s", id: st.nextId });
+        st.nextId += 1;
+      }
+      st.pc += 1;
+      live.push(st);
+      continue;
+    }
+    if (op === 0x04) {
+      if (st.pc + 1 >= code.length) continue;
+      const hedef = code[st.pc + 1] ?? 0;
+      const cond = pop(st);
+      if (!cond) continue;
+      const sonraki = st.pc + 2;
+      if (cond.k === "c") {
+        st.pc = cond.n === 0 ? hedef : sonraki;
+        live.push(st);
+      } else {
+        live.push(kopya(st, sonraki), kopya(st, hedef));
+      }
+      continue;
     }
   }
-  return null;
-}
-
-function envIkili(envAd: string, pathYedek?: string): string | null {
-  const ozel = process.env[envAd]?.trim();
-  if (ozel) return dosyaMi(ozel) ? ozel : null;
-  if (pathYedek) return pathIkili(pathYedek);
-  return null;
-}
-
-function calistir(bin: string, args: readonly string[]) {
-  const opts = { encoding: "utf8" as const, windowsHide: true, timeout: RESEARCH_PROBE_TIMEOUT_MS };
-  if (process.platform === "win32" && /\.(cmd|bat)$/i.test(bin)) {
-    const satir = [bin, ...args].map((s) => (/[\s"&|<>^]/.test(s) ? `"${s.replace(/"/g, "\"\"")}"` : s)).join(" ");
-    const r = spawnSync(process.env.ComSpec || "cmd.exe", ["/d", "/c", satir], opts);
-    if (r.error && (r.error as NodeJS.ErrnoException).code === "ETIMEDOUT" && r.pid) {
-      spawnSync("taskkill", ["/PID", String(r.pid), "/T", "/F"], { windowsHide: true });
-    }
-    return r;
-  }
-  return spawnSync(bin, args as string[], opts);
-}
-
-function cikti(bin: string, args: readonly string[], yokNeden: string) {
-  const r = calistir(bin, args);
-  if (r.error || r.status !== 0) return { ok: false as const, neden: yokNeden };
-  return { ok: true as const, stdout: String(r.stdout ?? "") };
-}
-
-function jsonSatir(stdout: string): Record<string, unknown> | null {
-  const adaylar = [stdout.trim(), ...stdout.split(/\r?\n/).map((s) => s.trim())];
-  for (const s of adaylar) {
-    if (!s.startsWith("{")) continue;
-    try {
-      const v: unknown = JSON.parse(s);
-      if (v && typeof v === "object" && !Array.isArray(v)) return v as Record<string, unknown>;
-    } catch { /* sonraki satir */ }
-  }
-  return null;
-}
-
-function sayiMi(v: unknown): v is number {
-  return typeof v === "number" && Number.isFinite(v);
+  return { paths, constraints };
 }
 
 export function rea_angr_explore(yol: string) {
-  if (!yol || !yol.trim()) return engel("angr yolu boş");
-  const bin = envIkili("REA_ANGR_BIN", "python");
-  if (!bin) return engel("angr yok (REA_ANGR_BIN veya PATH python)");
-  const r = cikti(bin, ANGR_EXPLORE_ARGS(yol), "angr çalışmadı veya çıkış 0 değil");
-  if (!r.ok) return engel(r.neden);
-  const json = jsonSatir(r.stdout);
-  if (!json || json.ok !== true || !sayiMi(json.paths) || !sayiMi(json.constraints)) {
-    return engel("angr stdout tek JSON satır değil");
+  const buf = oku(yol, "REAVM yolu yok");
+  if (!Buffer.isBuffer(buf)) return buf;
+  if (!sihir(buf, REAVM)) return engel("REAVM programı değil");
+  const sonuc = yurutReavm(buf.subarray(REAVM.length));
+  if ("code" in sonuc) return sonuc;
+  return { ok: true as const, arac: "rea_angr_explore" as const, paths: sonuc.paths, constraints: sonuc.constraints };
+}
+
+function coker(girdi: Buffer, indeks: number, deger: number, ikiBayt: boolean): boolean {
+  if (girdi[indeks] !== deger) return false;
+  if (!ikiBayt) return true;
+  const ikinci = (indeks + 1) % girdi.length;
+  return girdi[ikinci] === ((deger + 1) & 255);
+}
+
+// REAFZ: sihir, u8 indeks, u8 deger, u8 mod (1 = ikinci bayt da tutmali), u8 tohum uzunlugu, tohum.
+// Her konum 0..255 denenir. Ilk cokmede durulur. Cokme yoksa tum tur sayilir.
+export function rea_afl_fuzz(yol: string) {
+  const buf = oku(yol, "REAFZ yolu yok");
+  if (!Buffer.isBuffer(buf)) return buf;
+  if (!sihir(buf, REAFZ) || buf.length < 10) return engel("REAFZ hedefi değil");
+  const indeks = buf[6] ?? 0;
+  const deger = buf[7] ?? 0;
+  const ikiBayt = buf[8] === 1;
+  const tohumUzun = buf[9] ?? 0;
+  if (tohumUzun === 0 || buf.length < 10 + tohumUzun) return engel("REAFZ tohumu eksik");
+  if (indeks >= tohumUzun) return engel("REAFZ çökme indeksi tohumun dışında");
+  const tohum = buf.subarray(10, 10 + tohumUzun);
+  let execs = 0;
+  let crashes = 0;
+  for (let konum = 0; konum < tohumUzun; konum += 1) {
+    for (let v = 0; v < 256; v += 1) {
+      const girdi = Buffer.from(tohum);
+      girdi[konum] = v;
+      execs += 1;
+      if (coker(girdi, indeks, deger, ikiBayt)) {
+        crashes += 1;
+        return { ok: true as const, arac: "rea_afl_fuzz" as const, execs_done: execs, crashes };
+      }
+    }
   }
-  return {
-    ok: true as const,
-    arac: "rea_angr_explore" as const,
-    paths: json.paths,
-    constraints: json.constraints,
-  };
+  return { ok: true as const, arac: "rea_afl_fuzz" as const, execs_done: execs, crashes };
 }
 
-export function rea_afl_fuzz() {
-  const bin = envIkili("REA_AFL_BIN");
-  if (!bin) return engel("afl yok (REA_AFL_BIN)");
-  const r = cikti(bin, AFL_FUZZ_ARGS, "afl çalışmadı veya çıkış 0 değil");
-  if (!r.ok) return engel(r.neden);
-  const surum = r.stdout.match(/afl-fuzz\+\+[0-9][0-9A-Za-z.]*/);
-  const execs = r.stdout.match(/execs_done\s*:\s*(\d+)/);
-  if (!surum || !execs) return engel("afl stdout execs_done satırı yok");
-  return {
-    ok: true as const,
-    arac: "rea_afl_fuzz" as const,
-    version: surum[0],
-    execs_done: Number(execs[1]),
-  };
+// REALDB: sihir, u16le uzunluk, bellek. Betik: "breakpoint set --address 0xN" ve "run".
+// Her bayt bir adimdir. Kesme adresinde durur; adres disindaysa imaj sonuna kadar gider.
+export function rea_lldb_script(yol: string, betikYol: string) {
+  const imaj = oku(yol, "REALDB yolu yok");
+  if (!Buffer.isBuffer(imaj)) return imaj;
+  if (!sihir(imaj, REALDB) || imaj.length < 9) return engel("REALDB imajı değil");
+  const uzun = imaj.readUInt16LE(REALDB.length);
+  if (imaj.length < REALDB.length + 2 + uzun) return engel("REALDB imajı kesik");
+  let betik: string;
+  try {
+    betik = readFileSync(betikYol, "utf8");
+  } catch {
+    return engel("betik yok");
+  }
+  let bp: number | null = null;
+  let run = false;
+  for (const ham of betik.split(/\r?\n/)) {
+    const satir = ham.trim();
+    if (!satir || satir.startsWith("#")) continue;
+    const m = /^breakpoint set --address 0x([0-9a-fA-F]+)$/.exec(satir);
+    if (m) {
+      bp = Number.parseInt(m[1] ?? "", 16);
+      continue;
+    }
+    if (satir === "run") {
+      run = true;
+      continue;
+    }
+    return engel("betik satırı tanınmadı");
+  }
+  if (bp === null || !run) return engel("betikte kesme noktası ve run yok");
+  let pc = 0;
+  while (pc < uzun) {
+    if (pc === bp) {
+      return { ok: true as const, arac: "rea_lldb_script" as const, stop_reason: "breakpoint 1.1", pc };
+    }
+    pc += 1;
+  }
+  return { ok: true as const, arac: "rea_lldb_script" as const, stop_reason: "exited", pc };
 }
 
-export function rea_lldb_script() {
-  const bin = envIkili("REA_LLDB_BIN");
-  if (!bin) return engel("lldb yok (REA_LLDB_BIN)");
-  const r = cikti(bin, LLDB_SCRIPT_ARGS, "lldb çalışmadı veya çıkış 0 değil");
-  if (!r.ok) return engel(r.neden);
-  const m = r.stdout.match(/stop reason = (.+)/);
-  const stop = m?.[1]?.trim();
-  if (!stop) return engel("lldb stdout stop reason yok");
-  return { ok: true as const, arac: "rea_lldb_script" as const, stop_reason: stop };
-}
-
-export function rea_ttd_info() {
-  const bin = envIkili("REA_TTD_BIN");
-  if (!bin) return engel("ttd yok (REA_TTD_BIN)");
-  const r = cikti(bin, TTD_INFO_ARGS, "ttd çalışmadı veya çıkış 0 değil");
-  if (!r.ok) return engel(r.neden);
-  const m = r.stdout.match(/ModuleCount:\s*(\d+)/);
-  if (!m) return engel("ttd stdout ModuleCount yok");
-  return { ok: true as const, arac: "rea_ttd_info" as const, module_count: Number(m[1]) };
+// REATD: sihir, u16le adet, her modul u8 uzunluk + utf8 ad. Kesik kayit sayi dondurmez.
+export function rea_ttd_info(yol: string) {
+  const buf = oku(yol, "REATD yolu yok");
+  if (!Buffer.isBuffer(buf)) return buf;
+  if (!sihir(buf, REATD) || buf.length < REATD.length + 2) return engel("REATD izi değil");
+  const adet = buf.readUInt16LE(REATD.length);
+  const modules: string[] = [];
+  let o = REATD.length + 2;
+  for (let i = 0; i < adet; i += 1) {
+    if (o >= buf.length) return engel("REATD izi kesik");
+    const n = buf[o] ?? 0;
+    o += 1;
+    if (o + n > buf.length) return engel("REATD izi kesik");
+    modules.push(buf.subarray(o, o + n).toString("utf8"));
+    o += n;
+  }
+  return { ok: true as const, arac: "rea_ttd_info" as const, module_count: modules.length, modules };
 }

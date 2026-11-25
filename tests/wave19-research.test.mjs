@@ -1,58 +1,27 @@
-// wave19-research.test.mjs: angr / AFL++ / LLDB / TTD yoklamalari.
-// Sahte ikili REA_*_BIN ile verilir. Canli fuzz, debug veya time-travel yok.
+// wave19-research.test.mjs: dort arac kendi dosya formatini yurutur.
+// Beklenen sayi testin yazdigi baytlardan hesaplanir. Dis ikili yok.
 // Kos: npm run build sonrasi node --test tests/wave19-research.test.mjs
 import { describe, it, afterEach } from "node:test";
 import assert from "node:assert/strict";
-import { mkdtempSync, writeFileSync, readFileSync, existsSync, chmodSync } from "node:fs";
+import { mkdtempSync, writeFileSync, readFileSync } from "node:fs";
 import { tmpdir } from "node:os";
-import { delimiter, join } from "node:path";
-import { spawnSync } from "node:child_process";
-import {
-  rea_angr_explore,
-  rea_afl_fuzz,
-  rea_lldb_script,
-  rea_ttd_info,
-  ANGR_EXPLORE_ARGS,
-  AFL_FUZZ_ARGS,
-  LLDB_SCRIPT_ARGS,
-  TTD_INFO_ARGS,
-  RESEARCH_PROBE_TIMEOUT_MS,
-} from "../dist/rea-domains/research/ResearchProbes.js";
+import { join } from "node:path";
+import { rea_angr_explore, rea_afl_fuzz, rea_lldb_script, rea_ttd_info } from "../dist/rea-domains/research/ResearchProbes.js";
 import { reaToolMetadata } from "../dist/server/toolMetadata.js";
 import { TOOLSETS } from "../dist/server/toolsets.js";
 import { applyWorkspaceRoot } from "../dist/server/workspaceRoot.js";
 
-const ENV = ["PATH", "REA_ANGR_BIN", "REA_AFL_BIN", "REA_LLDB_BIN", "REA_TTD_BIN", "REA_WORKSPACE_ROOT"];
+const ENV = ["REA_WORKSPACE_ROOT"];
 const onceki = Object.fromEntries(ENV.map((k) => [k, process.env[k]]));
 
 function dizin() {
   return mkdtempSync(join(tmpdir(), "rea-w19-"));
 }
 
-function sahte(kok, ad, govde) {
-  const js = join(kok, `${ad}.mjs`);
-  writeFileSync(js, govde);
-  const node = process.execPath.replace(/"/g, "");
-  if (process.platform === "win32") {
-    const cmd = join(kok, `${ad}.cmd`);
-    writeFileSync(cmd, `@echo off\r\n"${node}" "%~dp0${ad}.mjs" %*\r\n`);
-    return cmd;
-  }
-  const bin = join(kok, ad);
-  writeFileSync(bin, `#!/bin/sh\nexec "${node}" "${js.replace(/\\/g, "/")}" "$@"\n`);
-  chmodSync(bin, 0o755);
-  return bin;
-}
-
-function argvYazan(kok, ad, satirlar, cikis = 0) {
-  const kayit = join(kok, `${ad}-argv.json`);
-  const yaz = satirlar.map((s) => `console.log(${JSON.stringify(s)});`).join("\n");
-  const govde = `import { writeFileSync } from "node:fs";
-writeFileSync(${JSON.stringify(kayit)}, JSON.stringify(process.argv));
-${yaz}
-process.exit(${cikis});
-`;
-  return { bin: sahte(kok, ad, govde), kayit };
+function yaz(kok, ad, buf) {
+  const yol = join(kok, ad);
+  writeFileSync(yol, buf);
+  return yol;
 }
 
 afterEach(() => {
@@ -62,14 +31,36 @@ afterEach(() => {
   }
 });
 
-describe("dalga 19 yoklama sozlesmesi", () => {
-  it("zaman asimi 5 saniyenin altindadir", () => {
-    assert.ok(RESEARCH_PROBE_TIMEOUT_MS < 5000);
-    assert.deepEqual(AFL_FUZZ_ARGS, ["--version"]);
-    assert.deepEqual(LLDB_SCRIPT_ARGS, ["--version"]);
-    assert.deepEqual(TTD_INFO_ARGS, ["--version"]);
-  });
+function reavm(kod) {
+  return Buffer.concat([Buffer.from("REAVM\0"), Buffer.from(kod)]);
+}
 
+function reafz(indeks, deger, mod, tohum) {
+  return Buffer.concat([
+    Buffer.from("REAFZ\0"),
+    Buffer.from([indeks, deger, mod, tohum.length]),
+    Buffer.from(tohum),
+  ]);
+}
+
+function realdb(uzun) {
+  const bas = Buffer.alloc(9);
+  Buffer.from("REALDB\0").copy(bas, 0);
+  bas.writeUInt16LE(uzun, 7);
+  return Buffer.concat([bas, Buffer.alloc(uzun)]);
+}
+
+function reatd(adlar) {
+  const parcalar = [Buffer.from("REATD\0"), Buffer.alloc(2)];
+  parcalar[1].writeUInt16LE(adlar.length, 0);
+  for (const ad of adlar) {
+    const bayt = Buffer.from(ad, "utf8");
+    parcalar.push(Buffer.from([bayt.length]), bayt);
+  }
+  return Buffer.concat(parcalar);
+}
+
+describe("dalga 19 yuzey", () => {
   it("dort arac outputSchema ve readOnlyHint tasir; ozel profillerde yoktur", () => {
     for (const ad of ["rea_angr_explore", "rea_afl_fuzz", "rea_lldb_script", "rea_ttd_info"]) {
       const meta = reaToolMetadata(ad);
@@ -84,187 +75,163 @@ describe("dalga 19 yoklama sozlesmesi", () => {
 });
 
 describe("rea_angr_explore", () => {
-  it("sahte python tek JSON satirini paths ve constraints olarak okur", () => {
+  it("sembolik JZ iki yolu da sayar; somut esitlik tek yol birakir", () => {
     const kok = dizin();
-    const hedef = join(kok, "ornek.bin");
-    writeFileSync(hedef, "ornek");
-    const { bin, kayit } = argvYazan(kok, "python", ['{"ok":true,"paths":2,"constraints":1}']);
-    process.env.REA_ANGR_BIN = bin;
-    const r = rea_angr_explore(hedef);
-    assert.equal(r.ok, true);
-    assert.equal(r.arac, "rea_angr_explore");
-    assert.equal(r.paths, 2);
-    assert.equal(r.constraints, 1);
-    const argv = JSON.parse(readFileSync(kayit, "utf8"));
-    assert.deepEqual(argv.slice(-ANGR_EXPLORE_ARGS(hedef).length), [...ANGR_EXPLORE_ARGS(hedef)]);
-    assert.equal(readFileSync(hedef, "utf8"), "ornek");
+    const dallanan = yaz(kok, "dal.reavm", reavm([0x10, 0x01, 0x41, 0x03, 0x04, 0x07, 0x05, 0x05]));
+    const once = readFileSync(dallanan);
+    const dal = rea_angr_explore(dallanan);
+    assert.equal(dal.ok, true);
+    assert.equal(dal.paths, 2);
+    assert.equal(dal.constraints, 2);
+    assert.deepEqual(readFileSync(dallanan), once);
+
+    const esit = yaz(kok, "esit.reavm", reavm([0x01, 0x01, 0x01, 0x01, 0x03, 0x04, 0x08, 0x05, 0x05]));
+    const tek = rea_angr_explore(esit);
+    assert.equal(tek.paths, 1);
+    assert.equal(tek.constraints, 0);
+
+    const farkli = yaz(kok, "fark.reavm", reavm([0x01, 0x01, 0x01, 0x02, 0x03, 0x04, 0x08, 0x05, 0x05]));
+    const atlanan = rea_angr_explore(farkli);
+    assert.equal(atlanan.paths, 1);
+    assert.equal(atlanan.constraints, 0);
   });
 
-  it("PATH uzerindeki python da ayni JSON sozlesmesini okur", () => {
-    const kok = dizin();
-    const { bin } = argvYazan(kok, "python", ['{"ok":true,"paths":2,"constraints":1}']);
-    assert.ok(bin.endsWith("python.cmd") || bin.endsWith("python") || bin.endsWith("python.exe"));
-    delete process.env.REA_ANGR_BIN;
-    process.env.PATH = `${kok}${delimiter}${onceki.PATH ?? ""}`;
-    const r = rea_angr_explore(join(kok, "hedef.bin"));
-    assert.equal(r.ok, true);
-    assert.equal(r.paths, 2);
-    assert.equal(r.constraints, 1);
+  it("iki sembolik karsilastirma uc biten yol uretir", () => {
+    const kod = [
+      0x10, 0x01, 0x00, 0x03, 0x04, 0x07,
+      0x05,
+      0x10, 0x01, 0x00, 0x03, 0x04, 0x0e,
+      0x05, 0x05,
+    ];
+    const r = rea_angr_explore(yaz(dizin(), "iki.reavm", reavm(kod)));
+    assert.equal(r.paths, 3);
+    assert.equal(r.constraints, 5);
   });
 
-  it("olmayan ikili, JSON olmayan stdout ve sifir disi cikis capability_unsupported; yol sayisi uydurulmaz", () => {
+  it("REAVM olmayan dosya ve eksik yol capability_unsupported; yol sayisi yoktur", () => {
     const kok = dizin();
-    process.env.REA_ANGR_BIN = join(kok, "python-yok.exe");
-    const yok = rea_angr_explore(join(kok, "a.bin"));
-    assert.equal(yok.ok, false);
+    const degil = rea_angr_explore(yaz(kok, "not.bin", Buffer.from("not-a-vm")));
+    assert.equal(degil.ok, false);
+    assert.equal(degil.code, "capability_unsupported");
+    assert.equal(degil.paths, undefined);
+    const yok = rea_angr_explore(join(kok, "yok.reavm"));
     assert.equal(yok.code, "capability_unsupported");
     assert.equal(yok.paths, undefined);
-
-    const bozuk = sahte(kok, "py-bozuk", `console.log("not-json");\nprocess.exit(0);\n`);
-    process.env.REA_ANGR_BIN = bozuk;
-    const jsonDegil = rea_angr_explore(join(kok, "a.bin"));
-    assert.equal(jsonDegil.ok, false);
-    assert.equal(jsonDegil.code, "capability_unsupported");
-    assert.equal(jsonDegil.paths, undefined);
-
-    const { bin } = argvYazan(kok, "py-hata", ['{"ok":true,"paths":99,"constraints":7}'], 2);
-    process.env.REA_ANGR_BIN = bin;
-    const cikis = rea_angr_explore(join(kok, "a.bin"));
-    assert.equal(cikis.ok, false);
-    assert.equal(cikis.code, "capability_unsupported");
-    assert.equal(cikis.paths, undefined);
-    assert.equal(cikis.constraints, undefined);
   });
 
   it("yol calisma kokune uyar", () => {
     const kok = dizin();
     const dis = dizin();
     process.env.REA_WORKSPACE_ROOT = kok;
-    const ic = applyWorkspaceRoot("rea_angr_explore", { path: join(kok, "ic.bin") }, process.env, kok);
-    assert.equal(ic.path, join(kok, "ic.bin"));
-    assert.throws(() => applyWorkspaceRoot("rea_angr_explore", { path: join(dis, "dis.bin") }, process.env, kok));
+    const ic = applyWorkspaceRoot("rea_angr_explore", { path: join(kok, "ic.reavm") }, process.env, kok);
+    assert.equal(ic.path, join(kok, "ic.reavm"));
+    assert.throws(() => applyWorkspaceRoot("rea_angr_explore", { path: join(dis, "dis.reavm") }, process.env, kok));
   });
 });
 
 describe("rea_afl_fuzz", () => {
-  it("surum ve execs_done satirini okur; hedef vermez ve kampanya baslatmaz", () => {
+  it("cokme bayti dosyadan okunur; calistirma sayisi o bayta kadardir", () => {
     const kok = dizin();
-    const { bin, kayit } = argvYazan(kok, "afl", ["afl-fuzz++4.21c", "execs_done : 10"]);
-    process.env.REA_AFL_BIN = bin;
-    const r = rea_afl_fuzz();
-    assert.equal(r.ok, true);
-    assert.equal(r.arac, "rea_afl_fuzz");
-    assert.equal(r.version, "afl-fuzz++4.21c");
-    assert.equal(r.execs_done, 10);
-    assert.equal(r.session, undefined);
-    const argv = JSON.parse(readFileSync(kayit, "utf8"));
-    assert.deepEqual(argv.slice(-AFL_FUZZ_ARGS.length), [...AFL_FUZZ_ARGS]);
-    assert.equal(argv.some((a) => String(a).includes("hedef")), false);
-  });
-
-  it("ikili yoksa veya execs_done satiri yoksa capability_unsupported", () => {
-    const kok = dizin();
-    process.env.REA_AFL_BIN = join(kok, "afl-yok.exe");
-    const yok = rea_afl_fuzz();
-    assert.equal(yok.ok, false);
-    assert.equal(yok.code, "capability_unsupported");
-    assert.equal(yok.execs_done, undefined);
-
-    delete process.env.REA_AFL_BIN;
-    const envYok = rea_afl_fuzz();
-    assert.equal(envYok.code, "capability_unsupported");
-
-    const bin = sahte(kok, "afl-surum", `console.log("afl-fuzz++4.21c");\nprocess.exit(0);\n`);
-    process.env.REA_AFL_BIN = bin;
-    const satirsiz = rea_afl_fuzz();
-    assert.equal(satirsiz.ok, false);
-    assert.equal(satirsiz.code, "capability_unsupported");
-    assert.equal(satirsiz.execs_done, undefined);
-  });
-
-  it("donguye giren sahte fuzz basari sayilmaz", () => {
-    const kok = dizin();
-    const pidDosya = join(kok, "pid.txt");
-    const bin = sahte(kok, "afl-dongu", `import { writeFileSync } from "node:fs";
-writeFileSync(${JSON.stringify(pidDosya)}, String(process.pid));
-console.log("afl-fuzz++4.21c");
-console.log("execs_done : 10");
-setInterval(() => {}, 1000);
-`);
-    process.env.REA_AFL_BIN = bin;
-    const bas = Date.now();
-    const r = rea_afl_fuzz();
-    const sure = Date.now() - bas;
-    if (existsSync(pidDosya)) {
-      const pid = readFileSync(pidDosya, "utf8").trim();
-      spawnSync("taskkill", ["/PID", pid, "/T", "/F"], { windowsHide: true });
+    for (const deger of [0x41, 0x02]) {
+      const yol = yaz(kok, `t-${deger}.reafz`, reafz(0, deger, 0, [0x00]));
+      const r = rea_afl_fuzz(yol);
+      assert.equal(r.ok, true);
+      assert.equal(r.crashes, 1);
+      assert.equal(r.execs_done, deger + 1);
     }
-    assert.equal(r.ok, false);
-    assert.equal(r.code, "capability_unsupported");
-    assert.equal(r.execs_done, undefined);
-    assert.ok(sure < 8000, `zaman asimi gec geldi: ${sure}ms`);
+  });
+
+  it("iki bayt birden tutmasi gereken hedef, sifir tohumda cokmez", () => {
+    const kok = dizin();
+    const yok = rea_afl_fuzz(yaz(kok, "yok.reafz", reafz(0, 0x41, 1, [0x00, 0x00])));
+    assert.equal(yok.ok, true);
+    assert.equal(yok.crashes, 0);
+    assert.equal(yok.execs_done, 512);
+
+    const var_ = rea_afl_fuzz(yaz(kok, "var.reafz", reafz(0, 0x41, 1, [0x00, 0x42])));
+    assert.equal(var_.crashes, 1);
+    assert.equal(var_.execs_done, 0x41 + 1);
+  });
+
+  it("REAFZ olmayan veya kesik tohum capability_unsupported; sayi uydurulmaz", () => {
+    const kok = dizin();
+    const degil = rea_afl_fuzz(yaz(kok, "x.bin", Buffer.from("nope")));
+    assert.equal(degil.ok, false);
+    assert.equal(degil.code, "capability_unsupported");
+    assert.equal(degil.execs_done, undefined);
+    const kesik = rea_afl_fuzz(yaz(kok, "k.reafz", Buffer.concat([Buffer.from("REAFZ\0"), Buffer.from([0, 1, 0, 4, 0])])));
+    assert.equal(kesik.code, "capability_unsupported");
+    assert.equal(kesik.crashes, undefined);
   });
 });
 
 describe("rea_lldb_script", () => {
-  it("stop reason satirini okur; canli oturum iddiasinda bulunmaz", () => {
+  it("kesme noktasi imajdaki adreste durur; disaridaki adres imaj sonuna kadar gider", () => {
     const kok = dizin();
-    const { bin, kayit } = argvYazan(kok, "lldb", ["(lldb) target create", "stop reason = breakpoint 1.1"]);
-    process.env.REA_LLDB_BIN = bin;
-    const r = rea_lldb_script();
-    assert.equal(r.ok, true);
-    assert.equal(r.arac, "rea_lldb_script");
-    assert.equal(r.stop_reason, "breakpoint 1.1");
-    assert.equal(r.session, undefined);
-    const argv = JSON.parse(readFileSync(kayit, "utf8"));
-    assert.deepEqual(argv.slice(-LLDB_SCRIPT_ARGS.length), [...LLDB_SCRIPT_ARGS]);
+    const imaj = yaz(kok, "m.realdb", realdb(4));
+    const betik = yaz(kok, "dur.lldb", "breakpoint set --address 0x2\nrun\n");
+    const dur = rea_lldb_script(imaj, betik);
+    assert.equal(dur.ok, true);
+    assert.equal(dur.stop_reason, "breakpoint 1.1");
+    assert.equal(dur.pc, 2);
+
+    const kisa = yaz(kok, "kisa.realdb", realdb(1));
+    const dis = rea_lldb_script(kisa, yaz(kok, "dis.lldb", "breakpoint set --address 0x8\nrun\n"));
+    assert.equal(dis.stop_reason, "exited");
+    assert.equal(dis.pc, 1);
   });
 
-  it("ikili yoksa veya stop reason yoksa capability_unsupported", () => {
+  it("betik veya imaj eksikse capability_unsupported; durma nedeni yoktur", () => {
     const kok = dizin();
-    process.env.REA_LLDB_BIN = join(kok, "lldb-yok.exe");
-    const yok = rea_lldb_script();
-    assert.equal(yok.ok, false);
-    assert.equal(yok.code, "capability_unsupported");
-    assert.equal(yok.stop_reason, undefined);
-
-    const bin = sahte(kok, "lldb-bos", `console.log("(lldb) target create");\nprocess.exit(0);\n`);
-    process.env.REA_LLDB_BIN = bin;
-    const bos = rea_lldb_script();
+    const imaj = yaz(kok, "m.realdb", realdb(4));
+    const bos = rea_lldb_script(imaj, yaz(kok, "bos.lldb", "run\n"));
     assert.equal(bos.ok, false);
     assert.equal(bos.code, "capability_unsupported");
     assert.equal(bos.stop_reason, undefined);
+    const yok = rea_lldb_script(yaz(kok, "degil.bin", Buffer.from("xx")), yaz(kok, "ok.lldb", "breakpoint set --address 0x0\nrun\n"));
+    assert.equal(yok.code, "capability_unsupported");
+    assert.equal(yok.pc, undefined);
+  });
+
+  it("imaj ve betik calisma kokune uyar", () => {
+    const kok = dizin();
+    const dis = dizin();
+    process.env.REA_WORKSPACE_ROOT = kok;
+    const ic = applyWorkspaceRoot(
+      "rea_lldb_script",
+      { path: join(kok, "m.realdb"), script: join(kok, "b.lldb") },
+      process.env,
+      kok,
+    );
+    assert.equal(ic.script, join(kok, "b.lldb"));
+    assert.throws(() => applyWorkspaceRoot("rea_lldb_script", { path: join(kok, "m.realdb"), script: join(dis, "b.lldb") }, process.env, kok));
   });
 });
 
 describe("rea_ttd_info", () => {
-  it("ModuleCount okur; time-travel oturumu acmaz", () => {
+  it("modul adlarini dosyadan okur; sayi ad listesinin uzunlugudur", () => {
     const kok = dizin();
-    const { bin, kayit } = argvYazan(kok, "ttd", ["TraceDump.exe", "ModuleCount: 3"]);
-    process.env.REA_TTD_BIN = bin;
-    const r = rea_ttd_info();
+    const adlar = ["ntdll.dll", "kernel32.dll"];
+    const yol = yaz(kok, "t.reatd", reatd(adlar));
+    const r = rea_ttd_info(yol);
     assert.equal(r.ok, true);
-    assert.equal(r.arac, "rea_ttd_info");
-    assert.equal(r.module_count, 3);
-    assert.equal(r.session, undefined);
-    assert.equal(r.time_travel, undefined);
-    const argv = JSON.parse(readFileSync(kayit, "utf8"));
-    assert.deepEqual(argv.slice(-TTD_INFO_ARGS.length), [...TTD_INFO_ARGS]);
+    assert.equal(r.module_count, adlar.length);
+    assert.deepEqual(r.modules, adlar);
+
+    const bos = rea_ttd_info(yaz(kok, "bos.reatd", reatd([])));
+    assert.equal(bos.module_count, 0);
+    assert.deepEqual(bos.modules, []);
   });
 
-  it("ikili yoksa veya ModuleCount yoksa capability_unsupported", () => {
+  it("kesik iz capability_unsupported; modul sayisi uydurulmaz", () => {
     const kok = dizin();
-    process.env.REA_TTD_BIN = join(kok, "ttd-yok.exe");
-    const yok = rea_ttd_info();
-    assert.equal(yok.ok, false);
-    assert.equal(yok.code, "capability_unsupported");
-    assert.equal(yok.module_count, undefined);
-
-    const bin = sahte(kok, "ttd-bos", `console.log("TraceDump.exe");\nprocess.exit(0);\n`);
-    process.env.REA_TTD_BIN = bin;
-    const bos = rea_ttd_info();
-    assert.equal(bos.ok, false);
-    assert.equal(bos.code, "capability_unsupported");
-    assert.equal(bos.module_count, undefined);
+    const kesik = Buffer.concat([Buffer.from("REATD\0"), Buffer.from([0x01, 0x00])]);
+    const r = rea_ttd_info(yaz(kok, "k.reatd", kesik));
+    assert.equal(r.ok, false);
+    assert.equal(r.code, "capability_unsupported");
+    assert.equal(r.module_count, undefined);
+    assert.equal(r.modules, undefined);
+    const degil = rea_ttd_info(yaz(kok, "x.bin", Buffer.from("trace")));
+    assert.equal(degil.code, "capability_unsupported");
   });
 });

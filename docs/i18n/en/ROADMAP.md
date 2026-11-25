@@ -1,15 +1,32 @@
 # ROADMAP — ReaPlus roadmap
 
-> Status: v0.17.0 released (npm + MCP Registry + green CI). This document was
-> born from the findings of the first 2026-10-12 review and is synced with
-> what actually shipped at the end of every wave. v0.13.0 closed PE machine
-> identity (ARMNT/ARM64), ELF e_machine + Hexagon, type-aware lossless plist
-> values, JS CJS/require resolution + cross-bundle relations, apktool version
-> observation (advisory), a raw m68k Ghidra profile, and version-carrier sync
-> (9 checks). The tool surface is unchanged (191 tools). Numbers come from the
-> compiled server's real surface (the [`TOOLS.md`](TOOLS.md) generation output).
+> Status: v0.17.0 tagged. `main` CI is green at `4b6c359` (Ubuntu, Node 20 and 22) and Pages deployed. The `v0.17.0` publish job failed in its test step, so that tag did not upload the package. A new tag is required before npm sees this tree. Numbers below are the compiled surface in [`TOOLS.md`](TOOLS.md).
 >
 > **Scales:** Impact = contribution to user/agent value · Effort = S (days) / M (1-2 weeks) / L (month+) · Priority = P0 (outer gate) → P3 (long term).
+
+## Current surface
+
+- 200 tools: 30 frozen conduit names plus 170 `rea_*` tools. 197 `outputSchema`, 200 annotations, 2 resources, 7 prompts.
+- Three tools stay schema-less: `rea_best_motor`, `rea_fallback`, `rea_process_compare`.
+- `all` is 200. Named profiles are unchanged: `minimal` 8, `static` 98, `android` 27, `dotnet` 20, `web` 26, `debug` 50. A new tool is visible only in `all`.
+- With the session queue enabled, the status tool makes the list 201.
+- Schema budget last measured on this surface: 187135 list bytes, 98317 schema bytes, 491.6 bytes per tool. Ceilings stay 204800 / 112640 / 600.
+- `rea_angr_explore`, `rea_afl_fuzz`, `rea_lldb_script`, and `rea_ttd_info` execute REAVM, REAFZ, REALDB, and REATD in process. The v0.17.0 tag still shipped the stdout parsers.
+- de, fr, es, and tr Pages sources for 0.13.1 through 0.17.0 were translated on `4b6c359`.
+
+## Shipped after the 191-tool plateau
+
+| Version | What landed |
+|---|---|
+| v0.13.0 | ELF `e_machine` including Hexagon, PE ARMNT/ARM64, lossless plist values, JS cross-bundle `iliskiler`, apktool version observation, raw m68k Ghidra profile, nine version carriers. Surface still 191. |
+| v0.13.1 | GitHub-facing docs in English. Roadmap table matched CI, Pages, provenance, and 7 prompts. |
+| v0.14.0 | `rea_pwn_elf_layout` reads program headers (PIE, NX, RELRO). `rea_pwn_gadgets` keeps `ret`/`retn`/`retf` sequences. Frida tracer only hooks. `sniff` tests run in the default lane. 188 schemas. |
+| v0.15.0 | Live Win32 process, integrity, and directory snapshot in `addon.ts` (not an MCP tool). JS walk includes `.mts`/`.cts` and reads `exports` before `main`. AOT and MIPS profiles declare `details.iskelet: true`. |
+| v0.16.0 | `rea_electron_fuses`, `rea_electron_window`, `rea_apk_splits`, `rea_adb_pull`, `rea_sqlite_snapshot`. `all` only. 196 tools, 193 schemas. |
+| v0.17.0 | `rea_angr_explore`, `rea_afl_fuzz`, `rea_lldb_script`, `rea_ttd_info`. Each parses stdout and returns `capability_unsupported` when the program or the contract is missing. 200 tools, 197 schemas. |
+| `82946e6` on `main` | Linux-portable probe fakes, example counts, and the queue-on tool count (201). Not a new tag. |
+
+The v0.10.0 summary below is the historical baseline. Its "191 tools" sentence is that era, not the current catalog.
 
 ## Closed on the v0.10.0 baseline (summary)
 
@@ -36,7 +53,7 @@
 
 | Proposal | Current state / gap | Impact | Effort | Priority |
 |---|---|---|---|---|
-| ✅ Publish to npm (`rea-plus`) | CLOSED (v0.8.0, chain v0.9.0+): `rea-plus@0.10.0` on the registry; tag chain (npm→wait→registry, single trigger) | Install is one command: `npx -y rea-plus` | S | — |
+| ✅ Publish to npm (`rea-plus`) | CLOSED through the tag chain. The `v0.17.0` publish job failed in tests before upload. `main` after that tag is the tree that must be tagged next | Install is one command once the new tag publishes | S | P0 |
 | ✅ MCP Registry listing (`mcp-publisher`) | CLOSED (v0.8.0, chain v0.9.0+): `io.github.Alyhnte/rea-plus` live | Discoverability in the official catalog | S | — |
 | ✅ Push the GHCR image with the first release | CLOSED (v0.7.4): tags published for `ghcr.io/alyhnte/reaplus` and anonymous pullability verified | Zero-install for Docker users | S | — |
 | ✅ `rea-plus-cli setup` wizard | CLOSED (v0.10.0): client detection + confirmed writes + `.bak` + dry-run; tested only under a temp HOME | Biggest friction removed | M | — |
@@ -78,8 +95,8 @@
 | ✅ Frida attach/createScript/load timeouts | CLOSED (v0.10.0): 15/10/15s + env override + cleanup-bearing `engine_timeout` | Hangs end | S | — |
 | ✅ cdb: async pause + real push events | CLOSED (v0.10.0): event loop never blocked, push to subscribers | Multi-session comfort | M | — |
 | ✅ x64dbg plugin auto-provisioning | CLOSED (v0.10.0): doctor + setup, idempotent + hash-verified | Setup friction gone | M | — |
-| LLDB engine (Linux/macOS) | Live debugging is Windows-only | Wider platform coverage | L | P3 |
-| Reading WinDbg TTD traces | Missing | Time-travel analysis | L | P3 |
+| LLDB engine (Linux/macOS) | PARTIAL: `rea_lldb_script` steps a REALDB image to the breakpoint in the script and returns that stop reason and pc. It does not attach with lldb | Wider platform coverage | L | P3 |
+| Reading WinDbg TTD traces | PARTIAL: `rea_ttd_info` reads module names from a REATD trace file. It does not open WinDbg | Time-travel analysis | L | P3 |
 
 ## E) Static domains (depth and honesty)
 
@@ -103,8 +120,8 @@
 | ✅ Single-call behavior run | CLOSED (v0.10.0): spawn+trace+capture, mandatory timeout, crash honesty | Profile in one call | M | — |
 | ✅ PCAP + TLS keylog | CLOSED (v0.10.0): stream reassembly + keylog decryption; undecryptable stays `sifreli` | C2 traffic readable | M | — |
 | ✅ Android dynamic recipe | CLOSED (v0.10.0): 5-step generation + dry validation; missing tools flagged | Mobile starting point | M | — |
-| Symbolic execution (angr/Triton, WSL) | Missing | The only real path in the VMProtect class | L | P3 |
-| Fuzzing harness (AFL++ WSL) | Missing | Crash hunting in target parsers | L | P3 |
+| ◐ Symbolic execution (angr/Triton) | PARTIAL: `rea_angr_explore` symbolically executes a REAVM program and forks on a symbolic JZ. It does not launch angr. Triton is not wired | The VMProtect-class path still needs a real angr process | L | P3 |
+| ◐ Fuzzing harness (AFL++) | PARTIAL: `rea_afl_fuzz` runs a deterministic single-byte campaign on a REAFZ target and returns the executions and crashes it observed. It does not spawn AFL++. The Node parser fuzz smoke in CI is a separate, closed gate | Crash hunting in target parsers | L | P2 |
 
 ## G) Scale and performance
 
@@ -131,14 +148,20 @@
 
 | Proposal | Current state / gap | Impact | Effort | Priority |
 |---|---|---|---|---|
-| ✅ Automatic tool reference | CLOSED: [`TOOLS.md`](TOOLS.md) from the real surface (191 tools + 2 resources + 7 prompts) | Current catalog | S | — |
+| ✅ Automatic tool reference | CLOSED: [`TOOLS.md`](TOOLS.md) from the real surface (200 tools + 2 resources + 7 prompts) | Current catalog | S | — |
 | Example sessions (asciinema/GIF) in README | No visual proof | Convince in the first 10 seconds (star conversion) | S | P1 |
-| ◐ Docs site | GENERATED (v0.10.0): 7 static pages + 0 broken links | Searchable docs | M | P2 |
+| ✅ Docs site | CLOSED: 7 pages × 5 languages, generated, deployed by `pages.yml`. English page matches this file | Searchable docs | M | — |
 | ✅ Pages deploy | CLOSED: `.github/workflows/pages.yml` deploys the generated `docs/site/` to GitHub Pages | Docs at a single URL | S | — |
 | ✅ Prompt library | CLOSED (v0.10.0): `docs/PROMPTS.md` (10 prompts with sample calls) | First value within minutes | S | — |
-| good-first-issue + CONTRIBUTING expansion | Single paragraph | Contribution funnel opens | S | P3 |
+| ✅ CONTRIBUTING + issue forms | CLOSED: English H2 contract (Setup, Tests, Code Style, Wave Rules, PR Flow, Release) and three issue forms | Contribution funnel is open | S | — |
 
 ---
 
-**Suggested order (open items):** live Frida VM → self-hosted Windows runner → Trusted Publisher account setup → visual example sessions (asciinema) → P3 research (LLDB, WinDbg TTD, angr, AFL++). The single-file SEA exe stays open. Schema-budget CI and Pages deploy are closed.
-Closed in v0.10.1: dead facade cleanup + golden DEX corpus (marked ✅ above); closed in v0.10.0: all of waves I/J/K.
+**Next, in order.** The detailed jobs are in [`ROADMAP-NEXT.md`](ROADMAP-NEXT.md).
+
+1. Commit this working tree, then tag it only after CI on that commit is green. Measure the npm tarball hash. Do not invent a hash. Do not tag the older stdout-probe tree.
+2. Frida live VM, off this machine. Then a self-hosted Windows runner. Frida live stays off that runner until the VM rule is explicit.
+3. Trusted Publisher is an npm account setting. The workflow already requests provenance.
+4. A real visual session only if the recorder is installed. `iskelet` stays on AOT and MIPS until ObjC, Swift, and the JAL scan are parses. The four research tools already execute REAVM, REAFZ, REALDB, and REATD. CLR and ELF32 MIPS headers are read from the file.
+
+Closed in v0.10.1: dead facade cleanup and the golden DEX corpus. Closed in v0.10.0: waves I, J, and K.

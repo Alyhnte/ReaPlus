@@ -353,6 +353,7 @@ const OUTPUT_SCHEMAS: Readonly<Record<string, StandardSchemaWithJSON>> = {
       dos: z.looseObject({ ok: z.boolean() }),
       mips: z.looseObject({ ok: z.boolean() }),
       iskelet: z.literal(true),
+      elf: z.object({ machine: z.number(), entry: z.number(), flags: z.number(), endian: z.string() }).optional(),
     }),
   }),
   rea_aot_detect: z.object({
@@ -370,6 +371,7 @@ const OUTPUT_SCHEMAS: Readonly<Record<string, StandardSchemaWithJSON>> = {
       objc: z.looseObject({ ok: z.boolean() }),
       swift: z.looseObject({ ok: z.boolean() }),
       iskelet: z.literal(true),
+      clr: z.object({ major: z.number(), minor: z.number(), flags: z.number(), entryPoint: z.number() }).optional(),
     }),
   }),
   rea_firmware_handoff: z.object({
@@ -1149,7 +1151,7 @@ const OUTPUT_SCHEMAS: Readonly<Record<string, StandardSchemaWithJSON>> = {
     sayfaBoyutu: z.number(),
     tablolar: z.array(z.string()),
   }),
-  // Dalga 19: stdout sozlesmesi. Basarisiz surec bu sekli uretmez.
+  // Dalga 19: surec-ici REAVM / REAFZ / REALDB / REATD. Basarisiz okuma bu sekli uretmez.
   rea_angr_explore: z.object({
     ok: z.literal(true),
     arac: z.string(),
@@ -1159,18 +1161,20 @@ const OUTPUT_SCHEMAS: Readonly<Record<string, StandardSchemaWithJSON>> = {
   rea_afl_fuzz: z.object({
     ok: z.literal(true),
     arac: z.string(),
-    version: z.string(),
     execs_done: z.number(),
+    crashes: z.number(),
   }),
   rea_lldb_script: z.object({
     ok: z.literal(true),
     arac: z.string(),
     stop_reason: z.string(),
+    pc: z.number(),
   }),
   rea_ttd_info: z.object({
     ok: z.literal(true),
     arac: z.string(),
     module_count: z.number(),
+    modules: z.array(z.string()),
   }),
 };
 
@@ -1247,13 +1251,6 @@ const READ_ONLY_TOOLS: ReadonlySet<string> = new Set([
   // process_compare girdiyi yok sayar; dosya acmaz. ok:true uretmedigi icin
   // outputSchema almaz. pwn_elf_layout artik dosya okur (FILE_READ_ONLY).
   "rea_process_compare",
-  // Dalga 19: dis ikili yalniz belgelenmis no-op argv ile yoklanir
-  // (--explore yolunu yazmaz; afl/lldb/ttd --version). Hedefe yazmaz,
-  // kampanya/attach/time-travel acmaz. readOnlyHint bu yuzden true.
-  "rea_angr_explore",
-  "rea_afl_fuzz",
-  "rea_lldb_script",
-  "rea_ttd_info",
 ]);
 
 // Salt dosya/dizin okuyan kume (dalga 3): handler yalniz readFile/readdir/
@@ -1316,6 +1313,11 @@ const FILE_READ_ONLY_TOOLS: ReadonlySet<string> = new Set([
   "rea_electron_fuses",
   "rea_apk_splits",
   "rea_sqlite_snapshot",
+  // REAVM / REAFZ / REALDB / REATD dosyasini okur, yazmaz, alt surec acmaz.
+  "rea_angr_explore",
+  "rea_afl_fuzz",
+  "rea_lldb_script",
+  "rea_ttd_info",
 ]);
 
 // Yikici kume (salt-okunur degil): dosya/cikti yazan, cihaza kuran ya da hedef

@@ -48,12 +48,45 @@ export function rea_mips_funcs(buf: Uint8Array): ReaDosMipsResult {
   return { ok: true, tool: "rea_mips_funcs", summary: `${jal} JAL adayı`, details: { jal } };
 }
 
+function oku16(buf: Uint8Array, o: number, be: boolean): number {
+  const a = buf[o] ?? 0;
+  const b = buf[o + 1] ?? 0;
+  return be ? (a << 8) | b : a | (b << 8);
+}
+
+function oku32(buf: Uint8Array, o: number, be: boolean): number {
+  const a = buf[o] ?? 0;
+  const b = buf[o + 1] ?? 0;
+  const c = buf[o + 2] ?? 0;
+  const d = buf[o + 3] ?? 0;
+  return (be ? (a * 0x1000000 + b * 0x10000 + c * 0x100 + d) : (a + b * 0x100 + c * 0x10000 + d * 0x1000000)) >>> 0;
+}
+
+// ELF32, e_machine EM_MIPS (8). e_entry ve e_flags dosyanin kendi endian degerinden okunur.
+export function okuElfMips(buf: Uint8Array): { machine: number; entry: number; flags: number; endian: "le" | "be" } | null {
+  if (!buf || buf.length < 52) return null;
+  if (buf[0] !== 0x7f || buf[1] !== 0x45 || buf[2] !== 0x4c || buf[3] !== 0x46) return null;
+  if (buf[4] !== 1) return null;
+  const be = buf[5] === 2;
+  if (buf[5] !== 1 && !be) return null;
+  const machine = oku16(buf, 18, be);
+  if (machine !== 8) return null;
+  return { machine, entry: oku32(buf, 24, be), flags: oku32(buf, 36, be), endian: be ? "be" : "le" };
+}
+
 // PSP profil özeti: DOS + MIPS bulgularını tek kayda indirger.
-export function rea_mips_psp_profile(buf: Uint8Array): ReaDosMipsResult {  const dos = rea_dos_int21(buf);
+// ELF basligi varsa machine/entry/flags dosyadan gelir. JAL listesi fonksiyon degildir; iskelet true kalir.
+export function rea_mips_psp_profile(buf: Uint8Array): ReaDosMipsResult {
+  const dos = rea_dos_int21(buf);
   const mips = rea_mips_funcs(buf);
-  // İkisi de kapıdan geçemezse profil çıkarılamaz.
-  if (!dos.ok && !mips.ok) {
+  const elf = okuElfMips(buf);
+  if (!dos.ok && !mips.ok && !elf) {
     return { ok: false, code: "capability_unsupported", reason: "DOS+MIPS sinyali yok" };
   }
-  return { ok: true, tool: "rea_mips_psp_profile", summary: "DOS/MIPS profil iskeleti", details: { dos, mips, iskelet: true } };
+  return {
+    ok: true,
+    tool: "rea_mips_psp_profile",
+    summary: "DOS/MIPS profil iskeleti",
+    details: { dos, mips, iskelet: true, ...(elf ? { elf } : {}) },
+  };
 }

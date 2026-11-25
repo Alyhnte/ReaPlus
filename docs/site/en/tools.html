@@ -121,8 +121,8 @@ surface of the compiled server (<code>dist/server.js</code>). To regenerate:
 <p>Device screenshot.</p>
 <ul><li>Input fields:</li><li><code>out</code> (string, required)</li><li><code>seri</code> (string, optional)</li><li>outputSchema: present (fields: <code>arac</code>, <code>bayt</code>, <code>ok</code>, <code>yol</code>)</li><li>annotations: present (destructiveHint=true, openWorldHint=true, readOnlyHint=false)</li></ul>
 <h3 id="rea_afl_fuzz"><code>rea_afl_fuzz</code></h3>
-<p>Run REA_AFL_BIN --version and parse the afl-fuzz++ version plus execs_done. Does not start a fuzz campaign and does not pass a target. Missing binary or no execs_done line is capability_unsupported.</p>
-<ul><li>Input fields: none</li><li>outputSchema: present (fields: <code>arac</code>, <code>execs_done</code>, <code>ok</code>, <code>version</code>)</li><li>annotations: present (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
+<p>Run a deterministic single-byte mutation campaign against a REAFZ target. Returns the executions performed and the crashes observed. A file that is not REAFZ is capability_unsupported. Does not spawn afl-fuzz.</p>
+<ul><li>Input fields:</li><li><code>path</code> (string, required)</li><li>outputSchema: present (fields: <code>arac</code>, <code>crashes</code>, <code>execs_done</code>, <code>ok</code>)</li><li>annotations: present (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
 <h3 id="rea_android_dinamik_recete"><code>rea_android_dinamik_recete</code></h3>
 <p>Android dynamic-analysis recipe generation.</p>
 <ul><li>Input fields:</li><li><code>path</code> (string, required)</li><li>outputSchema: present (fields: <code>arac</code>, <code>ok</code>, <code>recete</code>)</li><li>annotations: present (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
@@ -130,7 +130,7 @@ surface of the compiled server (<code>dist/server.js</code>). To regenerate:
 <p>Dry-run validation of a recipe.</p>
 <ul><li>Input fields:</li><li><code>text</code> (string, required)</li><li>outputSchema: present (fields: <code>adim_sayisi</code>, <code>arac</code>, <code>ok</code>)</li><li>annotations: present (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
 <h3 id="rea_angr_explore"><code>rea_angr_explore</code></h3>
-<p>Run REA_ANGR_BIN (or python on PATH) as <code>&lt;bin&gt; --explore &lt;path&gt;</code> and parse one JSON line {ok,paths,constraints}. Missing binary, non-JSON stdout, or a non-zero exit is capability_unsupported. Does not invent a path count.</p>
+<p>Symbolically execute a REAVM program. A symbolic JZ forks both sides. Returns finished path and constraint counts from that run. A file that is not REAVM is capability_unsupported. Does not launch angr and does not invent a path count.</p>
 <ul><li>Input fields:</li><li><code>path</code> (string, required)</li><li>outputSchema: present (fields: <code>arac</code>, <code>constraints</code>, <code>ok</code>, <code>paths</code>)</li><li>annotations: present (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
 <h3 id="rea_aot_detect"><code>rea_aot_detect</code></h3>
 <p>NativeAOT sinyali.</p>
@@ -139,7 +139,7 @@ surface of the compiled server (<code>dist/server.js</code>). To regenerate:
 <p>ObjC dispatch izleri.</p>
 <ul><li>Input fields:</li><li><code>text</code> (string, required)</li><li>outputSchema: present (fields: <code>details</code>, <code>ok</code>, <code>summary</code>, <code>tool</code>)</li><li>annotations: present (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
 <h3 id="rea_aot_profile"><code>rea_aot_profile</code></h3>
-<p>AOT profili.</p>
+<p>AOT string scan plus a CLR runtime header when the PE COM directory points at a COR20 header. major, minor, flags, and entryPoint come from that header. iskelet stays true because ObjC and Swift remain string scans.</p>
 <ul><li>Input fields:</li><li><code>b64dosya</code> (string, required)</li><li><code>metin</code> (string, optional)</li><li>outputSchema: present (fields: <code>details</code>, <code>ok</code>, <code>summary</code>, <code>tool</code>)</li><li>annotations: present (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
 <h3 id="rea_aot_swift"><code>rea_aot_swift</code></h3>
 <p>Swift dispatch izleri.</p>
@@ -457,8 +457,8 @@ surface of the compiled server (<code>dist/server.js</code>). To regenerate:
 <p>Source-map resolution.</p>
 <ul><li>Input fields:</li><li><code>text</code> (string, required)</li><li>outputSchema: present (fields: <code>ok</code>, <code>summary</code>, <code>tool</code>)</li><li>annotations: present (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
 <h3 id="rea_lldb_script"><code>rea_lldb_script</code></h3>
-<p>Run REA_LLDB_BIN --version and parse <code>stop reason = …</code>. Does not attach or open a live debug session. Missing binary or no stop reason is capability_unsupported.</p>
-<ul><li>Input fields: none</li><li>outputSchema: present (fields: <code>arac</code>, <code>ok</code>, <code>stop_reason</code>)</li><li>annotations: present (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
+<p>Step a REALDB memory image one byte at a time and stop at the breakpoint in the script file. Returns the stop reason and pc from that run. A missing breakpoint or a non-REALDB image is capability_unsupported. Does not attach to a process.</p>
+<ul><li>Input fields:</li><li><code>path</code> (string, required)</li><li><code>script</code> (string, required)</li><li>outputSchema: present (fields: <code>arac</code>, <code>ok</code>, <code>pc</code>, <code>stop_reason</code>)</li><li>annotations: present (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
 <h3 id="rea_macho_classdump"><code>rea_macho_classdump</code></h3>
 <p>class-dump output (honest error if missing).</p>
 <ul><li>Input fields:</li><li><code>path</code> (string, required)</li><li>outputSchema: present (fields: <code>details</code>, <code>ok</code>, <code>summary</code>, <code>tool</code>)</li><li>annotations: present (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
@@ -487,7 +487,7 @@ surface of the compiled server (<code>dist/server.js</code>). To regenerate:
 <p>MIPS function pre-scan.</p>
 <ul><li>Input fields:</li><li><code>b64</code> (string, required)</li><li>outputSchema: present (fields: <code>details</code>, <code>ok</code>, <code>summary</code>, <code>tool</code>)</li><li>annotations: present (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
 <h3 id="rea_mips_psp_profile"><code>rea_mips_psp_profile</code></h3>
-<p>MIPS/PSP profili.</p>
+<p>DOS INT 21h and MIPS JAL scan. An ELF32 MIPS header adds machine, entry, and flags read from the file. iskelet stays true because the JAL scan is not a function list.</p>
 <ul><li>Input fields:</li><li><code>b64</code> (string, required)</li><li>outputSchema: present (fields: <code>details</code>, <code>ok</code>, <code>summary</code>, <code>tool</code>)</li><li>annotations: present (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
 <h3 id="rea_missing_reason"><code>rea_missing_reason</code></h3>
 <p>Missing tool + install command.</p>
@@ -580,8 +580,8 @@ surface of the compiled server (<code>dist/server.js</code>). To regenerate:
 <p>Cookies + localStorage.</p>
 <ul><li>Input fields:</li><li><code>url</code> (string, required)</li><li>outputSchema: present (fields: <code>details</code>, <code>ok</code>, <code>summary</code>, <code>tool</code>)</li><li>annotations: present (openWorldHint=true, readOnlyHint=false)</li></ul>
 <h3 id="rea_ttd_info"><code>rea_ttd_info</code></h3>
-<p>Run REA_TTD_BIN --version and parse ModuleCount. Does not open a time-travel session. Missing binary or no ModuleCount is capability_unsupported.</p>
-<ul><li>Input fields: none</li><li>outputSchema: present (fields: <code>arac</code>, <code>module_count</code>, <code>ok</code>)</li><li>annotations: present (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
+<p>Read a REATD trace and return the module count and module names stored in that file. A truncated or non-REATD file is capability_unsupported. Does not open a time-travel debugger.</p>
+<ul><li>Input fields:</li><li><code>path</code> (string, required)</li><li>outputSchema: present (fields: <code>arac</code>, <code>module_count</code>, <code>modules</code>, <code>ok</code>)</li><li>annotations: present (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>
 <h3 id="rea_typedef_oner"><code>rea_typedef_oner</code></h3>
 <p>Argument-name suggestion + spread.</p>
 <ul><li>Input fields:</li><li><code>text</code> (string, required)</li><li>outputSchema: present (fields: <code>arac</code>, <code>ok</code>, <code>oneriler</code>, <code>sayi</code>)</li><li>annotations: present (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)</li></ul>

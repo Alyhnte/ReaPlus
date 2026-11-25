@@ -1,8 +1,6 @@
-# ROADMAP-NEXT — deep work after v0.11.0
+# ROADMAP-NEXT — work after v0.17.0
 
-Status: ReaPlus carries the public rea capabilities that were ported (191 tools, 2 resources, 7 prompts). Commercially licensed tools stay gated (Hopper/IDA/JEB). Linux-only tools are documented (binwalk). Closed in v0.11.0: a 5-language site plus `--check`, text example sessions, npm OIDC provenance plus an SBOM release asset, Pages deploy, CONTRIBUTING, and issue forms. Closed in v0.12.0: the golden corpus (5 real gcc binaries plus 16 tests), 4 task-template prompts (7 prompts total), a portable node bundle (plus a release asset), and a docs/site sync.
-
-v0.13.0 is the current release. v0.14.0 is not tagged in this worktree. CI is `ubuntu-latest` only. `ci.yml` runs `tests/schema-budget.test.mjs`. `pages.yml` deploys. `publish.yml` runs `npm publish --provenance`. Trusted Publisher account setup is still an external gap. Frida live VM approval is still open.
+Status: `main` is `4b6c359`. Surface is 200 tools, 197 output schemas, 200 annotations, 2 resources, 7 prompts. CI on that commit is green (Ubuntu, Node 20 and 22). Pages deployed. The `v0.17.0` tag's publish job failed in tests, so npm does not have this tree yet. de/fr/es/tr changelog and new tool entries through v0.17.0 are translated (`4b6c359`). `publish.yml` runs only on a `v*` tag and already requests npm provenance. Trusted Publisher and the Frida live VM are still external gates.
 
 ## Items from the previous revision — closed with evidence (count of 2026-10-18)
 
@@ -22,10 +20,10 @@ Four task-template prompts landed (`packer-triage`, `dotnet-malware-triage`, `an
 
 ## 3. Long term (heavy — a research/L effort, not a code wave yet)
 
-- angr/Triton symbolic execution (the only real path for the VMProtect class; WSL plus conda). **OPEN.**
-- Fuzzing harness (AFL++ on WSL). A Node fuzz harness exists. AFL++ itself is **OPEN.**
+- angr/Triton symbolic execution (the VMProtect-class path; WSL plus conda). REAVM execution is in process. angr and Triton are **OPEN.**
+- AFL++ on WSL. `rea_afl_fuzz` campaigns a REAFZ target in process. AFL++ itself is **OPEN.**
 - A live IDA/Hopper bridge (license plus headless-API research). Hopper has no headless API. **OPEN** as gate-only.
-- An LLDB engine (Linux/macOS) and WinDbg TTD reading (ROADMAP section D, P3). **OPEN.**
+- Live lldb and WinDbg TTD. REALDB stepping and REATD reading are in process. The external debuggers are **OPEN.**
 - asciinema/GIF example sessions (ROADMAP section I, P1). The render tool is not installed. README has text transcripts. Visual recording waits on a tool install. **OPEN.**
 
 ## Open external gates (P0 — not a code wave; user or infrastructure setup)
@@ -77,9 +75,9 @@ Evidence: 4/4 branch merges (`081d6b3` through `55226c0`). Full suite **107/107 
 
 ---
 
-## Remaining plan
+## Closed waves 15–19
 
-de/fr/es/tr translations of the new English happen once after wave 19, not on each wave.
+de/fr/es/tr translations through v0.17.0 landed on `4b6c359`. They are not a future wave.
 
 ### Wave 15 — closed in v0.13.1
 
@@ -97,8 +95,64 @@ English GitHub docs, the stale roadmap table, and English pages. Other languages
 
 `rea_electron_fuses`, `rea_electron_window`, `rea_apk_splits`, `rea_adb_pull`, and `rea_sqlite_snapshot` are on the `all` profile only. The surface is 196 tools and 193 output schemas.
 
-### Wave 19 — closed in v0.17.0
+### Wave 19 — closed in v0.17.0 as stdout probes; replaced in the working tree
 
-`rea_angr_explore`, `rea_afl_fuzz`, `rea_lldb_script`, and `rea_ttd_info` parse the external program's stdout. A missing program returns `capability_unsupported`. They are on the `all` profile only. The surface is 200 tools and 197 output schemas.
+v0.17.0 parsed `--version`. The working tree now executes REAVM, REAFZ, REALDB, and REATD. That replacement is not tagged.
 
-Still open: Frida live VM approval, the self-hosted Windows runner, the SEA single-file exe, Trusted Publisher account setup, asciinema, a full AFL++ campaign, visual sessions, and automatic TOOL-COVERAGE. de/fr/es/tr body translation is the remaining documentation pass.
+Still external: a tag after this tree is committed and CI is green, the npm tarball hash, a Frida VM off this machine, a Windows runner, and Trusted Publisher.
+
+## Next waves
+
+Replanned under the working-code rule. A job that only looks finished does not count. No new tool unless it performs its whole task. Tests use a fixture whose expected numbers come from the bytes. `iskelet` stays `true` until every field in that success was parsed. Live Frida is not run on this machine. Hashes stay `bilinmiyor` until a real npm tarball is hashed. de/fr/es/tr stay on the previous translation until this queue is empty.
+
+### Wave 20 — in-repo engines
+
+Landed in the working tree, not tagged. See the wave 24 section below. Exit was `tests/wave19-research.test.mjs`.
+
+### Wave 21 — headers and honest counts (this run)
+
+No new tool.
+
+1. English README and the English site say 200 tools, 170 `rea_*` tools, 197 schemas, 200 annotations. Async opt-in is 205. The old 191/161/192 sentences are gone.
+2. `rea_aot_profile` reads a COR20 header through the PE section table. `major`, `minor`, `flags`, and `entryPoint` come from that header. A PE without a COM directory does not grow a `clr` object.
+3. `rea_mips_psp_profile` reads an ELF32 MIPS header, including big-endian `e_flags` and `e_entry`. A non-ELF buffer does not grow an `elf` object.
+4. `docs/TOOL-COVERAGE.md` lists `rea_adb_pull`, `rea_adb_install`, `rea_adb_screencap`, `rea_apktool_build`, and `rea_apktool_framework`, which the previous rows omitted.
+
+`iskelet` stays `true` on both profiles. ObjC, Swift, and the JAL scan are still scans, not a load or a function list.
+
+Exit: `node --test tests/wave25-headers.test.mjs` is green. A constant header fails the second fixture.
+
+### Wave 22 — external, not run here
+
+1. Frida live evidence only on a VM. Ubuntu stays without an injection test.
+2. A self-hosted Windows runner for `npm test` and `tests/native-windows.test.mjs`. No Frida on that job until the VM rule is explicit.
+3. Tag and npm publish only after this working tree is committed and that commit's CI is green. Hash the real tarball. Leave `bilinmiyor` if the download fails.
+4. Trusted Publisher is an npm account setting.
+
+Exit: a recorded VM result, a green Windows job, and a measured hash. None of these can be faked from this workstation.
+
+### Wave 23 — still open, and only if the artifact is real
+
+1. English README counts are done in wave 21. de/fr/es/tr counts wait until this queue is empty.
+2. Do not generate TOOL-COVERAGE from `tools/list`. A name list is not coverage. The adb and apktool rows were corrected from the source. Other rows stay until each one is re-read.
+3. A visual session only when a recorder is installed. No drawn GIF.
+4. `rea_native_*` becomes an MCP tool only after the Windows job is green. A dump reader is not added until it parses a documented header and rejects a file without that header.
+
+`iskelet` stays `true` until ObjC, Swift, and the JAL scan are parses rather than scans.
+
+### Wave 24 — in-repo engines (landed in the working tree, not tagged)
+
+The four tools no longer parse `--version`. Each reads a documented file and returns a result computed from that file. `tests/wave19-research.test.mjs` builds the file and asserts the count those bytes imply. External angr, AFL++, lldb, and WinDbg are still not scheduled.
+
+1. `rea_angr_explore` symbolically executes REAVM and forks on a symbolic JZ.
+2. `rea_afl_fuzz` mutates a REAFZ seed one byte at a time and returns the executions and crashes it observed.
+3. `rea_lldb_script` steps a REALDB image to the breakpoint named in the script.
+4. `rea_ttd_info` reads module names from a REATD trace. A truncated file returns `capability_unsupported` and no count.
+
+Exit: `node --test tests/wave19-research.test.mjs` is green, and a constant reply fails at least one fixture.
+
+### Not scheduled
+
+- Single-file SEA. The Frida binding, dynamic Playwright, and signing still block it. The portable Node bundle remains the ship path.
+- Triton, and unpack recipes for commercial protectors. Not started without a file format and a fixture that is not a protected sample on this machine.
+- Store submission for winget, scoop, or Homebrew. Wave 20 measures hashes first.

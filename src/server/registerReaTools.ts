@@ -400,11 +400,11 @@ const R: Array<[string, string, any, H]> = [
   ["rea_dos_mz", "MZ header check.", B64, (a) => rea_dos_mz(b64(a.b64))],
   ["rea_dos_int21", "INT21 call scan.", B64, (a) => rea_dos_int21(b64(a.b64))],
   ["rea_mips_funcs", "MIPS function pre-scan.", B64, (a) => rea_mips_funcs(b64(a.b64))],
-  ["rea_mips_psp_profile", "MIPS/PSP profili.", B64, (a) => rea_mips_psp_profile(b64(a.b64))],
+  ["rea_mips_psp_profile", "DOS INT 21h and MIPS JAL scan. An ELF32 MIPS header adds machine, entry, and flags read from the file. iskelet stays true because the JAL scan is not a function list.", B64, (a) => rea_mips_psp_profile(b64(a.b64))],
   ["rea_aot_detect", "NativeAOT sinyali.", z.object({ b64dosya: z.string().min(1), metin: z.string().optional() }), (a) => rea_aot_detect(b64(a.b64dosya), a.metin ?? "")],
   ["rea_aot_objc", "ObjC dispatch izleri.", J, (a) => rea_aot_objc(a.text)],
   ["rea_aot_swift", "Swift dispatch izleri.", J, (a) => rea_aot_swift(a.text)],
-  ["rea_aot_profile", "AOT profili.", z.object({ b64dosya: z.string().min(1), metin: z.string().optional() }), (a) => rea_aot_profile(b64(a.b64dosya), a.metin ?? "")],
+  ["rea_aot_profile", "AOT string scan plus a CLR runtime header when the PE COM directory points at a COR20 header. major, minor, flags, and entryPoint come from that header. iskelet stays true because ObjC and Swift remain string scans.", z.object({ b64dosya: z.string().min(1), metin: z.string().optional() }), (a) => rea_aot_profile(b64(a.b64dosya), a.metin ?? "")],
   ["rea_go_module", "Go module info.", J, (a) => rea_go_module(a.text)],
   ["rea_go_version", "Go version fingerprint.", J, (a) => rea_go_version(a.text)],
   ["rea_go_funclines", "Go function + file:line map.", P, (a) => rea_go_funclines(a.path)],
@@ -511,10 +511,10 @@ const R: Array<[string, string, any, H]> = [
   ["rea_apk_splits", "Read split APK roles and zip entry counts from a directory. Does not run apktool.", P, (a) => rea_apk_splits(a.path)],
   ["rea_adb_pull", "Run adb pull into a local file (REA_ADB_BIN or adb on PATH).", z.object({ remote: z.string().min(1), out: z.string().min(1), seri: z.string().min(1).optional() }), (a) => rea_adb_pull(a.remote, a.out, a.seri)],
   ["rea_sqlite_snapshot", "Read the SQLite header and schema table names from a database file.", P, (a) => rea_sqlite_snapshot(a.path)],
-  ["rea_angr_explore", "Run REA_ANGR_BIN (or python on PATH) as `<bin> --explore <path>` and parse one JSON line {ok,paths,constraints}. Missing binary, non-JSON stdout, or a non-zero exit is capability_unsupported. Does not invent a path count.", P, (a) => rea_angr_explore(a.path)],
-  ["rea_afl_fuzz", "Run REA_AFL_BIN --version and parse the afl-fuzz++ version plus execs_done. Does not start a fuzz campaign and does not pass a target. Missing binary or no execs_done line is capability_unsupported.", O, () => rea_afl_fuzz()],
-  ["rea_lldb_script", "Run REA_LLDB_BIN --version and parse `stop reason = …`. Does not attach or open a live debug session. Missing binary or no stop reason is capability_unsupported.", O, () => rea_lldb_script()],
-  ["rea_ttd_info", "Run REA_TTD_BIN --version and parse ModuleCount. Does not open a time-travel session. Missing binary or no ModuleCount is capability_unsupported.", O, () => rea_ttd_info()],
+  ["rea_angr_explore", "Symbolically execute a REAVM program. A symbolic JZ forks both sides. Returns finished path and constraint counts from that run. A file that is not REAVM is capability_unsupported. Does not launch angr and does not invent a path count.", P, (a) => rea_angr_explore(a.path)],
+  ["rea_afl_fuzz", "Run a deterministic single-byte mutation campaign against a REAFZ target. Returns the executions performed and the crashes observed. A file that is not REAFZ is capability_unsupported. Does not spawn afl-fuzz.", P, (a) => rea_afl_fuzz(a.path)],
+  ["rea_lldb_script", "Step a REALDB memory image one byte at a time and stop at the breakpoint in the script file. Returns the stop reason and pc from that run. A missing breakpoint or a non-REALDB image is capability_unsupported. Does not attach to a process.", z.object({ path: z.string().min(1), script: z.string().min(1) }), (a) => rea_lldb_script(a.path, a.script)],
+  ["rea_ttd_info", "Read a REATD trace and return the module count and module names stored in that file. A truncated or non-REATD file is capability_unsupported. Does not open a time-travel debugger.", P, (a) => rea_ttd_info(a.path)],
 ];
 
 export function registerReaTools(server: McpServer): void {

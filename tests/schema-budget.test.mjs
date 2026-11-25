@@ -3,11 +3,11 @@
 // tüm outputSchema JSON baytı bütçeli. Bütçe aşımı testi kırar (sessiz şişme biter).
 // Koş: npm run build sonrası `node --test tests/schema-budget.test.mjs` (veya npm test).
 //
-// ÖLÇÜM (2026-11-25, win32, wave-19/research, node scripts/olcut-semabutce.mjs):
+// ÖLÇÜM (2026-11-25, win32, REAVM/REAFZ/REALDB/REATD, node scripts/olcut-semabutce.mjs):
 //   araç=200, şemalı=197, şemasız=3 (rea_best_motor, rea_fallback,
 //   rea_process_compare — nesne dönmedikleri için şemasız; rea_pwn_elf_layout semalı),
-//   listeBayt=185884 (~181.5KB), şemaToplam=97776 (~95.5KB),
-//   girdiToplam=46207, ortalama=488.9 bayt/araç.
+//   listeBayt=187135 (~182.7KB), şemaToplam=98317 (~96.0KB),
+//   girdiToplam=46431, ortalama=491.6 bayt/araç.
 //   Tekrar ölçümde birebir aynı (tek sayfa, sayfalama yok, bayt deterministik).
 //
 // BÜTÇELER (keyfi değil; ölçümün üstüne cömert pay — bayt deterministik, CI flake'i yok):

@@ -12,7 +12,7 @@ v0.17.0 ships 200 tools, 197 `outputSchema`, 200 annotations, 2 resources, and 7
 - **split-APK.** `rea_apk_splits` reads each APK zip in a directory and separates `base.apk` from `split_*.apk`.
 - **adb pull.** `rea_adb_pull` runs `adb pull`. A missing `adb` returns `capability_unsupported`.
 - **SQLite snapshot.** `rea_sqlite_snapshot` reads the database header and schema table names from the file.
-- **Research probes.** `rea_angr_explore`, `rea_afl_fuzz`, `rea_lldb_script`, and `rea_ttd_info` parse the external program's stdout. A missing program returns `capability_unsupported`. They do not start a fuzz campaign or a time-travel session.
+- **Research tools.** `rea_angr_explore` executes REAVM, `rea_afl_fuzz` campaigns a REAFZ target, `rea_lldb_script` steps a REALDB image, and `rea_ttd_info` reads a REATD trace. A bad file returns `capability_unsupported`. They do not launch angr, AFL++, lldb, or WinDbg.
 - **UPX.** `rea_upx_info` and `rea_upx_unpack`.
 - **C# decompile path.** `rea_ilspy_decompile` (ilspycmd when it is installed).
 - **Network capture.** `rea_net_capture` (local HAR).
@@ -24,7 +24,7 @@ v0.17.0 ships 200 tools, 197 `outputSchema`, 200 annotations, 2 resources, and 7
 
 - Visual sessions (asciinema or GIF). Text transcripts exist; the recording does not.
 - Automatic TOOL-COVERAGE. `docs/TOOL-COVERAGE.md` is still hand-maintained.
-- AFL++ campaign. `rea_afl_fuzz` reads `afl-fuzz --version` output. It does not drive a fuzz campaign.
+- AFL++ itself. `rea_afl_fuzz` campaigns a REAFZ target in process. It does not spawn AFL++.
 - Frida live VM approval.
 - A self-hosted Windows runner. CI is `ubuntu-latest` only.
 - Trusted Publisher account setup. `publish.yml` already runs `npm publish --provenance`.

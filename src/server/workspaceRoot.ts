@@ -43,6 +43,8 @@ function paramKind(tool: string, key: string): WorkspacePathKind | null {
   switch (key) {
     case "path":
       return DIRECTORY_PATH_TOOLS.has(tool) ? "dir" : "read";
+    case "script":
+      return tool === "rea_lldb_script" ? "read" : null;
     case "apk_path":
     case "eski":
     case "yeni":

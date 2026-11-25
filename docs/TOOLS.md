@@ -350,10 +350,11 @@ Device screenshot.
 
 ### `rea_afl_fuzz`
 
-Run REA_AFL_BIN --version and parse the afl-fuzz++ version plus execs_done. Does not start a fuzz campaign and does not pass a target. Missing binary or no execs_done line is capability_unsupported.
+Run a deterministic single-byte mutation campaign against a REAFZ target. Returns the executions performed and the crashes observed. A file that is not REAFZ is capability_unsupported. Does not spawn afl-fuzz.
 
-- Input fields: none
-- outputSchema: present (fields: `arac`, `execs_done`, `ok`, `version`)
+- Input fields:
+  - `path` (string, required)
+- outputSchema: present (fields: `arac`, `crashes`, `execs_done`, `ok`)
 - annotations: present (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)
 
 ### `rea_android_dinamik_recete`
@@ -376,7 +377,7 @@ Dry-run validation of a recipe.
 
 ### `rea_angr_explore`
 
-Run REA_ANGR_BIN (or python on PATH) as `<bin> --explore <path>` and parse one JSON line {ok,paths,constraints}. Missing binary, non-JSON stdout, or a non-zero exit is capability_unsupported. Does not invent a path count.
+Symbolically execute a REAVM program. A symbolic JZ forks both sides. Returns finished path and constraint counts from that run. A file that is not REAVM is capability_unsupported. Does not launch angr and does not invent a path count.
 
 - Input fields:
   - `path` (string, required)
@@ -404,7 +405,7 @@ ObjC dispatch izleri.
 
 ### `rea_aot_profile`
 
-AOT profili.
+AOT string scan plus a CLR runtime header when the PE COM directory points at a COR20 header. major, minor, flags, and entryPoint come from that header. iskelet stays true because ObjC and Swift remain string scans.
 
 - Input fields:
   - `b64dosya` (string, required)
@@ -1393,10 +1394,12 @@ Source-map resolution.
 
 ### `rea_lldb_script`
 
-Run REA_LLDB_BIN --version and parse `stop reason = …`. Does not attach or open a live debug session. Missing binary or no stop reason is capability_unsupported.
+Step a REALDB memory image one byte at a time and stop at the breakpoint in the script file. Returns the stop reason and pc from that run. A missing breakpoint or a non-REALDB image is capability_unsupported. Does not attach to a process.
 
-- Input fields: none
-- outputSchema: present (fields: `arac`, `ok`, `stop_reason`)
+- Input fields:
+  - `path` (string, required)
+  - `script` (string, required)
+- outputSchema: present (fields: `arac`, `ok`, `pc`, `stop_reason`)
 - annotations: present (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)
 
 ### `rea_macho_classdump`
@@ -1484,7 +1487,7 @@ MIPS function pre-scan.
 
 ### `rea_mips_psp_profile`
 
-MIPS/PSP profili.
+DOS INT 21h and MIPS JAL scan. An ELF32 MIPS header adds machine, entry, and flags read from the file. iskelet stays true because the JAL scan is not a function list.
 
 - Input fields:
   - `b64` (string, required)
@@ -1770,10 +1773,11 @@ Cookies + localStorage.
 
 ### `rea_ttd_info`
 
-Run REA_TTD_BIN --version and parse ModuleCount. Does not open a time-travel session. Missing binary or no ModuleCount is capability_unsupported.
+Read a REATD trace and return the module count and module names stored in that file. A truncated or non-REATD file is capability_unsupported. Does not open a time-travel debugger.
 
-- Input fields: none
-- outputSchema: present (fields: `arac`, `module_count`, `ok`)
+- Input fields:
+  - `path` (string, required)
+- outputSchema: present (fields: `arac`, `module_count`, `modules`, `ok`)
 - annotations: present (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)
 
 ### `rea_typedef_oner`
