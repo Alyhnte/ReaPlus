@@ -93,12 +93,12 @@ English GitHub docs, the stale roadmap table, and English pages. Other languages
 
 `addon.ts` reads the live Win32 process, token integrity, and a directory snapshot. It does not return a skeleton `ok`. `rea_aot_profile` and `rea_mips_psp_profile` set `details.iskelet: true`. The JS walk includes `.mts`/`.cts` and reads package `exports` before `main`.
 
-### Wave 18 — not done
+### Wave 18 — closed in v0.16.0
 
-Electron fuses plus BrowserWindow constants, split-APK, adb pull with fake adb output, and a SQLite snapshot. New tools land only in the `all` profile.
+`rea_electron_fuses`, `rea_electron_window`, `rea_apk_splits`, `rea_adb_pull`, and `rea_sqlite_snapshot` are on the `all` profile only. The surface is 196 tools and 193 output schemas.
 
 ### Wave 19 — not done
 
 Real angr/Triton, AFL++, LLDB, and WinDbg TTD integrations. They return `capability_unsupported` when the dependency is absent, and they work when the dependency is present.
 
-Still open across these waves, and not closed by wave 15: Frida live VM approval, the self-hosted Windows runner, the SEA single-file exe, Trusted Publisher account setup, asciinema, LLDB, WinDbg TTD, angr, AFL++, Electron fuses, split-APK, adb file transfer, SQLite snapshot, visual sessions, and automatic TOOL-COVERAGE.
+Still open after wave 18: Frida live VM approval, the self-hosted Windows runner, the SEA single-file exe, Trusted Publisher account setup, asciinema, LLDB, WinDbg TTD, angr, AFL++, visual sessions, and automatic TOOL-COVERAGE.

@@ -7,11 +7,11 @@
 ## Summary
 
 - Server: `rea-plus` 0.15.0
-- Total tools: 191
+- Total tools: 196
 - Total resources: 2
 - Total prompts: 7
-- Tools with outputSchema: 188
-- Tools with annotations: 191
+- Tools with outputSchema: 193
+- Tools with annotations: 196
 
 ## Tools
 
@@ -327,6 +327,17 @@ List of installed packages.
 - outputSchema: present (fields: `arac`, `ok`, `paketler`)
 - annotations: present (openWorldHint=true, readOnlyHint=false)
 
+### `rea_adb_pull`
+
+Run adb pull into a local file (REA_ADB_BIN or adb on PATH).
+
+- Input fields:
+  - `out` (string, required)
+  - `remote` (string, required)
+  - `seri` (string, optional)
+- outputSchema: present (fields: `arac`, `bayt`, `cikis`, `ok`, `uzak`, `yerel`)
+- annotations: present (destructiveHint=true, openWorldHint=true, readOnlyHint=false)
+
 ### `rea_adb_screencap`
 
 Device screenshot.
@@ -391,6 +402,15 @@ Swift dispatch izleri.
 - Input fields:
   - `text` (string, required)
 - outputSchema: present (fields: `details`, `ok`, `summary`, `tool`)
+- annotations: present (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)
+
+### `rea_apk_splits`
+
+Read split APK roles and zip entry counts from a directory. Does not run apktool.
+
+- Input fields:
+  - `path` (string, required)
+- outputSchema: present (fields: `apkler`, `arac`, `dizin`, `ok`)
 - annotations: present (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)
 
 ### `rea_apktool_build`
@@ -788,6 +808,24 @@ ELF DWARF summary.
 - Input fields:
   - `path` (string, required)
 - outputSchema: present (fields: `arac`, `dosya`, `fonksiyonAdlari`, `ok`, `subprogramSayisi`, `unitSayisi`)
+- annotations: present (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)
+
+### `rea_electron_fuses`
+
+Read Electron fuse wire bytes after the fuse sentinel. Does not launch Electron.
+
+- Input fields:
+  - `path` (string, required)
+- outputSchema: present (fields: `arac`, `dosya`, `fuses`, `ok`, `surum`)
+- annotations: present (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)
+
+### `rea_electron_window`
+
+Classify BrowserWindow constructor option keys. Does not open a window.
+
+- Input fields:
+  - `text` (string, required)
+- outputSchema: present (fields: `arac`, `bilinen`, `bilinmeyen`, `calisiyor`, `ok`)
 - annotations: present (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)
 
 ### `rea_evidence_bundle`
@@ -1685,6 +1723,15 @@ File type + engine suggestion (magic-byte).
 - Input fields:
   - `b64dosya` (string, required)
 - outputSchema: present (fields: `makine`, `motor`, `tip`)
+- annotations: present (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)
+
+### `rea_sqlite_snapshot`
+
+Read the SQLite header and schema table names from a database file.
+
+- Input fields:
+  - `path` (string, required)
+- outputSchema: present (fields: `arac`, `dosya`, `ok`, `sayfaBoyutu`, `tablolar`)
 - annotations: present (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)
 
 ### `rea_storage_dump`

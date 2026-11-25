@@ -1107,6 +1107,48 @@ const OUTPUT_SCHEMAS: Readonly<Record<string, StandardSchemaWithJSON>> = {
     ok: z.literal(true), arac: z.string(), karar: z.enum(["upx", "dotnet", "dump"]),
     adimlar: z.array(z.object({ sira: z.number(), eylem: z.string(), tool: z.string(), neden: z.string() })),
   }),
+  rea_electron_fuses: z.object({
+    ok: z.literal(true),
+    arac: z.string(),
+    dosya: z.string(),
+    surum: z.literal(1),
+    fuses: z.array(z.object({ ad: z.string(), durum: z.enum(["on", "off"]) })),
+  }),
+  rea_electron_window: z.object({
+    ok: z.literal(true),
+    arac: z.string(),
+    bilinen: z.array(z.string()),
+    bilinmeyen: z.array(z.string()),
+    calisiyor: z.literal(false),
+  }),
+  rea_apk_splits: z.object({
+    ok: z.literal(true),
+    arac: z.string(),
+    dizin: z.string(),
+    apkler: z.array(z.object({
+      dosya: z.string(),
+      rol: z.enum(["base", "split", "diger"]),
+      ad: z.string().nullable(),
+      manifestSplit: z.string().nullable(),
+      metaSplitler: z.array(z.string()),
+      girisSayisi: z.number(),
+    })),
+  }),
+  rea_adb_pull: z.object({
+    ok: z.literal(true),
+    arac: z.string(),
+    uzak: z.string(),
+    yerel: z.string(),
+    bayt: z.number(),
+    cikis: z.literal(0),
+  }),
+  rea_sqlite_snapshot: z.object({
+    ok: z.literal(true),
+    arac: z.string(),
+    dosya: z.string(),
+    sayfaBoyutu: z.number(),
+    tablolar: z.array(z.string()),
+  }),
 };
 
 // Salt-okunur kume: saf, surec-icinde hesap; dosya okumaz/yazmaz, surec
@@ -1161,6 +1203,7 @@ const READ_ONLY_TOOLS: ReadonlySet<string> = new Set([
   "rea_managed_compare",
   "rea_managed_verify",
   "rea_typedef_oner",
+  "rea_electron_window",
   // Dalga 3: b64/metin/JSON girdili saf hesap ve deger donusumleri (kalici
   // durum yazmaz; obligation advance/close gelen defterin yeni halini doner)
   "rea_crash_append",
@@ -1240,6 +1283,9 @@ const FILE_READ_ONLY_TOOLS: ReadonlySet<string> = new Set([
   "rea_pcap_oku",
   "rea_android_dinamik_recete",
   "rea_android_recete_dogrula",
+  "rea_electron_fuses",
+  "rea_apk_splits",
+  "rea_sqlite_snapshot",
 ]);
 
 // Yikici kume (salt-okunur degil): dosya/cikti yazan, cihaza kuran ya da hedef
@@ -1253,6 +1299,7 @@ const DESTRUCTIVE_TOOLS: ReadonlySet<string> = new Set([
   "rea_apktool_framework",
   "rea_adb_install",
   "rea_adb_screencap",
+  "rea_adb_pull",
   "rea_upx_unpack",
   "rea_ilspy_decompile",
   "rea_unpack_try", // upx sikisiksa <yol>.unpacked yazar
@@ -1297,6 +1344,7 @@ const OPEN_WORLD_TOOLS: ReadonlySet<string> = new Set([
   "rea_adb_install",
   "rea_adb_logcat",
   "rea_adb_screencap",
+  "rea_adb_pull",
   // Hedef surec (frida) + serbest komut
   "rea_frida_pause",
   "rea_frida_resume",

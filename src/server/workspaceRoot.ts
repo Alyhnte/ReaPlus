@@ -24,6 +24,7 @@ export type WorkspacePathKind = "read" | "dir" | "write";
 // Dizin bekleyen path parametreli araclar; digerlerinde path dosya okumadir.
 export const DIRECTORY_PATH_TOOLS: ReadonlySet<string> = new Set([
   "rea_apple_bundle",
+  "rea_apk_splits",
   "rea_fs_snapshot",
   "rea_js_require",
   "rea_scan_repo",

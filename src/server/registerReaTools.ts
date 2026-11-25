@@ -15,6 +15,11 @@ import { rea_ghidra_analyze, rea_ghidra_funcs, rea_ghidra_decompile, rea_ghidra_
 import { rea_jadx_manifest, rea_jadx_classes, rea_jadx_decompile, rea_jadx_full, rea_jadx_methods, rea_jadx_xrefs, rea_jadx_read } from "../rea-domains/android/JadxBridge.js";
 import { rea_apktool_decode, rea_apktool_info, rea_apktool_build, rea_apktool_framework, rea_apktool_caps } from "../rea-domains/android/ApktoolBridge.js";
 import { rea_adb_devices, rea_adb_packages, rea_adb_install, rea_adb_logcat, rea_adb_screencap } from "../rea-domains/android/AdbBridge.js";
+import { rea_adb_pull } from "../rea-domains/android/AdbPull.js";
+import { rea_apk_splits } from "../rea-domains/android/ApkSplits.js";
+import { rea_electron_fuses } from "../rea-domains/electron/ElectronFuses.js";
+import { rea_electron_window } from "../rea-domains/electron/ElectronWindow.js";
+import { rea_sqlite_snapshot } from "../rea-domains/sqlite/SqliteSnapshot.js";
 import { rea_dotnet_metadata, rea_dotnet_cil, rea_il2cpp_metadata, rea_il2cpp_dump, rea_il2cpp_methods } from "../rea-domains/dotnet/ManagedInspector.js";
 import { rea_r2_callgraph, rea_r2_esil, rea_r2_debug } from "../rea-domains/r2plus/R2Plus.js";
 import { rea_frida_pause, rea_frida_resume, rea_frida_step, rea_frida_cond, rea_frida_stalker } from "../rea-domains/frida-plus/FridaPlus.js";
@@ -500,6 +505,11 @@ const R: Array<[string, string, any, H]> = [
   ["rea_scan_repo_paralel", "Parallel repo scan (pool of 4, cancellable).", z.object({ path: z.string().min(1), eszamanlilik: z.number().int().min(1).max(4).optional() }), (a) => rea_scan_repo_paralel(a.path, a.eszamanlilik ? { eszamanlilik: a.eszamanlilik } : undefined)],
   ["rea_android_dinamik_recete", "Android dynamic-analysis recipe generation.", z.object({ path: z.string().min(1) }), (a) => rea_android_dinamik_recete({ apkYolu: a.path })],
   ["rea_android_recete_dogrula", "Dry-run validation of a recipe.", J, (a) => { const p = JSON.parse(a.text); return rea_android_recete_dogrula(p); }],
+  ["rea_electron_fuses", "Read Electron fuse wire bytes after the fuse sentinel. Does not launch Electron.", P, (a) => rea_electron_fuses(a.path)],
+  ["rea_electron_window", "Classify BrowserWindow constructor option keys. Does not open a window.", J, (a) => rea_electron_window(a.text)],
+  ["rea_apk_splits", "Read split APK roles and zip entry counts from a directory. Does not run apktool.", P, (a) => rea_apk_splits(a.path)],
+  ["rea_adb_pull", "Run adb pull into a local file (REA_ADB_BIN or adb on PATH).", z.object({ remote: z.string().min(1), out: z.string().min(1), seri: z.string().min(1).optional() }), (a) => rea_adb_pull(a.remote, a.out, a.seri)],
+  ["rea_sqlite_snapshot", "Read the SQLite header and schema table names from a database file.", P, (a) => rea_sqlite_snapshot(a.path)],
 ];
 
 export function registerReaTools(server: McpServer): void {

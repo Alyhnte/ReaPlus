@@ -3,17 +3,17 @@
 // tüm outputSchema JSON baytı bütçeli. Bütçe aşımı testi kırar (sessiz şişme biter).
 // Koş: npm run build sonrası `node --test tests/schema-budget.test.mjs` (veya npm test).
 //
-// ÖLÇÜM (2026-11-25, win32, dalga-17/skeletons, node scripts/olcut-semabutce.mjs):
-//   araç=191, şemalı=188, şemasız=3 (rea_best_motor, rea_fallback,
+// ÖLÇÜM (2026-11-25, win32, wave-18/ports, node scripts/olcut-semabutce.mjs):
+//   araç=196, şemalı=193, şemasız=3 (rea_best_motor, rea_fallback,
 //   rea_process_compare — nesne dönmedikleri için şemasız; rea_pwn_elf_layout semalı),
-//   listeBayt=178647 (~174.5KB), şemaToplam=94460 (~92.2KB),
-//   girdiToplam=44962, ortalama=494.6 bayt/araç, şemalı-ort=502.4 bayt.
+//   listeBayt=182952 (~178.7KB), şemaToplam=96700 (~94.4KB),
+//   girdiToplam=45789, ortalama=493.4 bayt/araç.
 //   Tekrar ölçümde birebir aynı (tek sayfa, sayfalama yok, bayt deterministik).
 //
 // BÜTÇELER (keyfi değil; ölçümün üstüne cömert pay — bayt deterministik, CI flake'i yok):
-//   LISTE_BUTCE = 200*1024 = 204800  (ölçüm 178647 → %14.6 pay)
-//   SEMA_BUTCE  = 110*1024 = 112640  (ölçüm 94460 → %19.2 pay)
-//   ORT_BUTCE   = 600 bayt            (ölçüm 494.6 → %21.3 pay)
+//   LISTE_BUTCE = 200*1024 = 204800  (ölçüm 182952)
+//   SEMA_BUTCE  = 110*1024 = 112640  (ölçüm 96700)
+//   ORT_BUTCE   = 600 bayt            (ölçüm 493.4)
 // YÖNTEM (flake karşıtı): before() bir kez ölçer (süreç-içi InMemoryTransport,
 // timersız); it() blokları yalnız assert eder. Süreç after()'da değil, ölçüm
 // sonunda kapatılır (ölçü fonksiyonu açtığını kapatır); asılı timer/süreç yok.
@@ -42,8 +42,8 @@ describe("şema bütçeleri (saf, InMemory tools/list)", () => {
   });
 
   it("(a) tools/list yanıt baytı bütçe altında", () => {
-    assert.equal(olcum.aracSayisi, 191, "araç sayısı 191 olmalı (gerçek değer)");
-    assert.equal(olcum.semaSayisi, 188, "şemalı araç 188 olmalı (gerçek değer)");
+    assert.equal(olcum.aracSayisi, 196, "araç sayısı 196 olmalı (gerçek değer)");
+    assert.equal(olcum.semaSayisi, 193, "şemalı araç 193 olmalı (gerçek değer)");
     assert.ok(
       olcum.listeBayt < BUTCE.listeBayt,
       `tools/list ${olcum.listeBayt}B bütçe ${BUTCE.listeBayt}B üstünde`,

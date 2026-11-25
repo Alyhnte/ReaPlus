@@ -9,11 +9,11 @@
 ## Özet
 
 - Sunucu: `rea-plus` 0.15.0
-- Toplam araç: 191
+- Toplam araç: 196
 - Toplam resource: 2
 - Toplam prompt: 7
-- outputSchema taşıyan araç: 188
-- annotations taşıyan araç: 191
+- outputSchema taşıyan araç: 193
+- annotations taşıyan araç: 196
 
 ## Araçlar
 

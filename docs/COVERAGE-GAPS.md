@@ -1,6 +1,6 @@
-# COVERAGE-GAPS — what is still missing after v0.15.0
+# COVERAGE-GAPS — what is still missing after v0.16.0
 
-v0.15.0 ships 191 tools, 188 `outputSchema`, 191 annotations, 2 resources, and 7 prompts. The tool count did not grow. `details.iskelet` is now declared on the AOT and MIPS profile schemas.
+v0.16.0 ships 196 tools, 193 `outputSchema`, 196 annotations, 2 resources, and 7 prompts. Five tools were added and registered only on the `all` profile.
 
 ## Closed (do not list these as gaps)
 
@@ -8,6 +8,10 @@ v0.15.0 ships 191 tools, 188 `outputSchema`, 191 annotations, 2 resources, and 7
 - **ELF layout and gadgets.** `rea_pwn_elf_layout` reads the ELF program headers (PIE, NX, RELRO). `rea_pwn_gadgets` keeps instruction sequences that end in `ret`, `retn`, or `retf`.
 - **JS package entry.** The walk includes `.mts` and `.cts`. `package.json` `exports` is read before `main`.
 - **Windows process reads.** `src/native-windows/addon.ts` reads the live process name, token integrity, and a directory snapshot. It is not an MCP tool.
+- **Electron offline.** `rea_electron_fuses` reads the fuse sentinel and wire. `rea_electron_window` classifies BrowserWindow option keys. Neither starts Electron.
+- **split-APK.** `rea_apk_splits` reads each APK zip in a directory and separates `base.apk` from `split_*.apk`.
+- **adb pull.** `rea_adb_pull` runs `adb pull`. A missing `adb` returns `capability_unsupported`.
+- **SQLite snapshot.** `rea_sqlite_snapshot` reads the database header and schema table names from the file.
 - **UPX.** `rea_upx_info` and `rea_upx_unpack`.
 - **C# decompile path.** `rea_ilspy_decompile` (ilspycmd when it is installed).
 - **Network capture.** `rea_net_capture` (local HAR).
@@ -17,10 +21,6 @@ v0.15.0 ships 191 tools, 188 `outputSchema`, 191 annotations, 2 resources, and 7
 
 ## Still open
 
-- Electron fuses and BrowserWindow constants.
-- split-APK.
-- adb file transfer (`adb pull`). Devices and package listing exist; pull does not.
-- SQLite snapshot inspection.
 - Visual sessions (asciinema or GIF). Text transcripts exist; the recording does not.
 - Automatic TOOL-COVERAGE. `docs/TOOL-COVERAGE.md` is still hand-maintained.
 - AFL++. A Node fuzz harness exists (`docs/FUZZ.md`). AFL++ itself is not wired. Wave 19 (not done) is the real integration, returning `capability_unsupported` when the dependency is absent.

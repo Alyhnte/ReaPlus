@@ -98,7 +98,7 @@ describe("workspaceRoot parametre siniflari", () => {
   });
 
   it("dizin path araclari koku ve icini kabul eder, disi reddeder", () => {
-    for (const arac of ["rea_apple_bundle", "rea_fs_snapshot", "rea_js_require", "rea_scan_repo"]) {
+    for (const arac of ["rea_apple_bundle", "rea_apk_splits", "rea_fs_snapshot", "rea_js_require", "rea_scan_repo"]) {
       assert.equal(applyWorkspaceRoot(arac, { path: kok }, envKok(), kok).path, gercek(kok), arac);
       reddet(() => applyWorkspaceRoot(arac, { path: dis }, envKok(), kok));
     }
