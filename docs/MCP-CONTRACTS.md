@@ -1,6 +1,8 @@
-# MCP Contracts — rea-plus v0.1.0
+# MCP contracts — rea-plus
 
-## Frozen 30 (conduit, yeniden adlandırılmaz)
+Current surface at v0.13.0: 191 tools, 187 `outputSchema`, 191 annotations, 2 resources, 7 prompts. The lists below are the original frozen conduit set and the original Rea 30 registration. The full catalog is [`TOOLS.md`](TOOLS.md). Field names in sample envelopes stay as the code emits them.
+
+## Frozen 30 (conduit, not renamed)
 
 `health`, `session_open`, `session_close`, `session_list`, `events_pull`,
 `static_info`, `open_target`, `close_target`, `disassemble`, `get_cfg`,
@@ -10,9 +12,9 @@
 `debug_code`, `debug_thread`, `debug_plugin`, `debug_time`,
 `explain`, `prerequisites`.
 
-Kaynak: `src/facade/toolNamespace.ts` (`FROZEN_CONDUIT_TOOLS`).
+Source: `src/facade/toolNamespace.ts` (`FROZEN_CONDUIT_TOOLS`).
 
-## Rea 30 (MCP kayıtlı, hepsi prefixli)
+## Rea 30 (the original MCP registration, every name prefixed)
 
 `rea_dotnet_metadata`, `rea_dotnet_cil`, `rea_js_sourcemap`,
 `rea_js_bundle`, `rea_js_diff`, `rea_js_recon`, `rea_diff_match`,
@@ -25,31 +27,35 @@ Kaynak: `src/facade/toolNamespace.ts` (`FROZEN_CONDUIT_TOOLS`).
 `rea_adb_packages`, `rea_evidence_bundle`, `rea_obligation_ledger`,
 `rea_obligation_advance`, `rea_obligation_verify`.
 
-Kaynak: `src/server/registerReaTools.ts` (tek döngü, 30 kayıt).
+Source: `src/server/registerReaTools.ts` (one loop, 30 registrations at the time this list was frozen). Later tools were added in the same registrar. The count today is 191.
 
-## Prefix kuralı
+## Prefix rule
 
-- Rea kökenli her MCP adı `rea_*` (veya `hopper/ghidra/jeb/evm/firmware/browser/adb_*`) olur.
-- `qualifyReaTool(ad)`: frozen ad geçerse `rea_` öneki basar, çift prefix yapmaz.
-- `assertNoCollision(adlar)`: çift kayıt + çıplak frozen adı yasaktır.
-- Örnek: `health -> rea_health`, `rea_evm_selector` aynen kalır.
+- Every Rea-origin MCP name is `rea_*` (or `hopper` / `ghidra` / `jeb` / `evm` / `firmware` / `browser` / `adb_*`).
+- `qualifyReaTool(name)`: a frozen name gets a `rea_` prefix, and it does not double-prefix.
+- `assertNoCollision(names)`: a double registration and a bare frozen name are forbidden.
+- Example: `health -> rea_health`. `rea_evm_selector` stays as it is.
 
 ## capability_unsupported
 
-- Eksik bağlama/araç = stub yok, tek zarf döner:
-- `{"ok":false,"code":"capability_unsupported","tool":"<ad>","reason":"..."}` (`isError:true`).
-- Statik kapı: yanlış engine oturumu aynı kodu + `required:{engine:"radare2"}` ile döner.
-- Yanına katalogdan indirme önerisi eklenir (`suggestDownload(id)`).
+- A missing binding or tool is not a stub. One envelope comes back:
+- `{"ok":false,"code":"capability_unsupported","tool":"<tool>","reason":"..."}` (`isError: true`).
+- Static gate: a session on the wrong engine returns the same code plus `required: {engine: "radare2"}`.
+- A catalog download suggestion is added beside it (`suggestDownload(id)`).
 
 ## confirm:true
 
-- Canlı debug yazma işleri (`debug_breakpoint/continue/step`, `explain` canlı kolu) onaysız çalışmaz.
-- `confirm:true` yoksa: `confirmation_required` + aynı çağrıyı tekrarla mesajı.
-- Okuma işleri (`disassemble`, `strings`, `rea_evm_selector`) confirm istemez.
+- Live debug writes (`debug_breakpoint` / `continue` / `step`, and the live branch of `explain`) do not run without approval.
+- Without `confirm: true`: `confirmation_required`, plus a message to repeat the same call.
+- Reads (`disassemble`, `strings`, `rea_evm_selector`) do not ask for confirm.
 
-## Katalog 16 + transport
+## Catalog 16 + transport
 
-- `mergedCatalog()`: 8 conduit (`radare2/graphviz/x64dbg/python64/python32/cdb/frida/scyllahide`) + 8 rea (`hopper/ghidra/ida/jeb/jadx/apktool/wabt/binwalk`) = 16.
-- Transport: stdio varsayılan; HTTP stateless `POST /mcp` + `GET /health`.
-- Port: rea-plus 3848 (alternatif 3849), conduit 3847 ile çakışmaz.
-- Token (`DBG_BRIDGE_TOKEN`) varsa HTTP Bearer zorunlu, stdio etkilenmez.
+- `mergedCatalog()`: 8 conduit (`radare2` / `graphviz` / `x64dbg` / `python64` / `python32` / `cdb` / `frida` / `scyllahide`) + 8 rea (`hopper` / `ghidra` / `ida` / `jeb` / `jadx` / `apktool` / `wabt` / `binwalk`) = 16.
+- Transport: stdio is the default. HTTP is stateless `POST /mcp` plus `GET /health`.
+- Port: rea-plus 3848 (alternative 3849). It does not collide with conduit 3847.
+- If a token (`DBG_BRIDGE_TOKEN`) is set, HTTP requires Bearer. stdio is unaffected.
+
+## Prompts
+
+Seven side-effect-free prompts: `packer-triage`, `dotnet-malware-triage`, `android-triage`, `pe-crash-triage`, `elf-linux-triage`, `binary-diff`, `evidence-report`. A prompt runs no tool.

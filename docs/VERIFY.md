@@ -1,13 +1,15 @@
-# VERIFY — rea-plus v0.1.0
+# VERIFY — rea-plus v0.1.0 check (historical)
 
-## 1) Derleme
+This file records the verification commands used at v0.1.0. The current release is v0.13.0: 191 tools, 187 `outputSchema`, 191 annotations, 2 resources, 7 prompts. Do not read the counts below as the current suite size.
+
+## 1) Build
 
 ```powershell
-npm run typecheck   # tsc --noEmit, hata vermemeli
+npm run typecheck   # tsc --noEmit, must not error
 npm run build       # tsc -> dist/
 ```
 
-## 2) Testler (tests/, 49 dosya, 398 it)
+## 2) Tests (tests/, 49 files, 398 it — v0.1.0 count)
 
 ```powershell
 node --test tests/auth.test.mjs
@@ -61,17 +63,17 @@ node --test tests/unpack-hunt.test.mjs
 node --test tests/winpe.test.mjs
 ```
 
-Tek komut: `node --test tests/` (49 dosya koşar).
-`namespace` + `smoke` + `cli` + `e2e` assert-tipidir (`it` sayılmaz); 45 dosyada 398 `it` vardır.
+One command at that time: `node --test tests/` (49 files). `namespace`, `smoke`, `cli`, and `e2e` are assert-style scripts (they are not counted as `it`). 45 files held 398 `it` calls.
 
-## 3) Beklenen yeşil çıktı
+`sniff.test.mjs` is still on the default-lane LIVE exclusion list. Moving it off that list is wave 16 and is not done.
+
+## 3) Expected green output (v0.1.0)
 
 - `namespace`: `OK: health->rea_health disassemble->rea_disassemble`
-- `smoke`: `OK: transfer=0xa9059cbb approve=0x095ea7b3` + `OK: frozen=30 katalog=24`
-- `evm`: `transfer(address,uint256) -> 0xa9059cbb` davası geçer.
-- `node --test`: `pass 398, fail 0` (assert dosyaları ayrıca exit 0).
+- `smoke`: `OK: transfer=0xa9059cbb approve=0x095ea7b3` plus `OK: frozen=30 katalog=24`
+- `evm`: the `transfer(address,uint256) -> 0xa9059cbb` case passes.
+- `node --test`: `pass 398, fail 0` (the assert-style files also exit 0).
 
-## 4) Golden satır-sonu notu
+## 4) Golden line-ending note
 
-Golden karşılaştırmalarda `CRLF -> LF` normalize edilir
-(`radare2.ts`/`cdb.ts`: `replace(/\r\n/g, "\n")`); dosyalar LF sayılır.
+Golden comparisons normalize `CRLF -> LF` (`radare2.ts` / `cdb.ts`: `replace(/\r\n/g, "\n")`). Files are counted as LF.

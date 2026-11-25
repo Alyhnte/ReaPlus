@@ -1,53 +1,31 @@
-# ARAŞTIRMA — LLDB motoru (Linux/macOS canlı debug)
+# Research — an LLDB engine (live debug on Linux/macOS)
 
-> Etiket anahtarı: her madde sonunda **[repo-içi]** (bu repoda dosyayla doğrulanabilir)
-> ya da **[doğrulanmadı]** (repo + eğitim verisinden; resmî belgede teyit edilmedi).
-> Uydurma API/URL yok; emin olunmayan resmî adres yazılmadı.
+> Tag key: each item ends with **[in-repo]** (checkable against a file in this repo) or **[unverified]** (from the repo plus training data; not confirmed in an official document). No invented API or URL. An official address that is not certain is not written down.
 
-## 1. Bugünkü durum
+## 1. State today
 
-- Canlı debug yalnız Windows: conduit motorları `src/conduit-core/engines/` altında
-  `cdb.ts`, `x64dbg.ts`, `frida.ts` (+ `radare2.ts` statik) **[repo-içi]**.
-- Oturum yönlendirici: `CONDUIT_ENGINES = { radare2, x64dbg, cdb, frida }` → `"conduit"`;
-  geri kalan her şey `"rea-domains"` **[repo-içi]** (`docs/DETECTION.md` §4).
-- ROADMAP D satırı: "LLDB motoru (Linux/macOS) | Canlı debug yalnız Windows |
-  Platform kapsamı genişler | L | P3" **[repo-içi]** (`docs/ROADMAP.md` D).
-- LLDB'ye dair mevcut kod/kapı yok (engines/ altında `lldb.ts` yok, `REA_LLDB_*`
-  env yok) **[repo-içi]**.
+- Live debug is Windows-only. Conduit engines under `src/conduit-core/engines/` are `cdb.ts`, `x64dbg.ts`, `frida.ts`, and `radare2.ts` (static) **[in-repo]**.
+- The session router is `CONDUIT_ENGINES = { radare2, x64dbg, cdb, frida }` mapping to `"conduit"`. Everything else is `"rea-domains"` **[in-repo]** (`docs/DETECTION.md` section 4).
+- ROADMAP section D: an LLDB engine (Linux/macOS) is still open. Live debug is Windows-only. Effort L, priority P3 **[in-repo]**.
+- There is no LLDB code or gate (no `lldb.ts` under engines/, no `REA_LLDB_*` env) **[in-repo]**.
+- CI is `ubuntu-latest` only. A self-hosted Windows runner is still absent. That does not by itself provide LLDB **[in-repo]**.
 
-## 2. Resmî kaynak / API
+## 2. Official source / API
 
-- LLDB, LLVM projesinin hata ayıklayıcısıdır; betiklenebilir bir SB API
-  (`SBDebugger`, `SBTarget`, `SBProcess` ailesi) sunar ve Python modülü üzerinden
-  headless sürülebilir **[doğrulanmadı]**.
-- SB API'nin kararlı ve belgeli olması, bu başlığı Hopper'dan ayırır: Hopper'da
-  headless API YOK hükmü verilmişti **[repo-içi]** (`docs/ROADMAP.md` E);
-  LLDB'de kapı (betiklenebilir headless API) VAR görünüyor **[doğrulanmadı]**.
-- Lisans/dağıtım koşulları (hangi LLVM sürümü, Python eşleşmesi, macOS imza
-  gereksinimleri) teyit edilmedi **[doğrulanmadı]**.
+- LLDB is the LLVM debugger. It offers a scriptable SB API (`SBDebugger`, `SBTarget`, `SBProcess` and the rest of that family) and can be driven headless through its Python module **[unverified]**.
+- A stable, documented SB API is what separates this item from Hopper. Hopper was judged to have NO headless API **[in-repo]** (`docs/ROADMAP.md` section E). LLDB appears to have a scriptable headless API **[unverified]**.
+- License and distribution terms (which LLVM version, which Python, macOS signing requirements) were not confirmed **[unverified]**.
 
-## 3. Gereken arayüz (öneri, kod yok)
+## 3. Interface required (proposal, no code)
 
-- `src/conduit-core/engines/lldb.ts` (yeni motor: spawn+oturum+olay, mevcut
-  `cdb.ts`/`x64dbg.ts` ile aynı soyutlama) + `engines/registry.ts` kaydı +
-  oturum yönlendiriciye conduit motoru olarak ekleme **[repo-içi]** (dosya adları
-  mevcut yapıdan; içerik öneri).
-- Kurulum kapısı: `doctor`/`prerequisites` yoklaması (LLDB + Python modülü) +
-  eksikte `capability_unsupported`, Hopper/IDA/JEB desenindeki gibi **[repo-içi]**
-  (desen `docs/DETECTION.md` §5, `docs/MCP-CONTRACTS.md`).
-- Platform kapısı: yalnız Linux/macOS'ta etkin; Windows'ta kapalı dal
-  (binwalk'un linux-only + handoff deseni gibi) **[repo-içi]** (desen
-  `docs/TOOL-COVERAGE.md` binwalk satırı).
+- `src/conduit-core/engines/lldb.ts` (a new engine: spawn, session, events, the same abstraction as `cdb.ts` / `x64dbg.ts`) plus a registration in `engines/registry.ts` plus adding it to the session router as a conduit engine **[in-repo]** (file names come from the current layout; the contents are a proposal).
+- An install gate: a `doctor` / `prerequisites` probe (LLDB plus the Python module). When it is missing, return `capability_unsupported`, the same shape as Hopper/IDA/JEB **[in-repo]** (pattern in `docs/DETECTION.md` section 5 and `docs/MCP-CONTRACTS.md`). Wave 19 (not done) is that integration: unsupported when the dependency is absent, working when it is present.
+- A platform gate: enabled only on Linux/macOS. On Windows, a closed branch (the same shape as binwalk's linux-only plus handoff) **[in-repo]** (pattern on the binwalk row of `docs/TOOL-COVERAGE.md`).
 
-## 4. Efor tahmini
+## 4. Effort
 
-- **L** (ay+) — ROADMAP zaten L diyor **[repo-içi]**; yeni canlı motor =
-  oturum + olay + timeout + serileştirme (cdb async pause işi M idi) **[repo-içi]**.
+- **L** (a month or more). ROADMAP already says L **[in-repo]**. A new live engine means session plus events plus timeout plus serialization. The cdb async-pause work was M **[in-repo]**.
 
-## 5. Öneri
+## 5. Recommendation
 
-- **BEKLE** — Gerekçe: teknik kapı açık görünüyor (headless betiklenebilir API
-  var) **[doğrulanmadı]**, ama efor L ve P3'te doğru sırada; P0 (Frida canlı VM
-  onayı) ve P2'ler (Pages deployu, şema bütçesi CI) önce gelir **[repo-içi]**
-  (`docs/ROADMAP.md` "Önerilen sıra"). P3 açıldığında ilk prototip: salt-okunur
-  `lldbDurumu` kapısı + `capability_unsupported`, analiz sonra.
+- **WAIT.** Reason: the technical gate looks open (a headless scriptable API appears to exist) **[unverified]**, but the effort is L and P3 is the right slot. Still ahead of it: the P0 Frida live VM approval, the self-hosted Windows runner, and Trusted Publisher account setup **[in-repo]** (`docs/ROADMAP.md`, suggested order). Schema-budget CI and Pages deploy have already shipped (`ci.yml` runs `tests/schema-budget.test.mjs`; `pages.yml` deploys). They are not blockers for this row anymore. When P3 opens, the first prototype is a read-only `lldb` status gate plus `capability_unsupported`. Analysis comes after that. Do not mark this row closed.

@@ -1,88 +1,91 @@
-# morluto/rea ↔ ReaPlus karşılaştırması
+# morluto/rea compared with ReaPlus
 
-Tarih: 2026-10-19 · ReaPlus `v0.12.0` (`9fd2057`) ↔ upstream `rea-agents-6.7.0` (son release).
-Kaynak: canlı `gh` API (release'ler, merge PR'lar, commit'ler) + ReaPlus grep kanıtları (2026-10-18/19).
+Date of the original pass: 2026-10-19. That pass compared ReaPlus `v0.12.0` (`9fd2057`) with upstream `rea-agents-6.7.0` (the latest release then). Sources: a live `gh` API read (releases, merged PRs, commits) plus ReaPlus grep evidence (2026-10-18/19).
 
-## 1. Upstream release'leri (6.1.0 → 6.7.0) × ReaPlus
+Status revised for v0.13.0 (191 tools, 187 `outputSchema`, 191 annotations, 2 resources, 7 prompts). The tool count did not change. v0.14.0 is not tagged. Rows that shipped are marked closed below. Rows that did not ship stay open.
 
-| rea release | Highlights | ReaPlus durumu |
+## 1. Upstream releases (6.1.0 through 6.7.0) against ReaPlus
+
+| rea release | Highlights | ReaPlus status |
 |---|---|---|
-| **6.7.0** (18.10) | Duplicate-member semantiği: setup son JSON/JSONC üyesini düzenler (client'ın okuduğu); 6.6.0'ı içerir (npm'e yayınlanmayan tag) | setup/client-config yüzeyi ReaPlus'ta yok → alakasız |
-| **6.6.0** (18.10) | **571 commit / 236 merge PR**: Kuna SA provider; retained JS facts (paging + row Evidence); çok-locale APK tablosu; Ghidra Windows ARM PE (ARMNT/ARM64) + raw m68k; JADX deadline env; Electron window options; ~40 fix kategorisi (partial-fact retention, JS resolution, Apple plist, ADB, MCP contracts, SQLite/WASM/packet) | ana başlıklar port adayı (bkz. bölüm 4); breaking'ler upstream-internal → ReaPlus kendi Evidence şemasında |
-| **6.5.0** (14.10) | JS cross-bundle relationship recovery; retained Evidence summary/paging; SQLite snapshot, packet/signal, WASM, Rust dep metadata, Electron fuses offline inspect | JS: `rea_js_sourcemap` + `rea_js_bundle_diff` ✓; **cross-bundle recovery yok**, SQLite **0 hit**, Electron fuse **yalnız sessionRouter tipi** → eklemi adayı |
-| **6.4.0** (11.10) | Android: cihaz inceleme, **split-APK**, log, **screenshot**, **file transfer**, lifecycle + Apktool manifest/lokalized-string; JEB unit browse; large analiz summary'leri | `AdbBridge` install/logcat/screencap + `ApktoolBridge` ✓; **split-APK 0 hit, screenshot yalnız firmware-browser, adb transfer yalnız frida reçetesi** → kısmi eklemi adayı |
-| **6.3.0** (9.10) | BREAKING: capture accounting + web diff accessibility/storage dims; typed JSON shape paths | Bizde bu capture/web-diff yüzeyi **yok** (domain ayrımı) → alakasız/düşük risk |
-| **6.2.0** (9.10) | BREAKING: canonical Evidence (`normalized_result`), migration-6.2.md; `always-bump-minor` | Bizde Evidence facade kendi şemasıyla ✓ (upstream wrapper'ı benimsemiyor) → bilinçli ayrım |
-| **6.1.0** (9.10) | BREAKING: Hopper regex → ECMAScript Unicode + 5s cancel worker; `set_current_document` kaldırıldı; Grok Build/Bot setup | `rea_hopper_tara(regexMi)` ✓ — bizde zaten `set_current_document` **yok** (çakışma sıfır); Unicode/worker deadline kapsamı farklı → izle |
+| **6.7.0** (18 Oct) | Duplicate-member semantics: setup edits the last JSON/JSONC member (the one the client reads). Contains 6.6.0 (a tag that was not published to npm) | The setup/client-config surface does not exist in ReaPlus, so this is unrelated |
+| **6.6.0** (18 Oct) | **571 commits / 236 merged PRs**: Kuna SA provider; retained JS facts (paging plus row Evidence); multi-locale APK table; Ghidra Windows ARM PE (ARMNT/ARM64) plus raw m68k; JADX deadline env; Electron window options; about 40 fix categories (partial-fact retention, JS resolution, Apple plist, ADB, MCP contracts, SQLite/WASM/packet) | CLOSED in v0.13.0: PE ARMNT/ARM64, raw m68k, plist fidelity, apktool advisory. Still open: Electron fuses and BrowserWindow constants, SQLite snapshot, scoped package `exports`, `.mts`/`.cts` walk. Kuna stays optional and unwired. Breaking changes were upstream-internal; ReaPlus keeps its own Evidence schema |
+| **6.5.0** (14 Oct) | JS cross-bundle relationship recovery; retained Evidence summary/paging; SQLite snapshot, packet/signal, WASM, Rust dep metadata, Electron fuses offline inspect | JS: `rea_js_sourcemap` plus `rea_js_bundle_diff` are present. **Cross-bundle recovery CLOSED in v0.13.0** (`iliskiler`). SQLite snapshot is still absent. Electron fuses are still only a session-router type, not an offline fuse read. Those two stay open |
+| **6.4.0** (11 Oct) | Android: device inspection, **split-APK**, log, **screenshot**, **file transfer**, lifecycle, plus Apktool manifest/localized strings; JEB unit browse; large analysis summaries | `AdbBridge` install/logcat/screencap plus `ApktoolBridge` are present. **split-APK is still absent. adb file transfer is still only the Frida recipe, not `adb pull`.** Screenshot stays on the firmware-browser side. Those stay open |
+| **6.3.0** (9 Oct) | BREAKING: capture accounting plus web-diff accessibility/storage dimensions; typed JSON shape paths | That capture/web-diff surface is **absent** here (domain split), so this is unrelated / low risk |
+| **6.2.0** (9 Oct) | BREAKING: canonical Evidence (`normalized_result`), migration-6.2.md; `always-bump-minor` | The Evidence facade has its own schema and does not adopt the upstream wrapper. That split is deliberate |
+| **6.1.0** (9 Oct) | BREAKING: Hopper regex to ECMAScript Unicode plus a 5s cancel worker; `set_current_document` removed; Grok Build/Bot setup | `rea_hopper_tara(regexMi)` is present. `set_current_document` is **already absent** here (no collision). Unicode/worker deadline coverage differs. Watch it |
 
-## 2. Son merge PR'lar → ReaPlus karşılığı
+## 2. Recent merged PRs and the ReaPlus counterpart
 
-### 6.1–6.5 dönemi (17 PR, 17–18 Eki)
+### The 6.1–6.5 window (17 PRs, 17–18 Oct)
 
-| rea PR | Konu | ReaPlus'ta |
+| rea PR | Topic | In ReaPlus |
 |---|---|---|
-| #4944 | strict JSON for Claude Code config | **yok** (0 hit) — setup yüzeyi yok → alakasız |
-| #4937 | signed 64-bit TOML int lossless | TOML parse **yok** → alakasız |
-| #4930/#4824/#4796 | CI capacity/cache/plist test altyapısı | upstream'e özgü CI → alakasız |
-| #4839 | plist negative-zero reals | bizde `Apple.ts` sadece basit XML `<key>/<string>` parse — **CFNumber gerçek okuma yok** → kapsamsal boşluk (B2) |
-| #4838 | CommonJS bare **scoped** pkg dir resolution | JS domain'de paket çözümleme **yok** → kapsamsal boşluk (B3) |
-| #4819 | **EM_HEXAGON (164) ELF** | **0 hit** → ELF e_machine yüzeyimizde eksik → bug adayı (B1) |
-| #4823 | spaced output flag values (upstream CLI) | ReaPlus CLI ayrı parser → düşük risk (doğrulanmadı) |
-| #4804/#4771 | Apktool locale-table paylaşımı + Evidence subject | `ApktoolBridge` var; locale paylaşımlı decode kapsamı doğrulanmadı → izle |
-| #4791 | Android class page filter perf | bizde ADB yüzeyi farklı → alakasız |
-| #4814/#4803/#4792 | test/docs/launcher alias | not |
+| #4944 | strict JSON for Claude Code config | **absent** (0 hits). No setup surface. Unrelated |
+| #4937 | signed 64-bit TOML int, lossless | No TOML parse. Unrelated |
+| #4930/#4824/#4796 | CI capacity/cache/plist test infrastructure | Upstream-specific CI. Unrelated |
+| #4839 | plist negative-zero reals | **CLOSED in v0.13.0**: type-aware lossless plist values. The old "simple XML key/string only" gap is closed |
+| #4838 | CommonJS bare **scoped** package dir resolution | **PARTIAL.** CJS require resolution (relative and `node_modules`) shipped. The scoped package `exports` field and a `.mts`/`.cts` walk stay open |
+| #4819 | **EM_HEXAGON (164) ELF** | **CLOSED in v0.13.0.** ELF `e_machine` includes Hexagon (`makine` on the sniff result) |
+| #4823 | spaced output flag values (upstream CLI) | ReaPlus CLI has its own parser. Low risk (not re-verified) |
+| #4804/#4771 | Apktool locale-table sharing plus Evidence subject | `ApktoolBridge` exists. Shared-locale decode coverage was not re-verified. Watch it. Version observation (advisory) **CLOSED in v0.13.0** |
+| #4791 | Android class page filter perf | The ADB surface here is different. Unrelated |
+| #4814/#4803/#4792 | test/docs/launcher alias | note |
 
-### 6.6.0–6.7.0 dönemi (9 yeni merge, 18 Eki)
+### The 6.6.0–6.7.0 window (9 new merges, 18 Oct)
 
-| rea PR | Konu | ReaPlus'ta |
+| rea PR | Topic | In ReaPlus |
 |---|---|---|
-| #5126 | fix(setup): empty APPDATA as unset (VS Code/Trae/Devin) | setup domain → alakasız |
-| #4954 | feat(analysis-view): web capture'tan environment manifest | ReaPlus'ta web capture yok → alakasız |
-| #5041 | fix(hopper): Linux embedding runtime onarımı | ticari lisans kapılı köprü → izle |
-| #5017 | perf(hopper): decoded record reuse | izle |
-| #5021/#5018 | fix(tests): Android önkoşul / fixture sahipliği | upstream test altyapısı → alakasız |
-| #5002 | docs(jeb): Linux CE iş akışları | ticari lisans → izle |
-| #4990 | perf(apktool): duplicate primary string önleme | `ApktoolBridge` string dedupe doğrulanacak → izle |
+| #5126 | fix(setup): empty APPDATA treated as unset (VS Code/Trae/Devin) | setup domain. Unrelated |
+| #4954 | feat(analysis-view): environment manifest from a web capture | No web capture in ReaPlus. Unrelated |
+| #5041 | fix(hopper): repair the Linux embedding runtime | Commercially licensed gate. Watch it |
+| #5017 | perf(hopper): reuse decoded records | Watch it |
+| #5021/#5018 | fix(tests): Android prerequisite / fixture ownership | Upstream test infrastructure. Unrelated |
+| #5002 | docs(jeb): Linux CE workflows | Commercial license. Watch it |
+| #4990 | perf(apktool): avoid a duplicate primary string | `ApktoolBridge` string dedupe still to be checked. Watch it |
 | #4983 | chore(release/6.7.0) | — |
-| #4957 | fix(setup): duplicate JSON üyesi (client'ın okuduğu) | setup domain → alakasız |
+| #4957 | fix(setup): duplicate JSON member (the one the client reads) | setup domain. Unrelated |
 
-### 6.7.0 sonrası commit dalgası (18–19 Eki, ~15 commit)
+### Commits after 6.7.0 (18–19 Oct, about 15 commits)
 
-Partial-fact retention disiplini (fs snapshot, uninstall, native routes, reference comparison),
-symlink race koruması, cancellation provenance, MCP procedure alias'ları, scoped unknown'lar.
-ReaPlus `evidenceBundle` aynı felsefede; küçük uyarlama adayları olarak izlenir (henüz doğrulanmadı).
+Partial-fact retention discipline (fs snapshot, uninstall, native routes, reference comparison), symlink-race protection, cancellation provenance, MCP procedure aliases, scoped unknowns. ReaPlus `evidenceBundle` follows the same idea. Small adaptation candidates are watched and were not re-verified.
 
-## 3. Olası bug adayları (grep kanıtlı)
+## 3. Bug candidates (grep-backed, then revised)
 
-| # | Aday | Kanıt | Etki |
+| # | Candidate | Evidence | Effect |
 |---|---|---|---|
-| B1 | ELF **Hexagon** tanınmıyor | `EM_HEXAGON` src+tests **0 hit** | Qualcomm firmware'de tanıma boşluğu |
-| B2 | plist'te gerçek numeric/CFNumber okunmuyor | `Apple.ts` basit key/string eşleşmesi; `negative-zero/CFNumber` 0 hit | iOS bundle'da sayısal anahtarlar sessiz kayıp |
-| B3 | CommonJS bare scoped package çözümlenmiyor | `bare.?scoped/bareSpecifier` **0 hit** | JS analizinde `@scope/pkg` import'ları bilinmeyen |
-| B4 | Sessiz sürüm bayatlaması (kapandı) | TOOLS 0.11.0'da takılı kaldı, `build → regen` sırası sabitlendi | regresyon: version-sync kapsamı genişletilebilir |
-| B5 | `*.map` adlı **dizin** source-map sanılabilir (doğrulanacak) | upstream 6.6.0 bunu düzeltti; ReaPlus `js_sourcemap/bundle_diff` guard'ı doğrulanmadı | yanlış sınıflandırma (düşük) |
+| B1 | ELF **Hexagon** unrecognized | **CLOSED v0.13.0.** `e_machine` maps to `makine`, little- and big-endian, at least 20 bytes, Hexagon included | Qualcomm firmware recognition gap is closed |
+| B2 | plist does not read real numeric/CFNumber values | **CLOSED v0.13.0.** Type-aware lossless values | Numeric keys in an iOS bundle are no longer dropped silently |
+| B3 | CommonJS bare scoped package is not resolved | **PARTIAL.** Require walk shipped. The `exports` field and `.mts`/`.cts` walk are still open | `@scope/pkg` through `exports`, and `.mts`/`.cts`, can still be missed |
+| B4 | Silent version staleness | **CLOSED.** Version-sync carriers locked with 9 checks in v0.13.0 | A regression would show up in `tests/version-sync.test.mjs` |
+| B5 | A **directory** named `*.map` can be treated as a source map | **CLOSED in wave 13.** `analyze-js` has a directory-versus-file gate | Misclassification of that shape is closed |
 
-## 4. Port/ekleme adayları (öncelikli)
+## 4. Port / add candidates, with v0.13.0 status
 
-1. **JS cross-bundle recovery** (6.5.0) — `rea_js_bundle_diff` yanına doğal oturur. P-M.
-2. **JS çözümleme genişletmesi** (6.6.0): scoped pkg, `main`, JSON require, `.mts/.cts`, `Object.defineProperty` export'ları. B3'ü kapatır. P-M.
-3. **Android paketi** (6.4.0/6.6.0): split-APK, file transfer (snapshot identity), çok-locale decode, method-body bytecode recovery, Apktool advisory pencereleri. P-M/L (cihaz şart).
-4. **Apple plist sayısal sadakat** (6.6.0): exact int, negative-zero, non-finite, OpenStep. B2'yi kapatır. P-M.
-5. **Hexagon ELF e_machine** (#4819). P-S.
-6. **Ghidra admission genişletmesi**: Windows ARM PE (ARMNT/ARM64) + raw m68k profili (6.6.0). P-M.
-7. **SQLite snapshot inspect** (6.5.0) — sıfırdan yüzey. P-L.
-8. **Electron**: fuses offline read (6.5.0) + `BrowserWindow` sabit çözümü (6.6.0). P-M.
-9. **Kuna provider köprüsü** (6.6.0, caller-installed). P-L (opsiyonel).
-10. **Apktool version advisory** (6.6.0) — sürümü kanıt değil, gözlem olarak raporla. P-S.
+1. **JS cross-bundle recovery** (6.5.0) — **CLOSED v0.13.0.**
+2. **Wider JS resolution** (6.6.0): scoped package, `main`, JSON require, `.mts`/`.cts`, `Object.defineProperty` exports. Require resolution shipped. **Still open: the `exports` field and the `.mts`/`.cts` walk.** Do not treat the rest of this bullet as fully closed; `main`, JSON require, and `defineProperty` exports were not re-audited for this note.
+3. **Android package** (6.4.0/6.6.0): **apktool advisory CLOSED.** **split-APK and adb file transfer stay open.** Multi-locale decode and method-body bytecode recovery were not re-audited.
+4. **Apple plist numeric fidelity** (6.6.0) — **CLOSED v0.13.0.** Exact int, negative zero, non-finite, and OpenStep are the fidelity that shipped as type-aware lossless values.
+5. **Hexagon ELF `e_machine`** (#4819) — **CLOSED v0.13.0.**
+6. **Wider Ghidra admission**: Windows ARM PE (ARMNT/ARM64) plus a raw m68k profile (6.6.0) — **CLOSED v0.13.0.**
+7. **SQLite snapshot inspect** (6.5.0) — **OPEN.** No surface yet.
+8. **Electron**: offline fuse read (6.5.0) plus `BrowserWindow` constant resolution (6.6.0) — **OPEN.**
+9. **Kuna provider bridge** (6.6.0, caller-installed) — **OPEN** (optional).
+10. **Apktool version advisory** (6.6.0) — **CLOSED v0.13.0.** The version is reported as an observation, not as evidence.
 
-## 5. ReaPlus güncellemeleri (v0.12.0)
+## 5. ReaPlus updates through v0.13.0
 
-`63e775f` golden korpus (5 gerçek gcc binary + 16 test) · `d5ef760` 4 görev şablonu prompt'u
-(toplam 7) · `a0ea39b`+`582b9b2`+`6d67eaf` portable bundle + release asset zinciri ·
-`0c16da6` docs 191/2/7 senkronu (6 dil) + CLI guard realpath fix · `9fd2057` release.
+v0.12.0: `63e775f` golden corpus (5 real gcc binaries plus 16 tests). `d5ef760` four task-template prompts (7 total). `a0ea39b` plus `582b9b2` plus `6d67eaf` portable bundle and the release-asset chain. `0c16da6` docs sync to 191/2/7 (6 languages) plus a CLI guard realpath fix. `9fd2057` release.
 
-## 6. Release notu düzeltmesi (2026-10-19)
+v0.13.0 closed the static rows named above and locked version carriers (9 checks). The surface stayed 191 tools / 187 schemas / 191 annotations / 2 resources / 7 prompts. `ci.yml` runs `tests/schema-budget.test.mjs`. `pages.yml` deploys. `publish.yml` uses `npm publish --provenance`. Trusted Publisher account setup is still an external gap. Frida live VM approval is still open. CI is `ubuntu-latest` only.
 
-- `v0.11.0` gövdesi: baştaki CP437-mojibake BOM (`´╗┐`) + 2 bozuk em-dash (`ÔÇö`) temizlendi.
-- `v0.12.0` gövdesi: baştaki U+FEFF (BOM) temizlendi.
-- Doğrulama: iki gövde de ilk kod noktası `#` (35), suspicious=0. Kaynak: node + `gh release edit --notes-file` (PowerShell UTF-16/BOM tuzağından bağımsız).
+## 6. Release-note cleanup (2026-10-19)
+
+- `v0.11.0` body: the leading CP437-mojibake BOM (`´╗┐`) and 2 broken em dashes (the sequence that rendered as `ÔÇö`) were removed.
+- `v0.12.0` body: the leading U+FEFF (BOM) was removed.
+- Check: both bodies start at code point `#` (35), suspicious=0. Source: node plus `gh release edit --notes-file` (independent of the PowerShell UTF-16/BOM trap).
+
+## 7. Still open on purpose
+
+Electron fuses, split-APK, adb file transfer, SQLite snapshot, the scoped package `exports` field, a `.mts`/`.cts` walk, visual sessions, automatic TOOL-COVERAGE, Frida live VM approval, a self-hosted Windows runner, Trusted Publisher account setup, a SEA single-file exe, asciinema, LLDB, WinDbg TTD, angr, and AFL++. de/fr/es/tr translations of new English wait until after wave 19.

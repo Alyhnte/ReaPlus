@@ -6,7 +6,7 @@
 
 ## Summary
 
-- Server: `rea-plus` 0.13.0
+- Server: `rea-plus` 0.13.1
 - Total tools: 191
 - Total resources: 2
 - Total prompts: 7
@@ -984,7 +984,7 @@ Snapshot diff.
 - Input fields:
   - `once` (string, required)
   - `sonra` (string, required)
-- outputSchema: present (fields: kayıt, ok, summary, tool)
+- outputSchema: present (fields: `kayıt`, ok, summary, tool)
 - annotations: present (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)
 
 ### `rea_fs_snapshot`
@@ -993,7 +993,7 @@ Dizin snapshot.
 
 - Input fields:
   - `path` (string, required)
-- outputSchema: present (fields: kayıt, ok, summary, tool)
+- outputSchema: present (fields: `kayıt`, ok, summary, tool)
 - annotations: present (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)
 
 ### `rea_ghidra_analyze`
@@ -1444,7 +1444,7 @@ Local network capture (HAR).
 
 - Input fields:
   - `url` (string, required)
-- outputSchema: present (fields: kayıt, ok, summary, tool)
+- outputSchema: present (fields: `kayıt`, ok, summary, tool)
 - annotations: present (destructiveHint=true, openWorldHint=true, readOnlyHint=false)
 
 ### `rea_obligation_advance`
@@ -1464,7 +1464,7 @@ Seal the ledger.
 
 - Input fields:
   - `text` (string, required)
-- outputSchema: present (fields: kapatıldı, links)
+- outputSchema: present (fields: `kapatıldı`, links)
 - annotations: present (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)
 
 ### `rea_obligation_ledger`
@@ -1475,7 +1475,7 @@ Defter kurma.
   - `bulgular` (string[], required)
   - `evidence_digest` (string, required)
   - `tools_sha256` (string, required)
-- outputSchema: present (fields: evidence_digest, kapatıldı, ledger_id, links, tools_sha256)
+- outputSchema: present (fields: evidence_digest, `kapatıldı`, ledger_id, links, tools_sha256)
 - annotations: present (destructiveHint=false, idempotentHint=false, openWorldHint=false, readOnlyHint=true)
 
 ### `rea_obligation_verify`
@@ -1547,7 +1547,7 @@ PE section tablosu.
 Process capability probe.
 
 - Input fields: none
-- outputSchema: present (fields: kayıt, ok, summary, tool)
+- outputSchema: present (fields: `kayıt`, ok, summary, tool)
 - annotations: present (destructiveHint=false, idempotentHint=true, openWorldHint=false, readOnlyHint=true)
 
 ### `rea_process_compare`
@@ -1565,7 +1565,7 @@ Process-run recording.
 
 - Input fields:
   - `cmd` (string, required)
-- outputSchema: present (fields: kayıt, ok, summary, tool)
+- outputSchema: present (fields: `kayıt`, ok, summary, tool)
 - annotations: present (destructiveHint=true, openWorldHint=true, readOnlyHint=false)
 
 ### `rea_pwn_elf_layout`

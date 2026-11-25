@@ -1,48 +1,58 @@
-# rea-plus skill-pack — Soruşturma Akışı İskeleti
+# rea-plus skill pack — investigation-flow skeleton
 
-> Çevrimdışı ilk temas: önce yerel köprüleri çağır, yetmezse kapıyı raporla.
-> Hiçbir adımda uydurma bulgu yazma; `capability_unsupported` dön ve dur.
+> Offline first contact: call the local bridges first. If that is not enough, report the gate.
+> Do not write an invented finding at any step. Return `capability_unsupported` and stop.
 
-## 0. Ortak Kapı
+v0.13.0 surface: 191 tools, 187 `outputSchema`, 191 annotations, 2 resources, 7 prompts. This pack is a flow, not a new tool.
 
-- Girdi boş/bozuksa ilgili `rea_*` kapısı `capability_unsupported` döner.
-- Kapalı kapıyı atlama; üst akışa aynen taşı.
-- Her bulguya `tool` + `summary` + ham kanıt ekle.
+## 0. Shared gate
 
-## 1. Native Akışı
+- If the input is empty or corrupt, the related `rea_*` gate returns `capability_unsupported`.
+- Do not skip a closed gate. Carry it up to the caller as-is.
+- Attach `tool`, `summary`, and the raw evidence to every finding.
 
-1. `rea_dos_mz` ile MZ/e_lfanew doğrula (16-bit DOS şüphesi).
-2. `rea_dos_int21` ile INT 21h sayımı yap.
-3. `rea_aot_detect` ile NativeAOT sinyalini tara.
-4. `rea_aot_objc` / `rea_aot_swift` ile dispatch tablosunu özetle.
-5. Referans: `src/rea-domains/wasm-evm/DosMipsBridge.ts`.
+## 1. Native flow
 
-## 2. JS Akışı
+1. Check MZ / `e_lfanew` with `rea_dos_mz` (16-bit DOS suspicion).
+2. Count INT 21h with `rea_dos_int21`.
+3. Scan the NativeAOT signal with `rea_aot_detect`.
+4. Summarize the dispatch table with `rea_aot_objc` / `rea_aot_swift`.
+5. Reference: `src/rea-domains/wasm-evm/DosMipsBridge.ts`.
 
-1. `rea_js_bundle` ile bundle özetini çıkar.
-2. `rea_js_sourcemap` ile kaynak/mappings sayımı yap.
-3. `rea_diff_match` ile sürümler arası fonksiyon eşle.
-4. `rea_diff_summary` ile eklenen/silinen sayımı ver.
-5. Referans: `src/rea-domains/javascript/BinaryDiff.ts`.
+Wave 17 (not done) makes the aot/mips profiles expose `iskelet: true`. Until then, treat a skeleton success as a skeleton, not as a Win32 or CPU read.
 
-## 3. APK Akışı
+## 2. JS flow
 
-1. `cargo apk` çıktısını ham bayt olarak al (dex/elf ayrımı).
-2. Native taraf için `rea_mips_psp_profile` iskeletini koş.
-3. JS tarafı (bundle) varsa JS akışına dallan.
-4. Crash kaydı varsa `rea_crash_timeline` ile diz.
-5. Referans: `src/rea-domains/android/*` + wasm-evm köprüleri.
+1. Summarize the bundle with `rea_js_bundle`.
+2. Count sources and mappings with `rea_js_sourcemap`.
+3. Match functions across versions with `rea_diff_match`.
+4. Report added and removed counts with `rea_diff_summary`.
+5. Reference: `src/rea-domains/javascript/BinaryDiff.ts`.
 
-## 4. Web Akışı
+Cross-bundle relations shipped in v0.13.0 (`iliskiler`). The scoped package `exports` field and a `.mts`/`.cts` walk are still open.
 
-1. Bundle + source-map çiftini topla, map yoksa `rea_js_bundle`.
-2. Şüpheli chunk için `rea_recon_funcs` ile aday çıkar.
-3. `rea_recon_harness` ile 3205 vakasına C taslağı üret.
-4. `rea_recon_tag` ile vaka etiketini bas.
-5. Referans: `src/rea-domains/javascript/ReconHarness.ts`.
+## 3. APK flow
 
-## 5. Kapanış
+1. Take the `cargo apk` output as raw bytes (dex versus elf).
+2. Run the `rea_mips_psp_profile` skeleton for the native side.
+3. If a bundle is present, branch into the JS flow.
+4. If a crash record is present, lay it out with `rea_crash_timeline`.
+5. Reference: `src/rea-domains/android/*` plus the wasm-evm bridges.
 
-- Tüm kapılar kapalıysa: "kanıt yetersiz" yaz, dosyayı kapat.
-- Bulguları `docs/AIRGAP.md` doğrulama listesine işle.
-- Yeni sinyal görürsen skill-pack'e başvuru satırı ekle, kodu şişirme.
+split-APK and adb file transfer are still open. Apktool version observation is advisory and did ship.
+
+## 4. Web flow
+
+1. Collect the bundle and source-map pair. If there is no map, use `rea_js_bundle`.
+2. Pull candidates from a suspicious chunk with `rea_recon_funcs`.
+3. Produce a C draft for the 3205-case set with `rea_recon_harness`.
+4. Stamp the case tag with `rea_recon_tag`.
+5. Reference: `src/rea-domains/javascript/ReconHarness.ts`.
+
+Electron fuses are still open. Do not invent a fuse read.
+
+## 5. Close
+
+- If every gate is closed: write "evidence is insufficient" and close the file.
+- File the findings on the checklist in `docs/AIRGAP.md`.
+- If you see a new signal, add a reference line to the skill pack. Do not bloat the code.

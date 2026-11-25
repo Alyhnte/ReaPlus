@@ -1,65 +1,34 @@
-# ARAŞTIRMA — Ticari entegrasyonlar (IDA / Hopper / JEB)
+# Research — commercial integrations (IDA / Hopper / JEB)
 
-> Etiket anahtarı: her madde sonunda **[repo-içi]** (bu repoda dosyayla doğrulanabilir)
-> ya da **[doğrulanmadı]** (repo + eğitim verisinden; resmî belgede teyit edilmedi).
-> Uydurma API/URL yok; emin olunmayan resmî adres yazılmadı.
+> Tag key: each item ends with **[in-repo]** (checkable against a file in this repo) or **[unverified]** (from the repo plus training data; not confirmed in an official document). No invented API or URL. An official address that is not certain is not written down.
 
-## 1. Bugünkü durum
+## 1. State today
 
-- Üç ticari sağlayıcı da **gate-only** (kapı + `capability_unsupported`, analiz
-  yok) **[repo-içi]** (`docs/TOOL-COVERAGE.md` satırları):
-  - Hopper: `HopperProvider.ts` open/close + `hopperDurumu/hopperYolu`,
-    `REA_HOPPER_PATH` + darwin/linux kapısı (exec yok) **[repo-içi]**.
-  - IDA: `IdaProvider.ts` open/close + `idaYolu`, idat64/idat/ida64 `-h` yoklaması
-    (yalnız exec-probe, analiz exec'i yok) **[repo-içi]**.
-  - JEB: `JebProvider.ts` open/close + `jebDurumu/jebMcpUrl`,
-    `REA_JEB_MCP_URL` doğrulaması (tasarım gereği spawn/fetch yok)
-    **[repo-içi]**.
-- Hopper hükmü verilmiş: "ARAŞTIRMA TAMAM: headless API YOK (resmî kaynaklı) →
-  istek-hazırlama olarak dürüst; POSIX benzerlik kapısı eklendi" **[repo-içi]**
-  (`docs/ROADMAP.md` E).
-- Üst hüküm: "Ticari lisanslılar kapalı (Hopper/IDA/JEB)" **[repo-içi]**
-  (`docs/ROADMAP-NEXT.md`).
-- Katalog: 8 rea girdisinden 3'ü ticari (`hopper`, `ida`, `jeb` rea tarafında) **[repo-içi]**
-  (`docs/DETECTION.md` §2, `docs/MCP-CONTRACTS.md`).
+- All three commercial providers are **gate-only** (a gate plus `capability_unsupported`, no analysis) **[in-repo]** (rows in `docs/TOOL-COVERAGE.md`):
+  - Hopper: `HopperProvider.ts` open/close plus `hopperDurumu` / `hopperYolu`, `REA_HOPPER_PATH`, and a darwin/linux gate (no exec) **[in-repo]**.
+  - IDA: `IdaProvider.ts` open/close plus `idaYolu`, an idat64/idat/ida64 `-h` probe (exec-probe only, no analysis exec) **[in-repo]**.
+  - JEB: `JebProvider.ts` open/close plus `jebDurumu` / `jebMcpUrl`, validation of `REA_JEB_MCP_URL` (no spawn and no fetch, by design) **[in-repo]**.
+- Hopper has a judgment on record: research is done, there is NO headless API (from official sources), so the tool stays honest as request preparation, and a POSIX similarity gate was added **[in-repo]** (`docs/ROADMAP.md` section E).
+- Standing judgment: commercially licensed tools stay gated (Hopper/IDA/JEB) **[in-repo]** (`docs/ROADMAP-NEXT.md`).
+- Catalog: 3 of the 8 rea entries are commercial (`hopper`, `ida`, `jeb` on the rea side) **[in-repo]** (`docs/DETECTION.md` section 2, `docs/MCP-CONTRACTS.md`).
 
-## 2. Resmî kaynak / API (satıcı bazında dürüst kapı)
+## 2. Official source / API (an honest gate per vendor)
 
-- **Hopper: kapı YOK.** Headless sorgu API'si yok hükmü repo araştırmasıyla
-  verilmiş **[repo-içi]**; bu dosya yeni kapı iddia etmiyor.
-- **IDA: kapı YARIM.** Konsol çalıştırılabilir + toplu-betik (IDAPython) yolu
-  görünüyor (idat probe repo-içi **[repo-içi]**; toplu-betik API ayrıntıları
-  **[doğrulanmadı]**). Canlı köprü = lisans + toplu-iş hattı kurulumu gerektirir;
-  temiz sorgu API'si doğrulanmadı **[doğrulanmadı]**.
-- **JEB: kapı VAR (arayüzde).** JEB tarafı MCP URL'si sunar; repo `jebMcpUrl`
-  doğrulaması yapar ama çağrıyı bilinçli olarak çağırana bırakır (caller-owned)
-  **[repo-içi]** (`docs/TOOL-COVERAGE.md` JEB satırı). Sunucu tarafı iş =
-  istemci-sahipli çağrıların düzenlenmesi, yeni protokol yok (değerlendirme).
-- Ortak sınırlayıcı: üçü de lisanslıdır; lisans koşulları/fiyatları bu dosyada
-  iddia edilmiyor **[doğrulanmadı]** (yazılmadı).
+- **Hopper: NO gate for analysis.** The repo's research already judged that there is no headless query API **[in-repo]**. This file does not claim a new gate.
+- **IDA: the gate is PARTIAL.** A console executable plus a batch-script path (IDAPython) appears to exist (the idat probe is in-repo **[in-repo]**; the batch-script API details are **[unverified]**). A live bridge needs a license plus a batch pipeline. A clean query API was not confirmed **[unverified]**.
+- **JEB: a gate EXISTS at the interface.** The JEB side offers an MCP URL. The repo validates `jebMcpUrl` and deliberately leaves the call to the caller (caller-owned) **[in-repo]** (the JEB row in `docs/TOOL-COVERAGE.md`). Server-side work is arranging caller-owned calls. There is no new protocol (judgment).
+- Shared limit: all three are licensed. This file does not claim license terms or prices **[unverified]** (not written).
 
-## 3. Gereken arayüz (öneri, kod yok)
+## 3. Interface required (proposal, no code)
 
-- Mevcut gate-only desen korunur: `src/rea-domains/{hopper,ida,jeb}/`
-  altında durum/yol/MCP-URL kapıları + eksikte `capability_unsupported`
-  **[repo-içi]** (mevcut dosyalar + `docs/MCP-CONTRACTS.md`).
-- Yeni iş yalnız IDA toplu-betik hattı için düşünülür (idb üretimi + döküm
-  okuma, `rea_` araçları arkasında); Hopper için yeni arayüz yok (kapı yok),
-  JEB için sunucu tarafı çağrı yok (caller-owned) — hepsi öneri.
-- Fallback zinciri (`ghidra → hopper → ida`) zaten iyileştirme listesinde
-  **[repo-içi]** (`docs/IMPROVEMENTS-DETAILED.md` §3): ticari kapı açılmadan
-  zincir kapalı dalla çalışır.
+- Keep the current gate-only pattern: status / path / MCP-URL gates under `src/rea-domains/{hopper,ida,jeb}/`, and `capability_unsupported` when the tool is missing **[in-repo]** (current files plus `docs/MCP-CONTRACTS.md`).
+- New work is only worth considering for an IDA batch-script pipeline (produce an idb, read the dump, behind `rea_` tools). No new interface for Hopper (no analysis gate). No server-side call for JEB (caller-owned). All of that is a proposal.
+- A fallback chain (`ghidra`, then `hopper`, then `ida`) is already in the improvement notes **[in-repo]** (`docs/IMPROVEMENTS-DETAILED.md` section 3). Until a commercial gate actually analyzes, that leg of the chain runs as a closed branch.
 
-## 4. Efor tahmini
+## 4. Effort
 
-- **L** (ay+) — Hopper satırı ROADMAP'te L **[repo-içi]**; IDA toplu-hattı +
-  lisanslı CI doğrulaması (lisanslı ürün CI'da koşmaz) L'yi korur (değerlendirme).
+- **L** (a month or more). The Hopper row in ROADMAP is L **[in-repo]**. An IDA batch pipeline plus licensed CI verification (a licensed product does not run in CI) keeps the estimate at L (judgment).
 
-## 5. Öneri
+## 5. Recommendation
 
-- **YAPMA** (yeni ticari köprü) — Gerekçe: Hopper'da kapı yok **[repo-içi]**,
-  IDA'da temiz sorgu API'si doğrulanmadı **[doğrulanmadı]**, JEB'de sunucu
-  tarafı iş yok (caller-owned) **[repo-içi]**; lisans maliyeti + efor L,
-  P3'te bile getiri/ücret oranı düşük. Mevcut gate-only + handoff deseni
-  korunur; ticari lisanslı ortamda ajan yine dürüst `capability_unsupported` +
-  kurulum önerisi alır **[repo-içi]**.
+- **DO NOT** build a new commercial bridge. Reason: Hopper has no analysis gate **[in-repo]**, IDA has no confirmed clean query API **[unverified]**, and JEB has no server-side job (caller-owned) **[in-repo]**. License cost plus effort L means a poor return even at P3. Keep the current gate-only plus handoff pattern. In a licensed environment the agent still gets an honest `capability_unsupported` plus an install hint **[in-repo]**.
