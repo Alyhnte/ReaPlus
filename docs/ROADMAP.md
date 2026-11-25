@@ -43,7 +43,7 @@
 | ✅ `doctor --fix` | CLOSED (v0.10.0): confirmation-gated install suggestion (winget/brew/apt); never runs unconfirmed | One command for a missing tool | M | — |
 | ◐ Single-file Windows exe (Node SEA) | FEASIBILITY DONE (v0.10.0): hello-world SEA ran; full app blocked by 3 obstacles (129MB Frida binding, dynamic playwright, signing) — alternative: portable node bundle | Node-less distribution; as a release asset | M | P2 |
 | ✅ winget/scoop/homebrew manifest | CLOSED (v0.10.0): three manifests versioned + hashed; no store submission | Discovery via package managers | S | — |
-| ◐ Signed release + SBOM | PARTIAL (v0.10.0): SBOM (CycloneDX) generated; no signature + provenance/Trusted Publisher | Supply-chain trust | S | P2 |
+| ◐ Signed release + SBOM | PARTIAL: SBOM (CycloneDX) is generated, and `publish.yml` runs `npm publish --provenance`. Trusted Publisher account setup is still an external gap. The Windows exe is not code-signed. | Supply-chain trust | S | P2 |
 
 ## B) MCP protocol and agent experience
 
@@ -51,7 +51,7 @@
 |---|---|---|---|---|
 | ✅ Toolset profiles (`REA_TOOLSETS=static,debug`) | CLOSED: `all` 191, `minimal` 8, `static` 98, `android` 27, `dotnet` 20, `web` 26, `debug` 50; comma-separated union, unknown profile is a startup error, resources/prompts unfiltered | Smaller tool-list context, better hits | S | — |
 | ✅ Resources | CLOSED: 2 static read-only resources (`rea-plus://server-info`, `rea-plus://capabilities-safety`); no arbitrary file/env exposure, no subscribe | Server identity + safety rules readable via URI | M | — |
-| ✅ Prompts | CLOSED: 3 side-effect-free prompts (`packer-triage`, `dotnet-malware-triage`, `android-triage`); a prompt runs no tool, returns only sequenced flow text | Ready triage flows in one pick | S | — |
+| ✅ Prompts | CLOSED: 7 side-effect-free prompts (`packer-triage`, `dotnet-malware-triage`, `android-triage`, `pe-crash-triage`, `elf-linux-triage`, `binary-diff`, `evidence-report`); a prompt runs no tool, returns only sequenced flow text | Ready triage flows in one pick | S | — |
 | ✅ `outputSchema` + `structuredContent` | CLOSED (v0.10.0): 187 tools with `outputSchema` (4 permanently schema-less); on plain-object results `structuredContent` equals the text JSON — per-tool status in [`TOOLS.md`](TOOLS.md) | Type-safe consumption | M | — |
 | ✅ Progress reporting + cancel | CLOSED (v0.10.0): stage helpers + 3 staged tools; sync handlers out of scope (documented) | Agent sees progress, can cancel | M | — |
 | ✅ Tool annotations | CLOSED (v0.10.0): 191 annotations (zero unannotated) | Client approval UX | S | — |
@@ -114,7 +114,7 @@
 | ✅ Dead facade cleanup (`probeCache`/`parallelProbe`) | CLOSED (v0.10.1): behavior moved to `workerCache` (`ResultCache` TTL + `runProbes`); `probe.test.mjs` moved under `worker-cache.test.mjs` | Dead code gone | S | — |
 | ✅ Parallel scan (pool of 4) | CLOSED (v0.10.0): ordered merge + cancel + error isolation | CI integration | M | — |
 | ✅ Schema budget | CLOSED (v0.10.0): measured thresholds (200KB/110KB/600B) | Bloat ends | S | — |
-| Schema-budget CI enforcement | Test exists, no CI step | Budget breaks in CI | S | P2 |
+| ✅ Schema-budget CI enforcement | CLOSED: `.github/workflows/ci.yml` runs `tests/schema-budget.test.mjs` | Budget breaks in CI | S | — |
 | ✅ Streaming reads | CLOSED (v0.10.0): 64KB buffer + stop on cancel | OOM ends | M | — |
 
 ## H) Tests and quality
@@ -122,7 +122,7 @@
 | Proposal | Current state / gap | Impact | Effort | Priority |
 |---|---|---|---|---|
 | ✅ Golden corpus manifest | CLOSED (v0.10.1): `tests/corpus/mini.dex` (synthetic minimal DEX v035, `scripts/dex-fixture-uret.mjs`) + `dex-golden` 7 tests + HASHES entry | Regressions caught early | M | — |
-| Self-hosted Windows runner | Frida/debug tests don't run in CI | Riskiest surface verified continuously | M | P0 |
+| Self-hosted Windows runner | OPEN: CI is `ubuntu-latest` only. There is no self-hosted Windows runner, so Frida/debug tests do not run in CI | Riskiest surface verified continuously | M | P0 |
 | ✅ Parser fuzz CI smoke | CLOSED (v0.10.0): deterministic mutation, crash/hang=0 | Silent bug classes caught | M | — |
 | ✅ HTTP e2e in the default suite | CLOSED (v0.10.0): removed from LIVE, no flakes | Transport regressions visible | S | — |
 | ✅ Performance budgets | CLOSED (v0.10.0): measured thresholds, median method | Accumulation ends | S | — |
@@ -131,14 +131,14 @@
 
 | Proposal | Current state / gap | Impact | Effort | Priority |
 |---|---|---|---|---|
-| ✅ Automatic tool reference | CLOSED (v0.10.0): [`TOOLS.md`](TOOLS.md) from the real surface (191 tools + 2 resources + 3 prompts) | Current catalog | S | — |
+| ✅ Automatic tool reference | CLOSED: [`TOOLS.md`](TOOLS.md) from the real surface (191 tools + 2 resources + 7 prompts) | Current catalog | S | — |
 | Example sessions (asciinema/GIF) in README | No visual proof | Convince in the first 10 seconds (star conversion) | S | P1 |
 | ◐ Docs site | GENERATED (v0.10.0): 7 static pages + 0 broken links | Searchable docs | M | P2 |
-| Pages deploy (site ready, not published) | `docs/site/` generated but not wired to GitHub Pages | Docs at a single URL | S | P2 |
+| ✅ Pages deploy | CLOSED: `.github/workflows/pages.yml` deploys the generated `docs/site/` to GitHub Pages | Docs at a single URL | S | — |
 | ✅ Prompt library | CLOSED (v0.10.0): `docs/PROMPTS.md` (10 prompts with sample calls) | First value within minutes | S | — |
 | good-first-issue + CONTRIBUTING expansion | Single paragraph | Contribution funnel opens | S | P3 |
 
 ---
 
-**Suggested order (open items):** live Frida VM → runner → trusted publisher → example sessions → Pages deploy → P3 research.
+**Suggested order (open items):** live Frida VM → self-hosted Windows runner → Trusted Publisher account setup → visual example sessions (asciinema) → P3 research (LLDB, WinDbg TTD, angr, AFL++). The single-file SEA exe stays open. Schema-budget CI and Pages deploy are closed.
 Closed in v0.10.1: dead facade cleanup + golden DEX corpus (marked ✅ above); closed in v0.10.0: all of waves I/J/K.

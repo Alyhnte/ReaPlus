@@ -1,58 +1,43 @@
-# Golden korpus
+# Golden corpus
 
-Bu dizin, offline testlerin kanonik fixture'larını tutar.
+This directory holds the canonical fixtures for offline tests.
 
-## Dosyalar
+## Files
 
-| Dosya | Kaynak | Lisans |
+| File | Source | License |
 |---|---|---|
-| `mini_branch.elf` | bilinmiyor | bilinmiyor |
-| `mini_pe_x64.exe` | bilinmiyor | bilinmiyor |
-| `ornek.js` | `scripts/korpus-kur.mjs` ile üretilir (deterministik) | bilinmiyor |
-| `ornek.wasm` | `scripts/korpus-kur.mjs` ile üretilir (deterministik) | bilinmiyor |
-| `sahte.apk` | `scripts/korpus-kur.mjs` ile üretilir (deterministik) | bilinmiyor |
-| `real_tiny.exe` | `src/tiny_exit.c` + `scripts/corpus-gercek-derle.mjs` (yerel gcc, PE32+ x64) | MIT |
-| `real_tiny_console.exe` | `src/hello.c` + `scripts/corpus-gercek-derle.mjs` (yerel gcc, PE32+ x64) | MIT |
-| `real_tiny_o2.exe` | `src/hello.c` + `scripts/corpus-gercek-derle.mjs` (yerel gcc, PE32+ x64) | MIT |
-| `real_dll.dll` | `src/dll_add.c` + `scripts/corpus-gercek-derle.mjs` (yerel gcc, PE32+ x64 DLL) | MIT |
-| `real_tiny.obj` | `src/tiny_exit.c` + `scripts/corpus-gercek-derle.mjs` (yerel gcc, COFF obj) | MIT |
-| `mini.dex` | `scripts/dex-fixture-uret.mjs` ile üretilir (deterministik) | bilinmiyor |
+| `mini_branch.elf` | unknown | unknown |
+| `mini_pe_x64.exe` | unknown | unknown |
+| `ornek.js` | produced by `scripts/korpus-kur.mjs` (deterministic) | unknown |
+| `ornek.wasm` | produced by `scripts/korpus-kur.mjs` (deterministic) | unknown |
+| `sahte.apk` | produced by `scripts/korpus-kur.mjs` (deterministic) | unknown |
+| `real_tiny.exe` | `src/tiny_exit.c` + `scripts/corpus-gercek-derle.mjs` (local gcc, PE32+ x64) | MIT |
+| `real_tiny_console.exe` | `src/hello.c` + `scripts/corpus-gercek-derle.mjs` (local gcc, PE32+ x64) | MIT |
+| `real_tiny_o2.exe` | `src/hello.c` + `scripts/corpus-gercek-derle.mjs` (local gcc, PE32+ x64) | MIT |
+| `real_dll.dll` | `src/dll_add.c` + `scripts/corpus-gercek-derle.mjs` (local gcc, PE32+ x64 DLL) | MIT |
+| `real_tiny.obj` | `src/tiny_exit.c` + `scripts/corpus-gercek-derle.mjs` (local gcc, COFF obj) | MIT |
+| `mini.dex` | produced by `scripts/dex-fixture-uret.mjs` (deterministic) | unknown |
 
-`real_*` dosyalar GERÇEKTİR: bu dizindeki `src/*.c` kaynaklarından yerel
-`gcc` (MinGW-w64) ile derlenir. `-Wl,--no-insert-timestamp` ile COFF
-TimeDateStamp gömülmez; aynı toolchain ile yeniden derleme aynı baytları
-üretir (deterministik). Hash'ler derleyici çıktısından alınır, uydurulmaz.
-ELF tarafında yerel `gcc` PE hedeflediğinden gerçek ELF üretilemez (cross
-toolchain yok); `mini_branch.elf` sentetik kalmaya devam eder.
+The `real_*` files are real. They are compiled with local `gcc` (MinGW-w64) from the `src/*.c` sources in this directory. `-Wl,--no-insert-timestamp` keeps a COFF TimeDateStamp out of the image, so rebuilding with the same toolchain yields the same bytes (deterministic). Hashes are taken from the compiler output. They are not invented. On the ELF side, local `gcc` targets PE, so a real ELF cannot be produced (no cross toolchain). `mini_branch.elf` stays synthetic.
 
-Bilinmeyen kaynak/lisans alanları bilerek `bilinmiyor` bırakıldı; uydurma
-lisans yazılmaz. Kökeni bilinen bir fixture eklendiğinde `HASHES.json`
-güncellenir.
+Unknown source and license cells are deliberately the string `bilinmiyor`. A made-up license is not written. When a fixture with a known origin is added, `HASHES.json` is updated. The manifest fields are `kaynak` and `lisans`.
 
-## Doğrulama
+## Check
 
 ```sh
 node scripts/verify-corpus.mjs
 ```
 
-Başarıda exit kodu `0`; eksik/uyuşmaz/manifest-dışı dosyada dosya adıyla
-rapor + exit kodu `1`. `HASHES.json` ve bu `README.md` fixture sayılmaz.
+On success the exit code is `0`. On a missing file, a mismatch, or a file outside the manifest, the report names the file and the exit code is `1`. `HASHES.json` and this `README.md` are not fixtures.
 
-## Satır sonu notu (`ornek.js`)
+## Line-ending note (`ornek.js`)
 
-`ornek.js` metin dosyasıdır. `scripts/korpus-kur.mjs` onu LF ile yazar;
-`core.autocrlf=true` olan makinede `git checkout`/`git restore` ise CRLF
-verir. `HASHES.json` referansı **restore/checkout sonrası** haline göredir
-(bu worktree'de CRLF). `tests/corpus.test.mjs` koşusu dosyayı LF'ye çevirir;
-bu beklenen churn'dür, test bitince `git restore -- tests/corpus/ornek.js`
-ile dönülür.
+`ornek.js` is a text file. `scripts/korpus-kur.mjs` writes it with LF. On a machine with `core.autocrlf=true`, `git checkout` / `git restore` yields CRLF. The `HASHES.json` reference points at the **post-restore/checkout** bytes (CRLF in this worktree). The `tests/corpus.test.mjs` run converts the file to LF. That churn is expected. When the test finishes, put it back with `git restore -- tests/corpus/ornek.js`.
 
-## Yeni fixture ekleme
+## Adding a fixture
 
-1. Dosyayı bu dizine koy.
-2. sha256 özetini hesapla.
-3. `HASHES.json` içine `kaynak` + `lisans` alanlarıyla yeni girdi ekle
-   (bilinmiyorsa `"bilinmiyor"` yaz, uydurma).
-4. `node scripts/verify-corpus.mjs` ile doğrula.
-5. Manifest'e eklenmeyen dosya testleri geçirmez
-   (`tests/corpus-manifest.test.mjs`).
+1. Put the file in this directory.
+2. Compute the sha256 digest.
+3. Add a new entry to `HASHES.json` with `kaynak` and `lisans` fields (if unknown, write `"bilinmiyor"`, do not invent one).
+4. Check with `node scripts/verify-corpus.mjs`.
+5. A file that is not in the manifest does not pass the tests (`tests/corpus-manifest.test.mjs`).

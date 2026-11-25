@@ -1,101 +1,84 @@
-# SANDBOX — ağsız snapshot'lı VM tarifi
+# SANDBOX — offline VM recipe with snapshots
 
-Bu belge, ReaPlus'ı İnternet'e dokunmadan denemek için iki sanallaştırma
-platformundaki kurulumu baştan sona anlatır. İlke: önce snapshot, sonra çalıştır,
-iş bitince geri yükle. Mağaza yayını ile ilgisi yoktur; yalnız yerel doğrulama içindir.
+This note walks through a full setup on two hypervisors so ReaPlus can be tried without touching the Internet. Rule: take a snapshot first, run the experiment, then restore. It has nothing to do with store publishing; it is local verification only.
 
-Ortak ilkeler (her iki platform için geçerlidir):
+Shared rules (both platforms):
 
-- VM İnternet'e çıkmaz: ağsız kip (sanal anahtar yok / yalnızca-host ağı, kablosu bağlı değil).
-- Tüm denemeler snapshot'tan başlar; kirlenen makine onarılmaz, geri yüklenir.
-- Konak dizinine/ağa yazma yok; paylaşılan klasör kapalı tutulur.
+- The VM does not reach the Internet: no network (no virtual switch, or a host-only adapter whose cable is not connected).
+- Every run starts from a snapshot. A dirty machine is not repaired; it is restored.
+- Nothing is written to the host directory or the host network. Shared folders stay off.
 
 ## 1. Hyper-V (Windows 10/11 Pro)
 
-Önkoşul: Hyper-V rolü açık, en az 8 GB RAM ve 40 GB boş disk.
+Prerequisite: the Hyper-V role is on, with at least 8 GB of RAM and 40 GB of free disk.
 
-### Adım 1 — Sanal anahtarı ağsız bırak
+### Step 1 — Leave the virtual switch with no network
 
-Hyper-V Yöneticisi > Sanal Anahtar Yöneticisi: İnternet'e bağlı harici anahtar
-EKLEMEYİN. Yalnızca "Yalnızca iç" (internal) anahtar kullanın ya da hiç anahtar
-bağlamayın; makine ağsız kalmalıdır.
+Hyper-V Manager > Virtual Switch Manager: do NOT add an external switch that is connected to the Internet. Use only an internal switch, or attach no switch at all. The machine must have no network.
 
-### Adım 2 — Yeni sanal makine oluştur
+### Step 2 — Create the virtual machine
 
-Yeni > Sanal Makine: 2. Nesil, 4 GB RAM, 40 GB VHDX, ISO'dan kurulum yapın.
-Ağ bağlantısı ekranında anahtar SEÇMEYİN ("Bağlı Değil").
+New > Virtual Machine: Generation 2, 4 GB RAM, 40 GB VHDX, install from an ISO. On the network page, select no switch ("Not connected").
 
-### Adım 3 — Misafir işletim sistemini kur
+### Step 3 — Install the guest operating system
 
-ISO'dan kurulumu tamamlayın, güncellemeleri çevrimdışı medyadan yapın.
-Misafir ilk açılışta ağ kablosu bağlı değil uyarısı veriyorsa doğru yoldasınız.
+Finish the install from the ISO and apply updates from offline media. If the guest warns on first boot that the network cable is not connected, that is the correct state.
 
-### Adım 4 — ReaPlus çalışma kopyasını içeri al
+### Step 4 — Bring in a ReaPlus working copy
 
-Kapalıyken VHDX'i konağa bağlayıp `dist/` çıktısını salt-okunur kopyalayın
-ya da ISO olarak ekleyin. Paylaşılan klasör ve pano entegrasyonunu kapatın.
+While the VM is off, mount the VHDX on the host and copy the `dist/` output read-only, or attach that tree as an ISO. Turn off shared folders and clipboard integration.
 
-### Adım 5 — Snapshot al
+### Step 5 — Take a snapshot
 
-Makine kapalıyken Denetim Noktası > "temiz-kurulum" adıyla snapshot alın.
-Bu nokta, her deneyin dönüş adresidir.
+With the machine off, Checkpoint > take a snapshot named "clean-install". That point is the return address for every experiment.
 
-### Adım 6 — Deneyi çalıştır
+### Step 6 — Run the experiment
 
-Makineyi başlatın, `npm test` (canlı testler hariç) koşun, sonucu not edin.
-Ağ isteği yapan deneyler ağsız ortamda atlanır ya da başarısız olur; bu beklenen
-bir durumdur, konak ağını AÇMAYIN.
+Start the machine and run `npm test` (live tests excluded). Record the result. Experiments that need the network are skipped or fail in this offline environment. That is expected. Do NOT turn the host network on for them.
 
-### Adım 7 — Geri yükleme
+### Step 7 — Restore
 
-Denetim Noktaları > "temiz-kurulum" > Uygula. Makine bir sonraki deneye
-tertemiz başlar. Snapshot zinciri uzarsa eskileri silin, yalnız tabanı tutun.
+Checkpoints > "clean-install" > Apply. The machine starts the next experiment clean. If the snapshot chain grows, delete the old ones and keep only the base.
 
-## 2. VirtualBox (Windows/Linux konak)
+## 2. VirtualBox (Windows or Linux host)
 
-Önkoşul: VirtualBox 7+, Extension Pack yok (USB/ağ eklentisi gerekmez).
+Prerequisite: VirtualBox 7 or newer, without the Extension Pack (USB and extra network features are not required).
 
-### Adım 1 — Yeni makine oluştur
+### Step 1 — Create the machine
 
-Yeni: tür ve sürümü ISO'ya göre seçin, 4 GB RAM, 40 GB VDI (dinamik).
+New: pick the type and version that match the ISO, 4 GB RAM, 40 GB VDI (dynamically allocated).
 
-### Adım 2 — Ağı kapat
+### Step 2 — Turn the network off
 
-Ayarlar > Ağ: "Bağlı Değil" seçin. Köprü/ NAT / yalnızca-host ağı SEÇMEYİN.
-Kablo bağlı kutusu boş kalmalıdır; makine ağsız çalışır.
+Settings > Network: choose "Not connected". Do NOT select bridged, NAT, or host-only. The cable-connected box stays clear. The machine runs with no network.
 
-### Adım 3 — Misafir işletim sistemini kur
+### Step 3 — Install the guest operating system
 
-ISO'yu takıp kurulumu tamamlayın. Misafir Eklentileri kurmayın (sürükle-bırak
-ve paylaşılan pano kapalı kalmalıdır).
+Attach the ISO and finish the install. Do not install the Guest Additions (drag-and-drop and the shared clipboard must stay off).
 
-### Adım 4 — ReaPlus çalışma kopyasını içeri al
+### Step 4 — Bring in a ReaPlus working copy
 
-ISO görüntüsü olarak ekleyip misafir içinden salt-okunur bağlayın.
-Sürükle-bırak ve paylaşılan klasör kapalı tutulur.
+Add the tree as an ISO and mount it read-only from inside the guest. Drag-and-drop and shared folders stay off.
 
-### Adım 5 — Snapshot al
+### Step 5 — Take a snapshot
 
-Anlık Görüntüler > "temiz-kurulum" adıyla snapshot alın. Bu nokta, her
-deneyin dönüş adresidir.
+Snapshots > take a snapshot named "clean-install". That point is the return address for every experiment.
 
-### Adım 6 — Deneyi çalıştır
+### Step 6 — Run the experiment
 
-Makineyi snapshot'tan başlatın, `npm test` (canlı testler hariç) koşun.
-Ağ isteyen deneylerin atlanması normaldir; konak ağını AÇMAYIN.
+Start the machine from the snapshot and run `npm test` (live tests excluded). It is normal for network-using experiments to be skipped. Do NOT turn the host network on.
 
-### Adım 7 — Geri yükleme
+### Step 7 — Restore
 
-Anlık Görüntüler > "temiz-kurulum" > Geri Yükle. Makine tertemiz döner.
-Eski dalları silin, yalnız taban snapshot'ı saklayın.
+Snapshots > "clean-install" > Restore. The machine comes back clean. Delete old branches and keep only the base snapshot.
 
-## 3. Ortak kontrol listesi
+## 3. Shared checklist
 
-Her deney öncesi bu liste baştan işaretlenir:
+Tick this list from the top before every experiment:
 
-- [ ] Ağ bağlı değil (Hyper-V: anahtar yok; VirtualBox: bağlı değil)
-- [ ] "temiz-kurulum" snapshot'ı mevcut ve güncel
-- [ ] Paylaşılan klasör/pano/sürükle-bırak kapalı
-- [ ] Deney snapshot'tan başlatıldı
-- [ ] Deney bitince geri yükleme yapıldı
-- [ ] Konak dizinine ve ağa yazılmadı
+- [ ] No network (Hyper-V: no switch; VirtualBox: not connected)
+- [ ] The "clean-install" snapshot exists and is current
+- [ ] Shared folders, clipboard, and drag-and-drop are off
+- [ ] The experiment was started from the snapshot
+- [ ] The snapshot was restored when the experiment finished
+- [ ] Nothing was written to the host directory or the host network

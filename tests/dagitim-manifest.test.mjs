@@ -162,13 +162,13 @@ describe("dagitim manifestleri (Dalga J/2)", () => {
       const bas = icerik.indexOf(bolum);
       const son = bolum === "Hyper-V" ? icerik.indexOf("VirtualBox") : icerik.length;
       const dilim = icerik.slice(bas, son < bas ? icerik.length : son);
-      const adimlar = [...dilim.matchAll(/[Aa]dım\s+(\d+)/g)].map((m) => Number(m[1]));
+      const adimlar = [...dilim.matchAll(/\bStep\s+(\d+)/g)].map((m) => Number(m[1]));
       assert.ok(adimlar.length >= 4, `${bolum}: en az 4 adim olmali`);
       adimlar.forEach((n, i) => assert.equal(n, i + 1, `${bolum}: adimlar sirali olmali (${adimlar})`));
     }
-    for (const anahtar of ["snapshot", "geri yük", "kontrol listesi"]) {
-      assert.ok(icerik.toLocaleLowerCase("tr").includes(anahtar), `"${anahtar}" gecmeli`);
+    for (const anahtar of ["snapshot", "restore", "checklist"]) {
+      assert.ok(icerik.toLocaleLowerCase("en").includes(anahtar), `"${anahtar}" gecmeli`);
     }
-    assert.ok(/ağ(sız|dan yalıtılmış| kapalı| bağlantısız)|ağ.*(kapalı|devre dışı|host-only)/i.test(icerik), "agsizlik tarifi olmali");
+    assert.ok(/no network|not connected/i.test(icerik), "agsizlik tarifi olmali");
   });
 });

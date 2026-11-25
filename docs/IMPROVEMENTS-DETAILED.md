@@ -1,57 +1,67 @@
-# İyileştirme Önerileri — Detaylı (ne işe yarar / hız / maliyet / yetenek)
+# Improvement notes — detail (what it does / speed / cost / capability)
 
-## 1. Magic-byte sniffing (uzantı yerine içerik tanıma)
-- **Ne işe yarar:** Dosyanın ilk baytlarına bakarak gerçek tipi bulur. Örn. `.bin` denen dosya aslında APK (PK zip), `.dat` aslında ELF (7f 45 4c 46) çıkabilir. Uzantıya güvenen yönlendirme yanlış motora gider, sniffing doğru motora yollar.
-- **Yapılırsa ne olur:** Yanlış motor denemeleri biter. `capability_unsupported` sonrası ikinci deneme gerekmez, ilk seferde doğru kapı çalınır.
-- **Ne hızlanır:** Hedef açma süresi (özellikle toplu taramada). Yanlış deneme + hata + yeniden deneme döngüsü kalkar.
-- **Ne yavaşlar / maliyet:** Açılışta ilk 4KB okuma + imza tablosu eşleştirme (mikrosaniyeler). İmza tablosu bakımı gerekir (yeni format çıkınca ekleme).
-- **Kazanılan yetenek:** Uzantısız / yanlış uzantılı / iç içe dosyaları (APK içi dex, firmware içi ELF) otomatik tanıma ve içe doğru inme.
+Status at v0.13.0: the eight items below are in the tree, with tests (`sniff`, `confidence`, `fallback`, worker cache, parallel scan, missing reasons / `doctor --fix`, config suggestion, telemetry). They are not an open backlog. The notes describe the design that shipped. Surface: 191 tools, 187 `outputSchema`, 191 annotations, 2 resources, 7 prompts.
 
-## 2. Güven skoru (her eşleşmeye 0-100 puan)
-- **Ne işe yarar:** "Bu APK, jadx ile %95 açılır ama Ghidra ile %40" gibi karar verilebilir hale gelir. Şu an kapılar evet/hayır diyor; skor, en iyi adayı sıralar.
-- **Yapılırsa ne olur:** Router en yüksek skorluyu dener, düşük skorlular yedek bekler. Kullanıcıya "neden bu araç" açıklanabilir.
-- **Ne hızlanır:** Çok motorlu hedeflerde (örn. Electron: JS mi native mi?) deneme sayısı bire iner.
-- **Ne yavaşlar / maliyet:** Skor formülü + kalibrasyon testleri gerekir. Yanlış kalibre edilirse iyi motor geriye düşer (gözlem + ayar ister).
-- **Kazanılan yetenek:** Belirsiz hedeflerde otomatik en-iyi-motor seçimi ve açıklanabilir karar.
+## 1. Magic-byte sniffing (identify by content, not by extension)
 
-## 3. Fallback zinciri (jadx→apktool, ghidra→hopper→ida)
-- **Ne işe yarar:** Birinci araç yoksa/bozulursa ikinci otomatik devreye girer. Örn. jadx yok → apktool ile manifest+resource yine alınır (decompile eksik kalır ama iş durmaz).
-- **Yapılırsa ne olur:** Eksik araç = tam duruş olmaktan çıkar, kısmi sonuç + "şu eksik, şunu kur" raporu gelir.
-- **Ne hızlanır:** Operatör beklemez; kısmi kanıt hemen gelir, tam kanıt araç kurulunca tamamlanır.
-- **Ne yavaşlar / maliyet:** Zincir tanımı + kısmi-sonuç şeması gerekir. İki araç koşunca toplam süre uzayabilir (ama paralel koşulursa değil).
-- **Kazanılan yetenek:** Dayanıklılık: bozuk/eksik ortamda bile iş yapan MCP.
+- **What it does:** Reads the first bytes and finds the real type. A file called `.bin` can be an APK (PK zip). A file called `.dat` can be an ELF (`7f 45 4c 46`). Routing that trusts the extension picks the wrong engine. Sniffing picks the right one. v0.13.0 also reports ELF `e_machine` (including Hexagon) and PE ARMNT/ARM64 on this path.
+- **What you get:** The wrong-engine attempts stop. After `capability_unsupported` you do not need a second guess; the first call hits the right gate.
+- **What gets faster:** Time to open a target, especially in a bulk scan. The wrong-try, error, retry loop goes away.
+- **What it costs:** A read of the first 4 KB plus a signature-table match (microseconds). The table has to be maintained when a new format appears.
+- **Capability gained:** Automatic identification of extensionless, mis-extended, and nested files (dex inside an APK, ELF inside firmware), and a walk inward.
 
-## 4. Probe sonuçlarını TTL ile cacheleme
-- **Ne işe yarar:** `doctor` her çağrıda adb/java/r2 yoklaması yapıyor (process spawn ~10-100ms her biri). Sonucu örn. 60sn saklar, tekrar sormaz.
-- **Yapılırsa ne olur:** Art arda 10 tool çağrısında 10× probe yerine 1 probe. Oturum başı saniyeler kazanılır.
-- **Ne hızlanır:** Tüm tool çağrıları, özellikle hızlı ardışık çağrılar (session_open → open_target → disassemble).
-- **Ne yavaşlar / maliyet:** Araç çağrı arasında kurulursa 60sn görünmez (stale). Çözüm: `doctor --refresh` bayrağı + kurulum sonrası cache temizleme.
-- **Kazanılan yetenek:** Ölçek: çok dosyalı taramada probe maliyeti sabitlenir.
+## 2. Confidence score (0–100 on every match)
 
-## 5. Paralel probe
-- **Ne işe yarar:** 8 araç kontrolünü sıra yerine aynı anda yapar.
-- **Yapılırsa ne olur:** doctor süresi en yavaş probe kadar olur (800ms → ~150ms tipik).
-- **Ne hızlanır:** İlk açılış ve `prerequisites` raporu belirgin hızlanır.
-- **Ne yavaşlar / maliyet:** Aynı anda 8 process spawn (kısa CPU sıçraması). Windows'ta abartılırsa AV uyarısı tetiklenebilir; limit (4 paralel) konur.
-- **Kazanılan yetenek:** Hızlı readiness: ajan beklemeden ortama karar verir.
+- **What it does:** Turns "this APK opens with jadx at about 95, with Ghidra at about 40" into a decision. Gates used to say yes or no. The score ranks the best candidate.
+- **What you get:** The router tries the highest score. Lower scores wait as backups. The user can be told why that tool was chosen.
+- **What gets faster:** On multi-engine targets (Electron: JS or native?) the number of tries drops to one.
+- **What it costs:** A score formula plus calibration tests. A bad calibration pushes a good engine down the list (that needs observation and adjustment).
+- **Capability gained:** Automatic best-engine choice on ambiguous targets, and a decision you can explain.
 
-## 6. Yapılandırılmış eksik-neden + kurulum komutu
-- **Ne işe yarar:** Şu an "adb yok" deniyor. İyisi: `{eksik: adb, kur: "winget install Google.PlatformTools", neden: "packages listesi için", alternatif: "cihazı USB ile bağla"}`.
-- **Yapılırsa ne olur:** Kullanıcı/ajan tek adımda kurar, doküman aramaz. Ajan kurulumu otomatik önerebilir.
-- **Ne hızlanır:** Kurulum döngüsü (sor → ara → kur → dene) tek mesaja iner.
-- **Ne yavaşlar / maliyet:** Her kapıya kur-komut tablosu + platform ayrımı (winget/choco/apt/brew) bakımı.
-- **Kazanılan yetenek:** Kendi kendine onarım öneren MCP.
+## 3. Fallback chain (jadx to apktool, ghidra to hopper to ida)
 
-## 7. Otomatik config önerisi
-- **Ne işe yarar:** Eksik araca göre `configs/` dosyasını üretir: "Ghidra bulundu, REA_GHIDRA_DIR ekle" → hazır JSON snippet.
-- **Yapılırsa ne olur:** Kurulum sonrası manuel config düzenleme kalkar, kopyala-yapıştır kuruluma döner.
-- **Ne hızlanır:** İlk kurulum (10 dakika → 2 dakika).
-- **Ne yavaşlar / maliyet:** Config şema değişince snippet üretici güncellenmeli; yanlış yol yazılırsa debug gerekir (yolu test eden butonla çözülür).
-- **Kazanılan yetenek:** Sıfırdan kuran kullanıcı için guided setup.
+- **What it does:** If the first tool is missing or broken, the second takes over. Example: no jadx, so apktool still returns the manifest and resources (decompile stays incomplete, but the job does not stop).
+- **What you get:** A missing tool is no longer a full stop. You get a partial result plus "this is missing, install that."
+- **What gets faster:** The operator does not wait. Partial evidence arrives immediately. Full evidence arrives once the tool is installed.
+- **What it costs:** A chain definition plus a partial-result schema. Running two tools can make the total longer (not if they run in parallel).
+- **Capability gained:** An MCP that still does work in a broken or incomplete environment. Hopper and IDA stay gate-only, so that leg of the chain does not invent analysis.
 
-## 8. Eksik-araç telemetrisi
-- **Ne işe yarar:** Hangi araç en çok eksik kalıyor, hangi hedefte takılınıyor kaydı tutulur (lokal, opt-in). Örn. "10 koşunun 7'sinde wabt yoktu" → air-gap paketine wabt gömülür.
-- **Yapılırsa ne olur:** Yol haritası veriye dayanır; en çok can yakan eksik önce kapanır.
-- **Ne hızlanır:** Uzun vadede herkesin kurulumu (paket doğru araçları içerir).
-- **Ne yavaşlar / maliyet:** Log yazma (mikrosaniye) + gizlilik onayı gerekir (varsayılan kapalı, lokal dosya).
-- **Kazanılan yetenek:** Kanıta dayalı önceliklendirme.
+## 4. Caching probe results with a TTL
+
+- **What it does:** `doctor` used to probe adb/java/r2 on every call (a process spawn, on the order of 10–100 ms each). The result is kept, for example for 60 seconds, and is not asked again. The live cache is the worker cache (`ResultCache` TTL + `runProbes`).
+- **What you get:** Ten tool calls in a row cost one probe, not ten. Seconds per session come back.
+- **What gets faster:** Every tool call, especially a fast sequence (`session_open`, then `open_target`, then `disassemble`).
+- **What it costs:** A tool installed between calls stays invisible for up to 60 seconds (stale). Remedy: `doctor --refresh`, plus clearing the cache after install.
+- **Capability gained:** Scale. In a multi-file scan the probe cost stays flat.
+
+## 5. Parallel probes
+
+- **What it does:** Checks several tools at once instead of in series.
+- **What you get:** `doctor` takes as long as the slowest probe (800 ms down to about 150 ms is the original measurement, not a fresh benchmark).
+- **What gets faster:** First launch and the `prerequisites` report, clearly.
+- **What it costs:** Several processes spawn at once (a short CPU spike). On Windows, too many at once can trip an AV warning, so the cap is 4.
+- **Capability gained:** Fast readiness. The agent decides about the environment without waiting through a serial list.
+
+## 6. Structured missing-reason plus an install command
+
+- **What it does:** "adb is missing" becomes a structured reason: what is missing, the install command (`winget install Google.PlatformTools` and the apt/brew equivalents), why it is needed, and an alternative. `doctor --fix` suggests the install and does not run it without confirmation.
+- **What you get:** The user or the agent installs in one step and does not hunt through docs.
+- **What gets faster:** The install loop (ask, search, install, retry) collapses to one message.
+- **What it costs:** An install-command table on every gate, plus a per-platform split (winget / choco / apt / brew) to maintain.
+- **Capability gained:** An MCP that proposes its own repair.
+
+## 7. Automatic config suggestion
+
+- **What it does:** Writes a `configs/` snippet for the tool that was found: "Ghidra was found, add REA_GHIDRA_DIR", as JSON ready to paste. The setup wizard (`rea-plus-cli setup`) is the shipped form of this, tested under a temp HOME.
+- **What you get:** Manual config editing after install goes away. Setup becomes copy and paste.
+- **What gets faster:** First install (the original note said 10 minutes down to 2; that figure is the design target, not a new measurement).
+- **What it costs:** When the config schema changes, the snippet generator has to change. A wrong path needs a debug pass (a button that tests the path covers it).
+- **Capability gained:** Guided setup for someone installing from zero.
+
+## 8. Missing-tool telemetry
+
+- **What it does:** Records which tool is missing most often and which target gets stuck (local, opt-in). Example: "wabt was missing in 7 of 10 runs", so the air-gap package embeds wabt.
+- **What you get:** The roadmap leans on data. The gap that hurts most closes first.
+- **What gets faster:** Everyone's install, over time, because the package contains the right tools.
+- **What it costs:** A log write (microseconds) plus a privacy consent. Default is off, and the file is local.
+- **Capability gained:** Priorities based on evidence.

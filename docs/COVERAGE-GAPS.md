@@ -1,40 +1,35 @@
-# COVERAGE-GAPS — araçların HİÇBİRİNİN yapamadığı önemli kısım
+# COVERAGE-GAPS — what is still missing after v0.13.0
 
-## Kısa cevap
+v0.13.0 ships 191 tools, 187 `outputSchema`, 191 annotations, 2 resources, and 7 prompts. The tool count did not grow in that release. This note replaces the older claim that no tool can answer "which APIs does this process call, with what arguments."
 
-**Davranış düzeyi dinamik izleme (API/syscall/ağ/dosya izi): uygulamanın ÇALIŞIRKEN ne yaptığı.**
-Statik taraf yapıyı söyler (fonksiyonlar, xref, string), canlı debug anlık durumu söyler
-(register, bellek, breakpoint). Ama "bu exe çalışınca hangi API'leri hangi argümanlarla
-çağırıyor, nereye bağlanıyor, hangi dosyaya yazıyor" sorusunu otomatik cevaplayan
-hiçbir araç yok. Stalker çağrı listesi verir (argümansız), process capture stdout
-verir (davranış vermez), logcat/screencap cihaz ister.
+## Closed (do not list these as gaps)
 
-## Neden önemli
+- **Frida API tracer.** `rea_frida_api` logs the function name, arguments, and return value. Live Frida VM approval is still an open gate; the tool itself is in the surface. Wave 16 (not done, other branch) removes the tracer's self-trigger of `GetTickCount` / `CreateFileW`.
+- **UPX.** `rea_upx_info` and `rea_upx_unpack`.
+- **C# decompile path.** `rea_ilspy_decompile` (ilspycmd when it is installed).
+- **Network capture.** `rea_net_capture` (local HAR).
+- **Syscall and file/registry behavior.** Closed in v0.10.0: ntdll number mapping, CreateFileW/RegSet profiles, and a single-call behavior run.
+- **Android dynamic recipe.** `rea_android_dinamik_recete` generates a 5-step recipe and dry-checks it. That is not device-less full dynamic RE.
+- **v0.13.0 static gaps that this comparison used to call missing:** ELF `e_machine` including Hexagon, PE machine identity ARMNT (`0x01c4`) and ARM64 (`0xaa64`), type-aware lossless plist values, JS cross-bundle relations (`iliskiler`), apktool version observation (advisory, not evidence), and a raw m68k Ghidra profile.
 
-Gerçek RE sorularının çoğu davranıştır: "bu zararlı nereye sızıyor",
-"bu lisans kontrolü nerede patlıyor", "bu özellik hangi servisi çağırıyor".
-Şu an ajan bunu breakpoint kovalayarak elle bulur; otomatik iz + özet yoktur.
+## Still open
 
-## Nasıl çözülür (sıralı, kolaydan zora)
+- Electron fuses and BrowserWindow constants.
+- split-APK.
+- adb file transfer (`adb pull`). Devices and package listing exist; pull does not.
+- SQLite snapshot inspection.
+- Scoped package `exports` field. CJS require resolution (relative and `node_modules`) shipped earlier; the `exports` field did not.
+- A `.mts` / `.cts` walk.
+- Visual sessions (asciinema or GIF). Text transcripts exist; the recording does not.
+- Automatic TOOL-COVERAGE. `docs/TOOL-COVERAGE.md` is still hand-maintained.
+- AFL++. A Node fuzz harness exists (`docs/FUZZ.md`). AFL++ itself is not wired. Wave 19 (not done) is the real integration, returning `capability_unsupported` when the dependency is absent.
+- angr / Triton, LLDB, and WinDbg TTD. No engine for them is in the tree. Same wave-19 rule: unsupported when the dependency is absent, working when it is present. That behavior is not implemented yet.
+- Frida live VM approval.
+- A self-hosted Windows runner. CI is `ubuntu-latest` only.
+- Trusted Publisher account setup. `publish.yml` already runs `npm publish --provenance`.
+- A single-file SEA exe (three obstacles in `docs/SEA-DAGITIM.md`).
+- Unpack recipes past UPX (Themida, VMProtect, ConfuserEx). No memory-dump OEP flow is shipped.
 
-1. **Frida API-tracer (kolay, 1-2 gün):** `rea_frida_api(pid, modülDeseni)` —
-   `Module.enumerateImports` + `Interceptor.attach` ile fonksiyon adı + argüman
-   ilk N baytı + dönüş değeri loglanır. FridaPlus deseni hazır (cond/stalker
-   ispatlı). Test: notepad `CreateFileW` yakalar.
-2. **UPX unpack (kolay, saatler):** `winget install UPX.UPX`, `rea_upx_unpack`
-   (`upx -d`). Paketli sample'lar statik analize kapalıdır; unpack hepsini açar.
-3. **C# decompile (kolay, saatler):** `dotnet tool install ilspycmd`,
-   `rea_dotnet_decompile` (dnfile listeler, ilspycmd C#'a çevirir). dnfile hazır.
-4. **Ağ izi (orta, günler):** mitmproxy `mitmdump` (Windows çalışır) +
-   `rea_net_capture` (HAR üretir, mevcut HAR import ile birleşir).
-5. **Syscall izi (orta):** Windows ETW veya `NtTrace`? Pratik yol: Frida
-   Stalker + ntdll hook (syscall numaraları), `rea_frida_syscalls`.
-6. **Android dinamik (zor, haftalar):** Emülatör + frida-server + SSL unpinning
-   reçetesi (`rea_android_dynamic`). Cihazsız tam RE yok.
-7. **Fuzzing (zor):** AFL++ (WSL) + `rea_fuzz` harness. Zafiyet avı için şart.
+## Why the closed API-tracer gap mattered
 
-## İkinci büyük boşluk: şifreli/paketli + sanal makine korumaları
-
-UPX ötesi packer'lar (Themida, VMProtect) ve .NET obfuscator'lar (ConfuserEx)
-için unpack reçetesi yok. Çözüm: unpack profilleri docs + bellek-dump
-(x64dbg/cdb snapshot'tan OEP bulma) akışı. Bu, yukarıdaki 7 maddeden sonra gelir.
+Most real RE questions are behavioral: where a sample beacons, where a license check fails, which service a feature calls. `rea_frida_api` is the automatic trace. It still needs a live Frida VM, which is not approved, so CI does not prove it on hardware.

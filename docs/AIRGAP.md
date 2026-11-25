@@ -1,48 +1,51 @@
-# AIRGAP — Offline Paket Yol Haritası (rea-plus WP6)
+# AIRGAP — offline package roadmap (rea-plus WP6)
 
-> Tamamen çevrimdışı çalışır; ağ çağrısı yok, telemetri yok.
-> Her modül `capability_unsupported` kapısı döner, asla sessizce uydurmaz.
+> Runs fully offline. No network calls, no telemetry.
+> Every module returns a `capability_unsupported` gate. It never invents a result in silence.
 
-## 1. Kapsam
+Current release is v0.13.0 (191 tools, 187 `outputSchema`, 191 annotations, 2 resources, 7 prompts). This note is the offline package shape, not a claim that every later roadmap item has shipped.
 
-- `wasm-evm`: DOS/MIPS, NativeAOT, crash timeline iskeletleri.
-- `javascript`: sürüm diff ve recon harness iskeletleri.
-- `skill-pack`: soruşturma akışı başvuruları (native/js/apk/web).
+## 1. Scope
 
-## 2. Paket İçeriği
+- `wasm-evm`: DOS/MIPS, NativeAOT, and crash-timeline skeletons.
+- `javascript`: version diff and recon-harness skeletons.
+- `skill-pack`: investigation-flow references (native / js / apk / web).
 
-| Paket | İçerik | Ağ gereksinimi |
+## 2. Package contents
+
+| Package | Contents | Network requirement |
 |---|---|---|
-| `core` | saf TS köprüler | yok |
-| `docs` | AIRGAP + ÖNERİLER | yok |
-| `skill` | SKILL.md başvuruları | yok |
+| `core` | pure TypeScript bridges | none |
+| `docs` | AIRGAP + `docs/ONERILER.md` | none |
+| `skill` | `SKILL.md` references | none |
 
-## 3. Kurulum (Airgap)
+## 3. Install (air-gap)
 
-1. Paketi USB ile taşı, hash doğrula (`sha256sum`).
-2. `npm ci --offline` ile bağımlılıkları kur.
-3. `REA_WABT_BIN` yoksa wasm decode kapısı kapalı kalır.
-4. Testleri çevrimdışı koş: `npm test -- --offline`.
+1. Carry the package on USB and check the hash (`sha256sum`).
+2. Install dependencies with `npm ci --offline`.
+3. If `REA_WABT_BIN` is unset, the wasm decode gate stays closed.
+4. Run tests offline: `npm test -- --offline`.
 
-## 4. Capability Kapıları
+## 4. Capability gates
 
-- `REA_WABT_BIN` tanımsızsa `rea_wasm_decode` kapalıdır.
-- Ham bayt < 64 ise DOS/MIPS kapıları `capability_unsupported` döner.
-- PE imzasız girdide AOT kapıları `capability_unsupported` döner.
-- Crash kaydı boşsa timeline kapısı `capability_unsupported` döner.
-- Fonksiyon listesi boşsa diff kapısı `capability_unsupported` döner.
+- If `REA_WABT_BIN` is unset, `rea_wasm_decode` stays closed.
+- If the raw bytes are shorter than 64, the DOS/MIPS gates return `capability_unsupported`.
+- On a PE input with no signature, the AOT gates return `capability_unsupported`.
+- If the crash record is empty, the timeline gate returns `capability_unsupported`.
+- If the function list is empty, the diff gate returns `capability_unsupported`.
 
-## 5. Doğrulama
+## 5. Checks
 
-- [ ] `DosMipsBridge` 40-60 satır aralığında.
-- [ ] `NativeAotBridge` 40-60 satır aralığında.
-- [ ] `CrashTimeline` 40-60 satır aralığında.
-- [ ] `BinaryDiff` ve `ReconHarness` 40-60 satır aralığında.
-- [ ] Hiçbir dosyada ağ importu yok (`fetch`, `axios` yasak).
-- [ ] Tüm Türkçe yorumlar yerinde.
+- [ ] `DosMipsBridge` stays in the 40–60 line range.
+- [ ] `NativeAotBridge` stays in the 40–60 line range.
+- [ ] `CrashTimeline` stays in the 40–60 line range.
+- [ ] `BinaryDiff` and `ReconHarness` stay in the 40–60 line range.
+- [ ] No file imports the network (`fetch` and `axios` are forbidden).
+- [ ] Turkish source comments stay in place. This docs wave does not translate code comments.
 
-## 6. Sınırlamalar
+## 6. Limits
 
-- Keccak/selector gerçek hash değil, yer tutucu FNV kullanır.
-- VLQ decode ve CLR header parse WP4d sonrasına bırakıldı.
-- Harness taslağı derlenebilirlik garantisi vermez.
+- Keccak/selector is not a real hash here; the placeholder is FNV.
+- VLQ decode and CLR header parsing were left for after WP4d.
+- The harness draft does not guarantee that the generated C compiles.
+- Still open, and not part of this offline package: Electron fuses, split-APK, adb file transfer, SQLite snapshot, the scoped package `exports` field, a `.mts`/`.cts` walk, visual sessions, and automatic TOOL-COVERAGE.
