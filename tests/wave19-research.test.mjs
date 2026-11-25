@@ -3,7 +3,7 @@
 // Kos: npm run build sonrasi node --test tests/wave19-research.test.mjs
 import { describe, it, afterEach } from "node:test";
 import assert from "node:assert/strict";
-import { mkdtempSync, writeFileSync, readFileSync, existsSync } from "node:fs";
+import { mkdtempSync, writeFileSync, readFileSync, existsSync, chmodSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { delimiter, join } from "node:path";
 import { spawnSync } from "node:child_process";
@@ -32,9 +32,16 @@ function dizin() {
 function sahte(kok, ad, govde) {
   const js = join(kok, `${ad}.mjs`);
   writeFileSync(js, govde);
-  const cmd = join(kok, `${ad}.cmd`);
-  writeFileSync(cmd, `@echo off\r\nnode "%~dp0${ad}.mjs" %*\r\n`);
-  return cmd;
+  const node = process.execPath.replace(/"/g, "");
+  if (process.platform === "win32") {
+    const cmd = join(kok, `${ad}.cmd`);
+    writeFileSync(cmd, `@echo off\r\n"${node}" "%~dp0${ad}.mjs" %*\r\n`);
+    return cmd;
+  }
+  const bin = join(kok, ad);
+  writeFileSync(bin, `#!/bin/sh\nexec "${node}" "${js.replace(/\\/g, "/")}" "$@"\n`);
+  chmodSync(bin, 0o755);
+  return bin;
 }
 
 function argvYazan(kok, ad, satirlar, cikis = 0) {
@@ -96,7 +103,7 @@ describe("rea_angr_explore", () => {
   it("PATH uzerindeki python da ayni JSON sozlesmesini okur", () => {
     const kok = dizin();
     const { bin } = argvYazan(kok, "python", ['{"ok":true,"paths":2,"constraints":1}']);
-    assert.ok(bin.endsWith("python.cmd"));
+    assert.ok(bin.endsWith("python.cmd") || bin.endsWith("python") || bin.endsWith("python.exe"));
     delete process.env.REA_ANGR_BIN;
     process.env.PATH = `${kok}${delimiter}${onceki.PATH ?? ""}`;
     const r = rea_angr_explore(join(kok, "hedef.bin"));

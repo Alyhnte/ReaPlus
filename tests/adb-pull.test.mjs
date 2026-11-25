@@ -2,7 +2,7 @@
 // Kos: npm run build sonrasi node --test tests/adb-pull.test.mjs
 import { describe, it, afterEach } from "node:test";
 import assert from "node:assert/strict";
-import { mkdtempSync, readFileSync, writeFileSync, existsSync } from "node:fs";
+import { mkdtempSync, readFileSync, writeFileSync, existsSync, chmodSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { rea_adb_pull } from "../dist/rea-domains/android/AdbPull.js";
@@ -14,9 +14,22 @@ function dizin() {
   return mkdtempSync(join(tmpdir(), "rea-adb-"));
 }
 
-function sahteAdb(kok, cikis, govde) {
-  const yol = join(kok, "adb.cmd");
-  writeFileSync(yol, `@echo off\r\n${govde}\r\nexit /b ${cikis}\r\n`);
+function sahteAdb(kok, cikis, yaz) {
+  const js = join(kok, "adb-impl.mjs");
+  writeFileSync(js, `import { writeFileSync } from "node:fs";
+const args = process.argv.slice(2);
+if (${cikis} !== 0) { console.error("fail"); process.exit(${cikis}); }
+if (args[0] === "pull" && args[2]) writeFileSync(args[2], ${JSON.stringify(yaz)});
+`);
+  const node = process.execPath.replace(/"/g, "");
+  if (process.platform === "win32") {
+    const yol = join(kok, "adb.cmd");
+    writeFileSync(yol, `@echo off\r\n"${node}" "%~dp0adb-impl.mjs" %*\r\n`);
+    return yol;
+  }
+  const yol = join(kok, "adb");
+  writeFileSync(yol, `#!/bin/sh\nexec "${node}" "${js.replace(/\\/g, "/")}" "$@"\n`);
+  chmodSync(yol, 0o755);
   return yol;
 }
 
@@ -33,7 +46,7 @@ describe("rea_adb_pull", () => {
   it("REA_ADB_BIN sahte adb dosyayi yazar ve 0 ile cikarsa cekilen dosyayi bildirir", () => {
     const kok = dizin();
     const yerel = join(kok, "gelen.bin");
-    const adb = sahteAdb(kok, 0, `if /I "%~1"=="pull" echo wave18-pulled>"%~3"`);
+    const adb = sahteAdb(kok, 0, "wave18-pulled\n");
     process.env.REA_ADB_BIN = adb;
     const r = rea_adb_pull("/sdcard/ornek.bin", yerel);
     assert.equal(r.ok, true);
@@ -47,7 +60,7 @@ describe("rea_adb_pull", () => {
   it("PATH uzerindeki sahte adb de calisir", () => {
     const kok = dizin();
     const yerel = join(kok, "yol.bin");
-    sahteAdb(kok, 0, `if /I "%~1"=="pull" echo path-pulled>"%~3"`);
+    sahteAdb(kok, 0, "path-pulled\n");
     delete process.env.REA_ADB_BIN;
     process.env.PATH = kok;
     const r = rea_adb_pull("/data/local/tmp/a", yerel);
@@ -62,7 +75,7 @@ describe("rea_adb_pull", () => {
     assert.equal(yok.ok, false);
     assert.equal(yok.code, "capability_unsupported");
     assert.equal(existsSync(join(kok, "out.bin")), false);
-    const adb = sahteAdb(kok, 3, `echo fail 1>&2`);
+    const adb = sahteAdb(kok, 3, "");
     process.env.REA_ADB_BIN = adb;
     const hedef = join(kok, "yazilmadi.bin");
     const r = rea_adb_pull("/sdcard/a", hedef);

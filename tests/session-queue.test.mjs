@@ -95,14 +95,15 @@ describe("SessionQueue birimi (sahte kosucular)", () => {
     })();
     const t0 = Date.now();
     const [a, b] = await Promise.all([
-      q.enqueue("oturum-1", "r1", is("oturum-1", "a", 120), { tool: "test" }),
-      q.enqueue("oturum-2", "r2", is("oturum-2", "b", 120), { tool: "test" }),
+      q.enqueue("oturum-1", "r1", is("oturum-1", "a", 800), { tool: "test" }),
+      q.enqueue("oturum-2", "r2", is("oturum-2", "b", 800), { tool: "test" }),
     ]);
     const toplam = Date.now() - t0;
     assert.equal(a, "a");
     assert.equal(b, "b");
-    // Seri olsaydi ~240ms surerdi; paralel ~120ms. CI payiyla 200ms alti paralel kanitidir.
-    assert.ok(toplam < 200, `paralel beklenen <200ms, gelen ${toplam}ms`);
+    // Ortusme damgasi asil kanittir. Duvar saati yalniz askida kalmayi yakalar;
+    // GitHub runner'da 120ms'lik iki is 200ms'yi asabiliyor.
+    assert.ok(toplam < 8000, `paralel is askiya dusmemeli, gelen ${toplam}ms`);
     const basla2 = olay.find((o) => o.ev === "basla" && o.ad === "b").t;
     const bit1 = olay.find((o) => o.ev === "bit" && o.ad === "a").t;
     assert.ok(basla2 < bit1, "ikinci oturum birincinin bitisini beklememeli (ortusme olmali)");
@@ -241,14 +242,14 @@ describe("sessionSerializeEnabled + TAM serilestirme (Dalga I/1, birim)", () => 
     };
     const t0 = Date.now();
     const [a, b] = await Promise.all([
-      q.enqueue("oturum-p1", "r1", is("a", 120), { tool: "test" }),
-      q.enqueue("oturum-p2", "r2", is("b", 120), { tool: "test" }),
+      q.enqueue("oturum-p1", "r1", is("a", 800), { tool: "test" }),
+      q.enqueue("oturum-p2", "r2", is("b", 800), { tool: "test" }),
     ]);
     const toplam = Date.now() - t0;
     assert.equal(a, "a");
     assert.equal(b, "b");
-    // Paralel ispat: ~120ms; seri olsaydi ~240ms surerdi.
-    assert.ok(toplam < 200, `paralel beklenen <200ms, gelen ${toplam}ms`);
+    // Ortusme damgasi asil kanittir. Duvar saati yalniz askida kalmayi yakalar.
+    assert.ok(toplam < 8000, `paralel is askiya dusmemeli, gelen ${toplam}ms`);
     // Ortusme: ikinci, birinci bitmeden baslar.
     assert.ok(iz.b.basla < iz.a.bit, `ortusme beklenir: a=[${iz.a.basla},${iz.a.bit}] b basla=${iz.b.basla}`);
   });
@@ -421,9 +422,9 @@ describe("stdio: SERIALIZE=1 tek basina kuyrugu acar (kapali davranis korunur)",
   });
   after(async () => { await istemci.kapat(); });
 
-  it("arac sayisi 192 olur, status araci vardir", async () => {
+  it("arac sayisi 201 olur, status araci vardir", async () => {
     const sayfa = await istemci.istek("tools/list", {}).soz;
-    assert.equal(sayfa.tools.length, 192);
+    assert.equal(sayfa.tools.length, 201);
     assert.ok(sayfa.tools.some((t) => t.name === "session_queue_status"), "status araci listede olmali");
   });
 
@@ -440,9 +441,9 @@ describe("stdio: kuyruk acikken (REA_SESSION_QUEUE=1)", () => {
   before(async () => { istemci = await stdioIstemci(temizEnv({ REA_SESSION_QUEUE: "1" })).baslat(); });
   after(async () => { await istemci.kapat(); });
 
-  it("arac sayisi 192 olur, status araci vardir", async () => {
+  it("arac sayisi 201 olur, status araci vardir", async () => {
     const sayfa = await istemci.istek("tools/list", {}).soz;
-    assert.equal(sayfa.tools.length, 192);
+    assert.equal(sayfa.tools.length, 201);
     assert.ok(sayfa.tools.some((t) => t.name === "session_queue_status"), "status araci listede olmali");
   });
 
