@@ -1,6 +1,6 @@
 # ROADMAP — ReaPlus roadmap
 
-> Status: v0.15.0 released (npm + MCP Registry + green CI). This document was
+> Status: v0.16.0 released (npm + MCP Registry + green CI). This document was
 > born from the findings of the first 2026-10-12 review and is synced with
 > what actually shipped at the end of every wave. v0.13.0 closed PE machine
 > identity (ARMNT/ARM64), ELF e_machine + Hexagon, type-aware lossless plist

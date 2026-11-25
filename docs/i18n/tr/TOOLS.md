@@ -8,7 +8,7 @@
 
 ## Özet
 
-- Sunucu: `rea-plus` 0.15.0
+- Sunucu: `rea-plus` 0.16.0
 - Toplam araç: 196
 - Toplam resource: 2
 - Toplam prompt: 7

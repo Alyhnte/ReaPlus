@@ -3,6 +3,16 @@
 Alle wichtigen Änderungen werden in dieser Datei festgehalten. Format: Keep a Changelog + SemVer.
 Alle nennenswerten Änderungen sind hier dokumentiert (deutsche Zusammenfassung + englisches Detail).
 
+## [0.16.0] — 2026-11-25
+
+### Added
+
+- `rea_electron_fuses` reads the Electron fuse sentinel and wire. `rea_electron_window` classifies BrowserWindow option keys. `rea_apk_splits` separates base and split APKs. `rea_adb_pull` runs adb pull. `rea_sqlite_snapshot` reads the database header and schema table names (`90701d6e6d5496a9b0d9bf3f2a61b3f27c9f8b3f`).
+
+### Updated
+
+- The five tools are on the `all` profile only. The surface is 196 tools and 193 output schemas (`90701d6e6d5496a9b0d9bf3f2a61b3f27c9f8b3f`).
+
 ## [0.15.0] — 2026-11-25
 
 ### Added
